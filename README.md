@@ -49,6 +49,8 @@ Please be mindful of your conduct. We really appreciate any contributions made t
 
 We will be keeping an eye on the issues section but please note however, that since this is a PART-TIME project, issues will take time to be addressed and the use of this code in your own PRODUCTION environment is strictly at YOUR OWN RISK. We DONOT encourage the use of its code base for anything but for ideas, understanding and if applicable, learning.
 
+Note: Please make sure to add APPROPRIATE Labels before you post an issue OR it will not be prioritized. 
+
 ### Roadmap & Project Management
 
 A project for every MAJOR(SemVer Guidelines) version will be created. Tracked though Github Project Manager.
