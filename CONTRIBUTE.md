@@ -31,3 +31,12 @@ You have following available labels, use of any other tags will only confuse the
 - If you have a fix, create a PR with your branch (branch name --> e.g {bugname}-fix) and reference it inside the issue comment. Then add the proposal tag to it to show that you have a solution as well.
 - The Team will test the branch, review the code and get back to the issue.
 - If the issue is relevant, it will be marked with either "approved" or with "needs more approvals" or "Changes requested" or if the PR gets merged successfully, it will be marked as "merged".
+
+  - ###### Process of Issue to Pull Request to Merging
+
+    - Create Issue
+      - Issue is reviewed by team
+        - If issue is valid and has been tagged with "approved"
+          - You can open a Pull request with fix/feature
+            - Pull request will be checked and reviewed by team
+              - If team approves, changes will be merged

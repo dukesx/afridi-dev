@@ -44,15 +44,6 @@ We will be keeping an eye on the issues section but please note however, that si
 
 Note: Please make sure to add APPROPRIATE Labels before you post an issue OR it will not be prioritized.
 
-##### Process of Issue to Pull Request to Merging
-
-- Create Issue
-  - Issue is reviewed by team
-    - If issue is valid and has been tagged with "approved"
-      - You can open a Pull request with fix/feature
-        - Pull request will be checked and reviewed by team
-          - If team approves, changes will be merged
-
 ### Roadmap & Project Management
 
-A project for every MAJOR(SemVer Guidelines) version will be created. Tracked though Github Project Manager.
+A project board for every MAJOR/MINOR (SemVer) will be created. Tracked though Github Project Manager.
