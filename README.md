@@ -30,16 +30,9 @@ Limitations:
 
 ### Contribution
 
-Contribution Guidelines will be provided soon. When created, Please refer to the
-CONTRIBUTION.md file for guidelines.
+Contribution Guidelines will be provided soon. When created, Please refer to the CONTRIBUTE.md file for guidelines on how to contribute.
 
 - #### Commit Guidelines
-  - ##### Commit Messages
-    - Based on Conventional Commits (feat/fix/chore/breaking)
-    - Based on SemVer Guidlines (minor/major/patch)
-  - ##### Branch Choices
-    - Commits are only accepted towards dev branch
-    - DONOT seed commits towards major/minor version branches. We will merge changes after review with the intended branch as per contribution guidelines and SemVer guidelines.
 
 ### Code of Conduct
 
