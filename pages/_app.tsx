@@ -1,27 +1,40 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { AppProps } from "next/app";
 import Head from "next/head";
 import {
   ColorScheme,
   ColorSchemeProvider,
   MantineProvider,
+  useMantineColorScheme,
 } from "@mantine/core";
-import { generalStore } from "../static/store";
+import { generalStore } from "../data/static/store";
 import { StoreProvider } from "easy-peasy";
-import { useState } from "react";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
+import { useEffect, useState } from "react";
+import "../styles/app.css";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
+  const [iteration, setIteration] = useState(0);
+  const preferredColorScheme = useColorScheme();
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-    key: "mantine-color-scheme",
-    defaultValue: "light",
-    getInitialValueInEffect: true,
+    key: "afridi-dev-color-scheme",
+    defaultValue: null,
   });
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
+
+  useEffect(() => {
+    setIteration(iteration + 1);
+    if (iteration == 1) {
+      if (!colorScheme) {
+        setColorScheme(preferredColorScheme);
+      }
+    }
+  }, [preferredColorScheme]);
 
   return (
     <>
