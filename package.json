@@ -55,6 +55,7 @@
     "imagekitio-react": "^1.1.1",
     "next": "^12.2.2",
     "next-seo": "^5.5.0",
+    "next-sitemap": "^3.1.11",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
