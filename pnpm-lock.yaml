@@ -12,6 +12,7 @@ specifiers:
   '@mantine/prism': ^4.2.12
   '@mantine/spotlight': ^4.2.12
   '@playwright/test': ^1.23.4
+  '@tabler/icons': ^1.77.0
   '@testing-library/jest-dom': ^5.16.4
   '@testing-library/react': ^13.3.0
   autoprefixer: ^10.4.7
@@ -41,6 +42,7 @@ dependencies:
   '@mantine/notifications': 4.2.12_7e5kgvtxhgbmwlaie64d25ybnm
   '@mantine/prism': 4.2.12_7e5kgvtxhgbmwlaie64d25ybnm
   '@mantine/spotlight': 4.2.12_7e5kgvtxhgbmwlaie64d25ybnm
+  '@tabler/icons': 1.77.0_sfoxds7t5ydpegc3knd667wn6m
   dayjs: 1.11.4
   easy-peasy: 5.0.4_react@17.0.2
   imagekitio-react: 1.1.1_sfoxds7t5ydpegc3knd667wn6m
@@ -1401,6 +1403,21 @@ packages:
     dependencies:
       defer-to-connect: 2.0.1
     dev: true
+
+  /@tabler/icons/1.77.0_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-zSCw3SEVYKPq5M3KgZFXatQYhyFLEJUoyFDAswSglH36JmqYIXp9qgahpcEVh4wpNhjshBLL/7/SuLU/ZIKsFQ==}
+    peerDependencies:
+      react: ^16.x || 17.x || 18.x
+      react-dom: ^16.x || 17.x || 18.x
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+    dev: false
 
   /@testing-library/dom/8.16.0:
     resolution: {integrity: sha512-uxF4zmnLHHDlmW4l+0WDjcgLVwCvH+OVLpD8Dfp+Bjfz85prwxWGbwXgJdLtkgjD0qfOzkJF9SmA6YZPsMYX4w==}

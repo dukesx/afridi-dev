@@ -20,6 +20,7 @@ export default function App(props: AppProps) {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "afridi-dev-color-scheme",
     defaultValue: null,
+    getInitialValueInEffect: true,
   });
 
   const toggleColorScheme = (value?: ColorScheme) =>
@@ -31,6 +32,7 @@ export default function App(props: AppProps) {
     setIteration(iteration + 1);
     if (iteration == 1) {
       if (!colorScheme) {
+        console.log(preferredColorScheme);
         setColorScheme(preferredColorScheme);
       }
     }
@@ -40,10 +42,6 @@ export default function App(props: AppProps) {
     <>
       <Head>
         <title>Page title</title>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
       </Head>
       <ColorSchemeProvider
         colorScheme={colorScheme}
@@ -52,7 +50,12 @@ export default function App(props: AppProps) {
         <MantineProvider
           withGlobalStyles
           withNormalizeCSS
-          theme={{ colorScheme }}
+          theme={{
+            colorScheme: colorScheme,
+            fontFamily: "Inter, sans-serif",
+            fontFamilyMonospace: "Monaco, Courier, monospace",
+            headings: { fontFamily: "Inter, sans-serif" },
+          }}
         >
           {/** @ts-ignore */}
           <StoreProvider store={generalStore}>

@@ -49,6 +49,7 @@
     "@mantine/notifications": "^4.2.12",
     "@mantine/prism": "^4.2.12",
     "@mantine/spotlight": "^4.2.12",
+    "@tabler/icons": "^1.77.0",
     "dayjs": "^1.11.4",
     "easy-peasy": "^5.0.4",
     "imagekitio-react": "^1.1.1",
