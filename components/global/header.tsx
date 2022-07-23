@@ -9,7 +9,10 @@ import {
 } from "@mantine/core";
 import { IconExternalLink, IconMoon, IconSun } from "@tabler/icons";
 
-const GlobalHeader = () => {
+interface GlobalHeaderProps {
+  selectedKey: number;
+}
+const GlobalHeader: React.FC<GlobalHeaderProps> = ({ selectedKey }) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
