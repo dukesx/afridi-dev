@@ -12,6 +12,7 @@ import { StoreProvider } from "easy-peasy";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import "../styles/app.css";
+import { IKContext } from "imagekitio-react";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
@@ -59,7 +60,9 @@ export default function App(props: AppProps) {
         >
           {/** @ts-ignore */}
           <StoreProvider store={generalStore}>
-            <Component {...pageProps} />
+            <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
+              <Component {...pageProps} />
+            </IKContext>
           </StoreProvider>
         </MantineProvider>
       </ColorSchemeProvider>
