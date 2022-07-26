@@ -12,7 +12,6 @@ You can use it for:
 - Commercial use
 - Distribution
 - Modification
-- Patent use
 - Private use
 
 BUT ON CONDITIONS:
