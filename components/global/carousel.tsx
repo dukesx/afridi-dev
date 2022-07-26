@@ -1,5 +1,4 @@
 import useEmblaCarousel from "embla-carousel-react";
-import { ReactNode } from "react";
 
 interface GlobalCarouselProps {
   children: Array<any>;

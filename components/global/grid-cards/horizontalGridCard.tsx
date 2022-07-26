@@ -1,13 +1,24 @@
-import { Group, type MantineTheme, Stack, Text } from "@mantine/core";
+import { Group, type MantineTheme, Stack, Text, Card } from "@mantine/core";
 import { IKImage } from "imagekitio-react";
+
+export enum CardStyle {
+  DEFAULT,
+  FEED,
+  WIDGET,
+}
 
 interface HorizontalGridCardProps {
   theme: MantineTheme;
+  style: CardStyle;
 }
-const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({ theme }) => {
+const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
+  theme,
+  style,
+}) => {
   return (
-    <Group noWrap direction="row" className="w-full">
+    <Group noWrap className="w-full">
       <IKImage
+        className="h-[70px] xs:h-[90px]"
         path="/7011585.jpeg"
         transformation={[
           {
@@ -16,16 +27,43 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({ theme }) => {
           },
         ]}
         lqip={{ active: true, quality: 30, blur: 20 }}
-        height={90}
+        height={style == CardStyle.WIDGET ? 80 : CardStyle.FEED ? 110 : 90}
         style={{
           borderRadius: theme.radius.lg,
         }}
       />
-      <Stack spacing="xs" className="max-w-[290px]">
-        <Text lineClamp={3} size="xs">
+      <Stack
+        spacing="xs"
+        className={
+          style == CardStyle.FEED
+            ? "max-w-[550px]"
+            : style == CardStyle.WIDGET
+            ? "max-w-[290px]"
+            : "max-w-[390px]"
+        }
+      >
+        <Text
+          lineClamp={2}
+          className={
+            style == CardStyle.DEFAULT
+              ? "text-xs xs:text-xs"
+              : style == CardStyle.FEED
+              ? "text-xs xs:text-sm"
+              : "text-xs xs:text-xs"
+          }
+          size={style == CardStyle.FEED ? "sm" : "xs"}
+          style={{
+            lineHeight: 1.5,
+          }}
+        >
           The Truth About the Wage Gap from Someone Who Saw Everyone’s Salary
         </Text>
-        <Text lineClamp={2} color="dimmed" size="xs">
+        <Text
+          lineClamp={2}
+          className="text-xs xs:text-xs"
+          color="dimmed"
+          size={style == CardStyle.FEED ? "sm" : "xs"}
+        >
           Being a data educator at the intersection of analytical and creative
           thinking
         </Text>
