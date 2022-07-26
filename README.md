@@ -16,11 +16,11 @@ You can use it for:
 
 BUT ON CONDITIONS:
 
-- Disclose source
-- License and copyright notice
-- Network use is distribution
-- Same license
-- State changes
+- Disclose the source
+- License and copyright notice must be included
+- Network use is distribution (Allowed to obtain copy of source online)
+- Release modified under Same license
+- Document the changes
 
 Limitations:
 
