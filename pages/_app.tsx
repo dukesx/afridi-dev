@@ -17,6 +17,9 @@ import { IKContext } from "imagekitio-react";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
 import { getCookie, setCookie } from "cookies-next";
+import { UserProvider } from "@supabase/auth-helpers-react";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
 
@@ -83,7 +86,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           {/** @ts-ignore */}
           <StoreProvider store={generalStore}>
             <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
-              <Component {...pageProps} />
+              <UserProvider supabaseClient={supabaseClient}>
+                <Component {...pageProps} />
+              </UserProvider>
             </IKContext>
           </StoreProvider>
         </MantineProvider>
