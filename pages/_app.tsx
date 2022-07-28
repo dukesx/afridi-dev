@@ -4,9 +4,7 @@ import Head from "next/head";
 import {
   ColorScheme,
   ColorSchemeProvider,
-  createEmotionCache,
   MantineProvider,
-  useMantineColorScheme,
 } from "@mantine/core";
 import { generalStore } from "../data/static/store";
 import { StoreProvider } from "easy-peasy";
@@ -19,6 +17,7 @@ import { GetServerSidePropsContext } from "next";
 import { getCookie, setCookie } from "cookies-next";
 import { UserProvider } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { appCache } from "../utils/cache";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -80,6 +79,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
             headings: { fontFamily: "Inter, sans-serif" },
             primaryColor: "cyan",
           }}
+          emotionCache={appCache}
         >
           <RouterTransition />
 
