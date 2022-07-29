@@ -268,7 +268,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
           </MediaQuery>
 
           <Group className="max-w-[200px] xs:max-w-[250px] ml-auto" spacing={0}>
-            {user && !isLoading ? (
+            {user ? (
               <Button
                 variant="gradient"
                 radius="xl"
@@ -285,120 +285,127 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               </Button>
             ) : null}
 
-            {user ? (
-              <Group>
-                <Menu position="bottom-end">
-                  <Menu.Target>
-                    <Button
-                      px={5}
-                      className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
-                      radius="xl"
-                      variant="subtle"
-                    >
-                      <Group className="items-center h-full">
-                        <Avatar color="cyan" className="h-[40px]" radius="xl" />
-                      </Group>
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown className="w-[250px] xs:w-[300px]">
-                    <Menu.Label className="">Control Center</Menu.Label>
-                    <Menu.Item
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
-                        />
-                      }
-                      icon={<IconUserCircle color={theme.colors.cyan[4]} />}
-                    >
-                      Profile
-                    </Menu.Item>
-                    <Menu.Item
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
-                        />
-                      }
-                      icon={<IconSettings color={theme.colors.blue[4]} />}
-                    >
-                      Settings
-                    </Menu.Item>
-                    <Menu.Label>Actions</Menu.Label>
-                    <Menu.Item
-                      onClick={() => toggleColorScheme()}
-                      icon={
-                        <Avatar
-                          size={35}
-                          radius="xl"
-                          styles={{
-                            placeholder: {
-                              backgroundColor:
-                                colorScheme == "dark"
-                                  ? theme.colors.yellow[6]
-                                  : theme.black,
-                            },
-                          }}
-                        >
-                          {colorScheme == "dark" ? (
-                            <IconSun color={theme.white} size={20} />
-                          ) : (
-                            <IconMoon color={theme.white} size={20} />
-                          )}
-                        </Avatar>
-                      }
-                    >
-                      {colorScheme == "dark"
-                        ? "Toggle Light Mode"
-                        : "Toggle Dark Mode"}
-                    </Menu.Item>
-                    <Menu.Item
-                      className="text-red-500 dark:text-red-500"
-                      rightSection={<IconLogout size={20} />}
-                      onClick={async () => {
-                        const { error } = await supabaseClient.auth.signOut();
-                        if (!error) {
-                          router.push("/");
+            {
+              // isLoading ? (
+              //   <Skeleton
+              //     mr="xl"
+              //     className="w-full max-w-[41px] h-[41px] xs:h-[40px] rounded-full w-[40px]"
+              //   />
+              // ) : user ? (
+              user ? (
+                <Group>
+                  <Menu position="bottom-end">
+                    <Menu.Target>
+                      <Button
+                        px={5}
+                        className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
+                        radius="xl"
+                        variant="subtle"
+                      >
+                        <Group className="items-center h-full">
+                          <Avatar
+                            color="cyan"
+                            className="h-[40px]"
+                            radius="xl"
+                          />
+                        </Group>
+                      </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown className="w-[250px] xs:w-[300px]">
+                      <Menu.Label className="">Control Center</Menu.Label>
+                      <Menu.Item
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
                         }
-                      }}
-                    >
-                      Sign out
-                    </Menu.Item>
-                    <Menu.Item
-                      className="text-red-500 dark:text-red-500"
-                      rightSection={<IconTrash size={20} />}
-                    >
-                      Delete Account
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </Group>
-            ) : isLoading ? (
-              <Skeleton
-                mr="xl"
-                className="w-full max-w-[41px] h-[41px] xs:h-[40px] rounded-full w-[40px]"
-              />
-            ) : (
-              <Link href="/get-started" passHref>
-                <Button
-                  component="a"
-                  radius="xl"
-                  rightIcon={
-                    <IconExternalLink className="align-middle" size={20} />
-                  }
-                  className="mr-5 xs:mr-5 xs:ml-2 sm:mr-5 md:mr-5 lg:mr-5 xl:mr-5 text-sm w-[150px] xs:w-full"
-                  variant="gradient"
-                  gradient={{
-                    from: "cyan",
-                    to: "blue",
-                  }}
-                >
-                  Get Started
-                </Button>
-              </Link>
-            )}
+                        icon={<IconUserCircle color={theme.colors.cyan[4]} />}
+                      >
+                        Profile
+                      </Menu.Item>
+                      <Menu.Item
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={<IconSettings color={theme.colors.blue[4]} />}
+                      >
+                        Settings
+                      </Menu.Item>
+                      <Menu.Label>Actions</Menu.Label>
+                      <Menu.Item
+                        onClick={() => toggleColorScheme()}
+                        icon={
+                          <Avatar
+                            size={35}
+                            radius="xl"
+                            styles={{
+                              placeholder: {
+                                backgroundColor:
+                                  colorScheme == "dark"
+                                    ? theme.colors.yellow[6]
+                                    : theme.black,
+                              },
+                            }}
+                          >
+                            {colorScheme == "dark" ? (
+                              <IconSun color={theme.white} size={20} />
+                            ) : (
+                              <IconMoon color={theme.white} size={20} />
+                            )}
+                          </Avatar>
+                        }
+                      >
+                        {colorScheme == "dark"
+                          ? "Toggle Light Mode"
+                          : "Toggle Dark Mode"}
+                      </Menu.Item>
+                      <Menu.Item
+                        className="text-red-500 dark:text-red-500"
+                        rightSection={<IconLogout size={20} />}
+                        onClick={async () => {
+                          const { error } = await supabaseClient.auth.signOut();
+                          if (!error) {
+                            router.push("/");
+                          }
+                        }}
+                      >
+                        Sign out
+                      </Menu.Item>
+                      <Menu.Item
+                        className="text-red-500 dark:text-red-500"
+                        rightSection={<IconTrash size={20} />}
+                      >
+                        Delete Account
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </Group>
+              ) : (
+                <Link href="/get-started" passHref>
+                  <Button
+                    component="a"
+                    radius="xl"
+                    rightIcon={
+                      <IconExternalLink className="align-middle" size={20} />
+                    }
+                    className="mr-5 xs:mr-5 xs:ml-2 sm:mr-5 md:mr-5 lg:mr-5 xl:mr-5 text-sm w-[150px] xs:w-full"
+                    variant="gradient"
+                    gradient={{
+                      from: "cyan",
+                      to: "blue",
+                    }}
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              )
+            }
           </Group>
         </Group>
       </Stack>
