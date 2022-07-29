@@ -18,16 +18,10 @@ import AfridiImage, {
   AfridiImageLoadingEnum,
 } from "../../components/global/afridi-image";
 import {
-  IconCheck,
-  IconCrown,
   IconListDetails,
-  IconPhoto,
-  IconShield,
   IconShieldLock,
   IconStar,
-  IconUser,
   IconUserCircle,
-  IconUserPlus,
 } from "@tabler/icons";
 
 const UserProfilePage = () => {

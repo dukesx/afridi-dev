@@ -8,3 +8,5 @@ const UserSettingsPage = () => {
     </AppWrapper>
   );
 };
+
+export default UserSettingsPage;
