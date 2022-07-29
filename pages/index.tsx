@@ -23,8 +23,7 @@ import SquareHorizontalWidget from "../components/landing/widgets/square-horizon
 import { IconStar, IconStars } from "@tabler/icons";
 const LandingPage = () => {
   const theme = useMantineTheme();
-  const dontShowGrid = useMediaQuery(`(max-width: 700px)`, false);
-  const dontShowSidebar = useMediaQuery(`(max-width: 700px)`, false);
+
   const largeCardClass = createStyles((theme, _params, getRef) => ({
     wrapper: {
       borderColor: theme.colors.yellow[6],
@@ -32,6 +31,15 @@ const LandingPage = () => {
       [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
         // Type safe child reference in nested selectors via ref
         display: "block",
+      },
+    },
+    sidebar: {
+      display: "none",
+
+      [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+        // Type safe child reference in nested selectors via ref
+        display: "flex",
+        flexDirection: "column",
       },
     },
   }));
@@ -116,7 +124,7 @@ const LandingPage = () => {
             </Grid.Col>
 
             <Grid.Col
-              className="hidden sm:flex flex-col"
+              className={classes.sidebar}
               span={5}
               xs={12}
               sm={5}
