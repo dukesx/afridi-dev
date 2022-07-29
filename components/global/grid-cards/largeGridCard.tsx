@@ -1,4 +1,11 @@
-import { Card, Stack, Title, Text, type MantineTheme } from "@mantine/core";
+import {
+  Card,
+  Stack,
+  Title,
+  Text,
+  type MantineTheme,
+  createStyles,
+} from "@mantine/core";
 import { IKImage } from "imagekitio-react";
 
 interface LargeGridCardProps {

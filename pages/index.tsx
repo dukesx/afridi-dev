@@ -1,5 +1,6 @@
 import {
   Card,
+  createStyles,
   Divider,
   Grid,
   MediaQuery,
@@ -24,7 +25,18 @@ const LandingPage = () => {
   const theme = useMantineTheme();
   const dontShowGrid = useMediaQuery(`(max-width: 700px)`, false);
   const dontShowSidebar = useMediaQuery(`(max-width: 700px)`, false);
+  const largeCardClass = createStyles((theme, _params, getRef) => ({
+    wrapper: {
+      borderColor: theme.colors.yellow[6],
+      display: "none",
+      [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+        // Type safe child reference in nested selectors via ref
+        display: "block",
+      },
+    },
+  }));
 
+  const { classes } = largeCardClass();
   return (
     <Fragment>
       <AppWrapper activeHeaderKey="home" size="xl">
@@ -32,7 +44,7 @@ const LandingPage = () => {
          *  Grid Starts
          *
          */}
-        <Card withBorder className="border-1 border-orange-400 hidden sm:block">
+        <Card withBorder className={classes.wrapper}>
           <Grid className="mt-5" align="stretch" justify="center" gutter="xl">
             <Grid.Col xs={6} sm={6} md={4}>
               <LargeGridCard theme={theme} />
