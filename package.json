@@ -67,10 +67,12 @@
     "next": "^12.2.2",
     "next-seo": "^5.5.0",
     "next-sitemap": "^3.1.11",
+    "postcss-nesting": "^10.1.10",
     "react": "^18.2.0",
     "react-awesome-reveal": "^3.8.1",
     "react-dom": "^18.2.0",
     "react-sticky": "^6.0.3",
+    "sass": "^1.54.0",
     "sticky-sidebar-v2": "^1.1.1"
   },
   "devDependencies": {

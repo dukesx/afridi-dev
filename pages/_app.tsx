@@ -10,7 +10,7 @@ import { generalStore } from "../data/static/store";
 import { StoreProvider } from "easy-peasy";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import "../styles/app.css";
+import "../styles/app.scss";
 import { IKContext } from "imagekitio-react";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
