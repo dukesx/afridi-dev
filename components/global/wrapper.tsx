@@ -20,7 +20,9 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
   return (
     <Fragment>
       <GlobalHeader theme={theme} activeHeaderKey={activeHeaderKey} />
-      <Container size={size ?? "xl"}>{children}</Container>
+      <Container px="xs" size={size ?? "xl"}>
+        {children}
+      </Container>
     </Fragment>
   );
 };

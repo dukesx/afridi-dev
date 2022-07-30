@@ -1,5 +1,9 @@
 import { ClassNames } from "@emotion/react";
-import { createStyles, useMantineTheme } from "@mantine/core";
+import {
+  createStyles,
+  useMantineColorScheme,
+  useMantineTheme,
+} from "@mantine/core";
 import { IKImage } from "imagekitio-react";
 
 export enum AfridiImageLoadingEnum {
@@ -8,7 +12,7 @@ export enum AfridiImageLoadingEnum {
 }
 
 interface AfridiImageProps {
-  width: number;
+  width: number | string;
   height: number;
   path: string;
   loading?: AfridiImageLoadingEnum;
@@ -32,23 +36,31 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   }));
 
   const { classes } = AfridiImageClasses();
+  const { colorScheme } = useMantineColorScheme();
   return (
-    <div className={classes.wrapper + " " + className} style={style}>
+    <div className={classes.wrapper + " " + (className ?? "")} style={style}>
       <IKImage
         height={height}
         width={width}
         path={path}
         loading={loading ?? ""}
         transformation={[
-          {
-            height: height + "px",
-            width: width + "px",
-          },
+          typeof width == "string"
+            ? {
+                height: height + "px",
+                crop: "maintain_ratio",
+              }
+            : {
+                height: height + "px",
+                width: width + "px",
+                crop: "maintain_ratio",
+              },
         ]}
-        lqip={{ active: true, quality: 30, blur: 20 }}
+        lqip={{ active: true, quality: 50, blur: 60 }}
         style={{
-          width: width + "px",
+          width: typeof width == "string" ? width : width + "px",
           height: height + "px",
+          objectFit: "cover",
           ...style,
         }}
       />

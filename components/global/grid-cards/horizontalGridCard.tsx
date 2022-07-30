@@ -21,12 +21,12 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
     <Group noWrap className="w-full">
       <AfridiImage
         path="/7011585.jpeg"
-        width={style == CardStyle.FEED ? 110 : 100}
+        width={style == CardStyle.FEED ? 100 : 100}
         height={
-          style == CardStyle.WIDGET ? 100 : style == CardStyle.FEED ? 110 : 100
+          style == CardStyle.WIDGET ? 100 : style == CardStyle.FEED ? 100 : 100
         }
         style={{
-          borderRadius: theme.radius.md,
+          borderRadius: theme.radius.lg,
         }}
       />
       <Stack

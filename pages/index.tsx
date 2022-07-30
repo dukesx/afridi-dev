@@ -142,10 +142,11 @@ const LandingPage = () => {
                   calculatedHeight,
                 }) => (
                   <div
-                    className="gap-y-10 flex flex-col items-center"
+                    className="gap-y-20 flex flex-col items-center"
                     style={style}
                   >
                     <SquareHorizontalWidget
+                      cardClassName="top-10"
                       title="Must Reads"
                       icon="👀"
                       theme={theme}

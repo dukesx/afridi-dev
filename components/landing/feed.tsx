@@ -209,6 +209,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
             </Button>
           </Stack>
         </Center>
+        {/* <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
         <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
         <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
         <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
@@ -217,8 +218,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
         <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
         <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
         <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
+        <HorizontalGridCard style={CardStyle.FEED} theme={theme} /> */}
       </Stack>
     </Fragment>
   );
