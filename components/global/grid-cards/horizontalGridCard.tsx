@@ -17,21 +17,27 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
 }) => {
   return (
     <Group noWrap className="w-full">
-      <IKImage
-        className="h-[70px] xs:h-[90px]"
-        path="/7011585.jpeg"
-        transformation={[
-          {
+      <div className="h-[100px] w-[100px]">
+        <IKImage
+          className=""
+          path="/7011585.jpeg"
+          width={100}
+          // height={100}
+          transformation={[
+            {
+              height: "100px",
+              width: "100px",
+            },
+          ]}
+          lqip={{ active: true, quality: 30, blur: 20 }}
+          height={style == CardStyle.WIDGET ? 80 : CardStyle.FEED ? 110 : 90}
+          style={{
+            borderRadius: theme.radius.lg,
             height: "100px",
             width: "100px",
-          },
-        ]}
-        lqip={{ active: true, quality: 30, blur: 20 }}
-        height={style == CardStyle.WIDGET ? 80 : CardStyle.FEED ? 110 : 90}
-        style={{
-          borderRadius: theme.radius.lg,
-        }}
-      />
+          }}
+        />
+      </div>
       <Stack
         spacing="xs"
         className={
