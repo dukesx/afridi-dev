@@ -65,7 +65,7 @@
     "next-seo": "^5.5.0",
     "next-sitemap": "^3.1.11",
     "react": "^18.2.0",
-    "react-awesome-reveal": "^3.8.1",
+    "react-awesome-reveal": "^4.0.0",
     "react-dom": "^18.2.0",
     "react-sticky": "^6.0.3",
     "sticky-sidebar-v2": "^1.1.1"
