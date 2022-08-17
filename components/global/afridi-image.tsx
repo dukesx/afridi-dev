@@ -5,6 +5,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IKImage } from "imagekitio-react";
+import { MutableRefObject } from "react";
 
 export enum AfridiImageLoadingEnum {
   LAZY = "lazy",
@@ -18,6 +19,7 @@ interface AfridiImageProps {
   loading?: AfridiImageLoadingEnum;
   style?: object;
   className?: string;
+  onClick?: Function;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
@@ -26,6 +28,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   path,
   style,
   className,
+  onClick,
 }) => {
   const theme = useMantineTheme();
   const AfridiImageClasses = createStyles((theme) => ({
@@ -40,6 +43,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   return (
     <div className={classes.wrapper + " " + (className ?? "")} style={style}>
       <IKImage
+        onClick={onClick}
         height={height}
         width={width}
         path={path}

@@ -16,7 +16,6 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   theme,
   style,
 }) => {
-  console.log(style);
   return (
     <Group noWrap className="w-full">
       <AfridiImage

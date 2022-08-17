@@ -10,17 +10,18 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { Fragment } from "react";
-import GlobalHeader from "../components/global/header";
 import AppWrapper from "../components/global/wrapper";
 import LargeGridCard from "../components/global/grid-cards/largeGridCard";
 import HorizontalGridCard, {
   CardStyle,
 } from "../components/global/grid-cards/horizontalGridCard";
-import { useMediaQuery } from "@mantine/hooks";
 import { StickyContainer, Sticky } from "react-sticky";
 import LandingFeed from "../components/landing/feed";
 import SquareHorizontalWidget from "../components/landing/widgets/square-horizontal";
 import { IconStar, IconStars } from "@tabler/icons";
+import MarkDownEditor from "../components/global/editor";
+import { useState } from "react";
+
 const LandingPage = () => {
   const theme = useMantineTheme();
 
@@ -45,6 +46,7 @@ const LandingPage = () => {
   }));
 
   const { classes } = largeCardClass();
+  const [value, setValue] = useState("");
   return (
     <Fragment>
       <AppWrapper activeHeaderKey="home" size="xl">

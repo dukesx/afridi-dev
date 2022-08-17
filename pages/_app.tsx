@@ -18,6 +18,8 @@ import { getCookie, setCookie } from "cookies-next";
 import { UserProvider } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { appCache } from "../utils/cache";
+import { NotificationsProvider } from "@mantine/notifications";
+
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -87,7 +89,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           <StoreProvider store={generalStore}>
             <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
               <UserProvider supabaseClient={supabaseClient}>
-                <Component {...pageProps} />
+                <NotificationsProvider position="top-right">
+                  <Component {...pageProps} />
+                </NotificationsProvider>
               </UserProvider>
             </IKContext>
           </StoreProvider>

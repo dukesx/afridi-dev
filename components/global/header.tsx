@@ -328,6 +328,8 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                         Profile
                       </Menu.Item>
                       <Menu.Item
+                        component={NextLink}
+                        href={`/user/${user.id}/settings`}
                         rightSection={
                           <IconChevronRight
                             className="align-middle"
