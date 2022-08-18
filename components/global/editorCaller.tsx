@@ -13,6 +13,7 @@ export const MarkDownEditor = ({
   toolbarItems,
   previewStyle,
   placeholder,
+  plugins,
 }: MarkDownEditorProps) => {
   const MarkDownEditor = dynamic(() => import("./editor"), {
     ssr: false,
@@ -26,6 +27,7 @@ export const MarkDownEditor = ({
   return (
     <MarkDownEditor
       toolbarItems={toolbarItems}
+      plugins={plugins}
       placeholder={placeholder}
       autoFocus={autoFocus}
       previewStyle={previewStyle}

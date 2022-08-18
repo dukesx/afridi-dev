@@ -11,24 +11,23 @@ import {
   Stack,
   Tabs,
   Text,
-  Textarea,
   TextInput,
   Title,
   useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { IconCheck, IconSettings, IconUserCircle, IconX } from "@tabler/icons";
-import AppWrapper from "../../../components/global/wrapper";
+import AppWrapper from "../../../../components/global/wrapper";
 import { useForm } from "@mantine/form";
 import { forwardRef, Fragment, useState } from "react";
-import { countries } from "../../../data/static/countries";
+import { countries } from "../../../../data/static/countries";
 import "country-flag-icons/3x2/flags.css";
 import { useEffect } from "react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { supabaseClient, withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
-import { MarkDownEditor } from "../../../components/global/editorCaller";
+import { MarkDownEditor } from "../../../../components/global/editorCaller";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();
@@ -49,8 +48,6 @@ const UserSettingsPage = () => {
         value.length <= 0 ? "Location cannot be empty" : null,
     },
   });
-
-  // const [value, setValue] = useState("");
 
   const form2 = useForm({
     initialValues: {
@@ -354,6 +351,7 @@ const UserSettingsPage = () => {
                         height="290px"
                         saveData={save}
                         previewStyle="tab"
+                        plugins
                       />
                     </Input.Wrapper>
 
@@ -381,3 +379,5 @@ const UserSettingsPage = () => {
 };
 
 export default UserSettingsPage;
+
+export const getServerSideProps = withPageAuth({ redirectTo: "/get-started" });

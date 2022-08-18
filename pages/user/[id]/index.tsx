@@ -47,7 +47,7 @@ import {
   IconUserCircle,
   IconX,
 } from "@tabler/icons";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import NoDataPlaceholder from "../../../public/nodata.svg";
@@ -117,7 +117,8 @@ const UserProfilePage = () => {
       feed (
         body,
         created_at,
-        id
+        id,
+        author_id
       )
       `
       )
@@ -270,8 +271,8 @@ const UserProfilePage = () => {
                     ) : (
                       <AfridiImage
                         className=""
-                        height={100}
-                        width={100}
+                        height={140}
+                        width={140}
                         path={
                           dp
                             ? `/${dp}`
@@ -304,9 +305,7 @@ const UserProfilePage = () => {
                       label={
                         <Text className="capitalize" size="xs">
                           Hailing proudly from{" "}
-                          {/* <Text className="capitalize"> */}
                           {" " + data["location"].split("-")[0]}
-                          {/* </Text> */}
                         </Text>
                       }
                     >
@@ -384,88 +383,111 @@ const UserProfilePage = () => {
               <Grid>
                 <Grid.Col span={12} sm={7}>
                   <Stack className="py-5 px-0 sm:p-5" spacing="xl">
-                    <Input.Wrapper className="w-full" label="">
-                      <MarkDownEditor
-                        toolbarItems={false}
-                        autoFocus={false}
-                        value={""}
-                        placeholder="Write your status text here 👍‍ (GFM Supported)"
-                        height="150px"
-                        saveData={save}
-                        previewStyle="tab"
-                      />
-                      <Button
-                        variant="light"
-                        className="float-right"
-                        mt="sm"
-                        fullWidth
-                        loading={submittingStatus}
-                        onClick={async () => {
-                          var markdown = ref.current
-                            .getInstance()
-                            .getMarkdown();
-                          setSubmittingStatus(true);
+                    {user && user.id == id ? (
+                      <Fragment>
+                        <Input.Wrapper className="w-full" label="">
+                          <MarkDownEditor
+                            toolbarItems={false}
+                            autoFocus={false}
+                            value={""}
+                            placeholder="Write your status text here 👍‍ (GFM Supported)"
+                            height="150px"
+                            plugins={false}
+                            saveData={save}
+                            previewStyle="tab"
+                          />
+                          <Button
+                            variant="light"
+                            className="float-right"
+                            mt="sm"
+                            fullWidth
+                            loading={submittingStatus}
+                            onClick={async () => {
+                              var markdown = ref.current
+                                .getInstance()
+                                .getMarkdown();
+                              setSubmittingStatus(true);
 
-                          const { error } = await supabaseClient
-                            .from("feed")
-                            .insert({
-                              body: markdown,
-                              author_id: user.id,
-                            });
+                              const { error } = await supabaseClient
+                                .from("feed")
+                                .insert({
+                                  body: markdown,
+                                  author_id: user.id,
+                                });
 
-                          if (error) {
-                            showNotification({
-                              title: "Error !",
-                              message: "An error occurred",
-                              color: "red",
-                              icon: <IconX />,
-                            });
-                          } else {
-                            showNotification({
-                              title: "Success",
-                              message: "Status submitted",
-                              color: "teal",
-                              icon: <IconCheck />,
-                            });
-                            setFeed(null);
-                            getData();
+                              if (error) {
+                                showNotification({
+                                  title: "Error !",
+                                  message: "An error occurred",
+                                  color: "red",
+                                  icon: <IconX />,
+                                });
+                              } else {
+                                showNotification({
+                                  title: "Success",
+                                  message: "Status submitted",
+                                  color: "teal",
+                                  icon: <IconCheck />,
+                                });
+                                setFeed(null);
+                                getData();
+                              }
+
+                              setSubmittingStatus(false);
+                            }}
+                          >
+                            Post Status
+                          </Button>
+                        </Input.Wrapper>
+
+                        <Divider
+                          label={
+                            <Text color="dimmed">Posts start here 👇</Text>
                           }
-
-                          setSubmittingStatus(false);
-                        }}
-                      >
-                        Post Status
-                      </Button>
-                    </Input.Wrapper>
-
-                    <Divider
-                      label={<Text color="dimmed">Posts start here 👇</Text>}
-                      labelPosition="center"
-                    />
+                          labelPosition="center"
+                        />
+                      </Fragment>
+                    ) : null}
 
                     {data ? (
                       feed ? (
                         feed.length > 0 ? (
                           feed.map((mapped, index) => (
                             <Card pb="md" key={"alo" + index} withBorder>
-                              <MarkDownRenderer
-                                className="mb-5"
-                                key={index + "alo"}
-                              >
-                                {mapped.body}
-                              </MarkDownRenderer>
-                              <Card.Section p="xs" className="my-auto mt-5">
-                                <Group position="apart">
-                                  <Badge
-                                    variant="light"
-                                    size="sm"
-                                    color="blue"
-                                    className="my-auto font-semibold"
-                                  >
-                                    {formatDistanceToNow(
-                                      new Date(mapped.created_at)
-                                    ) + " ago"}
-                                  </Badge>
+                              <Group position="apart" mb={30}>
+                                <Group>
+                                  <Avatar className="rounded-full h-[40px] w-[40px] ml-0 rounded-full">
+                                    {!data ? (
+                                      <Skeleton height={40} />
+                                    ) : dp ? (
+                                      <AfridiImage
+                                        className=""
+                                        height={50}
+                                        width={50}
+                                        path={
+                                          dp
+                                            ? `/${dp}`
+                                            : colorScheme == "dark"
+                                            ? "/image-avatar-placeholder-dark.png"
+                                            : `/image-avatar-placeholder.png`
+                                        }
+                                        loading={AfridiImageLoadingEnum.LAZY}
+                                      />
+                                    ) : null}
+                                  </Avatar>
+                                  <Stack spacing={0}>
+                                    <Text size={13} weight={600}>
+                                      Afzaal Afridi
+                                    </Text>
+                                    <Text color="dimmed" size={10}>
+                                      {" "}
+                                      {formatDistanceToNow(
+                                        new Date(mapped.created_at)
+                                      ) + " ago"}
+                                    </Text>
+                                  </Stack>
+                                </Group>
+                                {user && user.id == mapped.author_id ? (
                                   <Button
                                     size="xs"
                                     radius="xl"
@@ -525,8 +547,15 @@ const UserProfilePage = () => {
                                   >
                                     <IconTrash size={18} />
                                   </Button>
-                                </Group>
-                              </Card.Section>
+                                ) : null}
+                              </Group>
+
+                              <MarkDownRenderer
+                                className="mb-5"
+                                key={index + "alo"}
+                              >
+                                {mapped.body}
+                              </MarkDownRenderer>
                             </Card>
                           ))
                         ) : (

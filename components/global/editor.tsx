@@ -1,8 +1,7 @@
-import "prismjs/themes/prism.css";
 import "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
-
+// import "prismjs/themes/prism.css";
 //
 import { Editor } from "@toast-ui/react-editor";
 import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js";
@@ -30,6 +29,7 @@ export interface MarkDownEditorProps {
   previewStyle: "tab" | "vertical";
   toolbarItems: boolean;
   placeholder?: string;
+  plugins: boolean;
 }
 
 export const TextEditor: React.FC<MarkDownEditorProps> = ({
@@ -40,10 +40,10 @@ export const TextEditor: React.FC<MarkDownEditorProps> = ({
   previewStyle,
   toolbarItems,
   placeholder,
+  plugins,
 }) => {
   var editorRef: any = React.createRef();
   const { colorScheme } = useMantineColorScheme();
-
   return (
     <div className="container max-w-[700px]">
       <Editor
@@ -65,11 +65,15 @@ export const TextEditor: React.FC<MarkDownEditorProps> = ({
         placeholder={
           placeholder ?? "Write something awesome with GFM Supported Markdown"
         }
-        plugins={[codeSyntaxHighlight]}
+        // plugins={plugins ? [codeSyntaxHighlight] : []}
         ref={editorRef}
         previewStyle={previewStyle}
-        onLoad={(editor) => {
+        onLoad={async (editor) => {
           saveData(editorRef);
+          if (plugins) {
+            //@ts-ignore
+            await import("prismjs/themes/prism.css");
+          }
         }}
         autofocus={autoFocus ?? true}
         hooks={{

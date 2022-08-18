@@ -1,7 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkGithub from "remark-github";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import {
   Blockquote,
   Checkbox,
@@ -12,6 +11,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { Prism } from "@mantine/prism";
 
 interface MarkDownRendererProps {
   children: any;
@@ -29,11 +29,10 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
         code: ({ node, inline, className, children, ...props }) => {
           const match = /language-(\w+)/.exec(className || "");
           return !inline && match ? (
-            <Code>
-              <SyntaxHighlighter language={match[1]} PreTag="div" {...props}>
-                {String(children).replace(/\n$/, "")}
-              </SyntaxHighlighter>
-            </Code>
+            //@ts-ignore
+            <Prism withLineNumbers language={className.split("language-")[1]}>
+              {String(children)}
+            </Prism>
           ) : (
             <Code className={className} {...props}>
               {children}
@@ -81,7 +80,7 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
                               <Checkbox
                                 key={index2 + "alo"}
                                 label={mapped2.value}
-                                checked={checked}
+                                defaultChecked={checked}
                               />
                             );
                           }
@@ -96,7 +95,7 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
                       return (
                         <Checkbox
                           key={index1 + "alob"}
-                          checked={checked2}
+                          defaultChecked={checked2}
                           label={mapped.value}
                         />
                       );
@@ -110,7 +109,11 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
           }
         },
         ol: ({ children, node }) => <List type="ordered">{children}</List>,
-        p: ({ children }) => <Text>{children}</Text>,
+        p: ({ children }) => (
+          <Text pt="xs" pb="xs">
+            {children}
+          </Text>
+        ),
         q: ({ children, ...props }) => <Blockquote>{children}</Blockquote>,
         blockquote: ({ children, ...props }) => {
           return (
