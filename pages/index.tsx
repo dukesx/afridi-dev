@@ -10,21 +10,21 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { Fragment } from "react";
-import GlobalHeader from "../components/global/header";
 import AppWrapper from "../components/global/wrapper";
 import LargeGridCard from "../components/global/grid-cards/largeGridCard";
 import HorizontalGridCard, {
   CardStyle,
 } from "../components/global/grid-cards/horizontalGridCard";
-import { useMediaQuery } from "@mantine/hooks";
 import { StickyContainer, Sticky } from "react-sticky";
 import LandingFeed from "../components/landing/feed";
 import SquareHorizontalWidget from "../components/landing/widgets/square-horizontal";
 import { IconStar, IconStars } from "@tabler/icons";
+import MarkDownEditor from "../components/global/editor";
+import { useState } from "react";
+
 const LandingPage = () => {
   const theme = useMantineTheme();
-  const dontShowGrid = useMediaQuery(`(max-width: 700px)`, false);
-  const dontShowSidebar = useMediaQuery(`(max-width: 700px)`, false);
+
   const largeCardClass = createStyles((theme, _params, getRef) => ({
     wrapper: {
       borderColor: theme.colors.yellow[6],
@@ -34,9 +34,19 @@ const LandingPage = () => {
         display: "block",
       },
     },
+    sidebar: {
+      display: "none",
+
+      [`@media (min-width: ${theme.breakpoints.sm}px)`]: {
+        // Type safe child reference in nested selectors via ref
+        display: "flex",
+        flexDirection: "column",
+      },
+    },
   }));
 
   const { classes } = largeCardClass();
+  const [value, setValue] = useState("");
   return (
     <Fragment>
       <AppWrapper activeHeaderKey="home" size="xl">
@@ -116,7 +126,7 @@ const LandingPage = () => {
             </Grid.Col>
 
             <Grid.Col
-              className="hidden sm:flex flex-col"
+              className={classes.sidebar}
               span={5}
               xs={12}
               sm={5}
@@ -134,10 +144,11 @@ const LandingPage = () => {
                   calculatedHeight,
                 }) => (
                   <div
-                    className="gap-y-10 flex flex-col items-center"
+                    className="gap-y-20 flex flex-col items-center"
                     style={style}
                   >
                     <SquareHorizontalWidget
+                      cardClassName="top-10"
                       title="Must Reads"
                       icon="👀"
                       theme={theme}

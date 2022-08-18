@@ -10,7 +10,7 @@ import { generalStore } from "../data/static/store";
 import { StoreProvider } from "easy-peasy";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import "../styles/app.css";
+import "../styles/app.scss";
 import { IKContext } from "imagekitio-react";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
@@ -18,6 +18,8 @@ import { getCookie, setCookie } from "cookies-next";
 import { UserProvider } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { appCache } from "../utils/cache";
+import { NotificationsProvider } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -87,7 +89,11 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           <StoreProvider store={generalStore}>
             <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
               <UserProvider supabaseClient={supabaseClient}>
-                <Component {...pageProps} />
+                <NotificationsProvider position="top-right">
+                  <ModalsProvider>
+                    <Component {...pageProps} />
+                  </ModalsProvider>
+                </NotificationsProvider>
               </UserProvider>
             </IKContext>
           </StoreProvider>
