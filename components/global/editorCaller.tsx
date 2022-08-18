@@ -1,5 +1,4 @@
 import { Loader, Stack, Text } from "@mantine/core";
-import { EditorProps } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import { MarkDownEditorProps } from "./editor";
 
@@ -11,12 +10,12 @@ export const MarkDownEditor = ({
   height,
   saveData,
   autoFocus,
-  previewStyle,
   toolbarItems,
+  previewStyle,
+  placeholder,
 }: MarkDownEditorProps) => {
   const MarkDownEditor = dynamic(() => import("./editor"), {
     ssr: false,
-    // suspense: true,
     loading: () => (
       <Stack align="center">
         <Text>Loading Editor</Text>
@@ -26,7 +25,8 @@ export const MarkDownEditor = ({
   });
   return (
     <MarkDownEditor
-      toolbarItems
+      toolbarItems={toolbarItems}
+      placeholder={placeholder}
       autoFocus={autoFocus}
       previewStyle={previewStyle}
       saveData={saveData}

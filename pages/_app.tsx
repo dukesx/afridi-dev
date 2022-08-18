@@ -19,7 +19,7 @@ import { UserProvider } from "@supabase/auth-helpers-react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { appCache } from "../utils/cache";
 import { NotificationsProvider } from "@mantine/notifications";
-
+import { ModalsProvider } from "@mantine/modals";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -90,7 +90,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
             <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
               <UserProvider supabaseClient={supabaseClient}>
                 <NotificationsProvider position="top-right">
-                  <Component {...pageProps} />
+                  <ModalsProvider>
+                    <Component {...pageProps} />
+                  </ModalsProvider>
                 </NotificationsProvider>
               </UserProvider>
             </IKContext>

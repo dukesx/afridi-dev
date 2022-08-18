@@ -29,7 +29,6 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
 import { MarkDownEditor } from "../../../components/global/editorCaller";
-import { EditorPreviewStyle } from "../../../components/global/editor";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();
@@ -354,7 +353,7 @@ const UserSettingsPage = () => {
                         value={form2.values.about}
                         height="290px"
                         saveData={save}
-                        previewStyle={EditorPreviewStyle.TAB}
+                        previewStyle="tab"
                       />
                     </Input.Wrapper>
 

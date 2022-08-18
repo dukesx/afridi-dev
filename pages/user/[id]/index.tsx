@@ -13,6 +13,7 @@ import {
   Grid,
   Group,
   Header,
+  Input,
   List,
   Loader,
   Skeleton,
@@ -41,6 +42,7 @@ import {
   IconPencilPlus,
   IconPhoto,
   IconStar,
+  IconTrash,
   IconUpload,
   IconUserCircle,
   IconX,
@@ -55,18 +57,17 @@ import HorizontalGridCard, {
 import SquareHorizontalWidget from "../../../components/landing/widgets/square-horizontal";
 import "country-flag-icons/3x2/flags.css";
 import dynamic from "next/dynamic";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkGithub from "remark-github";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+
 import { useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import ImageUploader, {
   ImageUploaderType,
 } from "../../../components/global/image_uploader";
 import { MarkDownEditor } from "../../../components/global/editorCaller";
-import { EditorPreviewStyle } from "../../../components/global/editor";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import MarkDownRenderer from "../../../components/global/markdown-renderer";
+import { openConfirmModal } from "@mantine/modals";
+import { formatDistanceToNow } from "date-fns";
 
 const UserProfilePage = () => {
   const router = useRouter();
@@ -79,6 +80,8 @@ const UserProfilePage = () => {
   const { user } = useUser();
   const openRef = useRef<() => void>(null);
   const openRef2 = useRef<() => void>(null);
+  const [submittingStatus, setSubmittingStatus] = useState(false);
+  const [feed, setFeed] = useState(null);
   var ref: any = React.createRef();
 
   const specialStyles = createStyles((theme) => ({
@@ -91,17 +94,14 @@ const UserProfilePage = () => {
       },
     },
   }));
-  const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
-    ssr: false,
-  });
+
   const { classes } = specialStyles();
 
-  useEffect(() => {
-    const getData = async () => {
-      const { data: userData, error: userDataError } = await supabaseClient
-        .from("authors")
-        .select(
-          `
+  const getData = async () => {
+    const { data: userData, error: userDataError } = await supabaseClient
+      .from("authors")
+      .select(
+        `
       id,
       firstName,
       lastName,
@@ -111,19 +111,45 @@ const UserProfilePage = () => {
       bio,
       cover,
       articles (
+        created_at,
+        id
+      ),
+      feed (
+        body,
+        created_at,
         id
       )
       `
-        )
-        .eq("id", id);
+      )
+      .eq("id", id)
+      .order("created_at", {
+        foreignTable: "feed",
+        ascending: false,
+      })
+      .order("created_at", {
+        foreignTable: "articles",
+        ascending: false,
+      });
 
-      if (!userDataError) {
-        setData(userData[0]);
-        setDp(userData[0].dp);
-        setCover(userData[0].cover);
+    if (!userDataError) {
+      setData(userData[0]);
+      setDp(userData[0].dp);
+      setCover(userData[0].cover);
+      var feed = [];
+
+      if (userData[0]["feed"].length > 0) {
+        userData[0]["feed"].map((mapped) => feed.push(mapped));
       }
-    };
 
+      if (userData[0]["articles"].length > 0) {
+        userData[0]["articles"].map((mapped) => feed.push(mapped));
+      }
+
+      setFeed(feed);
+    }
+  };
+
+  useEffect(() => {
     getData();
   }, []);
 
@@ -276,9 +302,11 @@ const UserProfilePage = () => {
                     <Tooltip
                       className="capitalize"
                       label={
-                        <Text size="xs">
+                        <Text className="capitalize" size="xs">
                           Hailing proudly from{" "}
+                          {/* <Text className="capitalize"> */}
                           {" " + data["location"].split("-")[0]}
+                          {/* </Text> */}
                         </Text>
                       }
                     >
@@ -353,119 +381,299 @@ const UserProfilePage = () => {
             </Tabs.List>
 
             <Tabs.Panel value="feed" pt="xs" className="px-3">
-              {data ? (
-                data.articles && data.articles.length <= 0 ? (
-                  <Grid>
-                    <Grid.Col span={12} sm={7}>
-                      <Stack className="py-5 px-0 sm:p-5" spacing="xl">
-                        <MarkDownEditor
-                          toolbarItems={false}
-                          autoFocus={false}
-                          value={""}
-                          height="290px"
-                          saveData={save}
-                          previewStyle={EditorPreviewStyle.TAB}
-                        />
-                        <HorizontalGridCard
-                          style={CardStyle.FEED}
-                          theme={theme}
-                        />
-                        <HorizontalGridCard
-                          style={CardStyle.FEED}
-                          theme={theme}
-                        />
-                        <HorizontalGridCard
-                          style={CardStyle.FEED}
-                          theme={theme}
-                        />
-                      </Stack>
-                    </Grid.Col>
+              <Grid>
+                <Grid.Col span={12} sm={7}>
+                  <Stack className="py-5 px-0 sm:p-5" spacing="xl">
+                    <Input.Wrapper className="w-full" label="">
+                      <MarkDownEditor
+                        toolbarItems={false}
+                        autoFocus={false}
+                        value={""}
+                        placeholder="Write your status text here 👍‍ (GFM Supported)"
+                        height="150px"
+                        saveData={save}
+                        previewStyle="tab"
+                      />
+                      <Button
+                        variant="light"
+                        className="float-right"
+                        mt="sm"
+                        fullWidth
+                        loading={submittingStatus}
+                        onClick={async () => {
+                          var markdown = ref.current
+                            .getInstance()
+                            .getMarkdown();
+                          setSubmittingStatus(true);
 
-                    <Grid.Col className={classes.col} span={0} sm={5}>
-                      <Stack spacing="xl" mt="xl">
-                        <SquareHorizontalWidget
-                          title="Must Reads"
-                          icon="👀"
-                          theme={theme}
-                          color="cyan"
-                        />
-                        <SquareHorizontalWidget
-                          title="Must Reads"
-                          icon="👀"
-                          theme={theme}
-                          color="cyan"
-                        />
-                      </Stack>
-                    </Grid.Col>
-                  </Grid>
-                ) : (
-                  <Stack align="center" spacing={0} mt="xl">
-                    <Image
-                      width={300}
-                      height={300}
-                      src={NoDataPlaceholder}
-                      alt="No Data"
+                          const { error } = await supabaseClient
+                            .from("feed")
+                            .insert({
+                              body: markdown,
+                              author_id: user.id,
+                            });
+
+                          if (error) {
+                            showNotification({
+                              title: "Error !",
+                              message: "An error occurred",
+                              color: "red",
+                              icon: <IconX />,
+                            });
+                          } else {
+                            showNotification({
+                              title: "Success",
+                              message: "Status submitted",
+                              color: "teal",
+                              icon: <IconCheck />,
+                            });
+                            setFeed(null);
+                            getData();
+                          }
+
+                          setSubmittingStatus(false);
+                        }}
+                      >
+                        Post Status
+                      </Button>
+                    </Input.Wrapper>
+
+                    <Divider
+                      label={<Text color="dimmed">Posts start here 👇</Text>}
+                      labelPosition="center"
                     />
-                    <Button
-                      leftIcon={<IconPencilPlus />}
-                      className="max-w-[300px] text-center"
-                      fullWidth={false}
-                    >
-                      Let&apos;s Create a Post
-                    </Button>
+
+                    {data ? (
+                      feed ? (
+                        feed.length > 0 ? (
+                          feed.map((mapped, index) => (
+                            <Card pb="md" key={"alo" + index} withBorder>
+                              <MarkDownRenderer
+                                className="mb-5"
+                                key={index + "alo"}
+                              >
+                                {mapped.body}
+                              </MarkDownRenderer>
+                              <Card.Section p="xs" className="my-auto mt-5">
+                                <Group position="apart">
+                                  <Badge
+                                    variant="light"
+                                    size="sm"
+                                    color="blue"
+                                    className="my-auto font-semibold"
+                                  >
+                                    {formatDistanceToNow(
+                                      new Date(mapped.created_at)
+                                    ) + " ago"}
+                                  </Badge>
+                                  <Button
+                                    size="xs"
+                                    radius="xl"
+                                    color="red"
+                                    variant="subtle"
+                                    className="rounded-full py-1 px-1.5"
+                                    onClick={() => {
+                                      openConfirmModal({
+                                        title: (
+                                          <Text size="md" weight={700}>
+                                            Delete Status
+                                          </Text>
+                                        ),
+                                        centered: true,
+                                        children: (
+                                          <Text
+                                            mb="lg"
+                                            size="sm"
+                                            color="dimmed"
+                                          >
+                                            You are about to delete a status.
+                                            Are you sure you want to delete it ?
+                                            This action cannot be
+                                            <b className="ml-1 underline font-medium text-red-600 decoration-red-600 decoration-2">
+                                              UNDONE
+                                            </b>
+                                          </Text>
+                                        ),
+                                        confirmProps: { color: "red" },
+                                        labels: {
+                                          confirm: "Yes, delete it",
+                                          cancel: "No, don't delete it",
+                                        },
+                                        onConfirm: async () => {
+                                          const { error } = await supabaseClient
+                                            .from("feed")
+                                            .delete()
+                                            .match({
+                                              id: mapped.id,
+                                            });
+
+                                          if (!error) {
+                                            showNotification({
+                                              title: "Success",
+                                              message:
+                                                "Status deleted successfully",
+                                              color: "teal",
+                                              icon: <IconCheck />,
+                                            });
+                                            setFeed(null);
+                                            getData();
+                                          }
+                                        },
+                                        onCancel: () => {},
+                                      });
+                                    }}
+                                  >
+                                    <IconTrash size={18} />
+                                  </Button>
+                                </Group>
+                              </Card.Section>
+                            </Card>
+                          ))
+                        ) : (
+                          <Stack spacing="xs" align="center" mt="xl">
+                            <Text size="xl" weight={700}>
+                              Nothing Found
+                            </Text>
+
+                            <Text size="sm" color="dimmed">
+                              Post something to see it here 🙃
+                            </Text>
+                          </Stack>
+                        )
+                      ) : (
+                        <Stack mt={30}>
+                          <Group>
+                            <Skeleton radius="lg" height={90} width={90} />
+
+                            <Stack>
+                              <Skeleton
+                                radius="xl"
+                                height={20}
+                                className="w-[200px] sm:w-[400px]"
+                              />
+                              <Skeleton
+                                radius="xl"
+                                height={15}
+                                className="w-[100px] sm:w-[200px]"
+                              />
+                            </Stack>
+                          </Group>
+                          <Group>
+                            <Skeleton radius="lg" height={90} width={90} />
+
+                            <Stack>
+                              <Skeleton
+                                radius="xl"
+                                height={20}
+                                className="w-[200px] sm:w-[400px]"
+                              />
+                              <Skeleton
+                                radius="xl"
+                                height={15}
+                                className="w-[100px] sm:w-[200px]"
+                              />
+                            </Stack>
+                          </Group>
+                          <Group>
+                            <Skeleton radius="lg" height={90} width={90} />
+                            <Stack>
+                              <Skeleton
+                                radius="xl"
+                                height={20}
+                                className="w-[200px] sm:w-[400px]"
+                              />
+                              <Skeleton
+                                radius="xl"
+                                height={15}
+                                className="w-[100px] sm:w-[200px]"
+                              />
+                            </Stack>
+                          </Group>
+                        </Stack>
+                      )
+                    ) : (
+                      <Stack mt={30}>
+                        <Group>
+                          <Skeleton radius="lg" height={90} width={90} />
+
+                          <Stack>
+                            <Skeleton
+                              radius="xl"
+                              height={20}
+                              className="w-[200px] sm:w-[400px]"
+                            />
+                            <Skeleton
+                              radius="xl"
+                              height={15}
+                              className="w-[100px] sm:w-[200px]"
+                            />
+                          </Stack>
+                        </Group>
+                        <Group>
+                          <Skeleton radius="lg" height={90} width={90} />
+
+                          <Stack>
+                            <Skeleton
+                              radius="xl"
+                              height={20}
+                              className="w-[200px] sm:w-[400px]"
+                            />
+                            <Skeleton
+                              radius="xl"
+                              height={15}
+                              className="w-[100px] sm:w-[200px]"
+                            />
+                          </Stack>
+                        </Group>
+                        <Group>
+                          <Skeleton radius="lg" height={90} width={90} />
+                          <Stack>
+                            <Skeleton
+                              radius="xl"
+                              height={20}
+                              className="w-[200px] sm:w-[400px]"
+                            />
+                            <Skeleton
+                              radius="xl"
+                              height={15}
+                              className="w-[100px] sm:w-[200px]"
+                            />
+                          </Stack>
+                        </Group>
+                      </Stack>
+                    )}
+                    {/* <HorizontalGridCard
+                          style={CardStyle.FEED}
+                          theme={theme}
+                        />
+                        <HorizontalGridCard
+                          style={CardStyle.FEED}
+                          theme={theme}
+                        />
+                        <HorizontalGridCard
+                          style={CardStyle.FEED}
+                          theme={theme}
+                        /> */}
                   </Stack>
-                )
-              ) : (
-                <Stack mt={30}>
-                  <Group>
-                    <Skeleton radius="lg" height={90} width={90} />
+                </Grid.Col>
 
-                    <Stack>
-                      <Skeleton
-                        radius="xl"
-                        height={20}
-                        className="w-[200px] sm:w-[400px]"
-                      />
-                      <Skeleton
-                        radius="xl"
-                        height={15}
-                        className="w-[100px] sm:w-[200px]"
-                      />
-                    </Stack>
-                  </Group>
-                  <Group>
-                    <Skeleton radius="lg" height={90} width={90} />
-
-                    <Stack>
-                      <Skeleton
-                        radius="xl"
-                        height={20}
-                        className="w-[200px] sm:w-[400px]"
-                      />
-                      <Skeleton
-                        radius="xl"
-                        height={15}
-                        className="w-[100px] sm:w-[200px]"
-                      />
-                    </Stack>
-                  </Group>
-                  <Group>
-                    <Skeleton radius="lg" height={90} width={90} />
-                    <Stack>
-                      <Skeleton
-                        radius="xl"
-                        height={20}
-                        className="w-[200px] sm:w-[400px]"
-                      />
-                      <Skeleton
-                        radius="xl"
-                        height={15}
-                        className="w-[100px] sm:w-[200px]"
-                      />
-                    </Stack>
-                  </Group>
-                </Stack>
-              )}
+                <Grid.Col className={classes.col} span={0} sm={5}>
+                  <Stack spacing="xl" mt="xl">
+                    <SquareHorizontalWidget
+                      title="Must Reads"
+                      icon="👀"
+                      theme={theme}
+                      color="cyan"
+                    />
+                    <SquareHorizontalWidget
+                      title="Must Reads"
+                      icon="👀"
+                      theme={theme}
+                      color="cyan"
+                    />
+                  </Stack>
+                </Grid.Col>
+              </Grid>
             </Tabs.Panel>
 
             <Tabs.Panel value="exclusive" pt="xs">
@@ -582,91 +790,7 @@ const UserProfilePage = () => {
                       <Title mt="xl" mb={0} order={3}>
                         About me
                       </Title>
-                      <ReactMarkdown
-                        className=""
-                        components={{
-                          code: ({
-                            node,
-                            inline,
-                            className,
-                            children,
-                            ...props
-                          }) => {
-                            const match = /language-(\w+)/.exec(
-                              className || ""
-                            );
-                            return !inline && match ? (
-                              <Code>
-                                <SyntaxHighlighter
-                                  language={match[1]}
-                                  PreTag="div"
-                                  {...props}
-                                >
-                                  {String(children).replace(/\n$/, "")}
-                                </SyntaxHighlighter>
-                              </Code>
-                            ) : (
-                              <Code className={className} {...props}>
-                                {children}
-                              </Code>
-                            );
-                          },
-
-                          h1: ({ children }) => <Title>{children}</Title>,
-                          h2: ({ children }) => (
-                            <Title order={2}>{children}</Title>
-                          ),
-                          h3: ({ children }) => (
-                            <Title order={3}>{children}</Title>
-                          ),
-                          h4: ({ children }) => (
-                            <Title order={4}>{children}</Title>
-                          ),
-                          h5: ({ children }) => (
-                            <Title order={5}>{children}</Title>
-                          ),
-                          h6: ({ children }) => (
-                            <Title order={6}>{children}</Title>
-                          ),
-                          a: ({ children, ...props }) => (
-                            <Text variant="link" component="a" {...props}>
-                              {children}
-                            </Text>
-                          ),
-                          table: ({ children, ...props }) => (
-                            <Table {...props}>{children}</Table>
-                          ),
-                          ul: ({ children }) => <List>{children}</List>,
-                          ol: ({ children }) => (
-                            <List type="ordered">{children}</List>
-                          ),
-                          p: ({ children }) => <Text>{children}</Text>,
-                          q: ({ children, ...props }) => (
-                            <Blockquote>{children}</Blockquote>
-                          ),
-                          blockquote: ({ children, ...props }) => {
-                            return (
-                              <Blockquote>
-                                <Text color="dimmed" size="md">
-                                  {children}
-                                </Text>
-                              </Blockquote>
-                            );
-                          },
-                        }}
-                        remarkPlugins={[
-                          remarkGfm,
-                          [
-                            remarkGithub,
-                            {
-                              repository:
-                                "https://github.com/dukesx/afridi-dev",
-                            },
-                          ],
-                        ]}
-                      >
-                        {data.bio}
-                      </ReactMarkdown>
+                      <MarkDownRenderer>{data.bio}</MarkDownRenderer>
                     </Stack>
                   ) : (
                     <Stack>

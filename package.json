@@ -65,6 +65,7 @@
     "@uiw/react-md-editor": "v3.17.0",
     "cookies-next": "^2.1.1",
     "country-flag-icons": "^1.5.5",
+    "date-fns": "^2.29.1",
     "dayjs": "^1.11.4",
     "easy-peasy": "^5.0.4",
     "embla-carousel-react": "7.0.0-rc05",
