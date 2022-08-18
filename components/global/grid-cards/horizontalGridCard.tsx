@@ -1,5 +1,6 @@
 import { Group, type MantineTheme, Stack, Text, Card } from "@mantine/core";
 import { IKImage } from "imagekitio-react";
+import AfridiImage from "../afridi-image";
 
 export enum CardStyle {
   DEFAULT,
@@ -17,17 +18,12 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
 }) => {
   return (
     <Group noWrap className="w-full">
-      <IKImage
-        className="h-[70px] xs:h-[90px]"
+      <AfridiImage
         path="/7011585.jpeg"
-        transformation={[
-          {
-            height: "100px",
-            width: "100px",
-          },
-        ]}
-        lqip={{ active: true, quality: 30, blur: 20 }}
-        height={style == CardStyle.WIDGET ? 80 : CardStyle.FEED ? 110 : 90}
+        width={style == CardStyle.FEED ? 100 : 100}
+        height={
+          style == CardStyle.WIDGET ? 100 : style == CardStyle.FEED ? 100 : 100
+        }
         style={{
           borderRadius: theme.radius.lg,
         }}

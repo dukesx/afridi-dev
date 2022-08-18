@@ -1,5 +1,14 @@
-import { Card, Stack, Title, Text, type MantineTheme } from "@mantine/core";
+import {
+  Card,
+  Stack,
+  Title,
+  Text,
+  type MantineTheme,
+  createStyles,
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { IKImage } from "imagekitio-react";
+import AfridiImage, { AfridiImageLoadingEnum } from "../afridi-image";
 
 interface LargeGridCardProps {
   theme: MantineTheme;
@@ -8,24 +17,15 @@ interface LargeGridCardProps {
 
 const LargeGridCard: React.FC<LargeGridCardProps> = ({ theme, className }) => {
   return (
-    <Card radius="lg" className={className ?? ""}>
-      <Card.Section>
-        <IKImage
+    <Card radius="md" className={className ?? ""}>
+      <Card.Section className="backdrop-blur-sm bg-black rounded-lg">
+        <AfridiImage
+          height={400}
+          width={"100%"}
           path="/7011585.jpeg"
-          transformation={[
-            {
-              height: "500px",
-              width: "500px",
-            },
-          ]}
-          lqip={{ active: true, quality: 30, blur: 20 }}
+          loading={AfridiImageLoadingEnum.LAZY}
           style={{
-            borderRadius: `${theme.radius.lg + "px"} ${
-              theme.radius.lg + "px"
-            } ${theme.colorScheme == "dark" ? "0px" : theme.radius.lg + "px"} ${
-              theme.colorScheme == "dark" ? "0px" : theme.radius.lg + "px"
-            }`,
-            width: "100%",
+            borderRadius: theme.radius.xl,
           }}
         />
       </Card.Section>

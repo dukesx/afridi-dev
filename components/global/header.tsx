@@ -9,24 +9,41 @@ import {
   Text,
   useMantineColorScheme,
   Divider,
+  Card,
+  Avatar,
+  Skeleton,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
+import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
 import {
   IconArrowDown,
   IconBulb,
+  IconCaretDown,
+  IconCaretRight,
   IconChecklist,
+  IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
   IconDice,
   IconExternalLink,
   IconEyeOff,
   IconHash,
+  IconLogout,
   IconMoon,
+  IconPencilPlus,
   IconScale,
+  IconSettings,
   IconSmartHome,
   IconSun,
+  IconTrash,
   IconUserCircle,
   IconUsers,
+  IconWriting,
 } from "@tabler/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 interface GlobalHeaderProps {
   activeHeaderKey: string;
@@ -36,7 +53,10 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
   activeHeaderKey,
   theme,
 }) => {
+  const { user, isLoading, error, checkSession } = useUser();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const router = useRouter();
+
   return (
     <Header className="w-full" height={70}>
       <Stack className="h-full w-full" justify="center" spacing={0}>
@@ -46,79 +66,59 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
           spacing={0}
         >
           {/* <Stack className="h-full" align="center" justify="center" spacing={0}> */}
-          <Text
-            className="ml-5 xs:ml-5 sm:ml-5 md:ml-5 lg:ml-5 xl:ml-5 font-mono text-sm xs:text-xl hidden xs:block"
-            size="xl"
-            weight={400}
-            // variant="gradient"
-            // gradient={{
-            //   from: "blue",
-            //   to: "indigo",
-            // }}
-            color={theme.colorScheme == "dark" ? theme.white : "blue"}
-          >
-            AFRIDI.{"</"}
-          </Text>
-          <Group
-            className="ml-2 font-mono"
-            noWrap
-            spacing={3}
-            position="center"
-            align="center"
-          >
-            <Text
-              className="text-lg xs:text-sm"
-              // variant="gradient"
-              // gradient={{
-              //   from: "blue",
-              //   to: "cyan",
-              // }}
-              color={theme.colorScheme == "dark" ? theme.white : "cyan"}
-              size="xs"
-              weight={500}
-            >
-              The
-            </Text>
-            <Text
-              className="text-lg xs:text-sm mx-1 xs:mx-0"
-              // variant="gradient"
-              // gradient={{
-              //   from: "blue",
-              //   to: "cyan",
-              // }}
-              size="xs"
-              weight={800}
-              color={theme.colorScheme == "dark" ? theme.white : "blue"}
-            >
-              DEV&apos;s
-            </Text>
-            <Text
-              className="text-lg xs:text-sm"
-              // variant="gradient"
-              // gradient={{
-              //   from: "blue",
-              //   to: "cyan",
-              // }}
-              size="xs"
-              weight={500}
-              color={theme.colorScheme == "dark" ? theme.white : "cyan"}
-            >
-              Blog
-            </Text>
-            <Text
-              className="font-mono ml-1 text-2xl xs:text-xl"
-              // variant="gradient"
-              // gradient={{
-              //   from: "blue",
-              //   to: "cyan",
-              // }}
-              size="xl"
-              weight={400}
-              color={theme.colorScheme == "dark" ? theme.white : "blue"}
-            >
-              {" >"}
-            </Text>
-          </Group>
+          <Link href="/" passHref>
+            <Group className="cursor-pointer" spacing={0}>
+              <Text
+                className="ml-5 xs:ml-5 sm:ml-5 md:ml-5 lg:ml-5 xl:ml-5 font-mono text-sm xs:text-xl hidden xs:block"
+                size="xl"
+                weight={400}
+                color={theme.colorScheme == "dark" ? theme.white : "blue"}
+              >
+                AFRIDI.{"</"}
+              </Text>
+              <Group
+                className="ml-2 font-mono"
+                noWrap
+                spacing={3}
+                position="center"
+                align="center"
+              >
+                <Text
+                  className="text-lg xs:text-sm"
+                  color={theme.colorScheme == "dark" ? theme.white : "cyan"}
+                  size="xs"
+                  weight={500}
+                >
+                  The
+                </Text>
+                <Text
+                  className="text-lg xs:text-sm mx-1 xs:mx-0"
+                  size="xs"
+                  weight={800}
+                  color={theme.colorScheme == "dark" ? theme.white : "blue"}
+                >
+                  DEV&apos;s
+                </Text>
+                <Text
+                  className="text-lg xs:text-sm"
+                  size="xs"
+                  weight={500}
+                  color={theme.colorScheme == "dark" ? theme.white : "cyan"}
+                >
+                  Blog
+                </Text>
+                <Text
+                  className="font-mono ml-1 text-2xl xs:text-xl"
+                  size="xl"
+                  weight={400}
+                  color={theme.colorScheme == "dark" ? theme.white : "blue"}
+                >
+                  {" >"}
+                </Text>
+              </Group>
+            </Group>
+          </Link>
+
           {/* </Stack> */}
           <MediaQuery
             smallerThan={950}
@@ -266,46 +266,147 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               </Menu>
             </Group>
           </MediaQuery>
-          {colorScheme == "dark" ? (
-            <Button
-              onClick={() => toggleColorScheme()}
-              radius="xl"
-              className="ml-auto bg-gradient-to-r from-amber-300 to-orange-400 mr-4 xs:mr-4"
-              px={8}
-              variant="gradient"
-            >
-              <IconSun size={21} />
-            </Button>
-          ) : (
-            <Button
-              onClick={() => toggleColorScheme()}
-              radius="xl"
-              className="ml-auto mr-4 xs:mr-4"
-              px={8}
-              variant="gradient"
-              gradient={{
-                from: "dark",
-                to: "grey",
-              }}
-            >
-              <IconMoon size={21} />
-            </Button>
-          )}
-          <Link href="/get-started" passHref>
-            <Button
-              component="a"
-              radius="xl"
-              rightIcon={<IconExternalLink size={20} />}
-              className="mr-5 xs:mr-5 sm:mr-5 md:mr-5 lg:mr-5 xl:mr-5 text-xs"
-              variant="gradient"
-              gradient={{
-                from: "cyan",
-                to: "blue",
-              }}
-            >
-              Get Started
-            </Button>
-          </Link>
+
+          <Group className="max-w-[200px] xs:max-w-[250px] ml-auto" spacing={0}>
+            {user ? (
+              <Button
+                variant="gradient"
+                radius="xl"
+                gradient={{
+                  from: "blue",
+                  to: "teal",
+                }}
+                rightIcon={
+                  <IconPencilPlus className="h-[22px] w-[22px] align-middle" />
+                }
+                className="mr-1 xs:mr-4 text-xs xs:text-sm"
+              >
+                Create Post
+              </Button>
+            ) : null}
+
+            {
+              // isLoading ? (
+              //   <Skeleton
+              //     mr="xl"
+              //     className="w-full max-w-[41px] h-[41px] xs:h-[40px] rounded-full w-[40px]"
+              //   />
+              // ) : user ? (
+              user ? (
+                <Group>
+                  <Menu position="bottom-end">
+                    <Menu.Target>
+                      <Button
+                        px={5}
+                        className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
+                        radius="xl"
+                        variant="subtle"
+                      >
+                        <Group className="items-center h-full">
+                          <Avatar
+                            color="cyan"
+                            className="h-[40px]"
+                            radius="xl"
+                          />
+                        </Group>
+                      </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown className="w-[250px] xs:w-[300px]">
+                      <Menu.Label className="">Control Center</Menu.Label>
+                      <Menu.Item
+                        component={NextLink}
+                        href={`/user/${user.id}`}
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={<IconUserCircle color={theme.colors.cyan[4]} />}
+                      >
+                        Profile
+                      </Menu.Item>
+                      <Menu.Item
+                        component={NextLink}
+                        href={`/user/${user.id}/settings`}
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={<IconSettings color={theme.colors.blue[4]} />}
+                      >
+                        Settings
+                      </Menu.Item>
+                      <Menu.Label>Actions</Menu.Label>
+                      <Menu.Item
+                        onClick={() => toggleColorScheme()}
+                        icon={
+                          <Avatar
+                            size={35}
+                            radius="xl"
+                            styles={{
+                              placeholder: {
+                                backgroundColor:
+                                  colorScheme == "dark"
+                                    ? theme.colors.yellow[6]
+                                    : theme.black,
+                              },
+                            }}
+                          >
+                            {colorScheme == "dark" ? (
+                              <IconSun color={theme.white} size={20} />
+                            ) : (
+                              <IconMoon color={theme.white} size={20} />
+                            )}
+                          </Avatar>
+                        }
+                      >
+                        {colorScheme == "dark"
+                          ? "Toggle Light Mode"
+                          : "Toggle Dark Mode"}
+                      </Menu.Item>
+                      <Menu.Item
+                        icon={
+                          <IconLogout
+                            color={theme.colors.yellow[6]}
+                            size={22}
+                          />
+                        }
+                        onClick={async () => {
+                          const { error } = await supabaseClient.auth.signOut();
+                          router.push("/");
+                        }}
+                      >
+                        Sign out
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </Group>
+              ) : (
+                <Link href="/get-started" passHref>
+                  <Button
+                    component="a"
+                    radius="xl"
+                    rightIcon={
+                      <IconExternalLink className="align-middle" size={20} />
+                    }
+                    className="mr-5 xs:mr-5 xs:ml-2 sm:mr-5 md:mr-5 lg:mr-5 xl:mr-5 text-sm w-[150px] xs:w-full"
+                    variant="gradient"
+                    gradient={{
+                      from: "cyan",
+                      to: "blue",
+                    }}
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              )
+            }
+          </Group>
         </Group>
       </Stack>
     </Header>
