@@ -17,6 +17,7 @@ interface SquareHorizontalWidgetProps {
   color: MantineColor;
   icon: string;
   title: string;
+  cardClassName?: string;
 }
 
 const SquareHorizontalWidget: React.FC<SquareHorizontalWidgetProps> = ({
@@ -24,10 +25,11 @@ const SquareHorizontalWidget: React.FC<SquareHorizontalWidgetProps> = ({
   color,
   icon,
   title,
+  cardClassName,
 }) => {
   return (
     <Card
-      className={`border border-solid max-w-[450px] top-10`}
+      className={`border border-solid max-w-[450px] ` + cardClassName}
       mt={0}
       radius="lg"
       style={{
