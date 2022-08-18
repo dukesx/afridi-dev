@@ -68,6 +68,7 @@
     "date-fns": "^2.29.1",
     "dayjs": "^1.11.4",
     "easy-peasy": "^5.0.4",
+    "embla-carousel-react": "7.0.0",
     "embla-carousel-react": "7.0.0-rc05",
     "filepond": "^4.30.4",
     "filepond-plugin-file-poster": "^2.5.1",
