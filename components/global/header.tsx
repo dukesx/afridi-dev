@@ -314,6 +314,8 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     <Menu.Dropdown className="w-[250px] xs:w-[300px]">
                       <Menu.Label className="">Control Center</Menu.Label>
                       <Menu.Item
+                        component={NextLink}
+                        href={`/user/${user.id}`}
                         rightSection={
                           <IconChevronRight
                             className="align-middle"
@@ -326,6 +328,8 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                         Profile
                       </Menu.Item>
                       <Menu.Item
+                        component={NextLink}
+                        href={`/user/${user.id}/settings`}
                         rightSection={
                           <IconChevronRight
                             className="align-middle"
@@ -366,22 +370,18 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                           : "Toggle Dark Mode"}
                       </Menu.Item>
                       <Menu.Item
-                        className="text-red-500 dark:text-red-500"
-                        rightSection={<IconLogout size={20} />}
+                        icon={
+                          <IconLogout
+                            color={theme.colors.yellow[6]}
+                            size={22}
+                          />
+                        }
                         onClick={async () => {
                           const { error } = await supabaseClient.auth.signOut();
-                          if (!error) {
-                            router.push("/");
-                          }
+                          router.push("/");
                         }}
                       >
                         Sign out
-                      </Menu.Item>
-                      <Menu.Item
-                        className="text-red-500 dark:text-red-500"
-                        rightSection={<IconTrash size={20} />}
-                      >
-                        Delete Account
                       </Menu.Item>
                     </Menu.Dropdown>
                   </Menu>

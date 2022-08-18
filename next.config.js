@@ -1,9 +1,8 @@
-module.exports = async (phase, { defaultConfig }) => {
-  /**
-   * @type {import('next').NextConfig}
-   */
-  const nextConfig = {
+const removeImports = require("next-remove-imports")();
+
+module.exports = (phase, { defaultConfig }) => {
+  return removeImports({
+    ...defaultConfig,
     reactStrictMode: false,
-  };
-  return nextConfig;
+  });
 };
