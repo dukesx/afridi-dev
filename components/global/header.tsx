@@ -9,9 +9,7 @@ import {
   Text,
   useMantineColorScheme,
   Divider,
-  Card,
   Avatar,
-  Skeleton,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
@@ -19,11 +17,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 import {
   IconArrowDown,
   IconBulb,
-  IconCaretDown,
-  IconCaretRight,
   IconChecklist,
-  IconChevronDown,
-  IconChevronLeft,
   IconChevronRight,
   IconDice,
   IconExternalLink,
@@ -36,14 +30,11 @@ import {
   IconSettings,
   IconSmartHome,
   IconSun,
-  IconTrash,
   IconUserCircle,
   IconUsers,
-  IconWriting,
 } from "@tabler/icons";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 interface GlobalHeaderProps {
   activeHeaderKey: string;
@@ -270,6 +261,8 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
           <Group className="max-w-[200px] xs:max-w-[250px] ml-auto" spacing={0}>
             {user ? (
               <Button
+                component={NextLink}
+                href="/compose/article"
                 variant="gradient"
                 radius="xl"
                 gradient={{
@@ -281,7 +274,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                 }
                 className="mr-1 xs:mr-4 text-xs xs:text-sm"
               >
-                Create Post
+                Compose
               </Button>
             ) : null}
 

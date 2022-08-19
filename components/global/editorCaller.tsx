@@ -14,11 +14,17 @@ export const MarkDownEditor = ({
   previewStyle,
   placeholder,
   plugins,
+  className,
 }: MarkDownEditorProps) => {
   const MarkDownEditor = dynamic(() => import("./editor"), {
     ssr: false,
     loading: () => (
-      <Stack align="center">
+      <Stack
+        style={{
+          height: height ?? 600,
+        }}
+        align="center"
+      >
         <Text>Loading Editor</Text>
         <Loader size="sm" variant="bars" />
       </Stack>
@@ -26,6 +32,7 @@ export const MarkDownEditor = ({
   });
   return (
     <MarkDownEditor
+      className={className}
       toolbarItems={toolbarItems}
       plugins={plugins}
       placeholder={placeholder}

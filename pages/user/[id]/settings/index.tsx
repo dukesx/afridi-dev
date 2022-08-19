@@ -82,6 +82,8 @@ const UserSettingsPage = () => {
 
   const newCountrues = [];
 
+  console.log(ref);
+
   countries.map((mapped) =>
     newCountrues.push({
       label: mapped.name,

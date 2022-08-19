@@ -30,6 +30,7 @@ export interface MarkDownEditorProps {
   toolbarItems: boolean;
   placeholder?: string;
   plugins: boolean;
+  className?: string;
 }
 
 export const TextEditor: React.FC<MarkDownEditorProps> = ({
@@ -41,11 +42,12 @@ export const TextEditor: React.FC<MarkDownEditorProps> = ({
   toolbarItems,
   placeholder,
   plugins,
+  className,
 }) => {
   var editorRef: any = React.createRef();
   const { colorScheme } = useMantineColorScheme();
   return (
-    <div className="container max-w-[700px]">
+    <div className={className + " container"}>
       <Editor
         initialValue={value}
         theme={colorScheme == "dark" ? "dark" : "default"}
@@ -65,7 +67,7 @@ export const TextEditor: React.FC<MarkDownEditorProps> = ({
         placeholder={
           placeholder ?? "Write something awesome with GFM Supported Markdown"
         }
-        // plugins={plugins ? [codeSyntaxHighlight] : []}
+        plugins={plugins ? [codeSyntaxHighlight] : []}
         ref={editorRef}
         previewStyle={previewStyle}
         onLoad={async (editor) => {
