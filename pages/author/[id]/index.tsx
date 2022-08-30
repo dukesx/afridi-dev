@@ -21,6 +21,7 @@ import {
   Table,
   Tabs,
   Text,
+  ThemeIcon,
   Title,
   Tooltip,
   useMantineColorScheme,
@@ -33,6 +34,7 @@ import AfridiImage, {
 } from "../../../components/global/afridi-image";
 import {
   IconArrowRight,
+  IconArticle,
   IconBrandGithub,
   IconCheck,
   IconCode,
@@ -56,7 +58,6 @@ import HorizontalGridCard, {
 } from "../../../components/global/grid-cards/horizontalGridCard";
 import SquareHorizontalWidget from "../../../components/landing/widgets/square-horizontal";
 import "country-flag-icons/3x2/flags.css";
-import dynamic from "next/dynamic";
 
 import { useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
@@ -67,7 +68,9 @@ import { MarkDownEditor } from "../../../components/global/editorCaller";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import MarkDownRenderer from "../../../components/global/markdown-renderer";
 import { openConfirmModal } from "@mantine/modals";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow, parseISO } from "date-fns";
+import { NextLink } from "@mantine/next";
+import { compareDesc } from "date-fns";
 
 const UserProfilePage = () => {
   const router = useRouter();
@@ -82,6 +85,8 @@ const UserProfilePage = () => {
   const openRef2 = useRef<() => void>(null);
   const [submittingStatus, setSubmittingStatus] = useState(false);
   const [feed, setFeed] = useState(null);
+  const [hot, setHot] = useState(null);
+  const [thumbsUp, setThumbsUp] = useState(null);
   var ref: any = React.createRef();
 
   const specialStyles = createStyles((theme) => ({
@@ -112,9 +117,20 @@ const UserProfilePage = () => {
       cover,
       articles (
         created_at,
-        id
+        author_id,
+        id,
+        title,
+        description,
+        cover,
+        co_authors_articles (
+          authors (
+            dp,
+            firstName,
+            lastName
+          )
+        )
       ),
-      feed (
+      status_feed (
         body,
         created_at,
         id,
@@ -122,9 +138,10 @@ const UserProfilePage = () => {
       )
       `
       )
+      .limit(100)
       .eq("id", id)
       .order("created_at", {
-        foreignTable: "feed",
+        foreignTable: "status_feed",
         ascending: false,
       })
       .order("created_at", {
@@ -138,20 +155,122 @@ const UserProfilePage = () => {
       setCover(userData[0].cover);
       var feed = [];
 
-      if (userData[0]["feed"].length > 0) {
-        userData[0]["feed"].map((mapped) => feed.push(mapped));
+      if (userData[0]["status_feed"].length > 0) {
+        userData[0]["status_feed"].map((mapped) =>
+          feed.push({
+            type: "status",
+            data: mapped,
+            created_at: mapped.created_at,
+          })
+        );
       }
 
       if (userData[0]["articles"].length > 0) {
-        userData[0]["articles"].map((mapped) => feed.push(mapped));
+        userData[0]["articles"].map((mapped) =>
+          feed.push({
+            data: mapped,
+            type: "article",
+            created_at: mapped.created_at,
+          })
+        );
       }
+      feed.sort((a, b) => {
+        return compareDesc(parseISO(a.created_at), parseISO(b.created_at));
+      });
 
       setFeed(feed);
     }
   };
 
+  const getThumbsUpArticles = async () => {
+    var date = new Date();
+    var date2 = new Date();
+    //
+    //
+    date.setMonth(date.getMonth());
+    date2.setMonth(date2.getMonth() - 1);
+    //
+    //
+    const { error, data } = await supabaseClient
+      .from("articles")
+      .select(
+        `
+        id,
+        title,
+        description,
+        cover,
+        body,
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        ),
+        co_authors_articles (
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        )
+        ),
+        tags!inner(
+          title
+        )
+        `
+      )
+      .lte("created_at", date.toUTCString())
+      .gte("created_at", date2.toUTCString())
+      .eq("tags.title", "thumbs-up")
+      .order("created_at", {
+        ascending: false,
+      })
+      .limit(3);
+
+    setThumbsUp(data);
+  };
+
+  const getHotArticles = async () => {
+    const { error, data } = await supabaseClient
+      .from("articles")
+      .select(
+        `
+        id,
+        title,
+        description,
+        cover,
+        body,
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        ),
+        co_authors_articles (
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        )
+        ),
+          tags!inner (
+            title
+        )
+        `
+      )
+      .eq("tags.title", "hot")
+      .order("created_at", {
+        ascending: false,
+      })
+      .limit(3);
+    setHot(data);
+  };
+
   useEffect(() => {
     getData();
+    getThumbsUpArticles();
+    getHotArticles();
   }, []);
 
   const save = (data) => {
@@ -160,12 +279,17 @@ const UserProfilePage = () => {
 
   return (
     <AppWrapper activeHeaderKey="" size="lg">
-      <Card px={0} className="w-full">
+      <Card
+        px={0}
+        style={{
+          overflow: "unset",
+        }}
+      >
         <Card.Section className="">
           {!data ? (
             <Skeleton height={450} />
           ) : (
-            <Group>
+            <Group className="overflow-hidden">
               {user ? (
                 <ImageUploader
                   className="border-0"
@@ -173,10 +297,12 @@ const UserProfilePage = () => {
                   theme={theme}
                   user={user}
                   py={0.01}
+                  px={1}
                   setImage={setCover}
                   openRef={openRef2}
                   placeholder={
                     <AfridiImage
+                      fillImage={false}
                       height={450}
                       width={1320}
                       path={
@@ -195,6 +321,7 @@ const UserProfilePage = () => {
                 />
               ) : (
                 <AfridiImage
+                  fillImage={false}
                   height={450}
                   width={1320}
                   path={
@@ -226,7 +353,7 @@ const UserProfilePage = () => {
           )}
         </Card.Section>
 
-        <Stack className="max-w-[1000px]">
+        <Stack className="max-w-[1000px] mx-auto">
           <Group position="apart">
             <Group pt="xl" py="sm">
               <Avatar className="rounded-full h-[90px] w-[90px] sm:h-[120px] ml-0 sm:ml-6 sm:w-[120px] shadow-lg">
@@ -239,7 +366,7 @@ const UserProfilePage = () => {
                         className="absolute z-[100] rounded-full p-1 bottom-1 left-8 sm:bottom-[6px] right-0 sm:left-12 h-[30px] w-[30px]"
                         size="xs"
                         color="blue"
-                        variant="filled"
+                        variant="default"
                         onClick={() => openRef.current()}
                       >
                         <IconUpload size={15} />
@@ -254,6 +381,7 @@ const UserProfilePage = () => {
                         openRef={openRef}
                         placeholder={
                           <AfridiImage
+                            fillImage={false}
                             className=""
                             height={140}
                             width={140}
@@ -271,6 +399,7 @@ const UserProfilePage = () => {
                     ) : (
                       <AfridiImage
                         className=""
+                        fillImage={false}
                         height={140}
                         width={140}
                         path={
@@ -345,11 +474,7 @@ const UserProfilePage = () => {
             </Group>
           </Group>
 
-          <Tabs
-            className="pb-16 min-h-[400px]"
-            color="blue"
-            defaultValue="feed"
-          >
+          <Tabs color="blue" defaultValue="feed">
             <Tabs.List grow position="center">
               <Tabs.Tab
                 value="feed"
@@ -382,7 +507,7 @@ const UserProfilePage = () => {
             <Tabs.Panel value="feed" pt="xs" className="px-3">
               <Grid>
                 <Grid.Col span={12} sm={7}>
-                  <Stack className="py-5 px-0 sm:p-5" spacing="xl">
+                  <Stack className="py-5 px-0 sm:pt-10 sm:pr-10" spacing="xl">
                     {user && user.id == id ? (
                       <Fragment>
                         <Input.Wrapper className="w-full" label="">
@@ -454,13 +579,14 @@ const UserProfilePage = () => {
                         feed.length > 0 ? (
                           feed.map((mapped, index) => (
                             <Card pb="md" key={"alo" + index} withBorder>
-                              <Group position="apart" mb={30}>
+                              <Group position="apart" mb={20}>
                                 <Group>
-                                  <Avatar className="rounded-full h-[40px] w-[40px] ml-0 rounded-full">
+                                  <Avatar className="rounded-full h-[50px] w-[50px] ml-0 rounded-full">
                                     {!data ? (
                                       <Skeleton height={40} />
                                     ) : dp ? (
                                       <AfridiImage
+                                        fillImage={false}
                                         className=""
                                         height={50}
                                         width={50}
@@ -477,17 +603,27 @@ const UserProfilePage = () => {
                                   </Avatar>
                                   <Stack spacing={0}>
                                     <Text size={13} weight={600}>
-                                      Afzaal Afridi
+                                      {data ? (
+                                        data.firstName + " " + data.lastName
+                                      ) : (
+                                        <Skeleton height={10} width={100} />
+                                      )}
                                     </Text>
-                                    <Text color="dimmed" size={10}>
+                                    <Text
+                                      className="capitalize"
+                                      color="dimmed"
+                                      size={10}
+                                    >
                                       {" "}
                                       {formatDistanceToNow(
-                                        new Date(mapped.created_at)
+                                        new Date(mapped.data.created_at)
                                       ) + " ago"}
                                     </Text>
                                   </Stack>
                                 </Group>
-                                {user && user.id == mapped.author_id ? (
+                                {user &&
+                                user.id == mapped.data.author_id &&
+                                mapped.type == "status" ? (
                                   <Button
                                     size="xs"
                                     radius="xl"
@@ -548,14 +684,88 @@ const UserProfilePage = () => {
                                     <IconTrash size={18} />
                                   </Button>
                                 ) : null}
+                                {mapped.type == "article" ? (
+                                  <Tooltip
+                                    position="top"
+                                    label="An article on Afridi.dev"
+                                  >
+                                    <ThemeIcon
+                                      className="cursor-help"
+                                      size={40}
+                                      variant="light"
+                                      radius="xl"
+                                    >
+                                      <Text>✏️</Text>
+                                    </ThemeIcon>
+                                  </Tooltip>
+                                ) : null}
                               </Group>
-
-                              <MarkDownRenderer
-                                className="mb-5"
-                                key={index + "alo"}
-                              >
-                                {mapped.body}
-                              </MarkDownRenderer>
+                              {mapped.type == "status" ? (
+                                <MarkDownRenderer
+                                  className="mb-5"
+                                  key={index + "alo"}
+                                >
+                                  {mapped.data.body}
+                                </MarkDownRenderer>
+                              ) : (
+                                <Stack>
+                                  <Text size="sm">
+                                    {mapped.data.description}
+                                  </Text>
+                                  <Card
+                                    component="a"
+                                    href="#"
+                                    onClick={() => {
+                                      if (mapped.type == "article") {
+                                        window.open(
+                                          `http://localhost:3000/article/${mapped.data.id}`,
+                                          "_blank"
+                                        );
+                                      }
+                                    }}
+                                    withBorder
+                                  >
+                                    <Card.Section>
+                                      <AfridiImage
+                                        fillImage={true}
+                                        path={mapped.data.cover}
+                                        height={300}
+                                        width={300}
+                                      />
+                                    </Card.Section>
+                                    <Group className="w-full" position="apart">
+                                      <Stack className="w-full" spacing={3}>
+                                        <Title mt="xl" order={5}>
+                                          {mapped.data.title}
+                                        </Title>
+                                      </Stack>
+                                      <Text
+                                        className="max-w-[90%]"
+                                        lineClamp={2}
+                                        size="xs"
+                                        color="dimmed"
+                                      >
+                                        {mapped.data.description}
+                                      </Text>
+                                      <Tooltip label="Open link in new tab">
+                                        <ActionIcon
+                                          color="blue"
+                                          variant="subtle"
+                                          component="div"
+                                          onClick={() => {
+                                            window.open(
+                                              `http://localhost:3000/article/${mapped.data.id}`,
+                                              "_blank"
+                                            );
+                                          }}
+                                        >
+                                          <IconExternalLink size={20} />
+                                        </ActionIcon>
+                                      </Tooltip>
+                                    </Group>
+                                  </Card>
+                                </Stack>
+                              )}
                             </Card>
                           ))
                         ) : (
@@ -671,34 +881,24 @@ const UserProfilePage = () => {
                         </Group>
                       </Stack>
                     )}
-                    {/* <HorizontalGridCard
-                          style={CardStyle.FEED}
-                          theme={theme}
-                        />
-                        <HorizontalGridCard
-                          style={CardStyle.FEED}
-                          theme={theme}
-                        />
-                        <HorizontalGridCard
-                          style={CardStyle.FEED}
-                          theme={theme}
-                        /> */}
                   </Stack>
                 </Grid.Col>
 
-                <Grid.Col className={classes.col} span={0} sm={5}>
-                  <Stack spacing="xl" mt="xl">
+                <Grid.Col span={0} sm={5}>
+                  <Stack spacing="xl" className="sticky top-8 mt-8 pb-10 ml-10">
                     <SquareHorizontalWidget
-                      title="Must Reads"
-                      icon="👀"
+                      title="ON FIRE"
+                      icon="🔥"
                       theme={theme}
-                      color="cyan"
+                      color="orange"
+                      data={hot ? hot : []}
                     />
                     <SquareHorizontalWidget
-                      title="Must Reads"
-                      icon="👀"
+                      title="Thumbs up"
+                      icon="👍‍"
                       theme={theme}
-                      color="cyan"
+                      color="yellow"
+                      data={thumbsUp ? thumbsUp : []}
                     />
                   </Stack>
                 </Grid.Col>

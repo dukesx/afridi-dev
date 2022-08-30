@@ -7,17 +7,25 @@ import {
   Divider,
   type MantineTheme,
   MantineColor,
+  Text,
 } from "@mantine/core";
+import { Fragment, ReactNode } from "react";
 import HorizontalGridCard, {
   CardStyle,
 } from "../../global/grid-cards/horizontalGridCard";
+import { AfridiDevArticle } from "../../global/grid-cards/largeGridCard";
+import HorizontalGridCardSkeleton from "../../global/skeletons/grid-cards/horizontalGridCardSkeleton";
+import EmptyImagePlaceholder from "../../../public/empty.svg";
+import Image from "next/image";
+import EmptyPlaceholder from "../../global/placeholders/empty";
 
 interface SquareHorizontalWidgetProps {
   theme: MantineTheme;
   color: MantineColor;
-  icon: string;
+  icon: string | ReactNode;
   title: string;
   cardClassName?: string;
+  data: Array<AfridiDevArticle>;
 }
 
 const SquareHorizontalWidget: React.FC<SquareHorizontalWidgetProps> = ({
@@ -26,10 +34,11 @@ const SquareHorizontalWidget: React.FC<SquareHorizontalWidgetProps> = ({
   icon,
   title,
   cardClassName,
+  data,
 }) => {
   return (
     <Card
-      className={`border border-solid max-w-[450px] ` + cardClassName}
+      className={`border border-solid max-w-[450px] my-1 ` + cardClassName}
       mt={0}
       radius="lg"
       style={{
@@ -47,10 +56,31 @@ const SquareHorizontalWidget: React.FC<SquareHorizontalWidgetProps> = ({
 
       <Divider mt="sm" pb="md" color={color} />
 
-      <Stack mt="xs">
-        <HorizontalGridCard style={CardStyle.WIDGET} theme={theme} />
-        <HorizontalGridCard style={CardStyle.WIDGET} theme={theme} />
-        <HorizontalGridCard style={CardStyle.WIDGET} theme={theme} />
+      <Stack
+        spacing={data ? (data.length > 0 ? "md" : 0) : "md"}
+        align="center"
+        mt="xs"
+      >
+        {data ? (
+          data.length > 0 ? (
+            data.map((mapped, index) => (
+              <HorizontalGridCard
+                key={"alobb" + index}
+                data={mapped}
+                style={CardStyle.WIDGET}
+                theme={theme}
+              />
+            ))
+          ) : (
+            <EmptyPlaceholder height={250} />
+          )
+        ) : (
+          <Stack className="w-full">
+            <HorizontalGridCardSkeleton />
+            <HorizontalGridCardSkeleton />
+            <HorizontalGridCardSkeleton />
+          </Stack>
+        )}
       </Stack>
     </Card>
   );

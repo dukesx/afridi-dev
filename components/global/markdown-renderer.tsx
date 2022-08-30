@@ -24,7 +24,7 @@ var checked2 = null;
 const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
   return (
     <ReactMarkdown
-      className=""
+      className={className}
       components={{
         code: ({ node, inline, className, children, ...props }) => {
           const match = /language-(\w+)/.exec(className || "");
@@ -44,14 +44,43 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
             return <Checkbox />;
           }
         },
-        h1: ({ children }) => <Title>{children}</Title>,
-        h2: ({ children }) => <Title order={2}>{children}</Title>,
-        h3: ({ children }) => <Title order={3}>{children}</Title>,
-        h4: ({ children }) => <Title order={4}>{children}</Title>,
-        h5: ({ children }) => <Title order={5}>{children}</Title>,
-        h6: ({ children }) => <Title order={6}>{children}</Title>,
+        h1: ({ children }) => (
+          <Title pb="xs" order={1}>
+            {children}
+          </Title>
+        ),
+        h2: ({ children }) => (
+          <Title pb="xs" order={2}>
+            {children}
+          </Title>
+        ),
+        h3: ({ children }) => (
+          <Title pb="xs" order={3}>
+            {children}
+          </Title>
+        ),
+        h4: ({ children }) => (
+          <Title pb="xs" order={4}>
+            {children}
+          </Title>
+        ),
+        h5: ({ children }) => (
+          <Title pb="xs" order={5}>
+            {children}
+          </Title>
+        ),
+        h6: ({ children }) => (
+          <Title pb="xs" order={6}>
+            {children}
+          </Title>
+        ),
         a: ({ children, ...props }) => (
-          <Text variant="link" component="a" {...props}>
+          <Text
+            variant="link"
+            className="truncate max-w-full"
+            component="a"
+            {...props}
+          >
             {children}
           </Text>
         ),
@@ -109,11 +138,7 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
           }
         },
         ol: ({ children, node }) => <List type="ordered">{children}</List>,
-        p: ({ children }) => (
-          <Text pt="xs" pb="xs">
-            {children}
-          </Text>
-        ),
+        p: ({ children }) => <Text pb="sm">{children}</Text>,
         q: ({ children, ...props }) => <Blockquote>{children}</Blockquote>,
         blockquote: ({ children, ...props }) => {
           return (

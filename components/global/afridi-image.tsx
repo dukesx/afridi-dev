@@ -20,6 +20,7 @@ interface AfridiImageProps {
   style?: object;
   className?: string;
   onClick?: Function;
+  fillImage: boolean;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
@@ -27,6 +28,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   loading,
   path,
   style,
+  fillImage,
   className,
   onClick,
 }) => {
@@ -41,8 +43,17 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   const { classes } = AfridiImageClasses();
   const { colorScheme } = useMantineColorScheme();
   return (
-    <div className={classes.wrapper + " " + (className ?? "")} style={style}>
+    <div
+      className={
+        classes.wrapper +
+        " " +
+        (className ?? "") +
+        (fillImage ? " max-w-full w-full" : "")
+      }
+      style={style}
+    >
       <IKImage
+        className={fillImage ? "mx-auto flex !w-full !h-full" : ""}
         onClick={onClick}
         height={height}
         width={width}

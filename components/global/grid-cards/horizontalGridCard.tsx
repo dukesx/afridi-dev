@@ -1,6 +1,15 @@
-import { Group, type MantineTheme, Stack, Text, Card } from "@mantine/core";
+import {
+  Group,
+  type MantineTheme,
+  Stack,
+  Text,
+  Card,
+  Skeleton,
+} from "@mantine/core";
+import { NextLink } from "@mantine/next";
 import { IKImage } from "imagekitio-react";
 import AfridiImage from "../afridi-image";
+import { AfridiDevArticle } from "./largeGridCard";
 
 export enum CardStyle {
   DEFAULT,
@@ -11,15 +20,18 @@ export enum CardStyle {
 interface HorizontalGridCardProps {
   theme: MantineTheme;
   style: CardStyle;
+  data: AfridiDevArticle;
 }
 const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   theme,
   style,
+  data,
 }) => {
-  return (
+  return data ? (
     <Group noWrap className="w-full">
       <AfridiImage
-        path="/7011585.jpeg"
+        fillImage={false}
+        path={data.cover}
         width={style == CardStyle.FEED ? 100 : 100}
         height={
           style == CardStyle.WIDGET ? 100 : style == CardStyle.FEED ? 100 : 100
@@ -39,10 +51,12 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
         }
       >
         <Text
+          component={NextLink}
+          href={`/article/${data.id}`}
           lineClamp={2}
           className={
             style == CardStyle.DEFAULT
-              ? "text-xs xs:text-xs"
+              ? "text-xs xs:text-xs max-w-[270px]"
               : style == CardStyle.FEED
               ? "text-xs xs:text-sm"
               : "text-xs xs:text-xs"
@@ -52,7 +66,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
             lineHeight: 1.5,
           }}
         >
-          The Truth About the Wage Gap from Someone Who Saw Everyone’s Salary
+          {data.title}
         </Text>
         <Text
           lineClamp={2}
@@ -60,12 +74,11 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
           color="dimmed"
           size={style == CardStyle.FEED ? "sm" : "xs"}
         >
-          Being a data educator at the intersection of analytical and creative
-          thinking
+          {data.description}
         </Text>
       </Stack>
     </Group>
-  );
+  ) : null;
 };
 
 export default HorizontalGridCard;
