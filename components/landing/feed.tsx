@@ -144,10 +144,12 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
   };
 
   useEffect(() => {
-    if (isLoading !== null && isLoading == false) {
-      getFeed();
-    }
-  }, [key, isLoading, user]);
+    console.log("isloading is");
+    console.log(isLoading);
+    console.log("user is");
+    console.log(user);
+    getFeed();
+  }, [key, user]);
 
   /**
    *
@@ -327,7 +329,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
                 <Stack spacing="xl" mb="xl" align="center">
                   {trendingData.map((mapped, index) => (
                     <HorizontalGridCard
-                      key={"aloba" + index}
+                      key={"aloban" + index}
                       data={mapped}
                       style={CardStyle.FEED}
                       theme={theme}
@@ -374,7 +376,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
                 <Stack spacing="xl" mb="xl" align="center">
                   {popularData.map((mapped, index) => (
                     <HorizontalGridCard
-                      key={"aloba" + index}
+                      key={"alobis" + index}
                       data={mapped}
                       style={CardStyle.FEED}
                       theme={theme}

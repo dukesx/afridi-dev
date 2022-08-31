@@ -15,7 +15,12 @@ export const getFeedArticles = async ({
   setArticleCount,
   setData,
 }: FeedFunctionProps) => {
+  console.log("data is");
+  console.log(data);
+
   if (user) {
+    console.log("sent user is");
+    console.log(user);
     const {
       error,
       data: feedData,
