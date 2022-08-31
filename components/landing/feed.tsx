@@ -90,7 +90,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
   //
   //
   const { colorScheme } = useMantineColorScheme();
-  const [infiniteLoading, setInfiniteLoading] = useState(true);
 
   /**
    *
@@ -108,8 +107,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
       case "feed":
         if (feedData.length == 0) {
           setFeedLoading(true);
-        } else {
-          setInfiniteLoading(true);
         }
         await getFeedArticles({
           user: user,
@@ -144,14 +141,12 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
     }
 
     setFeedLoading(false);
-    setInfiniteLoading(false);
   };
 
   useEffect(() => {
-    if (!user && !isLoading) {
-      setFeedData(feedaData);
+    if (isLoading !== null && isLoading == false) {
+      getFeed();
     }
-    getFeed();
   }, [key, user]);
 
   /**
