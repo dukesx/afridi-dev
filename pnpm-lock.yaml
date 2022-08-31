@@ -18,7 +18,7 @@ specifiers:
   '@mantine/spotlight': ^5.2.3
   '@next/env': ^12.2.3
   '@playwright/test': ^1.23.4
-  '@supabase/auth-helpers-nextjs': ^0.2.5
+  '@supabase/auth-helpers-nextjs': ^0.2.7
   '@supabase/auth-helpers-react': ^0.2.3
   '@supabase/supabase-js': ^1.35.4
   '@tabler/icons': ^1.91.0
@@ -82,7 +82,7 @@ dependencies:
   '@mantine/prism': 5.2.3_gtpyizsqksopg24uajf25sqkj4
   '@mantine/spotlight': 5.2.3_gtpyizsqksopg24uajf25sqkj4
   '@next/env': 12.2.3
-  '@supabase/auth-helpers-nextjs': 0.2.5
+  '@supabase/auth-helpers-nextjs': 0.2.7
   '@supabase/auth-helpers-react': 0.2.3
   '@supabase/supabase-js': 1.35.4
   '@tabler/icons': 1.91.0_biqbaboplfbrettd7655fr4n2y
@@ -1573,8 +1573,8 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@supabase/auth-helpers-nextjs/0.2.5:
-    resolution: {integrity: sha512-/l1gUR46xFf+fSUEwPEHak5FQMk/ZsQLdKm2k7RV7jV6RLmQVF7nZ2u9YOy88xZat7XbIkc4SYAM/sa9U6sjAw==}
+  /@supabase/auth-helpers-nextjs/0.2.7:
+    resolution: {integrity: sha512-3+UMfE+wXBKswnzVL/hg1IYt3+POay+/B/Fn2hV8MaiffRpDdOG8zDSOIwsiNUz4KVZYOVa8IPvyh2AJqXwfMQ==}
     dependencies:
       '@supabase/auth-helpers-shared': 0.1.3
     dev: false

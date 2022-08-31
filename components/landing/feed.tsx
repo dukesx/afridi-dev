@@ -35,7 +35,7 @@ import HorizontalGridCard, {
   CardStyle,
 } from "../global/grid-cards/horizontalGridCard";
 import { Fade } from "react-awesome-reveal";
-import { useUser } from "@supabase/auth-helpers-react";
+import { User, useUser } from "@supabase/auth-helpers-react";
 import HorizontalGridCardSkeleton from "../global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import InfiniteScroll from "react-infinite-scroller";
 import {
@@ -48,18 +48,18 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import { GeneralStore } from "../../data/static/store";
 interface LandingFeedProps {
   theme: MantineTheme;
-  feedaData: Array<any>;
+  usera: User;
 }
 
-const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
+const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
   /**
    *
    *
    *
    *
    */
-  const { user, isLoading } = useUser();
   const [key, setKey] = useState("feed");
+  const { user } = useUser();
   //
   //
   //
@@ -144,10 +144,9 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
   };
 
   useEffect(() => {
-    getFeed();
-  }, [key]);
-
-  getFeed();
+    setFeedLoading(true);
+    setTimeout(() => getFeed(), 1500);
+  }, [key, user]);
 
   /**
    *
@@ -164,7 +163,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
         <Tabs.List grow position="center">
           <Tabs.Tab
             icon={
-              user ? (
+              usera || user ? (
                 <Indicator
                   // offset={40}
                   position="top-end"
@@ -189,12 +188,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
                         radius="xl"
                         size={30}
                       >
-                        <IconHash
-                          strokeWidth={2}
-                          // fill={theme.colors.cyan[6]}
-                          // color={theme.colors.cyan[6]}
-                          size={16}
-                        />
+                        <IconHash strokeWidth={2} size={16} />
                       </ThemeIcon>
                     </Tooltip>
                   }
@@ -266,7 +260,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
                   loadMore={getFeed}
                   hasMore={feedData.length < articleCount ? true : false}
                   loader={
-                    <Center>
+                    <Center key="something-list-loader">
                       <Stack align="center">
                         <Loader variant="bars" color="blue" />
                         <Text className="text-center">
@@ -276,7 +270,12 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
                     </Center>
                   }
                 >
-                  <Stack spacing="xl" mb="xl" align="center">
+                  <Stack
+                    key="something-list"
+                    spacing="xl"
+                    mb="xl"
+                    align="center"
+                  >
                     {feedData.map((mapped, index) => (
                       <HorizontalGridCard
                         key={"aloba" + index}

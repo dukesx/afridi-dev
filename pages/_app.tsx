@@ -68,38 +68,38 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       <Head>
         <title>Page title</title>
       </Head>
-      <UserProvider supabaseClient={supabaseClient}>
-        <ColorSchemeProvider
-          colorScheme={newColorScheme}
-          toggleColorScheme={toggleColorScheme}
+      <ColorSchemeProvider
+        colorScheme={newColorScheme}
+        toggleColorScheme={toggleColorScheme}
+      >
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            colorScheme: newColorScheme,
+            fontFamily: "Inter, sans-serif",
+            fontFamilyMonospace: "Monaco, Courier, monospace",
+            headings: { fontFamily: "Inter, sans-serif" },
+            primaryColor: "cyan",
+          }}
+          emotionCache={appCache}
         >
-          <MantineProvider
-            withGlobalStyles
-            withNormalizeCSS
-            theme={{
-              colorScheme: newColorScheme,
-              fontFamily: "Inter, sans-serif",
-              fontFamilyMonospace: "Monaco, Courier, monospace",
-              headings: { fontFamily: "Inter, sans-serif" },
-              primaryColor: "cyan",
-            }}
-            emotionCache={appCache}
-          >
-            <RouterTransition />
+          <RouterTransition />
 
-            {/** @ts-ignore */}
-            <StoreProvider store={generalStore}>
-              <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
-                <NotificationsProvider position="top-right">
-                  <ModalsProvider>
+          {/** @ts-ignore */}
+          <StoreProvider store={generalStore}>
+            <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
+              <NotificationsProvider position="top-right">
+                <ModalsProvider>
+                  <UserProvider supabaseClient={supabaseClient}>
                     <Component {...pageProps} />
-                  </ModalsProvider>
-                </NotificationsProvider>
-              </IKContext>
-            </StoreProvider>
-          </MantineProvider>
-        </ColorSchemeProvider>
-      </UserProvider>
+                  </UserProvider>
+                </ModalsProvider>
+              </NotificationsProvider>
+            </IKContext>
+          </StoreProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
     </>
   );
 }
