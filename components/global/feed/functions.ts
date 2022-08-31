@@ -15,12 +15,7 @@ export const getFeedArticles = async ({
   setArticleCount,
   setData,
 }: FeedFunctionProps) => {
-  console.log("data is");
-  console.log(data);
-
   if (user) {
-    console.log("sent user is");
-    console.log(user);
     const {
       error,
       data: feedData,
@@ -106,7 +101,6 @@ export const getFeedArticles = async ({
       })
       .range(data.length, data.length + 9);
 
-    console.log(feedData);
     //
     //
     if (feedData && feedData.length > 0) {

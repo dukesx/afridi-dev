@@ -105,9 +105,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
     //
     switch (key) {
       case "feed":
-        if (feedData.length == 0) {
-          setFeedLoading(true);
-        }
         await getFeedArticles({
           user: user,
           data: feedData,
@@ -118,9 +115,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
         break;
 
       case "trending":
-        if (trendingData.length == 0) {
-          setFeedLoading(true);
-        }
         await getTrendingArticles({
           user: user,
           data: trendingData,
@@ -129,9 +123,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
         break;
 
       case "popular":
-        if (popularData.length == 0) {
-          setFeedLoading(true);
-        }
         await getPopularArticles({
           user: user,
           data: popularData,
