@@ -148,7 +148,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
     console.log(isLoading);
     console.log("user is");
     console.log(user);
-    if (isLoading == false) {
+    if ((isLoading == false && user) || (isLoading && !user)) {
       getFeed();
     }
   }, [key, user]);
