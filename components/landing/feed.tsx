@@ -144,13 +144,13 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
   };
 
   useEffect(() => {
-    console.log("isloading is");
-    console.log(isLoading);
-    console.log("user is");
-    console.log(user);
-    if ((isLoading == false && user) || (isLoading && !user)) {
+    setTimeout(() => {
+      console.log("isloading is");
+      console.log(isLoading);
+      console.log("user is");
+      console.log(user);
       getFeed();
-    }
+    }, 1000);
   }, [key, user]);
 
   /**
