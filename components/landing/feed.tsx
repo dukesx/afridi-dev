@@ -16,6 +16,7 @@ import {
   Indicator,
   useMantineTheme,
   useMantineColorScheme,
+  Loader,
 } from "@mantine/core";
 import {
   IconAdjustments,
@@ -43,25 +44,53 @@ import {
   getTrendingArticles,
 } from "../global/feed/functions";
 import EmptyPlaceholder from "../global/placeholders/empty";
+import { useStoreActions, useStoreState } from "easy-peasy";
+import { GeneralStore } from "../../data/static/store";
 interface LandingFeedProps {
   theme: MantineTheme;
+  feedaData: Array<any>;
 }
 
-const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
+const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
   /**
    *
    *
    *
    *
    */
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const [key, setKey] = useState("feed");
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
-  const [articleCount, setArticleCount] = useState(0);
-  const [trendingData, setTrendingData] = useState([]);
-  const [popularData, setPopularData] = useState([]);
+  //
+  //
+  //
+  //
+  const feedLoading = useStoreState((state: GeneralStore) => state.feedLoading);
+  const setFeedLoading = useStoreActions(
+    (actions: any) => actions.setFeedLoading
+  );
+  const feedData = useStoreState((state: GeneralStore) => state.feedData);
+  const setFeedData = useStoreActions((action: any) => action.setFeedData);
+  const articleCount = useStoreState(
+    (state: GeneralStore) => state.articleCount
+  );
+  const setArticleCount = useStoreActions(
+    (action: any) => action.setArticleCount
+  );
+  const trendingData = useStoreState(
+    (state: GeneralStore) => state.trendingData
+  );
+  const setTrendingData = useStoreActions(
+    (actions: any) => actions.setTrendingData
+  );
+  const popularData = useStoreState((state: GeneralStore) => state.popularData);
+  const setPopularData = useStoreActions(
+    (actions: any) => actions.setPopularData
+  );
+  //
+  //
+  //
   const { colorScheme } = useMantineColorScheme();
+  const [infiniteLoading, setInfiniteLoading] = useState(true);
 
   /**
    *
@@ -77,18 +106,24 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
     //
     switch (key) {
       case "feed":
-        setLoading(true);
+        if (feedData.length == 0) {
+          setFeedLoading(true);
+        } else {
+          setInfiniteLoading(true);
+        }
         await getFeedArticles({
           user: user,
-          data: data,
+          data: feedData,
           articleCount: articleCount,
-          setData: setData,
+          setData: setFeedData,
           setArticleCount: setArticleCount,
         });
         break;
 
       case "trending":
-        setLoading(true);
+        if (trendingData.length == 0) {
+          setFeedLoading(true);
+        }
         await getTrendingArticles({
           user: user,
           data: trendingData,
@@ -97,7 +132,9 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
         break;
 
       case "popular":
-        setLoading(true);
+        if (popularData.length == 0) {
+          setFeedLoading(true);
+        }
         await getPopularArticles({
           user: user,
           data: popularData,
@@ -106,10 +143,14 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
         break;
     }
 
-    setLoading(false);
+    setFeedLoading(false);
+    setInfiniteLoading(false);
   };
 
   useEffect(() => {
+    if (!user && !isLoading) {
+      setFeedData(feedaData);
+    }
     getFeed();
   }, [key, user]);
 
@@ -221,17 +262,27 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
         </Tabs.List>
 
         <Tabs.Panel value="feed">
-          <Stack pt="xs" mt="xl">
-            {!loading ? (
-              data.length > 0 ? (
+          <Stack className="relative" pt="xs" mt="xl">
+            {!feedLoading ? (
+              feedData.length > 0 ? (
                 <InfiniteScroll
                   threshold={50}
                   pageStart={0}
                   loadMore={getFeed}
-                  hasMore={data.length < articleCount ? true : false}
+                  hasMore={feedData.length < articleCount ? true : false}
+                  loader={
+                    <Center>
+                      <Stack align="center">
+                        <Loader variant="bars" color="blue" />
+                        <Text className="text-center">
+                          Loading More Articles
+                        </Text>
+                      </Stack>
+                    </Center>
+                  }
                 >
                   <Stack spacing="xl" mb="xl" align="center">
-                    {data.map((mapped, index) => (
+                    {feedData.map((mapped, index) => (
                       <HorizontalGridCard
                         key={"aloba" + index}
                         data={mapped}
@@ -276,7 +327,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
 
         <Tabs.Panel value="trending">
           <Stack pt="xs" mt="xl">
-            {!loading ? (
+            {!feedLoading ? (
               trendingData.length > 0 ? (
                 <Stack spacing="xl" mb="xl" align="center">
                   {trendingData.map((mapped, index) => (
@@ -323,7 +374,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
 
         <Tabs.Panel value="popular">
           <Stack pt="xs" mt="xl">
-            {!loading ? (
+            {!feedLoading ? (
               popularData.length > 0 ? (
                 <Stack spacing="xl" mb="xl" align="center">
                   {popularData.map((mapped, index) => (

@@ -27,7 +27,7 @@ import { getUser, supabaseClient } from "@supabase/auth-helpers-nextjs";
 import HorizontalGridCardSkeleton from "../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import { parse } from "date-fns";
 
-const LandingPage = ({ followed_tags }) => {
+const LandingPage = ({ feedData }) => {
   const theme = useMantineTheme();
   const [data, setData] = useState(null);
   const [mustReads, setMustReads] = useState(null);
@@ -260,7 +260,7 @@ const LandingPage = ({ followed_tags }) => {
          */}
         <Grid id="main-content" mt="xl" className="pl-3 pr-1 md:pr-10">
           <Grid.Col span={12} sm={7} xs={12} md={7}>
-            <LandingFeed theme={theme} />
+            <LandingFeed feedaData={feedData} theme={theme} />
           </Grid.Col>
 
           <Grid.Col className="hidden md:flex" span={5} xs={12} sm={5} md={5}>
@@ -298,3 +298,51 @@ const LandingPage = ({ followed_tags }) => {
 };
 
 export default LandingPage;
+
+export const getStaticProps = async (ctx) => {
+  const {
+    error,
+    data: feedData,
+    count: count,
+  } = await supabaseClient
+    .from("articles")
+    .select(
+      `
+                  id,
+                  title,
+                  description,
+                  cover,
+                  authors (
+                    dp,
+                    firstName,
+                    lastName
+                  ),
+                  co_authors_articles (
+                    authors (
+                      dp,
+                      firstName,
+                      lastName
+                    )
+                  )
+                `,
+      {
+        count: "exact",
+      }
+    )
+    .order("created_at", {
+      ascending: false,
+    })
+    .limit(10)
+    .order("created_at", {
+      ascending: false,
+    })
+    .range(0, 9);
+
+  if (feedData) {
+    return {
+      props: {
+        feedData: feedData,
+      },
+    };
+  }
+};

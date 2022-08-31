@@ -38,11 +38,14 @@ import {
   IconUserCircle,
   IconUsers,
 } from "@tabler/icons";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { GeneralStore } from "../../data/static/store";
 import PublishArticle from "../../public/publish-article.svg";
+import { getFeedArticles } from "./feed/functions";
 
 interface GlobalHeaderProps {
   activeHeaderKey: string;
@@ -54,8 +57,16 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 }) => {
   const { user, isLoading, error, checkSession } = useUser();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  //
+  //
+  //
+  //
   const router = useRouter();
 
+  //
+  //
+  //
+  //
   return (
     <Header className="w-full" height={70}>
       <Stack className="h-full w-full" justify="center" spacing={0}>
@@ -394,8 +405,8 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                         <IconLogout color={theme.colors.yellow[6]} size={22} />
                       }
                       onClick={async () => {
-                        const { error } = await supabaseClient.auth.signOut();
-                        router.push("/");
+                        await supabaseClient.auth.signOut();
+                        document.location = "/";
                       }}
                     >
                       Sign out

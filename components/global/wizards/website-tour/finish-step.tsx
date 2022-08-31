@@ -1,12 +1,35 @@
 import { Button, Stack, Text } from "@mantine/core";
 import { closeAllModals } from "@mantine/modals";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import { useState } from "react";
+import { GeneralStore } from "../../../../data/static/store";
+import { getFeedArticles } from "../../feed/functions";
 import { WelcomeWizardStepProps } from "./tag-step";
 
 const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
   const [step4Loading, setStep4Loading] = useState(false);
+  //
+  //
+  //
+  //
+  const feedData = useStoreState((state: GeneralStore) => state.feedData);
+  const setFeedData = useStoreActions((action: any) => action.setFeedData);
+  const articleCount = useStoreState(
+    (state: GeneralStore) => state.articleCount
+  );
+  const setArticleCount = useStoreActions(
+    (action: any) => action.setArticleCount
+  );
+  const feedLoading = useStoreState((state: GeneralStore) => state.feedLoading);
+  const setFeedLoading = useStoreActions(
+    (actions: any) => actions.setFeedLoading
+  );
 
+  //
+  //
+  //
+  //
   return (
     <Stack align="center" spacing={0}>
       <Text className="text-center" weight={500} size={40}>
@@ -30,6 +53,15 @@ const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
 
           if (!error) {
             setStep4Loading(false);
+            setFeedLoading(true);
+            await getFeedArticles({
+              user: user,
+              data: feedData,
+              articleCount: articleCount,
+              setData: setFeedData,
+              setArticleCount: setArticleCount,
+            });
+            setFeedLoading(false);
             closeAllModals();
           }
         }}

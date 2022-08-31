@@ -285,7 +285,7 @@ const UserProfilePage = () => {
           overflow: "unset",
         }}
       >
-        <Card.Section className="">
+        <Card.Section className="mx-0">
           {!data ? (
             <Skeleton height={450} />
           ) : (
@@ -355,7 +355,7 @@ const UserProfilePage = () => {
 
         <Stack className="max-w-[1000px] mx-auto">
           <Group position="apart">
-            <Group pt="xl" py="sm">
+            <Group className="ml-5 xs:ml-0" pt="xl" py="sm">
               <Avatar className="rounded-full h-[90px] w-[90px] sm:h-[120px] ml-0 sm:ml-6 sm:w-[120px] shadow-lg">
                 {!data ? (
                   <Skeleton height={120} />
@@ -474,7 +474,7 @@ const UserProfilePage = () => {
             </Group>
           </Group>
 
-          <Tabs color="blue" defaultValue="feed">
+          <Tabs className="w-full" color="blue" defaultValue="feed">
             <Tabs.List grow position="center">
               <Tabs.Tab
                 value="feed"
@@ -482,7 +482,7 @@ const UserProfilePage = () => {
                   <IconListDetails size={20} color={theme.colors.cyan[6]} />
                 }
               >
-                Status Feed
+                Feed
               </Tabs.Tab>
               <Tabs.Tab
                 value="exclusive"
@@ -494,7 +494,7 @@ const UserProfilePage = () => {
                   />
                 }
               >
-                Exclusive Content
+                Exclusive
               </Tabs.Tab>
               <Tabs.Tab
                 value="about"

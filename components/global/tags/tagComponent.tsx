@@ -9,6 +9,8 @@ import {
   Button,
   DefaultMantineColor,
 } from "@mantine/core";
+import { closeAllModals, openModal } from "@mantine/modals";
+import { NextLink } from "@mantine/next";
 import { supabaseClient, type User } from "@supabase/auth-helpers-nextjs";
 import {
   IconChevronDown,
@@ -23,9 +25,8 @@ import {
   IconHash,
   IconTag,
 } from "@tabler/icons";
-import { set } from "date-fns/esm";
-import Head from "next/head";
-import { Fragment, ReactNode, useState } from "react";
+import Image from "next/image";
+import Unauthorized from "../../../public/401.svg";
 
 interface TagComponentProps {
   authorTags: Array<any>;
@@ -127,19 +128,51 @@ const TagComponent = ({
               ) : (
                 <Button
                   onClick={async () => {
-                    const { data } = await supabaseClient
-                      .from("author_followed_tags")
-                      .insert({
-                        tag_id: id,
-                        author_id: user.id,
+                    if (user) {
+                      const { data } = await supabaseClient
+                        .from("author_followed_tags")
+                        .insert({
+                          tag_id: id,
+                          author_id: user.id,
+                        });
+
+                      if (data) {
+                        console.log(authorTags);
+                        var newArr = [...authorTags];
+                        newArr.push(title);
+
+                        setAuthorFollowed(newArr);
+                      }
+                    } else {
+                      openModal({
+                        title: "Unauthorised",
+                        children: (
+                          <Stack spacing={4} align="center">
+                            <Image
+                              src={Unauthorized}
+                              height={200}
+                              width={200}
+                              alt=""
+                            />
+                            <Text weight={600}>Ooops - Can&apos;t do it</Text>
+                            <Text size="sm" color="dimmed">
+                              You need to be signed in to follow tags
+                            </Text>
+                            <Button
+                              mt="xs"
+                              color="blue"
+                              fullWidth
+                              component={NextLink}
+                              onClick={() => {
+                                closeAllModals();
+                              }}
+                              href="/get-started"
+                            >
+                              Sign in
+                            </Button>
+                          </Stack>
+                        ),
                       });
-
-                    if (data) {
-                      console.log(authorTags);
-                      var newArr = [...authorTags];
-                      newArr.push(title);
-
-                      setAuthorFollowed(newArr);
                     }
                   }}
                   radius="xl"

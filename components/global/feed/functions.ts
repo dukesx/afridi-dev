@@ -12,7 +12,6 @@ type FeedFunctionProps = {
 export const getFeedArticles = async ({
   user,
   data,
-  articleCount,
   setArticleCount,
   setData,
 }: FeedFunctionProps) => {
@@ -57,11 +56,12 @@ export const getFeedArticles = async ({
         ascending: false,
       })
       .range(data.length, data.length + 9);
-
-    var articles = [...data];
-    feedData.map((mapped) => articles.push(mapped));
-    setArticleCount(count);
-    setData(articles);
+    if (feedData && feedData.length > 0) {
+      var articles = [...data];
+      feedData.map((mapped) => articles.push(mapped));
+      setArticleCount(count);
+      setData(articles);
+    }
   } else {
     const {
       error,
@@ -102,10 +102,12 @@ export const getFeedArticles = async ({
       .range(data.length, data.length + 9);
     //
     //
-    var articles = [...data];
-    feedData.map((mapped) => articles.push(mapped));
-    setArticleCount(count);
-    setData(articles);
+    if (feedData && feedData.length > 0) {
+      var articles = [...data];
+      feedData.map((mapped) => articles.push(mapped));
+      setArticleCount(count);
+      setData(articles);
+    }
   }
 };
 
@@ -148,7 +150,6 @@ export const getTrendingArticles = async ({ setData }: FeedFunctionProps) => {
     .order("created_at", {
       ascending: false,
     });
-  console.log(trendingData);
   setData(trendingData);
 };
 
