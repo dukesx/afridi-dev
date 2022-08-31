@@ -144,14 +144,10 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, feedaData }) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      console.log("isloading is");
-      console.log(isLoading);
-      console.log("user is");
-      console.log(user);
-      getFeed();
-    }, 1000);
-  }, [key, user]);
+    getFeed();
+  }, [key]);
+
+  getFeed();
 
   /**
    *
