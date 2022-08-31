@@ -100,6 +100,8 @@ export const getFeedArticles = async ({
         ascending: false,
       })
       .range(data.length, data.length + 9);
+
+    console.log(feedData);
     //
     //
     if (feedData && feedData.length > 0) {
