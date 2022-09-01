@@ -21,42 +21,24 @@ import { useDebouncedState } from "@mantine/hooks";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import {
-  IconBell,
-  IconBellOff,
-  IconBellRinging,
-  IconBrandAdobe,
   IconBrandAndroid,
   IconBrandAngular,
   IconBrandJavascript,
   IconBrandKotlin,
   IconBrandReact,
-  IconChevronDown,
   IconCode,
-  IconEye,
-  IconEyeCheck,
-  IconEyeOff,
   IconHash,
-  IconHeart,
-  IconMinus,
-  IconPlus,
   IconTrendingUp,
 } from "@tabler/icons";
-import {
-  Fragment,
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from "react";
+import { Fragment, useEffect, useState } from "react";
 import EmptyPlaceholder from "../components/global/placeholders/empty";
 import TagComponent from "../components/global/tags/tagComponent";
 import AppWrapper from "../components/global/wrapper";
 
-const TagsPage = () => {
-  const [tags, setTags] = useState([]);
+const TagsPage = ({ tagsArr }) => {
+  const [tags, setTags] = useState(tagsArr);
   const { user } = useUser();
   const [authorFollowed, setAuthorFollowed] = useState([]);
-  const [text, setText] = useState("");
   const [inputVal, setInputVal] = useDebouncedState("", 200);
   const [loading, setLoading] = useState(false);
 
@@ -91,44 +73,51 @@ const TagsPage = () => {
     searchTags(inputVal);
   }, [inputVal]);
 
-  const getTags = async () => {
-    const { error, data } = await supabaseClient
-      .from("tags")
-      .select(
-        `
-      title,
-      id
-      `
-      )
-      .range(tags.length, tags.length + 20)
-      .limit(20);
-    if (user) {
-      const { error: error2, data: data2 } = await supabaseClient
-        .from("authors")
-        .select(
-          `
-      tags (
-        title
-      )
-      `
-        )
-        .eq("id", user.id);
-      var followedTags = [];
-      if (data2[0].tags && data2[0].tags.length > 0) {
-        data2[0].tags.map((mapped) => followedTags.push(mapped.title));
-        setAuthorFollowed(followedTags);
-      }
-    }
-    var tagsArr = [...tags];
-    data.map((mapped) => tagsArr.push(mapped));
-    setTags(tagsArr);
-    setLoading(false);
-  };
+  /**
+   *
+   *  until Supabase v2 release
+   *
+   */
 
-  useEffect(() => {
-    setLoading(true);
-    getTags();
-  }, [user]);
+  // const getTags = async () => {
+  //   setLoading(true);
+  //   const { error, data } = await supabaseClient
+  //     .from("tags")
+  //     .select(
+  //       `
+  //     title,
+  //     id
+  //     `
+  //     )
+  //     .range(tags.length, tags.length + 20)
+  //     .limit(20);
+  //   if (user) {
+  //     const { error: error2, data: data2 } = await supabaseClient
+  //       .from("authors")
+  //       .select(
+  //         `
+  //     tags (
+  //       title
+  //     )
+  //     `
+  //       )
+  //       .eq("id", user.id);
+  //     var followedTags = [];
+  //     if (data2[0].tags && data2[0].tags.length > 0) {
+  //       data2[0].tags.map((mapped) => followedTags.push(mapped.title));
+  //       setAuthorFollowed(followedTags);
+  //     }
+  //   }
+  //   var tagsArr = [...tags];
+  //   data.map((mapped) => tagsArr.push(mapped));
+  //   setTags(tagsArr);
+  //   setLoading(false);
+  // };
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   getTags();
+  // }, [user]);
 
   /**
    *
@@ -155,8 +144,8 @@ const TagsPage = () => {
             <IconHash size={35} className="align-middle" />
           </ThemeIcon>
         </Group>
-        <Title order={4} mb="xl" mt="sm" className="text-center">
-          Seach & Follow your Favorite Tags
+        <Title order={5} mb="xl" mt="sm" className="text-center capitalize">
+          Looking for a particular category ? Search it!
         </Title>
 
         <TextInput
@@ -195,15 +184,13 @@ const TagsPage = () => {
                   }
                   color={
                     mapped.title == "react"
-                      ? "blue.4"
+                      ? "blue"
                       : mapped.title == "angular"
-                      ? "red.4"
+                      ? "red"
                       : mapped.title == "javascript"
                       ? "yellow.6"
                       : mapped.title == "kotlin"
                       ? "grape"
-                      : mapped.title == "programming"
-                      ? "blue"
                       : mapped.title == "typescript"
                       ? "blue"
                       : mapped.title == "ts"
@@ -257,3 +244,24 @@ const TagsPage = () => {
 };
 
 export default TagsPage;
+
+export const getStaticProps = async () => {
+  const { error, data } = await supabaseClient
+    .from("tags")
+    .select(
+      `
+      title,
+      id
+      `
+    )
+    .range(0, 99)
+    .limit(100);
+  var tagsArr = [];
+  data.map((mapped) => tagsArr.push(mapped));
+
+  return {
+    props: {
+      tagsArr: tagsArr,
+    },
+  };
+};

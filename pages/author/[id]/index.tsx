@@ -72,19 +72,18 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 import { NextLink } from "@mantine/next";
 import { compareDesc } from "date-fns";
 
-const UserProfilePage = () => {
+const UserProfilePage = ({ user, feedData }) => {
   const router = useRouter();
   const { id } = router.query;
   const theme = useMantineTheme();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(user);
   const { colorScheme } = useMantineColorScheme();
-  const [dp, setDp] = useState(null);
-  const [cover, setCover] = useState(null);
-  const { user } = useUser();
+  const [dp, setDp] = useState(user.dp);
+  const [cover, setCover] = useState(user.cover);
   const openRef = useRef<() => void>(null);
   const openRef2 = useRef<() => void>(null);
   const [submittingStatus, setSubmittingStatus] = useState(false);
-  const [feed, setFeed] = useState(null);
+  const [feed, setFeed] = useState(feedData);
   const [hot, setHot] = useState(null);
   const [thumbsUp, setThumbsUp] = useState(null);
   var ref: any = React.createRef();
@@ -268,7 +267,6 @@ const UserProfilePage = () => {
   };
 
   useEffect(() => {
-    getData();
     getThumbsUpArticles();
     getHotArticles();
   }, []);
@@ -534,7 +532,7 @@ const UserProfilePage = () => {
                               setSubmittingStatus(true);
 
                               const { error } = await supabaseClient
-                                .from("feed")
+                                .from("status_feed")
                                 .insert({
                                   body: markdown,
                                   author_id: user.id,
@@ -548,14 +546,29 @@ const UserProfilePage = () => {
                                   icon: <IconX />,
                                 });
                               } else {
-                                showNotification({
-                                  title: "Success",
-                                  message: "Status submitted",
-                                  color: "teal",
-                                  icon: <IconCheck />,
+                                const fetcher = await fetch("/api/revalidate", {
+                                  method: "POST",
+                                  headers: {
+                                    accept: "application/json",
+                                    "content-type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    path: "/author/" + user.id,
+                                  }),
                                 });
-                                setFeed(null);
-                                getData();
+
+                                const result = await fetcher.json();
+                                console.log(result);
+                                if (result && result.revalidate) {
+                                  showNotification({
+                                    title: "Success",
+                                    message: "Status submitted",
+                                    color: "teal",
+                                    icon: <IconCheck />,
+                                  });
+                                  setFeed(null);
+                                  getData();
+                                }
                               }
 
                               setSubmittingStatus(false);
@@ -1067,3 +1080,116 @@ const UserProfilePage = () => {
 };
 
 export default UserProfilePage;
+
+export const getStaticProps = async (ctx) => {
+  var id = ctx.params.id;
+  const { data: userData, error: userDataError } = await supabaseClient
+    .from("authors")
+    .select(
+      `
+      id,
+      firstName,
+      lastName,
+      location,
+      github,
+      dp,
+      bio,
+      cover,
+      articles (
+        created_at,
+        author_id,
+        id,
+        title,
+        description,
+        cover,
+        co_authors_articles (
+          authors (
+            dp,
+            firstName,
+            lastName
+          )
+        )
+      ),
+      status_feed (
+        body,
+        created_at,
+        id,
+        author_id
+      )
+      `
+    )
+    .limit(100)
+    .eq("id", id)
+    .order("created_at", {
+      foreignTable: "status_feed",
+      ascending: false,
+    })
+    .order("created_at", {
+      foreignTable: "articles",
+      ascending: false,
+    });
+
+  if (!userDataError) {
+    var feed = [];
+
+    if (userData[0]["status_feed"].length > 0) {
+      userData[0]["status_feed"].map((mapped) =>
+        feed.push({
+          type: "status",
+          data: mapped,
+          created_at: mapped.created_at,
+        })
+      );
+    }
+
+    if (userData[0]["articles"].length > 0) {
+      userData[0]["articles"].map((mapped) =>
+        feed.push({
+          data: mapped,
+          type: "article",
+          created_at: mapped.created_at,
+        })
+      );
+    }
+    feed.sort((a, b) => {
+      return compareDesc(parseISO(a.created_at), parseISO(b.created_at));
+    });
+
+    const user = {
+      id: userData[0].id,
+      firstName: userData[0].firstName,
+      lastName: userData[0].lastName,
+      cover: userData[0].cover,
+      dp: userData[0].dp,
+      github: userData[0].github,
+      location: userData[0].location,
+      bio: userData[0].bio,
+    };
+
+    return {
+      props: {
+        user: user,
+        feedData: feed,
+      },
+    };
+  }
+};
+
+export const getStaticPaths = async () => {
+  const { data, error } = await supabaseClient.from("authors").select("id");
+
+  var ids = [];
+
+  data.map((mapped) =>
+    ids.push({
+      params: {
+        id: mapped.id,
+      },
+    })
+  );
+
+  return {
+    paths: ids,
+    fallback: true,
+  };
+};

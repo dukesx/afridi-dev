@@ -35,12 +35,18 @@ import {
 import EmptyPlaceholder from "../global/placeholders/empty";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { GeneralStore } from "../../data/static/store";
+import { AfridiDevArticle } from "../global/grid-cards/largeGridCard";
 interface LandingFeedProps {
   theme: MantineTheme;
-  usera: User;
+  prefetchedFeedData: Array<AfridiDevArticle>;
+  feedDataCount: number;
 }
 
-const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
+const LandingFeed: React.FC<LandingFeedProps> = ({
+  theme,
+  prefetchedFeedData,
+  feedDataCount,
+}) => {
   /**
    *
    *
@@ -56,8 +62,8 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
 
   const [popularData, setPopularData] = useState([]);
   const [trendingData, setTrendingData] = useState([]);
-  const [feedData, setFeedData] = useState([]);
-  const [articleCount, setArticleCount] = useState(0);
+  const [feedData, setFeedData] = useState(prefetchedFeedData);
+  const [articleCount, setArticleCount] = useState(feedDataCount);
   const [feedLoading, setFeedLoading] = useState(false);
   //
   //
@@ -74,8 +80,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
    */
 
   const getFeed = async () => {
-    //
-    //
     switch (key) {
       case "feed":
         await getFeedArticles({
@@ -108,15 +112,11 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
   };
 
   useEffect(() => {
-    if (feedLoading == false) {
-      setFeedData([]);
+    if (key !== "feed") {
       setFeedLoading(true);
-    }
-
-    if (isLoading == false) {
       getFeed();
     }
-  }, [key, user, isLoading]);
+  }, [key]);
 
   /**
    *
@@ -133,59 +133,59 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
         <Tabs.List grow position="center">
           <Tabs.Tab
             icon={
-              usera || user ? (
-                <Indicator
-                  // offset={40}
-                  position="top-end"
-                  size={21}
-                  radius="xl"
-                  styles={{
-                    indicator: {
-                      padding: 0,
-                      border: 0,
-                      backgroundColor: "transparent",
-                    },
-                    root: {
-                      border: 0,
-                    },
-                  }}
-                  className="rounded-full"
-                  label={
-                    <Tooltip label="Filtered by tags you follow">
-                      <ThemeIcon
-                        variant="light"
-                        color="teal"
-                        radius="xl"
-                        size={30}
-                      >
-                        <IconHash strokeWidth={2} size={16} />
-                      </ThemeIcon>
-                    </Tooltip>
+              // user ? (
+              //   <Indicator
+              //     // offset={40}
+              //     position="top-end"
+              //     size={21}
+              //     radius="xl"
+              //     styles={{
+              //       indicator: {
+              //         padding: 0,
+              //         border: 0,
+              //         backgroundColor: "transparent",
+              //       },
+              //       root: {
+              //         border: 0,
+              //       },
+              //     }}
+              //     className="rounded-full"
+              //     label={
+              //       <Tooltip label="Filtered by tags you follow">
+              //         <ThemeIcon
+              //           variant="light"
+              //           color="teal"
+              //           radius="xl"
+              //           size={30}
+              //         >
+              //           <IconHash strokeWidth={2} size={16} />
+              //         </ThemeIcon>
+              //       </Tooltip>
+              //     }
+              //   >
+              //     <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
+              //       <IconHandRock
+              //         fill={
+              //           colorScheme == "dark"
+              //             ? theme.colors.blue[5]
+              //             : theme.colors.blue[2]
+              //         }
+              //         strokeWidth={1.5}
+              //       />
+              //     </ThemeIcon>
+              //   </Indicator>
+              // ) : (
+              <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
+                <IconHandRock
+                  fill={
+                    colorScheme == "dark"
+                      ? theme.colors.blue[5]
+                      : theme.colors.blue[2]
                   }
-                >
-                  <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
-                    <IconHandRock
-                      fill={
-                        colorScheme == "dark"
-                          ? theme.colors.blue[5]
-                          : theme.colors.blue[2]
-                      }
-                      strokeWidth={1.5}
-                    />
-                  </ThemeIcon>
-                </Indicator>
-              ) : (
-                <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
-                  <IconHandRock
-                    fill={
-                      colorScheme == "dark"
-                        ? theme.colors.blue[5]
-                        : theme.colors.blue[2]
-                    }
-                    strokeWidth={1.5}
-                  />
-                </ThemeIcon>
-              )
+                  strokeWidth={1.5}
+                />
+              </ThemeIcon>
+              // )
             }
             value="feed"
           >

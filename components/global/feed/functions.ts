@@ -15,62 +15,67 @@ export const getFeedArticles = async ({
   setArticleCount,
   setData,
 }: FeedFunctionProps) => {
-  if (user) {
-    const {
-      error,
-      data: feedData,
-      count,
-    } = await supabaseClient
-      .from("articles")
-      .select(
-        `
-              id,
-                  title,
-                  description,
-                  cover,
-                  authors (
-                    dp,
-                    firstName,
-                    lastName
-                  ),
-                  co_authors_articles (
-                    authors (
-                      dp,
-                      firstName,
-                      lastName
-                    )
-                  ),
-         tags!inner (
-          title,
-          authors!inner (
-            id,
-            firstName
-          )
-          )
-         `,
-        { count: "exact" }
-      )
-      .eq("tags.authors.id", user.id)
-      .limit(10)
-      .order("created_at", {
-        ascending: false,
-      })
-      .range(data.length, data.length + 9);
-    if (feedData && feedData.length > 0) {
-      var articles = [...data];
-      feedData.map((mapped) => articles.push(mapped));
-      setArticleCount(count);
-      setData(articles);
-    }
-  } else {
-    const {
-      error,
-      data: feedData,
-      count: count,
-    } = await supabaseClient
-      .from("articles")
-      .select(
-        `
+  /**
+   *
+   *  removed till supabase-js v2 upgrade
+   */
+  //
+  // if (user) {
+  //   const {
+  //     error,
+  //     data: feedData,
+  //     count,
+  //   } = await supabaseClient
+  //     .from("articles")
+  //     .select(
+  //       `
+  //             id,
+  //                 title,
+  //                 description,
+  //                 cover,
+  //                 authors (
+  //                   dp,
+  //                   firstName,
+  //                   lastName
+  //                 ),
+  //                 co_authors_articles (
+  //                   authors (
+  //                     dp,
+  //                     firstName,
+  //                     lastName
+  //                   )
+  //                 ),
+  //        tags!inner (
+  //         title,
+  //         authors!inner (
+  //           id,
+  //           firstName
+  //         )
+  //         )
+  //        `,
+  //       { count: "exact" }
+  //     )
+  //     .eq("tags.authors.id", user.id)
+  //     .limit(10)
+  //     .order("created_at", {
+  //       ascending: false,
+  //     })
+  //     .range(data.length, data.length + 9);
+  //   if (feedData && feedData.length > 0) {
+  //     var articles = [...data];
+  //     feedData.map((mapped) => articles.push(mapped));
+  //     setArticleCount(count);
+  //     setData(articles);
+  //   }
+  // } else {
+  const {
+    error,
+    data: feedData,
+    count: count,
+  } = await supabaseClient
+    .from("articles")
+    .select(
+      `
                   id,
                   title,
                   description,
@@ -88,28 +93,28 @@ export const getFeedArticles = async ({
                     )
                   )
                 `,
-        {
-          count: "exact",
-        }
-      )
-      .order("created_at", {
-        ascending: false,
-      })
-      .limit(10)
-      .order("created_at", {
-        ascending: false,
-      })
-      .range(data.length, data.length + 9);
+      {
+        count: "exact",
+      }
+    )
+    .order("created_at", {
+      ascending: false,
+    })
+    .limit(10)
+    .order("created_at", {
+      ascending: false,
+    })
+    .range(data.length, data.length + 9);
 
-    //
-    //
-    if (feedData && feedData.length > 0) {
-      var articles = [...data];
-      feedData.map((mapped) => articles.push(mapped));
-      setArticleCount(count);
-      setData(articles);
-    }
+  //
+  //
+  if (feedData && feedData.length > 0) {
+    var articles = [...data];
+    feedData.map((mapped) => articles.push(mapped));
+    setArticleCount(count);
+    setData(articles);
   }
+  // }
 };
 
 export const getTrendingArticles = async ({ setData }: FeedFunctionProps) => {

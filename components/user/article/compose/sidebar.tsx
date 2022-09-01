@@ -202,6 +202,7 @@ const ArticleComposeSidebar = ({
                   });
               }
             });
+
             setLoading(false);
             form.reset();
             setCover(null);

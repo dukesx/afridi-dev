@@ -301,7 +301,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   <Menu.Item
                     component={NextLink}
                     passHref
-                    href="/compose/article"
+                    href="/article/compose"
                   >
                     <Stack align="center" spacing={0}>
                       <Image

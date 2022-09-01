@@ -24,8 +24,8 @@ import AppWrapper from "../../components/global/wrapper";
 import { useLocalStorage } from "@mantine/hooks";
 import ArticleSidebar from "../../components/article/sidebar";
 
-const Article = () => {
-  const [data, setData] = useState(null);
+const Article = ({ article }) => {
+  const [data, setData] = useState(article);
   const router = useRouter();
   const theme = useMantineTheme();
   const { id } = router.query;
@@ -33,41 +33,7 @@ const Article = () => {
     key: "article-sidebar-orientation",
     defaultValue: false,
   });
-  const getArticle = async () => {
-    const { error, data } = await supabaseClient
-      .from("articles")
-      .select(
-        `
-        id,
-        title,
-        description,
-        cover,
-        body,
-        authors (
-            id,
-            firstName,
-            lastName,
-            dp
-        ),
-        co_authors_articles (
-        authors (
-            id,
-            firstName,
-            lastName,
-            dp
-        )
-        )
-        
-        `
-      )
-      .eq("id", id);
 
-    setData(data[0]);
-  };
-
-  useEffect(() => {
-    getArticle();
-  }, []);
   return (
     <AppWrapper activeHeaderKey="" size="xl">
       <Container className="px-0 sm:px-5" size="lg">
@@ -349,3 +315,58 @@ const Article = () => {
 };
 
 export default Article;
+
+export const getStaticProps = async (ctx) => {
+  var id = ctx.params.id;
+  const { data, error } = await supabaseClient
+    .from("articles")
+    .select(
+      `
+    id,
+        title,
+        description,
+        cover,
+        body,
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        ),
+        co_authors_articles (
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        )
+        )
+    `
+    )
+    .eq("id", id);
+
+  return {
+    props: {
+      article: data[0],
+    },
+  };
+};
+
+export const getStaticPaths = async () => {
+  const { data, error } = await supabaseClient.from("articles").select("id");
+
+  var ids = [];
+
+  data.map((mapped) =>
+    ids.push({
+      params: {
+        id: mapped.id,
+      },
+    })
+  );
+
+  return {
+    paths: ids,
+    fallback: true,
+  };
+};

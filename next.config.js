@@ -1,6 +1,6 @@
 module.exports = {
   reactStrictMode: false,
-  experimental: {
-    runtime: "experimental-edge",
-  },
+  // experimental: {
+  //   runtime: "experimental-edge",
+  // },
 };

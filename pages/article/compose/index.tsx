@@ -13,24 +13,22 @@ import {
   Title,
   useMantineColorScheme,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { supabaseClient, withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
-import { MarkDownEditor } from "../../components/global/editorCaller";
-import AppWrapper from "../../components/global/wrapper";
-import ArticleComposeSidebar from "../../components/user/compose/article/sidebar";
-import ToastUIEditorLogo from "../../public/tui-editor.png";
-import ToastUIEditorScreenshot from "../../public/tui-screenshot.png";
-import ToastUIEditorDarkScreenshot from "../../public/tui-dark.png";
-import DeveloperZenMode from "../../public/developer-zen.svg";
-import CraftBeautifulArticles from "../../public/craft-beautiful-articles.svg";
-import EditOnTheGo from "../../public/edit-on-the-go.svg";
-import StartExperience from "../../public/start-experience.svg";
+import React, { useEffect, useState } from "react";
+import { MarkDownEditor } from "../../../components/global/editorCaller";
+import AppWrapper from "../../../components/global/wrapper";
+import ToastUIEditorLogo from "../../../public/tui-editor.png";
+import ToastUIEditorScreenshot from "../../../public/tui-screenshot.png";
+import ToastUIEditorDarkScreenshot from "../../../public/tui-dark.png";
+import DeveloperZenMode from "../../../public/developer-zen.svg";
+import CraftBeautifulArticles from "../../../public/craft-beautiful-articles.svg";
+import EditOnTheGo from "../../../public/edit-on-the-go.svg";
 import { Carousel } from "@mantine/carousel";
 import { closeAllModals, openModal } from "@mantine/modals";
+import ArticleComposeSidebar from "../../../components/user/article/compose/sidebar";
 
 const ArticleComposer = () => {
   //

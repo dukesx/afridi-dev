@@ -49,12 +49,22 @@ const TagComponent = ({
 }: TagComponentProps) => {
   return (
     <Card
+      component={NextLink}
+      href={`/tags/${title}`}
       withBorder
       my="sm"
       radius="lg"
       className={"block aspect-square border-2"}
       sx={(theme) => ({
         borderColor: theme.fn.themeColor(color),
+        fontWeight: 500,
+        textTransform: "capitalize",
+
+        "&:hover": {
+          background: theme.fn.themeColor(color),
+          color: theme.white,
+          fontWeight: 700,
+        },
       })}
     >
       <Center className="h-full">
@@ -62,8 +72,6 @@ const TagComponent = ({
           <ThemeIcon
             variant={
               title == "kotlin"
-                ? "gradient"
-                : title == "programming"
                 ? "gradient"
                 : title == "typescript"
                 ? "gradient"
@@ -78,10 +86,10 @@ const TagComponent = ({
                     from: "grape.5",
                     to: "violet.6",
                   }
-                : title == "proramming"
+                : title == "programming"
                 ? {
-                    from: "blue.4",
-                    to: "indigo.6",
+                    from: "cyan.4",
+                    to: "blue.2",
                   }
                 : title == "typescript"
                 ? {
@@ -103,11 +111,14 @@ const TagComponent = ({
             )}
           </ThemeIcon>
 
-          <Text className="text-center capitalize" weight={500}>
-            {title}
-          </Text>
-
-          <Menu
+          <Text className="text-center">{title}</Text>
+          {/**
+           *
+           *
+           * Until Supabase V2 Upgrade
+           *
+           */}
+          {/* <Menu
             styles={{
               dropdown: {
                 width: 220,
@@ -211,7 +222,7 @@ const TagComponent = ({
                 </Menu.Item>
               </Menu.Dropdown>
             ) : null}
-          </Menu>
+          </Menu> */}
         </Stack>
       </Center>
     </Card>
