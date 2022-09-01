@@ -14,11 +14,6 @@ const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
   //
   //
 
-  // const [feedData, setFeedData] = useState([]);
-  const [articleCount, setArticleCount] = useState(0);
-  const feedData = useStoreState((state: GeneralStore) => state.feedData);
-  const setFeedData = useStoreActions((action: any) => action.setFeedData);
-
   //
   //
   //
