@@ -23,11 +23,16 @@ import LandingFeed from "../components/landing/feed";
 import SquareHorizontalWidget from "../components/landing/widgets/square-horizontal";
 import { IconStar, IconStars } from "@tabler/icons";
 import { useState } from "react";
-import { getUser, supabaseClient } from "@supabase/auth-helpers-nextjs";
+import {
+  getUser,
+  supabaseClient,
+  User,
+  withPageAuth,
+} from "@supabase/auth-helpers-nextjs";
 import HorizontalGridCardSkeleton from "../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import { parse } from "date-fns";
 
-const LandingPage = ({ user }) => {
+const LandingPage = ({ user, error }: { user: User; error: string }) => {
   const theme = useMantineTheme();
   const [data, setData] = useState(null);
   const [mustReads, setMustReads] = useState(null);
