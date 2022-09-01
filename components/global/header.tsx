@@ -406,7 +406,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                       }
                       onClick={async () => {
                         await supabaseClient.auth.signOut();
-                        router.push("/");
+                        document.location = "/";
                       }}
                     >
                       Sign out
