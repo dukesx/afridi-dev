@@ -53,10 +53,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
   //
   //
   //
-  const feedLoading = useStoreState((state: GeneralStore) => state.feedLoading);
-  const setFeedLoading = useStoreActions(
-    (actions: any) => actions.setFeedLoading
-  );
+
   // const feedData = useStoreState((state: GeneralStore) => state.feedData);
   // const setFeedData = useStoreActions((action: any) => action.setFeedData);
   // const articleCount = useStoreState(
@@ -79,6 +76,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
   const [trendingData, setTrendingData] = useState([]);
   const [feedData, setFeedData] = useState([]);
   const [articleCount, setArticleCount] = useState(0);
+  const [feedLoading, setFeedLoading] = useState(false);
   //
   //
   //
