@@ -138,13 +138,12 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
     if (feedLoading == false) {
       setFeedLoading(true);
     }
-    console.log(user);
-    console.log(isLoading);
+
     // setTimeout(() => getFeed(), 2000);
     if (isLoading == false) {
       getFeed();
     }
-  }, [key, user]);
+  }, [key, user, isLoading]);
 
   /**
    *
