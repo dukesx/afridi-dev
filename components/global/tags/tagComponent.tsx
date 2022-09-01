@@ -137,7 +137,6 @@ const TagComponent = ({
                         });
 
                       if (data) {
-                        console.log(authorTags);
                         var newArr = [...authorTags];
                         newArr.push(title);
 

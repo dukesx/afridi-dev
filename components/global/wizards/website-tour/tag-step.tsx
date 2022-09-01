@@ -58,7 +58,6 @@ const TagPickingStep = ({ setStep, step, user }: WelcomeWizardStepProps) => {
       })
     );
 
-    console.log(tagsArray);
     setTags(tagsArray);
     form2.setFieldValue("tags", ["article", "programming"]);
     setTagsLoading(false);
@@ -79,7 +78,6 @@ const TagPickingStep = ({ setStep, step, user }: WelcomeWizardStepProps) => {
       <form
         onSubmit={form2.onSubmit(async (val) => {
           setStep3Loading(true);
-          console.log(val.tags);
           val.tags.map(async (mapped) => {
             const { error, data } = await supabaseClient
               .from("author_followed_tags")

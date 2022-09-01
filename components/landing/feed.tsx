@@ -59,7 +59,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
    *
    */
   const [key, setKey] = useState("feed");
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   //
   //
   //
@@ -135,8 +135,15 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
   };
 
   useEffect(() => {
-    setFeedLoading(true);
-    setTimeout(() => getFeed(), 1700);
+    if (feedLoading == false) {
+      setFeedLoading(true);
+    }
+    console.log(user);
+    console.log(isLoading);
+    // setTimeout(() => getFeed(), 2000);
+    if (isLoading == false) {
+      getFeed();
+    }
   }, [key, user]);
 
   /**

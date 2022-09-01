@@ -121,7 +121,6 @@ const TagsPage = () => {
     }
     var tagsArr = [...tags];
     data.map((mapped) => tagsArr.push(mapped));
-    console.log(tagsArr);
     setTags(tagsArr);
     setLoading(false);
   };
