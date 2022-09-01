@@ -1,40 +1,29 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Avatar,
-  Title,
   Text,
-  Group,
   Stack,
   type MantineTheme,
-  LoadingOverlay,
   Center,
   Button,
   Tooltip,
   Tabs,
   ThemeIcon,
-  Badge,
   Indicator,
-  useMantineTheme,
   useMantineColorScheme,
   Loader,
 } from "@mantine/core";
 import {
-  IconAdjustments,
   IconArrowRight,
   IconBolt,
-  IconComet,
   IconHandRock,
   IconHash,
   IconHeart,
-  IconStar,
-  IconTag,
 } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import { Fragment } from "react";
 import HorizontalGridCard, {
   CardStyle,
 } from "../global/grid-cards/horizontalGridCard";
-import { Fade } from "react-awesome-reveal";
 import { User, useUser } from "@supabase/auth-helpers-react";
 import HorizontalGridCardSkeleton from "../global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import InfiniteScroll from "react-infinite-scroller";
@@ -139,7 +128,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
       setFeedLoading(true);
     }
 
-    // setTimeout(() => getFeed(), 2000);
     if (isLoading == false) {
       getFeed();
     }
