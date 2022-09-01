@@ -2,8 +2,6 @@
 import {
   ActionIcon,
   Avatar,
-  Badge,
-  Blockquote,
   Button,
   Card,
   Code,
@@ -12,13 +10,9 @@ import {
   Divider,
   Grid,
   Group,
-  Header,
   Input,
-  List,
-  Loader,
   Skeleton,
   Stack,
-  Table,
   Tabs,
   Text,
   ThemeIcon,
@@ -34,14 +28,11 @@ import AfridiImage, {
 } from "../../../components/global/afridi-image";
 import {
   IconArrowRight,
-  IconArticle,
   IconBrandGithub,
   IconCheck,
-  IconCode,
   IconCopy,
   IconExternalLink,
   IconListDetails,
-  IconPencilPlus,
   IconPhoto,
   IconStar,
   IconTrash,
@@ -51,11 +42,6 @@ import {
 } from "@tabler/icons";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import Image from "next/image";
-import NoDataPlaceholder from "../../../public/nodata.svg";
-import HorizontalGridCard, {
-  CardStyle,
-} from "../../../components/global/grid-cards/horizontalGridCard";
 import SquareHorizontalWidget from "../../../components/landing/widgets/square-horizontal";
 import "country-flag-icons/3x2/flags.css";
 
@@ -65,27 +51,26 @@ import ImageUploader, {
   ImageUploaderType,
 } from "../../../components/global/image_uploader";
 import { MarkDownEditor } from "../../../components/global/editorCaller";
-import "@toast-ui/editor/dist/toastui-editor.css";
 import MarkDownRenderer from "../../../components/global/markdown-renderer";
 import { openConfirmModal } from "@mantine/modals";
 import { formatDistanceToNow, parseISO } from "date-fns";
-import { NextLink } from "@mantine/next";
 import { compareDesc } from "date-fns";
 
-const UserProfilePage = ({ user, feedData }) => {
+const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
   const { id } = router.query;
   const theme = useMantineTheme();
   const [data, setData] = useState(user);
   const { colorScheme } = useMantineColorScheme();
-  const [dp, setDp] = useState(user.dp);
-  const [cover, setCover] = useState(user.cover);
+  const [dp, setDp] = useState(dpo);
+  const [cover, setCover] = useState(covera);
   const openRef = useRef<() => void>(null);
   const openRef2 = useRef<() => void>(null);
   const [submittingStatus, setSubmittingStatus] = useState(false);
   const [feed, setFeed] = useState(feedData);
   const [hot, setHot] = useState(null);
   const [thumbsUp, setThumbsUp] = useState(null);
+  const { user: usera } = useUser();
   var ref: any = React.createRef();
 
   const specialStyles = createStyles((theme) => ({
@@ -149,9 +134,6 @@ const UserProfilePage = ({ user, feedData }) => {
       });
 
     if (!userDataError) {
-      setData(userData[0]);
-      setDp(userData[0].dp);
-      setCover(userData[0].cover);
       var feed = [];
 
       if (userData[0]["status_feed"].length > 0) {
@@ -288,12 +270,12 @@ const UserProfilePage = ({ user, feedData }) => {
             <Skeleton height={450} />
           ) : (
             <Group className="overflow-hidden">
-              {user ? (
+              {usera ? (
                 <ImageUploader
                   className="border-0"
                   type={ImageUploaderType.COVER}
                   theme={theme}
-                  user={user}
+                  user={usera}
                   py={0.01}
                   px={1}
                   setImage={setCover}
@@ -306,6 +288,8 @@ const UserProfilePage = ({ user, feedData }) => {
                       path={
                         cover
                           ? `/${cover}`
+                          : user.cover
+                          ? `/${user.cover}`
                           : colorScheme == "dark"
                           ? "/image-horizontal-placeholder-dark.png"
                           : "/image-horizontal-placeholder.png"
@@ -325,6 +309,8 @@ const UserProfilePage = ({ user, feedData }) => {
                   path={
                     cover
                       ? `/${cover}`
+                      : user.cover
+                      ? `/${user.cover}`
                       : colorScheme == "dark"
                       ? "/image-horizontal-placeholder-dark.png"
                       : "/image-horizontal-placeholder.png"
@@ -336,7 +322,7 @@ const UserProfilePage = ({ user, feedData }) => {
                 />
               )}
 
-              {user ? (
+              {usera ? (
                 <Button
                   className="absolute rounded-full top-[20px] right-5"
                   color="blue"
@@ -359,7 +345,7 @@ const UserProfilePage = ({ user, feedData }) => {
                   <Skeleton height={120} />
                 ) : dp ? (
                   <Group>
-                    {user ? (
+                    {usera ? (
                       <Button
                         className="absolute z-[100] rounded-full p-1 bottom-1 left-8 sm:bottom-[6px] right-0 sm:left-12 h-[30px] w-[30px]"
                         size="xs"
@@ -370,11 +356,11 @@ const UserProfilePage = ({ user, feedData }) => {
                         <IconUpload size={15} />
                       </Button>
                     ) : null}
-                    {user ? (
+                    {usera ? (
                       <ImageUploader
                         type={ImageUploaderType.DP}
                         theme={theme}
-                        user={user}
+                        user={usera}
                         setImage={setDp}
                         openRef={openRef}
                         placeholder={
@@ -386,6 +372,8 @@ const UserProfilePage = ({ user, feedData }) => {
                             path={
                               dp
                                 ? `/${dp}`
+                                : user.dp
+                                ? `/${user.dp}`
                                 : colorScheme == "dark"
                                 ? "/image-avatar-placeholder-dark.png"
                                 : `/image-avatar-placeholder.png`
@@ -403,6 +391,8 @@ const UserProfilePage = ({ user, feedData }) => {
                         path={
                           dp
                             ? `/${dp}`
+                            : user.dp
+                            ? `/${user.dp}`
                             : colorScheme == "dark"
                             ? "/image-avatar-placeholder-dark.png"
                             : `/image-avatar-placeholder.png`
@@ -506,7 +496,7 @@ const UserProfilePage = ({ user, feedData }) => {
               <Grid>
                 <Grid.Col span={12} sm={7}>
                   <Stack className="py-5 px-0 sm:pt-10 sm:pr-10" spacing="xl">
-                    {user && user.id == id ? (
+                    {usera && user.id == id ? (
                       <Fragment>
                         <Input.Wrapper className="w-full" label="">
                           <MarkDownEditor
@@ -558,7 +548,6 @@ const UserProfilePage = ({ user, feedData }) => {
                                 });
 
                                 const result = await fetcher.json();
-                                console.log(result);
                                 if (result && result.revalidate) {
                                   showNotification({
                                     title: "Success",
@@ -634,8 +623,8 @@ const UserProfilePage = ({ user, feedData }) => {
                                     </Text>
                                   </Stack>
                                 </Group>
-                                {user &&
-                                user.id == mapped.data.author_id &&
+                                {usera &&
+                                usera.id == mapped.data.author_id &&
                                 mapped.type == "status" ? (
                                   <Button
                                     size="xs"
@@ -731,7 +720,7 @@ const UserProfilePage = ({ user, feedData }) => {
                                     onClick={() => {
                                       if (mapped.type == "article") {
                                         window.open(
-                                          `http://localhost:3000/article/${mapped.data.id}`,
+                                          `/article/${mapped.data.id}`,
                                           "_blank"
                                         );
                                       }
@@ -767,7 +756,7 @@ const UserProfilePage = ({ user, feedData }) => {
                                           component="div"
                                           onClick={() => {
                                             window.open(
-                                              `http://localhost:3000/article/${mapped.data.id}`,
+                                              `/article/${mapped.data.id}`,
                                               "_blank"
                                             );
                                           }}
@@ -1129,50 +1118,48 @@ export const getStaticProps = async (ctx) => {
       ascending: false,
     });
 
-  if (!userDataError) {
-    var feed = [];
+  var feed = [];
 
-    if (userData[0]["status_feed"].length > 0) {
-      userData[0]["status_feed"].map((mapped) =>
-        feed.push({
-          type: "status",
-          data: mapped,
-          created_at: mapped.created_at,
-        })
-      );
-    }
-
-    if (userData[0]["articles"].length > 0) {
-      userData[0]["articles"].map((mapped) =>
-        feed.push({
-          data: mapped,
-          type: "article",
-          created_at: mapped.created_at,
-        })
-      );
-    }
-    feed.sort((a, b) => {
-      return compareDesc(parseISO(a.created_at), parseISO(b.created_at));
-    });
-
-    const user = {
-      id: userData[0].id,
-      firstName: userData[0].firstName,
-      lastName: userData[0].lastName,
-      cover: userData[0].cover,
-      dp: userData[0].dp,
-      github: userData[0].github,
-      location: userData[0].location,
-      bio: userData[0].bio,
-    };
-
-    return {
-      props: {
-        user: user,
-        feedData: feed,
-      },
-    };
+  if (userData[0]["status_feed"].length > 0) {
+    userData[0]["status_feed"].map((mapped) =>
+      feed.push({
+        type: "status",
+        data: mapped,
+        created_at: mapped.created_at,
+      })
+    );
   }
+
+  if (userData[0]["articles"].length > 0) {
+    userData[0]["articles"].map((mapped) =>
+      feed.push({
+        data: mapped,
+        type: "article",
+        created_at: mapped.created_at,
+      })
+    );
+  }
+  feed.sort((a, b) => {
+    return compareDesc(parseISO(a.created_at), parseISO(b.created_at));
+  });
+
+  var user = {
+    id: userData[0].id,
+    firstName: userData[0].firstName,
+    lastName: userData[0].lastName,
+    github: userData[0].github,
+    location: userData[0].location,
+    bio: userData[0].bio,
+  };
+
+  return {
+    props: {
+      user: user,
+      dpo: userData[0].dp,
+      covera: userData[0].cover,
+      feedData: feed,
+    },
+  };
 };
 
 export const getStaticPaths = async () => {

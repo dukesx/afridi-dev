@@ -220,7 +220,7 @@ const ArticleEditSidebar = ({
               setLoading(false);
               form.reset();
               setCover(null);
-              router.push("http://localhost:3000/article/" + articleData[0].id);
+              router.push("/article/" + articleData[0].id);
             }
           }
         }
