@@ -57,24 +57,28 @@ const LandingFeed: React.FC<LandingFeedProps> = ({ theme, usera }) => {
   const setFeedLoading = useStoreActions(
     (actions: any) => actions.setFeedLoading
   );
-  const feedData = useStoreState((state: GeneralStore) => state.feedData);
-  const setFeedData = useStoreActions((action: any) => action.setFeedData);
-  const articleCount = useStoreState(
-    (state: GeneralStore) => state.articleCount
-  );
-  const setArticleCount = useStoreActions(
-    (action: any) => action.setArticleCount
-  );
-  const trendingData = useStoreState(
-    (state: GeneralStore) => state.trendingData
-  );
-  const setTrendingData = useStoreActions(
-    (actions: any) => actions.setTrendingData
-  );
-  const popularData = useStoreState((state: GeneralStore) => state.popularData);
-  const setPopularData = useStoreActions(
-    (actions: any) => actions.setPopularData
-  );
+  // const feedData = useStoreState((state: GeneralStore) => state.feedData);
+  // const setFeedData = useStoreActions((action: any) => action.setFeedData);
+  // const articleCount = useStoreState(
+  //   (state: GeneralStore) => state.articleCount
+  // );
+  // const setArticleCount = useStoreActions(
+  //   (action: any) => action.setArticleCount
+  // );
+  // const trendingData = useStoreState(
+  //   (state: GeneralStore) => state.trendingData
+  // );
+  // const setTrendingData = useStoreActions(
+  //   (actions: any) => actions.setTrendingData
+  // );
+  // const popularData = useStoreState((state: GeneralStore) => state.popularData);
+  // const setPopularData = useStoreActions(
+  //   (actions: any) => actions.setPopularData
+  // );
+  const [popularData, setPopularData] = useState([]);
+  const [trendingData, setTrendingData] = useState([]);
+  const [feedData, setFeedData] = useState([]);
+  const [articleCount, setArticleCount] = useState(0);
   //
   //
   //

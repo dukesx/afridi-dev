@@ -13,18 +13,11 @@ const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
   //
   //
   //
+
+  // const [feedData, setFeedData] = useState([]);
+  const [articleCount, setArticleCount] = useState(0);
   const feedData = useStoreState((state: GeneralStore) => state.feedData);
   const setFeedData = useStoreActions((action: any) => action.setFeedData);
-  const articleCount = useStoreState(
-    (state: GeneralStore) => state.articleCount
-  );
-  const setArticleCount = useStoreActions(
-    (action: any) => action.setArticleCount
-  );
-  const feedLoading = useStoreState((state: GeneralStore) => state.feedLoading);
-  const setFeedLoading = useStoreActions(
-    (actions: any) => actions.setFeedLoading
-  );
 
   //
   //
@@ -53,16 +46,8 @@ const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
 
           if (!error) {
             setStep4Loading(false);
-            setFeedLoading(true);
-            await getFeedArticles({
-              user: user,
-              data: feedData,
-              articleCount: articleCount,
-              setData: setFeedData,
-              setArticleCount: setArticleCount,
-            });
-            setFeedLoading(false);
             closeAllModals();
+            document.location = "/";
           }
         }}
         type="submit"

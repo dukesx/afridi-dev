@@ -86,18 +86,18 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         >
           <RouterTransition />
 
-          {/** @ts-ignore */}
-          <StoreProvider store={generalStore}>
-            <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
-              <NotificationsProvider position="top-right">
-                <ModalsProvider>
-                  <UserProvider supabaseClient={supabaseClient}>
+          <UserProvider supabaseClient={supabaseClient}>
+            {/** @ts-ignore */}
+            <StoreProvider store={generalStore}>
+              <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
+                <NotificationsProvider position="top-right">
+                  <ModalsProvider>
                     <Component {...pageProps} />
-                  </UserProvider>
-                </ModalsProvider>
-              </NotificationsProvider>
-            </IKContext>
-          </StoreProvider>
+                  </ModalsProvider>
+                </NotificationsProvider>
+              </IKContext>
+            </StoreProvider>
+          </UserProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>
