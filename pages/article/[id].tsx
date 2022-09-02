@@ -24,7 +24,7 @@ import AppWrapper from "../../components/global/wrapper";
 import { useLocalStorage } from "@mantine/hooks";
 import ArticleSidebar from "../../components/article/sidebar";
 
-const Article = ({ article }) => {
+const Article = ({ article, tags }) => {
   const [data, setData] = useState(article);
   const router = useRouter();
   const theme = useMantineTheme();
@@ -193,7 +193,8 @@ const Article = ({ article }) => {
                     </Avatar.Group>
                   </Group>
                 ) : null}
-                {data.tags.filter((filtered) => {
+                {tags &&
+                tags.filter((filtered) => {
                   if (
                     awards.filter((mapped) => mapped.title == filtered.title)
                       .length > 0
@@ -206,7 +207,7 @@ const Article = ({ article }) => {
                       Awards:
                     </Text>
                     <Group className="h-full" spacing="xs">
-                      {data.tags.filter((mapped) => mapped.title == "trending")
+                      {tags.filter((mapped) => mapped.title == "trending")
                         .length > 0 ? (
                         <Tooltip
                           label="Trending 💪"
@@ -228,8 +229,8 @@ const Article = ({ article }) => {
                         </Tooltip>
                       ) : null}
 
-                      {data.tags.filter((mapped) => mapped.title == "loved")
-                        .length > 0 ? (
+                      {tags.filter((mapped) => mapped.title == "loved").length >
+                      0 ? (
                         <Tooltip
                           label="Loved By Readers 😍"
                           position="bottom"
@@ -250,7 +251,7 @@ const Article = ({ article }) => {
                         </Tooltip>
                       ) : null}
 
-                      {data.tags.filter(
+                      {tags.filter(
                         (mapped) => mapped.title == "community-choice"
                       ).length > 0 ? (
                         <Tooltip
@@ -273,9 +274,8 @@ const Article = ({ article }) => {
                         </Tooltip>
                       ) : null}
 
-                      {data.tags.filter(
-                        (mapped) => mapped.title == "editors-pick"
-                      ).length > 0 ? (
+                      {tags.filter((mapped) => mapped.title == "editors-pick")
+                        .length > 0 ? (
                         <Tooltip
                           label="Editor's Pick 💯"
                           position="bottom"
@@ -347,7 +347,7 @@ const Article = ({ article }) => {
             }
           >
             <MarkDownRenderer className="ml-5 xs:max-w-[700px] md:max-w-full xs:mx-auto">
-              {data.body}
+              {article && article.body}
             </MarkDownRenderer>
           </Suspense>
         </Grid.Col>
@@ -390,9 +390,12 @@ export const getStaticProps = async (ctx) => {
     )
     .eq("id", id);
 
+  console.log(data[0].body.length);
+
   return {
     props: {
       article: data[0],
+      tags: data[0].tags,
     },
   };
 };
