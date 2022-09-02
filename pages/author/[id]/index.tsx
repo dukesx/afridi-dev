@@ -40,7 +40,7 @@ import {
   IconUserCircle,
   IconX,
 } from "@tabler/icons";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, { Fragment, Suspense, useEffect, useRef, useState } from "react";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import SquareHorizontalWidget from "../../../components/landing/widgets/square-horizontal";
 import "country-flag-icons/3x2/flags.css";
@@ -575,210 +575,317 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                         />
                       </Fragment>
                     ) : null}
+                    <Suspense
+                      fallback={
+                        <Stack mt={30}>
+                          <Group>
+                            <Skeleton radius="lg" height={90} width={90} />
 
-                    {data ? (
-                      feed ? (
-                        feed.length > 0 ? (
-                          feed.map((mapped, index) => (
-                            <Card pb="md" key={"alo" + index} withBorder>
-                              <Group position="apart" mb={20}>
-                                <Group>
-                                  <Avatar className="rounded-full h-[50px] w-[50px] ml-0 rounded-full">
-                                    {!data ? (
-                                      <Skeleton height={40} />
-                                    ) : dp ? (
-                                      <AfridiImage
-                                        fillImage={false}
-                                        className=""
-                                        height={50}
-                                        width={50}
-                                        path={
-                                          dp
-                                            ? `/${dp}`
-                                            : colorScheme == "dark"
-                                            ? "/image-avatar-placeholder-dark.png"
-                                            : `/image-avatar-placeholder.png`
-                                        }
-                                        loading={AfridiImageLoadingEnum.LAZY}
-                                      />
-                                    ) : null}
-                                  </Avatar>
-                                  <Stack spacing={0}>
-                                    <Text size={13} weight={600}>
-                                      {data ? (
-                                        data.firstName + " " + data.lastName
-                                      ) : (
-                                        <Skeleton height={10} width={100} />
-                                      )}
-                                    </Text>
-                                    <Text
-                                      className="capitalize"
-                                      color="dimmed"
-                                      size={10}
-                                    >
-                                      {" "}
-                                      {formatDistanceToNow(
-                                        new Date(mapped.data.created_at)
-                                      ) + " ago"}
-                                    </Text>
-                                  </Stack>
-                                </Group>
-                                {usera &&
-                                usera.id == mapped.data.author_id &&
-                                mapped.type == "status" ? (
-                                  <Button
-                                    size="xs"
-                                    radius="xl"
-                                    color="red"
-                                    variant="subtle"
-                                    className="rounded-full py-1 px-1.5"
-                                    onClick={() => {
-                                      openConfirmModal({
-                                        title: (
-                                          <Text size="md" weight={700}>
-                                            Delete Status
-                                          </Text>
-                                        ),
-                                        centered: true,
-                                        children: (
-                                          <Text
-                                            mb="lg"
-                                            size="sm"
-                                            color="dimmed"
-                                          >
-                                            You are about to delete a status.
-                                            Are you sure you want to delete it ?
-                                            This action cannot be
-                                            <b className="ml-1 underline font-medium text-red-600 decoration-red-600 decoration-2">
-                                              UNDONE
-                                            </b>
-                                          </Text>
-                                        ),
-                                        confirmProps: { color: "red" },
-                                        labels: {
-                                          confirm: "Yes, delete it",
-                                          cancel: "No, don't delete it",
-                                        },
-                                        onConfirm: async () => {
-                                          const { error } = await supabaseClient
-                                            .from("feed")
-                                            .delete()
-                                            .match({
-                                              id: mapped.id,
-                                            });
+                            <Stack>
+                              <Skeleton
+                                radius="xl"
+                                height={20}
+                                className="w-[200px] sm:w-[400px]"
+                              />
+                              <Skeleton
+                                radius="xl"
+                                height={15}
+                                className="w-[100px] sm:w-[200px]"
+                              />
+                            </Stack>
+                          </Group>
+                          <Group>
+                            <Skeleton radius="lg" height={90} width={90} />
 
-                                          if (!error) {
-                                            showNotification({
-                                              title: "Success",
-                                              message:
-                                                "Status deleted successfully",
-                                              color: "teal",
-                                              icon: <IconCheck />,
-                                            });
-                                            setFeed(null);
-                                            getData();
+                            <Stack>
+                              <Skeleton
+                                radius="xl"
+                                height={20}
+                                className="w-[200px] sm:w-[400px]"
+                              />
+                              <Skeleton
+                                radius="xl"
+                                height={15}
+                                className="w-[100px] sm:w-[200px]"
+                              />
+                            </Stack>
+                          </Group>
+                          <Group>
+                            <Skeleton radius="lg" height={90} width={90} />
+                            <Stack>
+                              <Skeleton
+                                radius="xl"
+                                height={20}
+                                className="w-[200px] sm:w-[400px]"
+                              />
+                              <Skeleton
+                                radius="xl"
+                                height={15}
+                                className="w-[100px] sm:w-[200px]"
+                              />
+                            </Stack>
+                          </Group>
+                        </Stack>
+                      }
+                    >
+                      {data ? (
+                        feed ? (
+                          feed.length > 0 ? (
+                            feed.map((mapped, index) => (
+                              <Card pb="md" key={"alo" + index} withBorder>
+                                <Group position="apart" mb={20}>
+                                  <Group>
+                                    <Avatar className="rounded-full h-[50px] w-[50px] ml-0 rounded-full">
+                                      {!data ? (
+                                        <Skeleton height={40} />
+                                      ) : dp ? (
+                                        <AfridiImage
+                                          fillImage={false}
+                                          className=""
+                                          height={50}
+                                          width={50}
+                                          path={
+                                            dp
+                                              ? `/${dp}`
+                                              : colorScheme == "dark"
+                                              ? "/image-avatar-placeholder-dark.png"
+                                              : `/image-avatar-placeholder.png`
                                           }
-                                        },
-                                        onCancel: () => {},
-                                      });
-                                    }}
-                                  >
-                                    <IconTrash size={18} />
-                                  </Button>
-                                ) : null}
-                                {mapped.type == "article" ? (
-                                  <Tooltip
-                                    position="top"
-                                    label="An article on Afridi.dev"
-                                  >
-                                    <ThemeIcon
-                                      className="cursor-help"
-                                      size={40}
-                                      variant="light"
-                                      radius="xl"
-                                    >
-                                      <Text>✏️</Text>
-                                    </ThemeIcon>
-                                  </Tooltip>
-                                ) : null}
-                              </Group>
-                              {mapped.type == "status" ? (
-                                <MarkDownRenderer
-                                  className="mb-5"
-                                  key={index + "alo"}
-                                >
-                                  {mapped.data.body}
-                                </MarkDownRenderer>
-                              ) : (
-                                <Stack>
-                                  <Text size="sm">
-                                    {mapped.data.description}
-                                  </Text>
-                                  <Card
-                                    component="a"
-                                    href="#"
-                                    onClick={() => {
-                                      if (mapped.type == "article") {
-                                        window.open(
-                                          `/article/${mapped.data.id}`,
-                                          "_blank"
-                                        );
-                                      }
-                                    }}
-                                    withBorder
-                                  >
-                                    <Card.Section>
-                                      <AfridiImage
-                                        fillImage={true}
-                                        path={mapped.data.cover}
-                                        height={300}
-                                        width={300}
-                                      />
-                                    </Card.Section>
-                                    <Group className="w-full" position="apart">
-                                      <Stack className="w-full" spacing={3}>
-                                        <Title mt="xl" order={5}>
-                                          {mapped.data.title}
-                                        </Title>
-                                      </Stack>
-                                      <Text
-                                        className="max-w-[90%]"
-                                        lineClamp={2}
-                                        size="xs"
-                                        color="dimmed"
-                                      >
-                                        {mapped.data.description}
+                                          loading={AfridiImageLoadingEnum.LAZY}
+                                        />
+                                      ) : null}
+                                    </Avatar>
+                                    <Stack spacing={0}>
+                                      <Text size={13} weight={600}>
+                                        {data ? (
+                                          data.firstName + " " + data.lastName
+                                        ) : (
+                                          <Skeleton height={10} width={100} />
+                                        )}
                                       </Text>
-                                      <Tooltip label="Open link in new tab">
-                                        <ActionIcon
-                                          color="blue"
-                                          variant="subtle"
-                                          component="div"
-                                          onClick={() => {
-                                            window.open(
-                                              `/article/${mapped.data.id}`,
-                                              "_blank"
-                                            );
-                                          }}
-                                        >
-                                          <IconExternalLink size={20} />
-                                        </ActionIcon>
-                                      </Tooltip>
-                                    </Group>
-                                  </Card>
-                                </Stack>
-                              )}
-                            </Card>
-                          ))
-                        ) : (
-                          <Stack spacing="xs" align="center" mt="xl">
-                            <Text size="xl" weight={700}>
-                              Nothing Found
-                            </Text>
+                                      <Text
+                                        className="capitalize"
+                                        color="dimmed"
+                                        size={10}
+                                      >
+                                        {" "}
+                                        {formatDistanceToNow(
+                                          new Date(mapped.data.created_at)
+                                        ) + " ago"}
+                                      </Text>
+                                    </Stack>
+                                  </Group>
+                                  {usera &&
+                                  usera.id == mapped.data.author_id &&
+                                  mapped.type == "status" ? (
+                                    <Button
+                                      size="xs"
+                                      radius="xl"
+                                      color="red"
+                                      variant="subtle"
+                                      className="rounded-full py-1 px-1.5"
+                                      onClick={() => {
+                                        openConfirmModal({
+                                          title: (
+                                            <Text size="md" weight={700}>
+                                              Delete Status
+                                            </Text>
+                                          ),
+                                          centered: true,
+                                          children: (
+                                            <Text
+                                              mb="lg"
+                                              size="sm"
+                                              color="dimmed"
+                                            >
+                                              You are about to delete a status.
+                                              Are you sure you want to delete it
+                                              ? This action cannot be
+                                              <b className="ml-1 underline font-medium text-red-600 decoration-red-600 decoration-2">
+                                                UNDONE
+                                              </b>
+                                            </Text>
+                                          ),
+                                          confirmProps: { color: "red" },
+                                          labels: {
+                                            confirm: "Yes, delete it",
+                                            cancel: "No, don't delete it",
+                                          },
+                                          onConfirm: async () => {
+                                            const { error } =
+                                              await supabaseClient
+                                                .from("feed")
+                                                .delete()
+                                                .match({
+                                                  id: mapped.id,
+                                                });
 
-                            <Text size="sm" color="dimmed">
-                              Post something to see it here 🙃
-                            </Text>
+                                            if (!error) {
+                                              showNotification({
+                                                title: "Success",
+                                                message:
+                                                  "Status deleted successfully",
+                                                color: "teal",
+                                                icon: <IconCheck />,
+                                              });
+                                              setFeed(null);
+                                              getData();
+                                            }
+                                          },
+                                          onCancel: () => {},
+                                        });
+                                      }}
+                                    >
+                                      <IconTrash size={18} />
+                                    </Button>
+                                  ) : null}
+                                  {mapped.type == "article" ? (
+                                    <Tooltip
+                                      position="top"
+                                      label="An article on Afridi.dev"
+                                    >
+                                      <ThemeIcon
+                                        className="cursor-help"
+                                        size={40}
+                                        variant="light"
+                                        radius="xl"
+                                      >
+                                        <Text>✏️</Text>
+                                      </ThemeIcon>
+                                    </Tooltip>
+                                  ) : null}
+                                </Group>
+                                {mapped.type == "status" ? (
+                                  <MarkDownRenderer
+                                    className="mb-5"
+                                    key={index + "alo"}
+                                  >
+                                    {mapped.data.body}
+                                  </MarkDownRenderer>
+                                ) : (
+                                  <Stack>
+                                    <Text size="sm">
+                                      {mapped.data.description}
+                                    </Text>
+                                    <Card
+                                      component="a"
+                                      href="#"
+                                      onClick={() => {
+                                        if (mapped.type == "article") {
+                                          window.open(
+                                            `/article/${mapped.data.id}`,
+                                            "_blank"
+                                          );
+                                        }
+                                      }}
+                                      withBorder
+                                    >
+                                      <Card.Section>
+                                        <AfridiImage
+                                          fillImage={true}
+                                          path={mapped.data.cover}
+                                          height={300}
+                                          width={300}
+                                        />
+                                      </Card.Section>
+                                      <Group
+                                        className="w-full"
+                                        position="apart"
+                                      >
+                                        <Stack className="w-full" spacing={3}>
+                                          <Title mt="xl" order={5}>
+                                            {mapped.data.title}
+                                          </Title>
+                                        </Stack>
+                                        <Text
+                                          className="max-w-[90%]"
+                                          lineClamp={2}
+                                          size="xs"
+                                          color="dimmed"
+                                        >
+                                          {mapped.data.description}
+                                        </Text>
+                                        <Tooltip label="Open link in new tab">
+                                          <ActionIcon
+                                            color="blue"
+                                            variant="subtle"
+                                            component="div"
+                                            onClick={() => {
+                                              window.open(
+                                                `/article/${mapped.data.id}`,
+                                                "_blank"
+                                              );
+                                            }}
+                                          >
+                                            <IconExternalLink size={20} />
+                                          </ActionIcon>
+                                        </Tooltip>
+                                      </Group>
+                                    </Card>
+                                  </Stack>
+                                )}
+                              </Card>
+                            ))
+                          ) : (
+                            <Stack spacing="xs" align="center" mt="xl">
+                              <Text size="xl" weight={700}>
+                                Nothing Found
+                              </Text>
+
+                              <Text size="sm" color="dimmed">
+                                Post something to see it here 🙃
+                              </Text>
+                            </Stack>
+                          )
+                        ) : (
+                          <Stack mt={30}>
+                            <Group>
+                              <Skeleton radius="lg" height={90} width={90} />
+
+                              <Stack>
+                                <Skeleton
+                                  radius="xl"
+                                  height={20}
+                                  className="w-[200px] sm:w-[400px]"
+                                />
+                                <Skeleton
+                                  radius="xl"
+                                  height={15}
+                                  className="w-[100px] sm:w-[200px]"
+                                />
+                              </Stack>
+                            </Group>
+                            <Group>
+                              <Skeleton radius="lg" height={90} width={90} />
+
+                              <Stack>
+                                <Skeleton
+                                  radius="xl"
+                                  height={20}
+                                  className="w-[200px] sm:w-[400px]"
+                                />
+                                <Skeleton
+                                  radius="xl"
+                                  height={15}
+                                  className="w-[100px] sm:w-[200px]"
+                                />
+                              </Stack>
+                            </Group>
+                            <Group>
+                              <Skeleton radius="lg" height={90} width={90} />
+                              <Stack>
+                                <Skeleton
+                                  radius="xl"
+                                  height={20}
+                                  className="w-[200px] sm:w-[400px]"
+                                />
+                                <Skeleton
+                                  radius="xl"
+                                  height={15}
+                                  className="w-[100px] sm:w-[200px]"
+                                />
+                              </Stack>
+                            </Group>
                           </Stack>
                         )
                       ) : (
@@ -831,77 +938,32 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                             </Stack>
                           </Group>
                         </Stack>
-                      )
-                    ) : (
-                      <Stack mt={30}>
-                        <Group>
-                          <Skeleton radius="lg" height={90} width={90} />
-
-                          <Stack>
-                            <Skeleton
-                              radius="xl"
-                              height={20}
-                              className="w-[200px] sm:w-[400px]"
-                            />
-                            <Skeleton
-                              radius="xl"
-                              height={15}
-                              className="w-[100px] sm:w-[200px]"
-                            />
-                          </Stack>
-                        </Group>
-                        <Group>
-                          <Skeleton radius="lg" height={90} width={90} />
-
-                          <Stack>
-                            <Skeleton
-                              radius="xl"
-                              height={20}
-                              className="w-[200px] sm:w-[400px]"
-                            />
-                            <Skeleton
-                              radius="xl"
-                              height={15}
-                              className="w-[100px] sm:w-[200px]"
-                            />
-                          </Stack>
-                        </Group>
-                        <Group>
-                          <Skeleton radius="lg" height={90} width={90} />
-                          <Stack>
-                            <Skeleton
-                              radius="xl"
-                              height={20}
-                              className="w-[200px] sm:w-[400px]"
-                            />
-                            <Skeleton
-                              radius="xl"
-                              height={15}
-                              className="w-[100px] sm:w-[200px]"
-                            />
-                          </Stack>
-                        </Group>
-                      </Stack>
-                    )}
+                      )}
+                    </Suspense>
                   </Stack>
                 </Grid.Col>
 
                 <Grid.Col span={0} sm={5}>
                   <Stack spacing="xl" className="sticky top-8 mt-8 pb-10 ml-10">
-                    <SquareHorizontalWidget
-                      title="ON FIRE"
-                      icon="🔥"
-                      theme={theme}
-                      color="orange"
-                      data={hot ? hot : []}
-                    />
-                    <SquareHorizontalWidget
-                      title="Thumbs up"
-                      icon="👍‍"
-                      theme={theme}
-                      color="yellow"
-                      data={thumbsUp ? thumbsUp : []}
-                    />
+                    <Suspense>
+                      <SquareHorizontalWidget
+                        title="ON FIRE"
+                        icon="🔥"
+                        theme={theme}
+                        color="orange"
+                        data={hot ? hot : []}
+                      />
+                    </Suspense>
+
+                    <Suspense>
+                      <SquareHorizontalWidget
+                        title="Thumbs up"
+                        icon="👍‍"
+                        theme={theme}
+                        color="yellow"
+                        data={thumbsUp ? thumbsUp : []}
+                      />
+                    </Suspense>
                   </Stack>
                 </Grid.Col>
               </Grid>

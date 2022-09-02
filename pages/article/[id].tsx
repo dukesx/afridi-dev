@@ -17,7 +17,7 @@ import { NextLink } from "@mantine/next";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { IconBolt, IconHeart, IconPencil, IconTrophy } from "@tabler/icons";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
@@ -34,6 +34,20 @@ const Article = ({ article }) => {
     defaultValue: false,
   });
 
+  const awards = [
+    {
+      title: "trending",
+    },
+    {
+      title: "loved",
+    },
+    {
+      title: "editors-pick",
+    },
+    {
+      title: "community-choice",
+    },
+  ];
   return (
     <AppWrapper activeHeaderKey="" size="xl">
       <Container className="px-0 sm:px-5" size="lg">
@@ -179,85 +193,111 @@ const Article = ({ article }) => {
                     </Avatar.Group>
                   </Group>
                 ) : null}
-                <Group>
-                  <Text size="sm" weight={600} color="dimmed">
-                    Awards:
-                  </Text>
-                  <Group className="h-full" spacing="xs">
-                    <Tooltip
-                      label="Trending 💪"
-                      position="bottom"
-                      mb="xl"
-                      ml="xl"
-                    >
-                      <ThemeIcon
-                        size="xl"
-                        radius="xl"
-                        variant="gradient"
-                        gradient={{
-                          from: "blue",
-                          to: "indigo",
-                        }}
-                      >
-                        <IconBolt size={20} />
-                      </ThemeIcon>
-                    </Tooltip>
-                    <Tooltip
-                      label="Loved By Readers 😍"
-                      position="bottom"
-                      mb="xl"
-                      ml="xl"
-                    >
-                      <ThemeIcon
-                        size="xl"
-                        radius="xl"
-                        variant="gradient"
-                        gradient={{
-                          from: "pink",
-                          to: "red.4",
-                        }}
-                      >
-                        <IconHeart size={20} />
-                      </ThemeIcon>
-                    </Tooltip>
-                    <Tooltip
-                      label="Community's Choice 👍‍"
-                      position="bottom"
-                      mb="xl"
-                      ml="xl"
-                    >
-                      <ThemeIcon
-                        size="xl"
-                        radius="xl"
-                        variant="gradient"
-                        gradient={{
-                          from: "orange.6",
-                          to: "yellow.4",
-                        }}
-                      >
-                        <IconTrophy size={22} />
-                      </ThemeIcon>
-                    </Tooltip>
-                    <Tooltip
-                      label="Editor's Pick 💯"
-                      position="bottom"
-                      mb="xl"
-                      ml="xl"
-                    >
-                      <ThemeIcon
-                        size="xl"
-                        radius="xl"
-                        variant="gradient"
-                        gradient={{
-                          from: "blue.7",
-                          to: "blue.4",
-                        }}
-                      >
-                        <IconPencil size={18} />
-                      </ThemeIcon>
-                    </Tooltip>
+                {data.tags.filter((filtered) => {
+                  if (
+                    awards.filter((mapped) => mapped.title == filtered.title)
+                      .length > 0
+                  ) {
+                    return filtered;
+                  }
+                }).length > 0 ? (
+                  <Group>
+                    <Text size="sm" weight={600} color="dimmed">
+                      Awards:
+                    </Text>
+                    <Group className="h-full" spacing="xs">
+                      {data.tags.filter((mapped) => mapped.title == "trending")
+                        .length > 0 ? (
+                        <Tooltip
+                          label="Trending 💪"
+                          position="bottom"
+                          mb="xl"
+                          ml="xl"
+                        >
+                          <ThemeIcon
+                            size="xl"
+                            radius="xl"
+                            variant="gradient"
+                            gradient={{
+                              from: "blue",
+                              to: "indigo",
+                            }}
+                          >
+                            <IconBolt size={20} />
+                          </ThemeIcon>
+                        </Tooltip>
+                      ) : null}
+
+                      {data.tags.filter((mapped) => mapped.title == "loved")
+                        .length > 0 ? (
+                        <Tooltip
+                          label="Loved By Readers 😍"
+                          position="bottom"
+                          mb="xl"
+                          ml="xl"
+                        >
+                          <ThemeIcon
+                            size="xl"
+                            radius="xl"
+                            variant="gradient"
+                            gradient={{
+                              from: "pink",
+                              to: "red.4",
+                            }}
+                          >
+                            <IconHeart size={20} />
+                          </ThemeIcon>
+                        </Tooltip>
+                      ) : null}
+
+                      {data.tags.filter(
+                        (mapped) => mapped.title == "community-choice"
+                      ).length > 0 ? (
+                        <Tooltip
+                          label="Community's Choice 👍‍"
+                          position="bottom"
+                          mb="xl"
+                          ml="xl"
+                        >
+                          <ThemeIcon
+                            size="xl"
+                            radius="xl"
+                            variant="gradient"
+                            gradient={{
+                              from: "orange.6",
+                              to: "yellow.4",
+                            }}
+                          >
+                            <IconTrophy size={22} />
+                          </ThemeIcon>
+                        </Tooltip>
+                      ) : null}
+
+                      {data.tags.filter(
+                        (mapped) => mapped.title == "editors-pick"
+                      ).length > 0 ? (
+                        <Tooltip
+                          label="Editor's Pick 💯"
+                          position="bottom"
+                          mb="xl"
+                          ml="xl"
+                        >
+                          <ThemeIcon
+                            size="xl"
+                            radius="xl"
+                            variant="gradient"
+                            gradient={{
+                              from: "blue.7",
+                              to: "blue.4",
+                            }}
+                          >
+                            <IconPencil size={18} />
+                          </ThemeIcon>
+                        </Tooltip>
+                      ) : null}
+                    </Group>
                   </Group>
-                </Group>
+                ) : null}
               </Stack>
             </Center>
           </Grid.Col>
@@ -292,22 +332,24 @@ const Article = ({ article }) => {
           </div>
         </Grid.Col>
         <Grid.Col xs={12} className="px-0 md:px-5 -order-1" span={12} lg={8}>
-          {data ? (
+          <Suspense
+            fallback={
+              <Stack pb="xl" className="min-h-[400px] w-full">
+                <Skeleton className="w-full" height={300} width={300} />
+                <Skeleton mt="xl" className="w-[70%]" height={30} width={300} />
+
+                <Stack mt="xl">
+                  <Skeleton height={10} className="w-[90%]" />
+                  <Skeleton height={10} className="w-[90%]" />{" "}
+                  <Skeleton height={10} className="w-[90%]" />{" "}
+                </Stack>
+              </Stack>
+            }
+          >
             <MarkDownRenderer className="ml-5 xs:max-w-[700px] md:max-w-full xs:mx-auto">
               {data.body}
             </MarkDownRenderer>
-          ) : (
-            <Stack pb="xl" className="min-h-[400px] w-full">
-              <Skeleton className="w-full" height={300} width={300} />
-              <Skeleton mt="xl" className="w-[70%]" height={30} width={300} />
-
-              <Stack mt="xl">
-                <Skeleton height={10} className="w-[90%]" />
-                <Skeleton height={10} className="w-[90%]" />{" "}
-                <Skeleton height={10} className="w-[90%]" />{" "}
-              </Stack>
-            </Stack>
-          )}
+          </Suspense>
         </Grid.Col>
       </Grid>
     </AppWrapper>
@@ -322,7 +364,7 @@ export const getStaticProps = async (ctx) => {
     .from("articles")
     .select(
       `
-    id,
+        id,
         title,
         description,
         cover,
@@ -340,6 +382,9 @@ export const getStaticProps = async (ctx) => {
             lastName,
             dp
         )
+        ),
+        tags (
+          title
         )
     `
     )

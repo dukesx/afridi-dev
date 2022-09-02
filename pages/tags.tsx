@@ -30,7 +30,7 @@ import {
   IconHash,
   IconTrendingUp,
 } from "@tabler/icons";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, Suspense, useEffect, useState } from "react";
 import EmptyPlaceholder from "../components/global/placeholders/empty";
 import TagComponent from "../components/global/tags/tagComponent";
 import AppWrapper from "../components/global/wrapper";
@@ -39,7 +39,7 @@ const TagsPage = ({ tagsArr }) => {
   const [tags, setTags] = useState(tagsArr);
   const { user } = useUser();
   const [authorFollowed, setAuthorFollowed] = useState([]);
-  const [inputVal, setInputVal] = useDebouncedState("", 200);
+  const [inputVal, setInputVal] = useDebouncedState(null, 200);
   const [loading, setLoading] = useState(false);
 
   /**
@@ -69,8 +69,10 @@ const TagsPage = ({ tagsArr }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    searchTags(inputVal);
+    if (inputVal !== null) {
+      setLoading(true);
+      searchTags(inputVal);
+    }
   }, [inputVal]);
 
   /**
@@ -157,86 +159,115 @@ const TagsPage = ({ tagsArr }) => {
           placeholder="e.g react-js"
         />
         <Grid gutter="xl">
-          {tags.length > 0 && !loading ? (
-            tags.map((mapped, index) => (
-              <Grid.Col key={"alock" + index} span={12} xs={6} sm={4} lg={3}>
-                <TagComponent
-                  IconName={
-                    mapped.title == "react"
-                      ? IconBrandReact
-                      : mapped.title == "angular"
-                      ? IconBrandAngular
-                      : mapped.title == "javascript"
-                      ? IconBrandJavascript
-                      : mapped.title == "kotlin"
-                      ? IconBrandKotlin
-                      : mapped.title == "programming"
-                      ? IconCode
-                      : mapped.title == "typescript"
-                      ? IconCode
-                      : mapped.title == "ts"
-                      ? IconCode
-                      : mapped.title == "trending"
-                      ? IconTrendingUp
-                      : mapped.title == "android"
-                      ? IconBrandAndroid
-                      : null
-                  }
-                  color={
-                    mapped.title == "react"
-                      ? "blue"
-                      : mapped.title == "angular"
-                      ? "red"
-                      : mapped.title == "javascript"
-                      ? "yellow.6"
-                      : mapped.title == "kotlin"
-                      ? "grape"
-                      : mapped.title == "typescript"
-                      ? "blue"
-                      : mapped.title == "ts"
-                      ? "blue"
-                      : mapped.title == "android"
-                      ? "teal"
-                      : "cyan.4"
-                  }
-                  setAuthorFollowed={setAuthorFollowed}
-                  id={mapped.id}
-                  authorTags={authorFollowed}
-                  title={mapped.title}
-                  user={user}
-                />
-              </Grid.Col>
-            ))
-          ) : loading ? (
-            <Fragment>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-              <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                <Skeleton className="aspect-square" />
-              </Grid.Col>
-            </Fragment>
-          ) : (
-            <EmptyPlaceholder height={260} />
-          )}
+          <Suspense
+            fallback={
+              <Fragment>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+              </Fragment>
+            }
+          >
+            {!loading ? (
+              tags.map((mapped, index) => (
+                <Grid.Col key={"alock" + index} span={12} xs={6} sm={4} lg={3}>
+                  <TagComponent
+                    IconName={
+                      mapped.title == "react"
+                        ? IconBrandReact
+                        : mapped.title == "angular"
+                        ? IconBrandAngular
+                        : mapped.title == "javascript"
+                        ? IconBrandJavascript
+                        : mapped.title == "kotlin"
+                        ? IconBrandKotlin
+                        : mapped.title == "programming"
+                        ? IconCode
+                        : mapped.title == "typescript"
+                        ? IconCode
+                        : mapped.title == "ts"
+                        ? IconCode
+                        : mapped.title == "trending"
+                        ? IconTrendingUp
+                        : mapped.title == "android"
+                        ? IconBrandAndroid
+                        : null
+                    }
+                    color={
+                      mapped.title == "react"
+                        ? "blue"
+                        : mapped.title == "angular"
+                        ? "red"
+                        : mapped.title == "javascript"
+                        ? "yellow.6"
+                        : mapped.title == "kotlin"
+                        ? "grape"
+                        : mapped.title == "typescript"
+                        ? "blue"
+                        : mapped.title == "ts"
+                        ? "blue"
+                        : mapped.title == "android"
+                        ? "teal"
+                        : "cyan.4"
+                    }
+                    setAuthorFollowed={setAuthorFollowed}
+                    id={mapped.id}
+                    authorTags={authorFollowed}
+                    title={mapped.title}
+                    user={user}
+                  />
+                </Grid.Col>
+              ))
+            ) : (
+              <Fragment>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+                <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                  <Skeleton className="aspect-square" />
+                </Grid.Col>
+              </Fragment>
+            )}
+          </Suspense>
         </Grid>
       </Card>
     </AppWrapper>

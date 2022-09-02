@@ -12,7 +12,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { Fragment, useEffect } from "react";
+import { Fragment, Suspense, useEffect } from "react";
 import AppWrapper from "../components/global/wrapper";
 import LargeGridCard from "../components/global/grid-cards/largeGridCard";
 import HorizontalGridCard, {
@@ -280,30 +280,45 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
               spacing="xl"
               className="sticky min-h-[1000px] h-screen w-full top-8 pb-10 mr-10"
             >
-              <SquareHorizontalWidget
-                icon="👏"
-                theme={theme}
-                color="blue"
-                title="This Month's Top"
-                data={top}
-              />
-              <SquareHorizontalWidget
-                cardClassName=""
-                title="Must Reads"
-                icon="👀"
-                theme={theme}
-                color="cyan"
-                data={mustReads}
-              />
+              <Suspense>
+                <SquareHorizontalWidget
+                  icon="👏"
+                  theme={theme}
+                  color="blue"
+                  title="This Month's Top"
+                  data={top}
+                />
+              </Suspense>
+
+              <Suspense>
+                <SquareHorizontalWidget
+                  cardClassName=""
+                  title="Must Reads"
+                  icon="👀"
+                  theme={theme}
+                  color="cyan"
+                  data={mustReads}
+                />
+              </Suspense>
             </Stack>
           </Grid.Col>
           <Grid.Col span={12} sm={5} xs={12} md={5}>
             <div className="mx-5">
-              <LandingFeed
-                prefetchedFeedData={feedData}
-                feedDataCount={feedDataCount}
-                theme={theme}
-              />
+              <Suspense
+                fallback={
+                  <Stack className="w-full h-full">
+                    <HorizontalGridCardSkeleton />
+                    <HorizontalGridCardSkeleton />
+                    <HorizontalGridCardSkeleton />
+                  </Stack>
+                }
+              >
+                <LandingFeed
+                  prefetchedFeedData={feedData}
+                  feedDataCount={feedDataCount}
+                  theme={theme}
+                />
+              </Suspense>
             </div>
           </Grid.Col>
 
@@ -318,21 +333,26 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
               spacing="xl"
               className="sticky min-h-[1000px] h-screen w-full top-8 pb-10 ml-10"
             >
-              <SquareHorizontalWidget
-                icon="👏"
-                theme={theme}
-                color="blue"
-                title="This Month's Top"
-                data={top}
-              />
-              <SquareHorizontalWidget
-                cardClassName=""
-                title="Must Reads"
-                icon="👀"
-                theme={theme}
-                color="cyan"
-                data={mustReads}
-              />
+              <Suspense>
+                <SquareHorizontalWidget
+                  icon="👏"
+                  theme={theme}
+                  color="blue"
+                  title="This Month's Top"
+                  data={top}
+                />
+              </Suspense>
+
+              <Suspense>
+                <SquareHorizontalWidget
+                  cardClassName=""
+                  title="Must Reads"
+                  icon="👀"
+                  theme={theme}
+                  color="cyan"
+                  data={mustReads}
+                />
+              </Suspense>
             </Stack>
           </Grid.Col>
         </Grid>

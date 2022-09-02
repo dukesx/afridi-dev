@@ -15,7 +15,7 @@ import {
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { IconBellRinging, IconInfoCircle } from "@tabler/icons";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import AfridiImage from "../global/afridi-image";
 import SquareHorizontalWidget from "../landing/widgets/square-horizontal";
 
@@ -200,14 +200,15 @@ const ArticleSidebar = ({
           />
         </Group>
       </Card>
-
-      <SquareHorizontalWidget
-        theme={theme}
-        icon={"✅"}
-        title="Similar Articles"
-        color="indigo"
-        data={[]}
-      />
+      <Suspense>
+        <SquareHorizontalWidget
+          theme={theme}
+          icon={"✅"}
+          title="Similar Articles"
+          color="indigo"
+          data={[]}
+        />
+      </Suspense>
     </Fragment>
   );
 };
