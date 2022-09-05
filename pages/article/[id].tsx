@@ -332,24 +332,9 @@ const Article = ({ article, tags }) => {
           </div>
         </Grid.Col>
         <Grid.Col xs={12} className="px-0 md:px-5 -order-1" span={12} lg={8}>
-          <Suspense
-            fallback={
-              <Stack pb="xl" className="min-h-[400px] w-full">
-                <Skeleton className="w-full" height={300} width={300} />
-                <Skeleton mt="xl" className="w-[70%]" height={30} width={300} />
-
-                <Stack mt="xl">
-                  <Skeleton height={10} className="w-[90%]" />
-                  <Skeleton height={10} className="w-[90%]" />{" "}
-                  <Skeleton height={10} className="w-[90%]" />{" "}
-                </Stack>
-              </Stack>
-            }
-          >
-            <MarkDownRenderer className="ml-5 xs:max-w-[700px] md:max-w-full xs:mx-auto">
-              {article && article.body}
-            </MarkDownRenderer>
-          </Suspense>
+          <MarkDownRenderer className="ml-5 xs:max-w-[700px] md:max-w-full xs:mx-auto">
+            {article && article.body}
+          </MarkDownRenderer>
         </Grid.Col>
       </Grid>
     </AppWrapper>
@@ -389,8 +374,6 @@ export const getStaticProps = async (ctx) => {
     `
     )
     .eq("id", id);
-
-  console.log(data[0].body.length);
 
   return {
     props: {

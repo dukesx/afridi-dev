@@ -9,9 +9,8 @@ import {
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { NextLink } from "@mantine/next";
-import { IKImage } from "imagekitio-react";
 import { AfridiDevAuthor } from "../../article/sidebar";
-import AfridiImage, { AfridiImageLoadingEnum } from "../afridi-image";
+import AfridiImage from "../afridi-image";
 import LargeGridCardSkeleton from "../skeletons/grid-cards/largeGridCardSkeleton";
 
 export type AfridiDevArticle = {
@@ -46,7 +45,6 @@ const LargeGridCard: React.FC<LargeGridCardProps> = ({
           height={400}
           width={"100%"}
           path={data.cover ?? ""}
-          loading={AfridiImageLoadingEnum.LAZY}
         />
       </Card.Section>
       <Stack mt="sm" spacing="xs">

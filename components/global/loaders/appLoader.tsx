@@ -4,6 +4,7 @@ import {
   type MantineTheme,
   Stack,
   Text,
+  Center,
 } from "@mantine/core";
 
 interface AppLoaderProps {
@@ -14,12 +15,12 @@ interface AppLoaderProps {
 const AppLoader = ({ theme, loading }: AppLoaderProps) => {
   return (
     <LoadingOverlay
-      className="h-full"
+      className="h-full fixed"
       overlayColor={theme.colors.gray[9]}
       overlayBlur={10}
       loader={
         <Stack
-          className="top-[15%] left-[37%] sm:left-[42%] absolute"
+          className="top-[47%] left-[37%] sm:left-[42%] absolute fixed"
           align="center"
         >
           <Loader variant="bars" color="blue" className="" />

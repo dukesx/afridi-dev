@@ -33,7 +33,6 @@ import {
   getTrendingArticles,
 } from "../global/feed/functions";
 import EmptyPlaceholder from "../global/placeholders/empty";
-import { useStoreActions, useStoreState } from "easy-peasy";
 import { GeneralStore } from "../../data/static/store";
 import { AfridiDevArticle } from "../global/grid-cards/largeGridCard";
 interface LandingFeedProps {

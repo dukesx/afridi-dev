@@ -1,7 +1,6 @@
 import { Stack, Center, type MantineTheme } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Fade } from "react-awesome-reveal";
-import "country-flag-icons/3x2/flags.css";
 import { useUser } from "@supabase/auth-helpers-react";
 import TagPickingStep from "./tag-step";
 import WelcomeStep from "./welcome-step";
@@ -15,7 +14,14 @@ interface WebsiteTourWizardBaseProps {
 const WebsiteTourWizardBase = ({ theme }: WebsiteTourWizardBaseProps) => {
   const [step, setStep] = useState(0);
   const { user } = useUser();
-
+  const importFlags = async () =>
+    //@ts-ignore
+    await import("country-flag-icons/3x2/flags.css");
+  useEffect(() => {
+    if (step == 1) {
+      importFlags();
+    }
+  }, [step]);
   return (
     <Stack className="!h-[500px]">
       <Center className="h-full !w-full">

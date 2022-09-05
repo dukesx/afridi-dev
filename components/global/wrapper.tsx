@@ -1,25 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Button,
-  Center,
   Container,
-  Group,
-  Loader,
-  LoadingOverlay,
-  Stack,
-  Text,
-  Transition,
   useMantineTheme,
   type MantineNumberSize,
 } from "@mantine/core";
 import { openModal } from "@mantine/modals";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
-import { IconArrowLeft, IconArrowRight } from "@tabler/icons";
-import { useStoreActions, useStoreState } from "easy-peasy";
-import { useRouter } from "next/router";
-import { Fragment, useEffect, useState } from "react";
-import { GeneralStore } from "../../data/static/store";
+import { useEffect } from "react";
+import { GeneralStore, useGeneralStore } from "../../data/static/store";
 import GlobalHeader from "./header";
 import AppLoader from "./loaders/appLoader";
 import WebsiteTourWizardBase from "./wizards/website-tour/wizardBase";
@@ -38,11 +27,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
 }) => {
   const theme = useMantineTheme();
   const { user } = useUser();
-  const router = useRouter();
-  const appLoading = useStoreState((state: GeneralStore) => state.appLoading);
-  const setAppLoading = useStoreActions(
-    (actions: any) => actions.toggleAppLoading
-  );
+  const appLoading = useGeneralStore((state: GeneralStore) => state.appLoading);
 
   const getUserProps = async () => {
     const { data } = await supabaseClient

@@ -1,7 +1,6 @@
 import { Button, Stack, Text } from "@mantine/core";
 import { closeAllModals } from "@mantine/modals";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useStoreActions, useStoreState } from "easy-peasy";
 import { useState } from "react";
 import { GeneralStore } from "../../../../data/static/store";
 import { getFeedArticles } from "../../feed/functions";

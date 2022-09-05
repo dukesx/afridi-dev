@@ -7,7 +7,6 @@ import {
   Skeleton,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { IKImage } from "imagekitio-react";
 import AfridiImage from "../afridi-image";
 import { AfridiDevArticle } from "./largeGridCard";
 

@@ -38,7 +38,6 @@ import {
   IconUserCircle,
   IconUsers,
 } from "@tabler/icons";
-import { useStoreActions, useStoreState } from "easy-peasy";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";

@@ -6,12 +6,9 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
-import { generalStore } from "../data/static/store";
-import { StoreProvider } from "easy-peasy";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import "../styles/app.scss";
-import { IKContext } from "imagekitio-react";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
 import { getCookie, setCookie } from "cookies-next";
@@ -88,15 +85,11 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
 
           <UserProvider supabaseClient={supabaseClient}>
             {/** @ts-ignore */}
-            <StoreProvider store={generalStore}>
-              <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
-                <NotificationsProvider position="top-right">
-                  <ModalsProvider>
-                    <Component {...pageProps} />
-                  </ModalsProvider>
-                </NotificationsProvider>
-              </IKContext>
-            </StoreProvider>
+            <NotificationsProvider position="top-right">
+              <ModalsProvider>
+                <Component {...pageProps} />
+              </ModalsProvider>
+            </NotificationsProvider>
           </UserProvider>
         </MantineProvider>
       </ColorSchemeProvider>

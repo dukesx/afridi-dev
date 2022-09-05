@@ -32,11 +32,9 @@ specifiers:
   country-flag-icons: ^1.5.5
   date-fns: ^2.29.1
   dayjs: ^1.11.4
-  easy-peasy: ^5.0.4
   embla-carousel-react: 7.0.1
   eslint: 8.22.0
   eslint-config-next: 12.2.5
-  imagekitio-react: ^1.1.1
   jest: ^28.1.3
   jest-environment-jsdom: ^28.1.3
   next: ^12.2.0
@@ -51,6 +49,7 @@ specifiers:
   react-dom: ^18.2.0
   react-infinite-scroller: ^1.2.6
   react-markdown: ^8.0.3
+  react-progressive-graceful-image: ^0.6.14
   react-sticky: ^6.0.3
   react-syntax-highlighter: ^15.5.0
   react-virtuoso: ^2.17.2
@@ -64,6 +63,7 @@ specifiers:
   tailwindcss: ^3.1.6
   typescript: ^4.7.4
   url-slug: ^3.0.4
+  zustand: ^4.1.1
 
 dependencies:
   '@babel/core': 7.18.9
@@ -93,9 +93,7 @@ dependencies:
   country-flag-icons: 1.5.5
   date-fns: 2.29.1
   dayjs: 1.11.4
-  easy-peasy: 5.0.4_react@18.2.0
   embla-carousel-react: 7.0.1_react@18.2.0
-  imagekitio-react: 1.1.1_biqbaboplfbrettd7655fr4n2y
   next: 12.2.5_ckhwt5v7fywslkplh6p4u2aony
   next-remove-imports: 1.0.6
   next-seo: 5.5.0_3xcjr4wz26biff45sz3jtokgje
@@ -107,6 +105,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-infinite-scroller: 1.2.6_react@18.2.0
   react-markdown: 8.0.3_ug65io7jkbhmo4fihdmbrh3ina
+  react-progressive-graceful-image: 0.6.14_biqbaboplfbrettd7655fr4n2y
   react-sticky: 6.0.3_biqbaboplfbrettd7655fr4n2y
   react-syntax-highlighter: 15.5.0_react@18.2.0
   react-virtuoso: 2.17.2_biqbaboplfbrettd7655fr4n2y
@@ -117,6 +116,7 @@ dependencies:
   sass: 1.54.0
   sticky-sidebar-v2: 1.1.1
   url-slug: 3.0.4
+  zustand: 4.1.1_react@18.2.0
 
 devDependencies:
   '@playwright/test': 1.23.4
@@ -1546,6 +1546,17 @@ packages:
     dependencies:
       '@babel/runtime': 7.18.9
       react: 18.2.0
+    dev: false
+
+  /@researchgate/react-intersection-observer/1.3.5_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-aYlsex5Dd6BAHMJvJrUoFp8gzgMSL27xFvrxkVYW0bV1RMAapVsO+QeYLtTaSF/QCflktODodvv+wJm49oMnnQ==}
+    engines: {node: '>=10.18.1'}
+    peerDependencies:
+      react: ^16.3.2
+      react-dom: ^16.3.2
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@rushstack/eslint-patch/1.1.4:
@@ -3191,19 +3202,6 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /easy-peasy/5.0.4_react@18.2.0:
-    resolution: {integrity: sha512-w4VmPGlUTkXWPmuDLRsdEdagEIGgKYJcnWoasb6NPpizFWrR2smojBLWys7kPrbdd4LIDhLtU2tXh8BIgP4rXw==}
-    peerDependencies:
-      react: '>= 16.8.0'
-    dependencies:
-      '@babel/runtime': 7.18.9
-      immer: 9.0.15
-      react: 18.2.0
-      redux: 4.2.0
-      redux-thunk: 2.4.1_redux@4.2.0
-      ts-toolbelt: 9.6.0
-    dev: false
-
   /electron-to-chromium/1.4.196:
     resolution: {integrity: sha512-uxMa/Dt7PQsLBVXwH+t6JvpHJnrsYBaxWKi/J6HE+/nBtoHENhwBoNkgkm226/Kfxeg0z1eMQLBRPPKcDH8xWA==}
 
@@ -4357,26 +4355,6 @@ packages:
     resolution: {integrity: sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==}
     engines: {node: '>= 4'}
     dev: true
-
-  /imagekit-javascript/1.5.2:
-    resolution: {integrity: sha512-qZquDA8vL4TGrn4VhKzzlnaDqPoYrn1Asrcfzfq0HvAy0w0P9jrPTl8foL6bPbvAGzx7Kj2P2M51HrOQKLX4IQ==}
-    dev: false
-
-  /imagekitio-react/1.1.1_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-6zKigyWbokArNMPjJTJ7Dt8yWOVqQi5H8wohbrLQO2MYGWcUQBr4iY5XQbtevjc/0sOlnpLEw2gOHrzFwD6CFA==}
-    peerDependencies:
-      react: ^16.13.1 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
-    dependencies:
-      imagekit-javascript: 1.5.2
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /immer/9.0.15:
-    resolution: {integrity: sha512-2eB/sswms9AEUSkOm4SbV5Y7Vmt/bKRwByd52jfLkW4OLYeaTP3EEiJ9agqU0O/tq6Dk62Zfj+TJSqfm1rLVGQ==}
-    dev: false
 
   /immutable/4.1.0:
     resolution: {integrity: sha512-oNkuqVTA8jqG1Q6c+UglTOD1xhC1BtjKI7XkCXRkZHrN5m18/XsnUp8Q89GkQO/z+0WjonSvl0FLhDYftp46nQ==}
@@ -7004,6 +6982,17 @@ packages:
       - supports-color
     dev: false
 
+  /react-progressive-graceful-image/0.6.14_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-KzWJVB8JTygKVEi+z9NEeN+UUnUjnsk6ESq+M+VtDOa/ODey7Fun1GgM6WCR97kjcP94cpPjK1BwPWcLdwG+6A==}
+    peerDependencies:
+      react: ^15.0.0-0 || ^16.0.0-0 || ^17.0.0-0
+      react-dom: ^15.0.0-0 || ^16.0.0-0 || ^17.0.0-0
+    dependencies:
+      '@researchgate/react-intersection-observer': 1.3.5_biqbaboplfbrettd7655fr4n2y
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
   /react-property/2.0.0:
     resolution: {integrity: sha512-kzmNjIgU32mO4mmH5+iUyrqlpFQhF8K2k7eZ4fdLSOPFrD1XgEuSBv9LDEgxRXTMBqMd8ppT0x6TIzqE5pdGdw==}
     dev: false
@@ -7145,20 +7134,6 @@ packages:
       indent-string: 4.0.0
       strip-indent: 3.0.0
     dev: true
-
-  /redux-thunk/2.4.1_redux@4.2.0:
-    resolution: {integrity: sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==}
-    peerDependencies:
-      redux: ^4
-    dependencies:
-      redux: 4.2.0
-    dev: false
-
-  /redux/4.2.0:
-    resolution: {integrity: sha512-oSBmcKKIuIR4ME29/AeNUnl5L+hvBq7OaJWzaptTQJAntaPvxIJqfnjbaEiCzzaIz+XmVILfqAM3Ob0aXLPfjA==}
-    dependencies:
-      '@babel/runtime': 7.18.9
-    dev: false
 
   /refractor/3.6.0:
     resolution: {integrity: sha512-MY9W41IOWxxk31o+YvFCNyNzdkc9M20NoZK5vq6jkv4I/uh2zkWcfudj0Q1fovjUQJrNewS9NMzeTtqPf+n5EA==}
@@ -7940,10 +7915,6 @@ packages:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
     dev: false
 
-  /ts-toolbelt/9.6.0:
-    resolution: {integrity: sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==}
-    dev: false
-
   /tsconfig-paths/3.14.1:
     resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==}
     dependencies:
@@ -8538,6 +8509,22 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zustand/4.1.1_react@18.2.0:
+    resolution: {integrity: sha512-h4F3WMqsZgvvaE0n3lThx4MM81Ls9xebjvrABNzf5+jb3/03YjNTSgZXeyrvXDArMeV9untvWXRw1tY+ntPYbA==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false
 
   /zwitch/2.0.2:
     resolution: {integrity: sha512-JZxotl7SxAJH0j7dN4pxsTV6ZLXoLdGME+PsjkL/DaBrVryK9kTGq06GfKrwcSOqypP+fdXGoCHE36b99fWVoA==}

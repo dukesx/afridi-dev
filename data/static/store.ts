@@ -1,6 +1,5 @@
-import { createStore, action, type Action } from "easy-peasy";
 import { AfridiDevArticle } from "../../components/global/grid-cards/largeGridCard";
-
+import create from "zustand";
 /**
  *  General Store
  *  @property {boolean} dark - Dark Mode
@@ -9,48 +8,56 @@ import { AfridiDevArticle } from "../../components/global/grid-cards/largeGridCa
 
 export interface GeneralStore {
   dark: boolean;
-  toggleDark: Action<GeneralStore, boolean>;
+  toggleDark: any;
   appLoading: boolean;
-  toggleAppLoading: Action<GeneralStore, boolean>;
+  toggleAppLoading: any;
   feedData: Array<AfridiDevArticle>;
-  setFeedData: Action<GeneralStore, Array<any>>;
+  setFeedData: any;
   trendingData: Array<AfridiDevArticle>;
-  setTrendingData: Action<GeneralStore, Array<any>>;
+  setTrendingData: any;
   popularData: Array<AfridiDevArticle>;
-  setPopularData: Action<GeneralStore, Array<any>>;
+  setPopularData: any;
   articleCount: number;
-  setArticleCount: Action<GeneralStore, number>;
+  setArticleCount: any;
   feedLoading: boolean;
-  setFeedLoading: Action<GeneralStore, boolean>;
+  setFeedLoading: any;
 }
+
 // Declare General Store
-export const generalStore = createStore<GeneralStore>({
+export const useGeneralStore = create<GeneralStore>((set) => ({
   dark: false,
-  toggleDark: action((state, payload) => {
-    state.dark = payload;
-  }),
+  toggleDark: (value: boolean) =>
+    set({
+      dark: value,
+    }),
   appLoading: false,
-  toggleAppLoading: action((state, payload) => {
-    state.appLoading = payload;
-  }),
+  toggleAppLoading: (value: boolean) =>
+    set({
+      appLoading: value,
+    }),
   feedData: [],
-  setFeedData: action((state, payload) => {
-    state.feedData = payload;
-  }),
+  setFeedData: (value: Array<any>) =>
+    set({
+      feedData: value,
+    }),
   trendingData: [],
-  setTrendingData: action((state, payload) => {
-    state.trendingData = payload;
-  }),
+  setTrendingData: (value: Array<any>) =>
+    set({
+      trendingData: value,
+    }),
   popularData: [],
-  setPopularData: action((state, payload) => {
-    state.popularData = payload;
-  }),
+  setPopularData: (value: Array<any>) =>
+    set({
+      popularData: value,
+    }),
   articleCount: 0,
-  setArticleCount: action((state, payload) => {
-    state.articleCount = payload;
-  }),
+  setArticleCount: (value: number) =>
+    set({
+      articleCount: value,
+    }),
   feedLoading: false,
-  setFeedLoading: action((state, payload) => {
-    state.feedLoading = payload;
-  }),
-});
+  setFeedLoading: (value: boolean) =>
+    set({
+      appLoading: value,
+    }),
+}));

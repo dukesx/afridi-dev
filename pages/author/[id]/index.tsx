@@ -23,9 +23,7 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/router";
 import AppWrapper from "../../../components/global/wrapper";
-import AfridiImage, {
-  AfridiImageLoadingEnum,
-} from "../../../components/global/afridi-image";
+
 import {
   IconArrowRight,
   IconBrandGithub,
@@ -55,6 +53,7 @@ import MarkDownRenderer from "../../../components/global/markdown-renderer";
 import { openConfirmModal } from "@mantine/modals";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { compareDesc } from "date-fns";
+import AfridiImage from "../../../components/global/afridi-image";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -294,7 +293,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                           ? "/image-horizontal-placeholder-dark.png"
                           : "/image-horizontal-placeholder.png"
                       }
-                      loading={AfridiImageLoadingEnum.LAZY}
                       style={{
                         objectFit: "cover",
                       }}
@@ -315,7 +313,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                       ? "/image-horizontal-placeholder-dark.png"
                       : "/image-horizontal-placeholder.png"
                   }
-                  loading={AfridiImageLoadingEnum.LAZY}
                   style={{
                     objectFit: "cover",
                   }}
@@ -378,7 +375,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                 ? "/image-avatar-placeholder-dark.png"
                                 : `/image-avatar-placeholder.png`
                             }
-                            loading={AfridiImageLoadingEnum.LAZY}
                           />
                         }
                       />
@@ -397,7 +393,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                             ? "/image-avatar-placeholder-dark.png"
                             : `/image-avatar-placeholder.png`
                         }
-                        loading={AfridiImageLoadingEnum.LAZY}
                       />
                     )}
                   </Group>
@@ -651,7 +646,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                               ? "/image-avatar-placeholder-dark.png"
                                               : `/image-avatar-placeholder.png`
                                           }
-                                          loading={AfridiImageLoadingEnum.LAZY}
                                         />
                                       ) : null}
                                     </Avatar>
