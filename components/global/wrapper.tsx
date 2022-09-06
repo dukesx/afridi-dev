@@ -39,6 +39,8 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       )
       .eq("id", user.id);
 
+    console.log(data);
+
     if (data[0].website_tour) {
       openModal({
         overlayBlur: 10,

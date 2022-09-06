@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  ActionIcon,
   Avatar,
+  Button,
   Center,
   Container,
   Grid,
@@ -15,24 +17,32 @@ import {
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { IconBolt, IconHeart, IconPencil, IconTrophy } from "@tabler/icons";
+import {
+  IconBolt,
+  IconEdit,
+  IconHeart,
+  IconPencil,
+  IconPencilPlus,
+  IconTrophy,
+} from "@tabler/icons";
 import { useRouter } from "next/router";
-import { Suspense, useEffect, useState } from "react";
+import { useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
 import { useLocalStorage } from "@mantine/hooks";
 import ArticleSidebar from "../../components/article/sidebar";
+import { useUser } from "@supabase/auth-helpers-react";
 
 const Article = ({ article, tags }) => {
   const [data, setData] = useState(article);
   const router = useRouter();
   const theme = useMantineTheme();
-  const { id } = router.query;
   const [flipSidebarOrientation, setFlipSidebarOrientation] = useLocalStorage({
     key: "article-sidebar-orientation",
     defaultValue: false,
   });
+  const { user } = useUser();
 
   const awards = [
     {
@@ -103,6 +113,28 @@ const Article = ({ article, tags }) => {
                       <Skeleton height={40} className="w-full max-w-[400px]" />
                     </Stack>
                   )}
+                  {user ? (
+                    article.author_id == user.id ||
+                    (article.co_authors_articles.length > 0 &&
+                      article.co_authors_articles.filter(
+                        (mapped) => mapped.authors.id == user.id
+                      ).length > 0) ? (
+                      <Tooltip label="Edit article">
+                        <ActionIcon
+                          onClick={() =>
+                            router.push(`/article/edit/${article.id}`)
+                          }
+                          mt="xl"
+                          size="xl"
+                          variant="light"
+                          color="indigo"
+                          className="align-middle"
+                        >
+                          <IconEdit size={20} />
+                        </ActionIcon>
+                      </Tooltip>
+                    ) : null
+                  ) : null}
                 </Title>
 
                 <Text lineClamp={4} mt="xl" color="dimmed">
@@ -357,6 +389,7 @@ export const getStaticProps = async (ctx) => {
         description,
         cover,
         body,
+        author_id,
         authors (
             id,
             firstName,

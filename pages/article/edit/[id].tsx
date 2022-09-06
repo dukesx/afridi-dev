@@ -14,7 +14,11 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { supabaseClient, withPageAuth } from "@supabase/auth-helpers-nextjs";
+import {
+  getUser,
+  supabaseClient,
+  withPageAuth,
+} from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
@@ -30,13 +34,12 @@ import { Carousel } from "@mantine/carousel";
 import { closeAllModals, openModal } from "@mantine/modals";
 import ArticleEditSidebar from "../../../components/user/article/edit/sidebar";
 
-const EditArticle = () => {
+const EditArticle = ({ user, data }) => {
   //
   var ref: any = React.createRef();
   const media = useMediaQuery("(min-width: 900px)", false);
   const [loading, setLoading] = useState(false);
   const [articleEditorTour, setArticleEditorTour] = useState(false);
-  const { user } = useUser();
   const { colorScheme } = useMantineColorScheme();
   const [loadingSetTour, setLoadingSetTour] = useState(false);
   //
@@ -233,7 +236,7 @@ const EditArticle = () => {
           loader={
             <Stack mb={50} align="center">
               <Loader variant="bars" color="blue" />
-              <Text weight={600}>Publishing Article</Text>
+              <Text weight={600}>Updating Article</Text>
             </Stack>
           }
           visible={loading}
@@ -248,7 +251,7 @@ const EditArticle = () => {
               required
             >
               <MarkDownEditor
-                value=""
+                value={data.body}
                 saveData={save}
                 autoFocus={false}
                 className="mt-5 h-full min-h-[700px]"
@@ -283,6 +286,13 @@ const EditArticle = () => {
               <ArticleEditSidebar
                 setLoading={setLoading}
                 getMarkdown={getMarkdown}
+                props={{
+                  title: data.title,
+                  description: data.description,
+                  cover: data.cover,
+                  tags: data.tags.map((mapped) => mapped.title),
+                  id: data.id,
+                }}
               />
             </Card>
           </Grid.Col>
@@ -294,4 +304,57 @@ const EditArticle = () => {
 
 export default EditArticle;
 
-export const getServerSideProps = withPageAuth({ redirectTo: "/get-started" });
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/get-started",
+  async getServerSideProps(ctx) {
+    const id = ctx.params.id;
+    const { user, accessToken } = await getUser(ctx);
+    const { data, error } = await supabaseClient
+      .from("articles")
+      .select(
+        `
+        id,
+        title,
+        description,
+        cover,
+        author_id,
+        body,
+        tags (
+          title
+        ),
+        co_authors_articles (
+          authors (
+            id
+          )
+        )
+        `
+      )
+      .eq("id", id);
+
+    if (data && data.length > 0) {
+      if (
+        data[0].author_id == user.id ||
+        data[0].co_authors_articles.filter(
+          (mapped) => mapped.authors.id == user.id
+        ).length > 0
+      ) {
+        return {
+          props: {
+            data: data[0],
+          },
+        };
+      } else {
+        return {
+          redirect: {
+            destination: "/unauthorized",
+            permanent: false,
+          },
+        };
+      }
+    } else {
+      return {
+        props: {},
+      };
+    }
+  },
+});

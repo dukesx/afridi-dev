@@ -92,13 +92,13 @@ const ArticleSidebar = ({
             </Text>
           </Stack>
 
-          <Button
+          {/* <Button
             rightIcon={<IconBellRinging size={18} />}
             size="xs"
             radius="xl"
           >
             Subscribe
-          </Button>
+          </Button> */}
         </Group>
         <div className="hidden sm:block">
           {data &&
@@ -115,7 +115,7 @@ const ArticleSidebar = ({
             {data
               ? data.co_authors_articles.map((mapped, index) => (
                   <Grid.Col my="sm" span={12} xs={6} key={"almac" + index}>
-                    <Stack className="text-center" ml="xs" spacing={10}>
+                    <Stack align="initial" ml="xs" spacing={10}>
                       <Tooltip
                         mt="xl"
                         label={
@@ -123,8 +123,8 @@ const ArticleSidebar = ({
                         }
                       >
                         <Avatar
-                          size={50}
-                          className="rounded-full mx-auto"
+                          size={60}
+                          className="rounded-full"
                           component={NextLink}
                           href={data ? `/author/${mapped.authors.id}` : ""}
                           radius="xl"
@@ -133,8 +133,8 @@ const ArticleSidebar = ({
                           {data ? (
                             <AfridiImage
                               fillImage
-                              height={53}
-                              width={53}
+                              height={63}
+                              width={63}
                               path={mapped.authors.dp}
                             />
                           ) : (
@@ -149,14 +149,14 @@ const ArticleSidebar = ({
                           mapped.authors.lastName}
                       </Text>
 
-                      <Button
+                      {/* <Button
                         className="px-0 w-[120px] mx-auto"
                         rightIcon={<IconBellRinging size={18} />}
                         size="xs"
                         radius="xl"
                       >
                         Subscribe
-                      </Button>
+                      </Button> */}
                     </Stack>
                   </Grid.Col>
                 ))

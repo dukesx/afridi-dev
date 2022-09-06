@@ -43,28 +43,36 @@ import ImageUploader, {
 interface ArticleEditSidebarProps {
   getMarkdown: () => string;
   setLoading: Function;
+  props: {
+    title: string;
+    description: string;
+    tags: Array<any>;
+    cover: string;
+    id: string;
+  };
 }
 
 //
 const ArticleEditSidebar = ({
   getMarkdown,
   setLoading,
+  props,
 }: ArticleEditSidebarProps) => {
   //
   const { user } = useUser();
   const theme = useMantineTheme();
-  const [cover, setCover] = useState(null);
+  const [cover, setCover] = useState(props.cover);
   var openRef: any = createRef();
   const [tagsLoading, setTagsLoading] = useState(false);
   const router = useRouter();
 
   const form = useForm({
     initialValues: {
-      tags: [],
+      tags: props.tags,
       content: "",
-      title: "",
-      description: "",
-      cover: "",
+      title: props.title,
+      description: props.description,
+      cover: props.cover,
     },
 
     validate: {
@@ -84,6 +92,7 @@ const ArticleEditSidebar = ({
   //
 
   const [tags, setTags] = useState([]);
+  const [tagsVal, setTagsVal] = useState(props.tags);
 
   const setCoverImage = (image) => {
     setCover(image);
@@ -96,7 +105,7 @@ const ArticleEditSidebar = ({
     const { error, data } = await supabaseClient
       .from("tags")
       .select("title")
-      .limit(5);
+      .limit(10);
     var tagsa = [];
     if (data && data.length > 0) {
       data.map((mapped) => tagsa.push(mapped.title));
@@ -143,13 +152,14 @@ const ArticleEditSidebar = ({
         } else {
           const { error, data: articleData } = await supabaseClient
             .from("articles")
-            .insert({
+            .update({
               title: val.title,
               description: val.description,
               cover: val.cover,
               author_id: user.id,
               body: markdown,
-            });
+            })
+            .eq("id", props.id);
 
           if (error) {
             setLoading(false);
@@ -160,67 +170,74 @@ const ArticleEditSidebar = ({
               message: error.message,
             });
           } else {
-            val.tags.map(async (mapped) => {
-              const {
-                error,
-                data: tagData,
-                count,
-              } = await supabaseClient
-                .from("tags")
-                .select(
-                  `
+            const { error: deleteTagError } = await supabaseClient
+              .from("articles_tags")
+              .delete()
+              .eq("article_id", props.id);
+
+            if (!deleteTagError) {
+              val.tags.map(async (mapped) => {
+                const {
+                  error,
+                  data: tagData,
+                  count,
+                } = await supabaseClient
+                  .from("tags")
+                  .select(
+                    `
                 title,
                 id
                 `,
-                  {
-                    count: "exact",
-                  }
-                )
-                .match({
-                  title: mapped,
-                });
-
-              if (count > 0) {
-                const { data: finalData } = await supabaseClient
-                  .from("articles_tags")
-                  .insert({
-                    title: mapped.title,
-                    tag_id: tagData[0].id,
-                    article_id: articleData[0].id,
-                  });
-              } else {
-                const { data: insertedTagData } = await supabaseClient
-                  .from("tags")
-                  .insert({
+                    {
+                      count: "exact",
+                    }
+                  )
+                  .match({
                     title: mapped,
                   });
-                const { error: tag2Error, data: tag2Data } =
-                  await supabaseClient.from("articles_tags").insert({
-                    title: mapped.title,
-                    tag_id: insertedTagData[0].id,
-                    article_id: articleData[0].id,
-                  });
+
+                if (count > 0) {
+                  const { data: finalData } = await supabaseClient
+                    .from("articles_tags")
+                    .insert({
+                      title: mapped.title,
+                      tag_id: tagData[0].id,
+                      article_id: articleData[0].id,
+                    });
+                } else {
+                  const { data: insertedTagData } = await supabaseClient
+                    .from("tags")
+                    .insert({
+                      title: mapped,
+                    });
+                  const { error: tag2Error, data: tag2Data } =
+                    await supabaseClient.from("articles_tags").insert({
+                      title: mapped.title,
+                      tag_id: insertedTagData[0].id,
+                      article_id: articleData[0].id,
+                    });
+                }
+              });
+
+              const fetcher = await fetch("/api/revalidate", {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                  accept: "application/json",
+                },
+                body: JSON.stringify({
+                  path: "/article/" + articleData[0].id,
+                }),
+              });
+
+              const returned = await fetcher.json();
+
+              if (returned && returned.revalidated) {
+                setLoading(false);
+                form.reset();
+                setCover(null);
+                router.push("/article/" + articleData[0].id);
               }
-            });
-
-            const fetcher = await fetch("/api/revalidate", {
-              method: "POST",
-              headers: {
-                "content-type": "application/json",
-                accept: "application/json",
-              },
-              body: JSON.stringify({
-                path: "/article/" + articleData[0].id,
-              }),
-            });
-
-            const returned = await fetcher.json();
-
-            if (returned && returned.revalidated) {
-              setLoading(false);
-              form.reset();
-              setCover(null);
-              router.push("/article/" + articleData[0].id);
             }
           }
         }
@@ -269,6 +286,7 @@ const ArticleEditSidebar = ({
         required
       >
         <MultiSelect
+          value={form.values.tags}
           rightSection={tagsLoading ? <Loader size="xs" /> : null}
           mt="md"
           mb="md"
@@ -314,7 +332,9 @@ const ArticleEditSidebar = ({
             }
           }}
           maxDropdownHeight={160}
-          onChange={(value) => form.setFieldValue("tags", value)}
+          onChange={(value) => {
+            form.setFieldValue("tags", value);
+          }}
           error={form.errors.tags}
         />
       </Input.Wrapper>
@@ -360,7 +380,7 @@ const ArticleEditSidebar = ({
         mt={0}
         fullWidth
       >
-        Publish Article
+        Update Article
       </Button>
     </form>
   );
