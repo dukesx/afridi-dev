@@ -20,15 +20,19 @@ interface HorizontalGridCardProps {
   theme: MantineTheme;
   style: CardStyle;
   data: AfridiDevArticle;
+  coverClassName?: string;
 }
 const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   theme,
   style,
   data,
+  coverClassName,
 }) => {
   return data ? (
     <Group noWrap className="w-full">
       <AfridiImage
+        imageClassName={coverClassName}
+        className="rounded-full"
         fillImage={false}
         path={data.cover}
         width={style == CardStyle.FEED ? 100 : 100}

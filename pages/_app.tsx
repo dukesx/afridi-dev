@@ -17,6 +17,7 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { appCache } from "../utils/cache";
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import ErrorBoundary from "../components/global/error-boundary";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;

@@ -17,6 +17,7 @@ interface AfridiImageProps {
   className?: string;
   onClick?: Function;
   fillImage: boolean;
+  imageClassName?: string;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
@@ -25,6 +26,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   path,
   style,
   fillImage,
+  imageClassName,
   className,
   onClick,
 }) => {
@@ -67,7 +69,8 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
             width={width}
             className={
               (fillImage ? "mx-auto flex !w-full !h-full" : "") +
-              " object-cover"
+              " object-cover " +
+              (imageClassName ? imageClassName : "")
             }
           />
         )}

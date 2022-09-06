@@ -130,16 +130,18 @@ const Article = ({ article, tags }) => {
                     }
                   >
                     <Avatar
+                      className="rounded-full"
                       component={NextLink}
                       href={data ? `/author/${data.authors.id}` : ""}
                       radius="xl"
                       color="blue"
+                      size={40}
                     >
                       {data ? (
                         <AfridiImage
                           fillImage
-                          height={40}
-                          width={40}
+                          height={43}
+                          width={43}
                           path={data.authors.dp}
                         />
                       ) : (
@@ -168,6 +170,7 @@ const Article = ({ article, tags }) => {
                                 }
                               >
                                 <Avatar
+                                  size={40}
                                   component={NextLink}
                                   href={
                                     mapped ? `/author/${mapped.authors.id}` : ""
@@ -178,8 +181,8 @@ const Article = ({ article, tags }) => {
                                   {data ? (
                                     <AfridiImage
                                       fillImage
-                                      height={40}
-                                      width={40}
+                                      height={43}
+                                      width={43}
                                       path={mapped.authors.dp}
                                     />
                                   ) : (
@@ -375,12 +378,18 @@ export const getStaticProps = async (ctx) => {
     )
     .eq("id", id);
 
-  return {
-    props: {
-      article: data[0],
-      tags: data[0].tags,
-    },
-  };
+  if (data) {
+    return {
+      props: {
+        article: data[0],
+        tags: data[0].tags,
+      },
+    };
+  } else {
+    return {
+      props: {},
+    };
+  }
 };
 
 export const getStaticPaths = async () => {

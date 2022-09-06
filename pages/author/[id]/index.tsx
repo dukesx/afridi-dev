@@ -708,10 +708,10 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                           onConfirm: async () => {
                                             const { error } =
                                               await supabaseClient
-                                                .from("feed")
+                                                .from("status_feed")
                                                 .delete()
                                                 .match({
-                                                  id: mapped.id,
+                                                  id: mapped.data.id,
                                                 });
 
                                             if (!error) {

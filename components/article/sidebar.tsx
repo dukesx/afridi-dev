@@ -56,7 +56,7 @@ const ArticleSidebar = ({
             }
           >
             <Avatar
-              size={50}
+              size={60}
               className="rounded-full"
               component={NextLink}
               href={data ? `/author/${data.authors.id}` : ""}
@@ -66,8 +66,8 @@ const ArticleSidebar = ({
               {data ? (
                 <AfridiImage
                   fillImage
-                  height={60}
-                  width={60}
+                  height={63}
+                  width={63}
                   path={data ? data.authors.dp : null}
                 />
               ) : (
@@ -123,7 +123,7 @@ const ArticleSidebar = ({
                         }
                       >
                         <Avatar
-                          size={60}
+                          size={50}
                           className="rounded-full mx-auto"
                           component={NextLink}
                           href={data ? `/author/${mapped.authors.id}` : ""}
@@ -133,8 +133,8 @@ const ArticleSidebar = ({
                           {data ? (
                             <AfridiImage
                               fillImage
-                              height={70}
-                              width={70}
+                              height={53}
+                              width={53}
                               path={mapped.authors.dp}
                             />
                           ) : (

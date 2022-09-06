@@ -28,12 +28,13 @@ import {
   IconBrandReact,
   IconCode,
   IconHash,
+  IconPencil,
   IconTrendingUp,
 } from "@tabler/icons";
 import { Fragment, Suspense, useEffect, useState } from "react";
-import EmptyPlaceholder from "../components/global/placeholders/empty";
-import TagComponent from "../components/global/tags/tagComponent";
-import AppWrapper from "../components/global/wrapper";
+import EmptyPlaceholder from "../../components/global/placeholders/empty";
+import TagComponent from "../../components/global/tags/tagComponent";
+import AppWrapper from "../../components/global/wrapper";
 
 const TagsPage = ({ tagsArr }) => {
   const [tags, setTags] = useState(tagsArr);
@@ -58,12 +59,26 @@ const TagsPage = ({ tagsArr }) => {
       .select(
         `
       title,
-      id`
+      articles!inner(id),
+      icon,
+      color,
+      id`,
+        {
+          count: "exact",
+        }
       )
       .ilike("title", `%${deferred}%`);
-
+    console.log();
     var tagsArr = [];
-    data.map((mapped) => tagsArr.push(mapped));
+    data.map((mapped) =>
+      tagsArr.push({
+        id: mapped.id,
+        title: mapped.title,
+        articleCount: mapped.articles.length,
+        icon: mapped.icon,
+        color: mapped.color,
+      })
+    );
     setTags(tagsArr);
     setLoading(false);
   };
@@ -193,44 +208,16 @@ const TagsPage = ({ tagsArr }) => {
               tags.map((mapped, index) => (
                 <Grid.Col key={"alock" + index} span={12} xs={6} sm={4} lg={3}>
                   <TagComponent
+                    icon={mapped.icon}
                     IconName={
-                      mapped.title == "react"
-                        ? IconBrandReact
-                        : mapped.title == "angular"
-                        ? IconBrandAngular
-                        : mapped.title == "javascript"
-                        ? IconBrandJavascript
-                        : mapped.title == "kotlin"
-                        ? IconBrandKotlin
-                        : mapped.title == "programming"
+                      mapped.title == "programming"
                         ? IconCode
-                        : mapped.title == "typescript"
-                        ? IconCode
-                        : mapped.title == "ts"
-                        ? IconCode
-                        : mapped.title == "trending"
-                        ? IconTrendingUp
-                        : mapped.title == "android"
-                        ? IconBrandAndroid
+                        : mapped.title == "editors-pick"
+                        ? IconPencil
                         : null
                     }
-                    color={
-                      mapped.title == "react"
-                        ? "blue"
-                        : mapped.title == "angular"
-                        ? "red"
-                        : mapped.title == "javascript"
-                        ? "yellow.6"
-                        : mapped.title == "kotlin"
-                        ? "grape"
-                        : mapped.title == "typescript"
-                        ? "blue"
-                        : mapped.title == "ts"
-                        ? "blue"
-                        : mapped.title == "android"
-                        ? "teal"
-                        : "cyan.4"
-                    }
+                    color={mapped.color ? mapped.color : "cyan"}
+                    count={mapped.articleCount}
                     setAuthorFollowed={setAuthorFollowed}
                     id={mapped.id}
                     authorTags={authorFollowed}
@@ -277,18 +264,32 @@ const TagsPage = ({ tagsArr }) => {
 export default TagsPage;
 
 export const getStaticProps = async () => {
-  const { error, data } = await supabaseClient
+  const { error, data, count } = await supabaseClient
     .from("tags")
     .select(
       `
       title,
-      id
-      `
+      id,
+      color,
+      icon,
+      articles!inner(id)
+      `,
+      {
+        count: "exact",
+      }
     )
     .range(0, 99)
     .limit(100);
   var tagsArr = [];
-  data.map((mapped) => tagsArr.push(mapped));
+  data.map((mapped) =>
+    tagsArr.push({
+      id: mapped.id,
+      title: mapped.title,
+      articleCount: mapped.articles.length,
+      icon: mapped.icon,
+      color: mapped.color,
+    })
+  );
 
   return {
     props: {
