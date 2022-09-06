@@ -4,6 +4,7 @@ import {
   Avatar,
   Button,
   Card,
+  Center,
   Code,
   CopyButton,
   createStyles,
@@ -84,6 +85,9 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   }));
 
   const { classes } = specialStyles();
+
+  console.log(usera && usera.id);
+  console.log(id);
 
   const getData = async () => {
     const { data: userData, error: userDataError } = await supabaseClient
@@ -269,7 +273,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
             <Skeleton height={450} />
           ) : (
             <Group className="overflow-hidden">
-              {usera ? (
+              {usera && usera.id == id ? (
                 <ImageUploader
                   className="border-0"
                   type={ImageUploaderType.COVER}
@@ -319,7 +323,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                 />
               )}
 
-              {usera ? (
+              {usera && usera.id == id ? (
                 <Button
                   className="absolute rounded-full top-[20px] right-5"
                   color="blue"
@@ -340,9 +344,9 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
               <Avatar className="rounded-full h-[90px] w-[90px] sm:h-[120px] ml-0 sm:ml-6 sm:w-[120px] shadow-lg">
                 {!data ? (
                   <Skeleton height={120} />
-                ) : dp ? (
+                ) : (
                   <Group>
-                    {usera ? (
+                    {usera && usera.id == id ? (
                       <Button
                         className="absolute z-[100] rounded-full p-1 bottom-1 left-8 sm:bottom-[6px] right-0 sm:left-12 h-[30px] w-[30px]"
                         size="xs"
@@ -353,7 +357,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                         <IconUpload size={15} />
                       </Button>
                     ) : null}
-                    {usera ? (
+                    {usera && usera.id == id ? (
                       <ImageUploader
                         type={ImageUploaderType.DP}
                         theme={theme}
@@ -396,7 +400,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                       />
                     )}
                   </Group>
-                ) : null}
+                )}
               </Avatar>
 
               <Stack spacing={2}>
@@ -1080,12 +1084,20 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                       <MarkDownRenderer>{data.bio}</MarkDownRenderer>
                     </Stack>
                   ) : (
-                    <Stack>
-                      <Title mt="xl" mb="sm" order={3}>
-                        OOoops 😮🤷‍♂️
-                      </Title>
-                      <Text color="dimmed">This has not been added yet</Text>
-                    </Stack>
+                    <Center className="h-[300px]">
+                      <Stack
+                        className="items-center my-auto"
+                        spacing={0}
+                        align="center"
+                      >
+                        <Title mt="xl" mb="sm" order={3}>
+                          Sorry! 😮🤷‍♂️
+                        </Title>
+                        <Text size="sm" color="dimmed">
+                          This has not been added yet
+                        </Text>
+                      </Stack>
+                    </Center>
                   )}
 
                   {data.github ? (
