@@ -5,40 +5,64 @@ import {
   Text,
   type MantineTheme,
   createStyles,
+  Skeleton,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IKImage } from "imagekitio-react";
-import AfridiImage, { AfridiImageLoadingEnum } from "../afridi-image";
+import { NextLink } from "@mantine/next";
+import { AfridiDevAuthor } from "../../article/sidebar";
+import AfridiImage from "../afridi-image";
+import LargeGridCardSkeleton from "../skeletons/grid-cards/largeGridCardSkeleton";
 
+export type AfridiDevArticle = {
+  id: string;
+  title: string;
+  description: string;
+  cover: string;
+  created_at?: string;
+  authors: AfridiDevAuthor;
+  co_authors_articles: [
+    {
+      authors: AfridiDevAuthor;
+    }
+  ];
+};
 interface LargeGridCardProps {
   theme: MantineTheme;
   className?: string;
+  data: AfridiDevArticle;
 }
 
-const LargeGridCard: React.FC<LargeGridCardProps> = ({ theme, className }) => {
-  return (
+const LargeGridCard: React.FC<LargeGridCardProps> = ({
+  theme,
+  className,
+  data,
+}) => {
+  return data ? (
     <Card radius="md" className={className ?? ""}>
       <Card.Section className="backdrop-blur-sm bg-black rounded-lg">
         <AfridiImage
+          fillImage={false}
           height={400}
           width={"100%"}
-          path="/7011585.jpeg"
-          loading={AfridiImageLoadingEnum.LAZY}
-          style={{
-            borderRadius: theme.radius.xl,
-          }}
+          path={data.cover ?? ""}
         />
       </Card.Section>
       <Stack mt="sm" spacing="xs">
-        <Title order={4}>
-          The Truth About the Wage Gap from Someone Who Saw Everyone’s Salary
-        </Title>
+        <Text
+          weight={700}
+          size="xl"
+          component={NextLink}
+          href={`/article/${data.id}`}
+        >
+          {data.title}
+        </Text>
         <Text lineClamp={2} color="dimmed" size="sm">
-          Being a data educator at the intersection of analytical and creative
-          thinking
+          {data.description}
         </Text>
       </Stack>
     </Card>
+  ) : (
+    <LargeGridCardSkeleton />
   );
 };
 

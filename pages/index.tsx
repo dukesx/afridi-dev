@@ -3,13 +3,16 @@ import {
   createStyles,
   Divider,
   Grid,
+  Group,
   MediaQuery,
+  Skeleton,
   Space,
   Stack,
+  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { Fragment } from "react";
+import { Fragment, Suspense, useEffect } from "react";
 import AppWrapper from "../components/global/wrapper";
 import LargeGridCard from "../components/global/grid-cards/largeGridCard";
 import HorizontalGridCard, {
@@ -19,11 +22,21 @@ import { StickyContainer, Sticky } from "react-sticky";
 import LandingFeed from "../components/landing/feed";
 import SquareHorizontalWidget from "../components/landing/widgets/square-horizontal";
 import { IconStar, IconStars } from "@tabler/icons";
-import MarkDownEditor from "../components/global/editor";
 import { useState } from "react";
+import {
+  getUser,
+  supabaseClient,
+  User,
+  withPageAuth,
+} from "@supabase/auth-helpers-nextjs";
+import HorizontalGridCardSkeleton from "../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
+import { parse } from "date-fns";
 
-const LandingPage = () => {
+const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
   const theme = useMantineTheme();
+  // const [data, setData] = useState(null);
+  // const [mustReads, setMustReads] = useState(null);
+  // const [monthsTop, setMonthsTop] = useState(null);
 
   const largeCardClass = createStyles((theme, _params, getRef) => ({
     wrapper: {
@@ -45,19 +58,147 @@ const LandingPage = () => {
     },
   }));
 
+  // const getArticle = async () => {
+  //   const { error, data } = await supabaseClient
+  //     .from("articles")
+  //     .select(
+  //       `
+  //       id,
+  //       title,
+  //       description,
+  //       cover,
+  //       body,
+  //       authors (
+  //           id,
+  //           firstName,
+  //           lastName,
+  //           dp
+  //       ),
+  //       co_authors_articles (
+  //       authors (
+  //           id,
+  //           firstName,
+  //           lastName,
+  //           dp
+  //       )
+  //       )
+  //       `
+  //     )
+  //     .order("created_at", {
+  //       ascending: false,
+  //     })
+  //     .limit(6);
+  //   setData(data);
+  // };
+
+  // const getMonthsTop = async () => {
+  //   var date = new Date();
+  //   var date2 = new Date();
+  //   //
+  //   //
+  //   date.setMonth(date.getMonth());
+  //   date2.setMonth(date2.getMonth() - 1);
+  //   //
+  //   //
+  //   const { error, data } = await supabaseClient
+  //     .from("articles")
+  //     .select(
+  //       `
+  //       id,
+  //       title,
+  //       description,
+  //       cover,
+  //       body,
+  //       authors (
+  //           id,
+  //           firstName,
+  //           lastName,
+  //           dp
+  //       ),
+  //       co_authors_articles (
+  //       authors (
+  //           id,
+  //           firstName,
+  //           lastName,
+  //           dp
+  //       )
+  //       )
+
+  //       `
+  //     )
+  //     .lte("created_at", date.toUTCString())
+  //     .gte("created_at", date2.toUTCString())
+  //     .contains("article_tags", ["top"])
+  //     .order("created_at", {
+  //       ascending: false,
+  //     })
+  //     .limit(3);
+
+  //   setMonthsTop(data);
+  // };
+
+  // const getMustReads = async () => {
+  //   const { error, data } = await supabaseClient
+  //     .from("articles")
+  //     .select(
+  //       `
+  //       id,
+  //       title,
+  //       description,
+  //       cover,
+  //       body,
+  //       authors (
+  //           id,
+  //           firstName,
+  //           lastName,
+  //           dp
+  //       ),
+  //       co_authors_articles (
+  //       authors (
+  //           id,
+  //           firstName,
+  //           lastName,
+  //           dp
+  //       )
+  //       )
+
+  //       `
+  //     )
+  //     .contains("article_tags", ["must-reads"])
+  //     .order("created_at", {
+  //       ascending: false,
+  //     })
+  //     .limit(3);
+  //   setMustReads(data);
+  // };
+
+  // useEffect(() => {
+  //   getArticle();
+  //   getMustReads();
+  //   getMonthsTop();
+  // }, []);
+
+  /**
+   *
+   *
+   *
+   *
+   *
+   *
+   */
+
   const { classes } = largeCardClass();
-  const [value, setValue] = useState("");
   return (
     <Fragment>
-      <AppWrapper activeHeaderKey="home" size="xl">
+      <AppWrapper activeHeaderKey="home" size={1600}>
         {/**
          *  Grid Starts
          *
          */}
-        <Card withBorder className={classes.wrapper}>
-          <Grid className="mt-5" align="stretch" justify="center" gutter="xl">
+        {/* <Card withBorder className={classes.wrapper}>
+          <Grid className="mt-2" align="stretch" justify="center" gutter="xl">
             <Grid.Col xs={6} sm={6} md={4}>
-              <LargeGridCard theme={theme} />
+              <LargeGridCard data={data ? data[0] : null} theme={theme} />
             </Grid.Col>
             <Grid.Col xs={6} sm={6} md={4}>
               <Stack spacing={25}>
@@ -73,21 +214,27 @@ const LandingPage = () => {
                   <Divider color="orange" />
                 </Stack>
 
-                <HorizontalGridCard style={CardStyle.DEFAULT} theme={theme} />
-                {
-                  //
-                }
-                <HorizontalGridCard style={CardStyle.DEFAULT} theme={theme} />
-
-                {
-                  //
-                }
-                <HorizontalGridCard style={CardStyle.DEFAULT} theme={theme} />
-
-                {
-                  //
-                }
-                <HorizontalGridCard style={CardStyle.DEFAULT} theme={theme} />
+                {data ? (
+                  data.map((mapped, index) => {
+                    if (index !== 0 && index !== data.length - 1 && index < 5) {
+                      return (
+                        <HorizontalGridCard
+                          key={"horizon" + index}
+                          style={CardStyle.DEFAULT}
+                          theme={theme}
+                          data={mapped}
+                        />
+                      );
+                    }
+                  })
+                ) : (
+                  <Stack>
+                    <HorizontalGridCardSkeleton />
+                    <HorizontalGridCardSkeleton />
+                    <HorizontalGridCardSkeleton />
+                    <HorizontalGridCardSkeleton />
+                  </Stack>
+                )}
               </Stack>
             </Grid.Col>
             <MediaQuery
@@ -100,11 +247,12 @@ const LandingPage = () => {
                 <LargeGridCard
                   className="max-w-[608px] mx-auto"
                   theme={theme}
+                  data={data ? data[data.length - 1] : null}
                 />
               </Grid.Col>
             </MediaQuery>
           </Grid>
-        </Card>
+        </Card> */}
 
         {/**
          *
@@ -115,65 +263,228 @@ const LandingPage = () => {
          *  Feed + Sidebar
          *
          */}
-        <StickyContainer>
-          <Grid
-            id="main-content"
-            mt="xl"
-            className="min-h-full xs:min-h-[1200px]"
+        <Grid
+          gutter="xl"
+          id="main-content"
+          mt="xl"
+          className="pl-3 pr-1 md:pr-10"
+        >
+          <Grid.Col
+            className={classes.sidebar}
+            span={5}
+            xs={12}
+            sm={3}
+            md={3.4}
           >
-            <Grid.Col span={12} sm={7} xs={12} md={7}>
-              <LandingFeed theme={theme} />
-            </Grid.Col>
-
-            <Grid.Col
-              className={classes.sidebar}
-              span={5}
-              xs={12}
-              sm={5}
-              md={5}
+            <Stack
+              spacing="xl"
+              className="sticky min-h-[1000px] h-screen w-full top-8 pb-10 mr-10"
             >
-              <Sticky bottomOffset={100}>
-                {({
-                  style,
+              <Suspense>
+                <SquareHorizontalWidget
+                  icon="👏"
+                  theme={theme}
+                  color="blue"
+                  title="This Month's Top"
+                  data={top}
+                />
+              </Suspense>
 
-                  // the following are also available but unused in this example
-                  isSticky,
-                  wasSticky,
-                  distanceFromTop,
-                  distanceFromBottom,
-                  calculatedHeight,
-                }) => (
-                  <div
-                    className="gap-y-20 flex flex-col items-center"
-                    style={style}
-                  >
-                    <SquareHorizontalWidget
-                      cardClassName="top-10"
-                      title="Must Reads"
-                      icon="👀"
-                      theme={theme}
-                      color="cyan"
-                    />
-                    <SquareHorizontalWidget
-                      icon="👏"
-                      theme={theme}
-                      color="blue"
-                      title="This Month's Top"
-                    />
-                  </div>
-                )}
-              </Sticky>
-            </Grid.Col>
-          </Grid>
-        </StickyContainer>
+              <Suspense>
+                <SquareHorizontalWidget
+                  cardClassName=""
+                  title="Must Reads"
+                  icon="👀"
+                  theme={theme}
+                  color="cyan"
+                  data={mustReads}
+                />
+              </Suspense>
+            </Stack>
+          </Grid.Col>
+          <Grid.Col span={12} sm={5} xs={12} md={5}>
+            <div className="mx-5">
+              <Suspense
+                fallback={
+                  <Stack className="w-full h-full">
+                    <HorizontalGridCardSkeleton />
+                    <HorizontalGridCardSkeleton />
+                    <HorizontalGridCardSkeleton />
+                  </Stack>
+                }
+              >
+                <LandingFeed
+                  prefetchedFeedData={feedData}
+                  feedDataCount={feedDataCount}
+                  theme={theme}
+                />
+              </Suspense>
+            </div>
+          </Grid.Col>
+
+          <Grid.Col
+            className={classes.sidebar}
+            span={5}
+            xs={12}
+            sm={3}
+            md={3.6}
+          >
+            <Stack
+              spacing="xl"
+              className="sticky min-h-[1000px] h-screen w-full top-8 pb-10 ml-10"
+            >
+              <Suspense>
+                <SquareHorizontalWidget
+                  icon="👏"
+                  theme={theme}
+                  color="blue"
+                  title="This Month's Top"
+                  data={top}
+                />
+              </Suspense>
+
+              <Suspense>
+                <SquareHorizontalWidget
+                  cardClassName=""
+                  title="Must Reads"
+                  icon="👀"
+                  theme={theme}
+                  color="cyan"
+                  data={mustReads}
+                />
+              </Suspense>
+            </Stack>
+          </Grid.Col>
+        </Grid>
 
         {/**
          *
          * Feed + Sidebar Ends
-         */}
+         *
+         **/}
       </AppWrapper>
     </Fragment>
   );
 };
 
 export default LandingPage;
+
+export const getStaticProps = async (ctx) => {
+  const {
+    error,
+    data: feedData,
+    count: feedDataCount,
+  } = await supabaseClient
+    .from("articles")
+    .select(
+      `
+                  id,
+                  title,
+                  description,
+                  cover,
+                  authors (
+                    dp,
+                    firstName,
+                    lastName
+                  ),
+                  co_authors_articles (
+                    authors (
+                      dp,
+                      firstName,
+                      lastName
+                    )
+                  )
+                `,
+      {
+        count: "exact",
+      }
+    )
+    .range(0, 10)
+    .limit(10)
+    .order("created_at", {
+      ascending: false,
+    });
+
+  const { error: mustReadsError, data: mustReadsData } = await supabaseClient
+    .from("articles")
+    .select(
+      `
+        id,
+        title,
+        description,
+        cover,
+        body,
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        ),
+        co_authors_articles (
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        )
+        )
+       
+        `
+    )
+    .contains("article_tags", ["must-reads"])
+    .order("created_at", {
+      ascending: false,
+    })
+    .limit(3);
+
+  var date = new Date();
+  var date2 = new Date();
+  //
+  //
+  date.setMonth(date.getMonth());
+  date2.setMonth(date2.getMonth() - 1);
+  //
+  //
+  const { error: topDataError, data: topData } = await supabaseClient
+    .from("articles")
+    .select(
+      `
+        id,
+        title,
+        description,
+        cover,
+        body,
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        ),
+        co_authors_articles (
+        authors (
+            id,
+            firstName,
+            lastName,
+            dp
+        )
+        )
+      
+        `
+    )
+    .lte("created_at", date.toUTCString())
+    .gte("created_at", date2.toUTCString())
+    .contains("article_tags", ["top"])
+    .order("created_at", {
+      ascending: false,
+    })
+    .limit(3);
+
+  return {
+    props: {
+      feedData: feedData,
+      mustReads: mustReadsData,
+      top: topData,
+      feedDataCount: feedDataCount,
+    },
+  };
+};

@@ -1,8 +1,6 @@
-const removeImports = require("next-remove-imports")();
-
-module.exports = (phase, { defaultConfig }) => {
-  return removeImports({
-    ...defaultConfig,
-    reactStrictMode: false,
-  });
+module.exports = {
+  reactStrictMode: false,
+  experimental: {
+    runtime: "experimental-edge",
+  },
 };

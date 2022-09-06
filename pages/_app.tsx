@@ -6,12 +6,9 @@ import {
   ColorSchemeProvider,
   MantineProvider,
 } from "@mantine/core";
-import { generalStore } from "../data/static/store";
-import { StoreProvider } from "easy-peasy";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import "../styles/app.scss";
-import { IKContext } from "imagekitio-react";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
 import { getCookie, setCookie } from "cookies-next";
@@ -20,6 +17,7 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { appCache } from "../utils/cache";
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import ErrorBoundary from "../components/global/error-boundary";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -34,16 +32,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   });
 
   const toggleColorScheme = (value?: ColorScheme) => {
-    if (document.body.classList.contains("dark")) {
-      document.body.classList.remove("dark");
-      document.body.classList.add("light");
-    } else {
-      document.body.classList.remove("light");
-      document.body.classList.add("dark");
-    }
     const nextColorScheme =
       value || (newColorScheme === "dark" ? "light" : "dark");
     setNewColorScheme(nextColorScheme);
+
+    if (nextColorScheme == "dark") {
+      document.body.classList.remove("light");
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+      document.body.classList.add("light");
+    }
     setCookie("afridi-dev-color-scheme", nextColorScheme, {
       maxAge: 60 * 60 * 24 * 30,
     });
@@ -85,18 +84,14 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         >
           <RouterTransition />
 
-          {/** @ts-ignore */}
-          <StoreProvider store={generalStore}>
-            <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
-              <UserProvider supabaseClient={supabaseClient}>
-                <NotificationsProvider position="top-right">
-                  <ModalsProvider>
-                    <Component {...pageProps} />
-                  </ModalsProvider>
-                </NotificationsProvider>
-              </UserProvider>
-            </IKContext>
-          </StoreProvider>
+          <UserProvider supabaseClient={supabaseClient}>
+            {/** @ts-ignore */}
+            <NotificationsProvider position="top-right">
+              <ModalsProvider>
+                <Component {...pageProps} />
+              </ModalsProvider>
+            </NotificationsProvider>
+          </UserProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>

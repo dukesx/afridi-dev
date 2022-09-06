@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import {
   Button,
   Group,
@@ -16,8 +17,11 @@ import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useUser } from "@supabase/auth-helpers-react";
 import {
   IconArrowDown,
+  IconArticle,
   IconBulb,
+  IconCaretDown,
   IconChecklist,
+  IconChevronDown,
   IconChevronRight,
   IconDice,
   IconExternalLink,
@@ -25,6 +29,7 @@ import {
   IconHash,
   IconLogout,
   IconMoon,
+  IconPencil,
   IconPencilPlus,
   IconScale,
   IconSettings,
@@ -33,8 +38,13 @@ import {
   IconUserCircle,
   IconUsers,
 } from "@tabler/icons";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
+import { GeneralStore } from "../../data/static/store";
+import PublishArticle from "../../public/publish-article.svg";
+import { getFeedArticles } from "./feed/functions";
 
 interface GlobalHeaderProps {
   activeHeaderKey: string;
@@ -46,8 +56,16 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 }) => {
   const { user, isLoading, error, checkSession } = useUser();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  //
+  //
+  //
+  //
   const router = useRouter();
 
+  //
+  //
+  //
+  //
   return (
     <Header className="w-full" height={70}>
       <Stack className="h-full w-full" justify="center" spacing={0}>
@@ -142,7 +160,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                 </Button>
               </Link>
 
-              <Link href="/topics" passHref>
+              <Link href="/tags" passHref>
                 <Button
                   leftIcon={<IconHash size={18} />}
                   variant={activeHeaderKey == "topics" ? "gradient" : "subtle"}
@@ -157,7 +175,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   color="blue"
                   component="a"
                 >
-                  Topics
+                  Tags
                 </Button>
               </Link>
 
@@ -260,150 +278,164 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 
           <Group className="max-w-[200px] xs:max-w-[250px] ml-auto" spacing={0}>
             {user ? (
-              <Button
-                component={NextLink}
-                href="/compose/article"
-                variant="gradient"
-                radius="xl"
-                gradient={{
-                  from: "blue",
-                  to: "teal",
-                }}
-                rightIcon={
-                  <IconPencilPlus className="h-[22px] w-[22px] align-middle" />
-                }
-                className="mr-1 xs:mr-4 text-xs xs:text-sm"
-              >
-                Compose
-              </Button>
-            ) : null}
-
-            {
-              // isLoading ? (
-              //   <Skeleton
-              //     mr="xl"
-              //     className="w-full max-w-[41px] h-[41px] xs:h-[40px] rounded-full w-[40px]"
-              //   />
-              // ) : user ? (
-              user ? (
-                <Group>
-                  <Menu position="bottom-end">
-                    <Menu.Target>
-                      <Button
-                        px={5}
-                        className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
-                        radius="xl"
-                        variant="subtle"
-                      >
-                        <Group className="items-center h-full">
-                          <Avatar
-                            color="cyan"
-                            className="h-[40px]"
-                            radius="xl"
-                          />
-                        </Group>
-                      </Button>
-                    </Menu.Target>
-                    <Menu.Dropdown className="w-[250px] xs:w-[300px]">
-                      <Menu.Label className="">Control Center</Menu.Label>
-                      <Menu.Item
-                        component={NextLink}
-                        href={`/user/${user.id}`}
-                        rightSection={
-                          <IconChevronRight
-                            className="align-middle"
-                            color={theme.colors.dark[1]}
-                            size={22}
-                          />
-                        }
-                        icon={<IconUserCircle color={theme.colors.cyan[4]} />}
-                      >
-                        Profile
-                      </Menu.Item>
-                      <Menu.Item
-                        component={NextLink}
-                        href={`/user/${user.id}/settings`}
-                        rightSection={
-                          <IconChevronRight
-                            className="align-middle"
-                            color={theme.colors.dark[1]}
-                            size={22}
-                          />
-                        }
-                        icon={<IconSettings color={theme.colors.blue[4]} />}
-                      >
-                        Settings
-                      </Menu.Item>
-                      <Menu.Label>Actions</Menu.Label>
-                      <Menu.Item
-                        onClick={() => toggleColorScheme()}
-                        icon={
-                          <Avatar
-                            size={35}
-                            radius="xl"
-                            styles={{
-                              placeholder: {
-                                backgroundColor:
-                                  colorScheme == "dark"
-                                    ? theme.colors.yellow[6]
-                                    : theme.black,
-                              },
-                            }}
-                          >
-                            {colorScheme == "dark" ? (
-                              <IconSun color={theme.white} size={20} />
-                            ) : (
-                              <IconMoon color={theme.white} size={20} />
-                            )}
-                          </Avatar>
-                        }
-                      >
-                        {colorScheme == "dark"
-                          ? "Toggle Light Mode"
-                          : "Toggle Dark Mode"}
-                      </Menu.Item>
-                      <Menu.Item
-                        icon={
-                          <IconLogout
-                            color={theme.colors.yellow[6]}
-                            size={22}
-                          />
-                        }
-                        onClick={async () => {
-                          const { error } = await supabaseClient.auth.signOut();
-                          router.push("/");
-                        }}
-                      >
-                        Sign out
-                      </Menu.Item>
-                    </Menu.Dropdown>
-                  </Menu>
-                </Group>
-              ) : (
-                <Link href="/get-started" passHref>
+              <Menu width={300} position="bottom-end">
+                <Menu.Target>
                   <Button
-                    component="a"
+                    leftIcon={<IconPencil size={18} />}
+                    color="blue"
+                    variant="subtle"
                     radius="xl"
                     rightIcon={
-                      <IconExternalLink className="align-middle" size={20} />
+                      <IconChevronDown
+                        size={18}
+                        className="align-super mt-0.5"
+                      />
                     }
-                    className="mr-5 xs:mr-5 xs:ml-2 sm:mr-5 md:mr-5 lg:mr-5 xl:mr-5 text-sm w-[150px] xs:w-full"
-                    variant="gradient"
-                    gradient={{
-                      from: "cyan",
-                      to: "blue",
-                    }}
+                    className="mr-1 xs:mr-4 text-xs xs:text-sm"
                   >
-                    Get Started
+                    Compose
                   </Button>
-                </Link>
-              )
-            }
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    component={NextLink}
+                    passHref
+                    href="/article/compose"
+                  >
+                    <Stack align="center" spacing={0}>
+                      <Image
+                        alt=""
+                        src={PublishArticle}
+                        height={200}
+                        width={200}
+                      />
+                      <Text mt="xl" weight={700}>
+                        ARTICLE
+                      </Text>
+                      <Text
+                        className="text-center capitalize"
+                        size="xs"
+                        color="dimmed"
+                      >
+                        Craft beautiful articles like <b>Dev.to</b>,{" "}
+                        <b>Hashnode</b>, <b>Medium</b> & More
+                      </Text>
+                    </Stack>
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            ) : null}
+
+            {user ? (
+              <Group>
+                <Menu position="bottom-end">
+                  <Menu.Target>
+                    <Button
+                      px={5}
+                      className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
+                      radius="xl"
+                      variant="subtle"
+                    >
+                      <Group className="items-center h-full">
+                        <Avatar color="cyan" className="h-[40px]" radius="xl" />
+                      </Group>
+                    </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown className="w-[250px] xs:w-[300px]">
+                    <Menu.Label className="">Control Center</Menu.Label>
+                    <Menu.Item
+                      component={NextLink}
+                      href={`/author/${user.id}`}
+                      rightSection={
+                        <IconChevronRight
+                          className="align-middle"
+                          color={theme.colors.dark[1]}
+                          size={22}
+                        />
+                      }
+                      icon={<IconUserCircle color={theme.colors.cyan[4]} />}
+                    >
+                      Profile
+                    </Menu.Item>
+                    <Menu.Item
+                      component={NextLink}
+                      href={`/author/${user.id}/settings`}
+                      rightSection={
+                        <IconChevronRight
+                          className="align-middle"
+                          color={theme.colors.dark[1]}
+                          size={22}
+                        />
+                      }
+                      icon={<IconSettings color={theme.colors.blue[4]} />}
+                    >
+                      Settings
+                    </Menu.Item>
+                    <Menu.Label>Actions</Menu.Label>
+                    <Menu.Item
+                      onClick={() => toggleColorScheme()}
+                      icon={
+                        <Avatar
+                          size={35}
+                          radius="xl"
+                          styles={{
+                            placeholder: {
+                              backgroundColor:
+                                colorScheme == "dark"
+                                  ? theme.colors.yellow[6]
+                                  : theme.black,
+                            },
+                          }}
+                        >
+                          {colorScheme == "dark" ? (
+                            <IconSun color={theme.white} size={20} />
+                          ) : (
+                            <IconMoon color={theme.white} size={20} />
+                          )}
+                        </Avatar>
+                      }
+                    >
+                      {colorScheme == "dark"
+                        ? "Toggle Light Mode"
+                        : "Toggle Dark Mode"}
+                    </Menu.Item>
+                    <Menu.Item
+                      icon={
+                        <IconLogout color={theme.colors.yellow[6]} size={22} />
+                      }
+                      onClick={async () => {
+                        await supabaseClient.auth.signOut();
+                        document.location = "/";
+                      }}
+                    >
+                      Sign out
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              </Group>
+            ) : (
+              <Link href="/get-started" passHref>
+                <Button
+                  component="a"
+                  radius="xl"
+                  rightIcon={
+                    <IconExternalLink className="align-middle" size={20} />
+                  }
+                  className="mr-5 xs:mr-5 xs:ml-2 sm:mr-5 md:mr-5 lg:mr-5 xl:mr-5 text-sm w-[150px] xs:w-full"
+                  variant="gradient"
+                  gradient={{
+                    from: "cyan",
+                    to: "blue",
+                  }}
+                >
+                  Get Started
+                </Button>
+              </Link>
+            )}
           </Group>
         </Group>
       </Stack>
     </Header>
   );
 };
-
 export default GlobalHeader;

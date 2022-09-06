@@ -82,8 +82,6 @@ const UserSettingsPage = () => {
 
   const newCountrues = [];
 
-  console.log(ref);
-
   countries.map((mapped) =>
     newCountrues.push({
       label: mapped.name,
@@ -138,7 +136,6 @@ const UserSettingsPage = () => {
       setAboutLoading(false);
       form2.setFieldValue("about", data[0].bio ?? "");
       form2.setFieldValue("githubProfile", data[0].github ?? "");
-      console.log("aaa");
     }
   };
 

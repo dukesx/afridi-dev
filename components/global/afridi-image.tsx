@@ -1,25 +1,23 @@
-import { ClassNames } from "@emotion/react";
+/* eslint-disable @next/next/no-img-element */
+// @ts-nocheck
 import {
   createStyles,
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { IKImage } from "imagekitio-react";
-import { MutableRefObject } from "react";
 
-export enum AfridiImageLoadingEnum {
-  LAZY = "lazy",
-  NORMAL = "",
-}
+import ProgressiveImage from "react-progressive-graceful-image";
 
 interface AfridiImageProps {
   width: number | string;
   height: number;
   path: string;
-  loading?: AfridiImageLoadingEnum;
+  loading?: "lazy" | "normal";
   style?: object;
   className?: string;
   onClick?: Function;
+  fillImage: boolean;
+  imageClassName?: string;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
@@ -27,6 +25,8 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   loading,
   path,
   style,
+  fillImage,
+  imageClassName,
   className,
   onClick,
 }) => {
@@ -41,33 +41,40 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   const { classes } = AfridiImageClasses();
   const { colorScheme } = useMantineColorScheme();
   return (
-    <div className={classes.wrapper + " " + (className ?? "")} style={style}>
-      <IKImage
+    <div
+      className={
+        classes.wrapper +
+        " " +
+        (className ?? "") +
+        (fillImage ? " max-w-full w-full" : "")
+      }
+      style={style}
+    >
+      <ProgressiveImage
+        src={
+          `https://ik.imagekit.io/afrididotdev/tr:w-${width},h-${height}` + path
+        }
+        placeholder={
+          `https://ik.imagekit.io/afrididotdev/tr:q-100,bl-30,w-${width},h-${height}` +
+          path
+        }
+        className={fillImage ? "mx-auto flex !w-full !h-full" : ""}
         onClick={onClick}
-        height={height}
-        width={width}
-        path={path}
-        loading={loading ?? ""}
-        transformation={[
-          typeof width == "string"
-            ? {
-                height: height + "px",
-                crop: "maintain_ratio",
-              }
-            : {
-                height: height + "px",
-                width: width + "px",
-                crop: "maintain_ratio",
-              },
-        ]}
-        lqip={{ active: true, quality: 50, blur: 60 }}
-        style={{
-          width: typeof width == "string" ? width : width + "px",
-          height: height + "px",
-          objectFit: "cover",
-          ...style,
-        }}
-      />
+      >
+        {(src, loading) => (
+          <img
+            src={src}
+            alt=""
+            height={height}
+            width={width}
+            className={
+              (fillImage ? "mx-auto flex !w-full !h-full" : "") +
+              " object-cover " +
+              (imageClassName ? imageClassName : "")
+            }
+          />
+        )}
+      </ProgressiveImage>
     </div>
   );
 };
