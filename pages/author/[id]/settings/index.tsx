@@ -23,8 +23,8 @@ import { forwardRef, Fragment, useState } from "react";
 import { countries } from "../../../../data/static/countries";
 import "country-flag-icons/3x2/flags.css";
 import { useEffect } from "react";
-import { supabaseClient, withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
 import { MarkDownEditor } from "../../../../components/global/editorCaller";
@@ -73,7 +73,7 @@ const UserSettingsPage = () => {
 
   const [generalLoading, setGeneralLoading] = useState(true);
   const [aboutLoading, setAboutLoading] = useState(true);
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
     image: string;
     label: string;
@@ -113,7 +113,7 @@ const UserSettingsPage = () => {
           location
           `
       )
-      .eq("id", user.id);
+      .eq("id", session.user.id);
     if (!error) {
       setGeneralLoading(false);
       form1.setFieldValue("firstName", data[0].firstName ?? "");
@@ -131,7 +131,7 @@ const UserSettingsPage = () => {
       github
       `
       )
-      .eq("id", user.id);
+      .eq("id", session.user.id);
     if (!error) {
       setAboutLoading(false);
       form2.setFieldValue("about", data[0].bio ?? "");
@@ -144,7 +144,7 @@ const UserSettingsPage = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (session.user) {
       switch (activeTab) {
         case "general":
           getGeneralData();
@@ -158,7 +158,7 @@ const UserSettingsPage = () => {
           break;
       }
     }
-  }, [user, activeTab]);
+  }, [session, activeTab]);
 
   return (
     <AppWrapper activeHeaderKey="" size="lg">
@@ -233,7 +233,7 @@ const UserSettingsPage = () => {
                         lastName: val.lastName,
                         location: val.location,
                       })
-                      .eq("id", user.id);
+                      .eq("id", session.user.id);
 
                     if (status == 200) {
                       showNotification({
@@ -320,7 +320,7 @@ const UserSettingsPage = () => {
                           bio: markdown,
                           github: val.githubProfile,
                         })
-                        .eq("id", user.id);
+                        .eq("id", session.user.id);
                       if (status == 200) {
                         showNotification({
                           message: "Your changes have been saved successfully",

@@ -7,7 +7,6 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { IconBell, IconHash, IconNews } from "@tabler/icons";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -19,11 +18,14 @@ import InfiniteScroll from "react-infinite-scroller";
 import { useRouter } from "next/router";
 import Custom404 from "../404";
 import Custom500 from "../500";
+import { useSessionContext } from "@supabase/auth-helpers-react";
+import { supabase } from "../../utils/supabaseClient";
 
 const ArticleTagPage = ({ taga, articles }) => {
   const theme = useMantineTheme();
   const [data, setData] = useState(articles);
   const router = useRouter();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
 
   const getMoreArticles = async () => {
     const {
@@ -146,7 +148,7 @@ export default ArticleTagPage;
 
 export const getStaticProps = async (ctx) => {
   const title = ctx.params.title;
-  const { error, data, count } = await supabaseClient
+  const { error, data, count } = await supabase
     .from("articles")
     .select(
       `
@@ -167,7 +169,7 @@ export const getStaticProps = async (ctx) => {
     )
     .eq("tags.title", title)
     .limit(10);
-  console.log(data);
+
   if (data && data.length > 0) {
     const tag = {
       id: data[0].tags[0].id,
@@ -191,7 +193,7 @@ export const getStaticProps = async (ctx) => {
 };
 
 export const getStaticPaths = async () => {
-  const { data, error } = await supabaseClient.from("tags").select("title");
+  const { data, error } = await supabase.from("tags").select("title");
 
   var ids = [];
 

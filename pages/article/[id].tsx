@@ -16,7 +16,6 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import {
   IconBolt,
   IconEdit,
@@ -32,7 +31,13 @@ import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
 import { useLocalStorage } from "@mantine/hooks";
 import ArticleSidebar from "../../components/article/sidebar";
-import { useUser } from "@supabase/auth-helpers-react";
+import {
+  useSessionContext,
+  useSupabaseClient,
+  useUser,
+} from "@supabase/auth-helpers-react";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { supabase } from "../../utils/supabaseClient";
 
 const Article = ({ article, tags }) => {
   const [data, setData] = useState(article);
@@ -42,7 +47,7 @@ const Article = ({ article, tags }) => {
     key: "article-sidebar-orientation",
     defaultValue: false,
   });
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
 
   const awards = [
     {
@@ -113,11 +118,11 @@ const Article = ({ article, tags }) => {
                       <Skeleton height={40} className="w-full max-w-[400px]" />
                     </Stack>
                   )}
-                  {user ? (
-                    article.author_id == user.id ||
+                  {session && session.user ? (
+                    article.author_id == session.user.id ||
                     (article.co_authors_articles.length > 0 &&
                       article.co_authors_articles.filter(
-                        (mapped) => mapped.authors.id == user.id
+                        (mapped) => mapped.authors.id == session.user.id
                       ).length > 0) ? (
                       <Tooltip label="Edit article">
                         <ActionIcon
@@ -380,7 +385,7 @@ export default Article;
 
 export const getStaticProps = async (ctx) => {
   var id = ctx.params.id;
-  const { data, error } = await supabaseClient
+  const { data, error } = await supabase
     .from("articles")
     .select(
       `
@@ -426,7 +431,7 @@ export const getStaticProps = async (ctx) => {
 };
 
 export const getStaticPaths = async () => {
-  const { data, error } = await supabaseClient.from("articles").select("id");
+  const { data, error } = await supabase.from("articles").select("id");
 
   var ids = [];
 

@@ -14,8 +14,8 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { supabaseClient, withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { MarkDownEditor } from "../../../components/global/editorCaller";
@@ -36,7 +36,7 @@ const ArticleComposer = () => {
   const media = useMediaQuery("(min-width: 900px)", false);
   const [loading, setLoading] = useState(false);
   const [articleEditorTour, setArticleEditorTour] = useState(false);
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const { colorScheme } = useMantineColorScheme();
   const [loadingSetTour, setLoadingSetTour] = useState(false);
   //
@@ -157,7 +157,7 @@ const ArticleComposer = () => {
                     .update({
                       article_editor_tour: false,
                     })
-                    .eq("id", user.id);
+                    .eq("id", session.user.id);
 
                   if (data) {
                     closeAllModals();
@@ -199,7 +199,7 @@ const ArticleComposer = () => {
     const { error, data } = await supabaseClient
       .from("authors")
       .select("article_editor_tour")
-      .eq("id", user.id);
+      .eq("id", session.user.id);
 
     // setArticleEditorTour(data[0].article_editor_tour);
     if (data[0].article_editor_tour) {
@@ -219,10 +219,10 @@ const ArticleComposer = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (session.user) {
       getTourModalValue();
     }
-  }, [user]);
+  }, [session]);
 
   //
 

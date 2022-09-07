@@ -13,9 +13,11 @@ import AppWrapper from "../../components/global/wrapper";
 import SlackLogo from "../../public/slack.png";
 import DiscordLogo from "../../public/discord.png";
 import GoogleLogo from "../../public/google.png";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
+import { supabase } from "../../utils/supabaseClient";
 
 const GetStarted = () => {
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const theme = useMantineTheme();
   return (
     <AppWrapper size="sm" activeHeaderKey="">
@@ -45,8 +47,8 @@ const GetStarted = () => {
                 />
               }
               onClick={async () => {
-                const { user, session, error } =
-                  await supabaseClient.auth.signIn({
+                const { data, error } =
+                  await supabaseClient.auth.signInWithOAuth({
                     provider: "google",
                   });
               }}
@@ -59,8 +61,8 @@ const GetStarted = () => {
               radius="xl"
               variant="white"
               onClick={async () => {
-                const { user, session, error } =
-                  await supabaseClient.auth.signIn({
+                const { data, error } =
+                  await supabaseClient.auth.signInWithOAuth({
                     provider: "discord",
                   });
               }}
@@ -78,8 +80,8 @@ const GetStarted = () => {
 
             <Button
               onClick={async () => {
-                const { user, session, error } =
-                  await supabaseClient.auth.signIn({
+                const { data, error } =
+                  await supabaseClient.auth.signInWithOAuth({
                     provider: "slack",
                   });
               }}

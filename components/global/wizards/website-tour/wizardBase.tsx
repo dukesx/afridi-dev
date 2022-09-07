@@ -1,7 +1,7 @@
 import { Stack, Center, type MantineTheme } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Fade } from "react-awesome-reveal";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import TagPickingStep from "./tag-step";
 import WelcomeStep from "./welcome-step";
 import DemographicsStep from "./demographics-step";
@@ -13,7 +13,7 @@ interface WebsiteTourWizardBaseProps {
 
 const WebsiteTourWizardBase = ({ theme }: WebsiteTourWizardBaseProps) => {
   const [step, setStep] = useState(0);
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const importFlags = async () =>
     //@ts-ignore
     await import("country-flag-icons/3x2/flags.css");
@@ -36,16 +36,20 @@ const WebsiteTourWizardBase = ({ theme }: WebsiteTourWizardBaseProps) => {
                 setStep={setStep}
                 theme={theme}
                 step={step}
-                user={user}
+                user={session.user}
               />
             </Fade>
           ) : step == 2 ? (
             <Fade key={2}>
-              <TagPickingStep user={user} setStep={setStep} step={step} />
+              <TagPickingStep
+                user={session.user}
+                setStep={setStep}
+                step={step}
+              />
             </Fade>
           ) : step == 3 ? (
             <Fade key={3}>
-              <FinishStep user={user} setStep={setStep} step={step} />
+              <FinishStep user={session.user} setStep={setStep} step={step} />
             </Fade>
           ) : null}
         </Stack>

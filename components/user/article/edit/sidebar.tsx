@@ -20,8 +20,7 @@ import {
 import { useForm } from "@mantine/form";
 import { closeAllModals, openContextModal, openModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
   IconCheck,
   IconCloudUpload,
@@ -59,7 +58,7 @@ const ArticleEditSidebar = ({
   props,
 }: ArticleEditSidebarProps) => {
   //
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const theme = useMantineTheme();
   const [cover, setCover] = useState(props.cover);
   var openRef: any = createRef();
@@ -115,10 +114,10 @@ const ArticleEditSidebar = ({
   };
 
   useEffect(() => {
-    if (user) {
+    if (session.user) {
       getTags();
     }
-  }, [user]);
+  }, [session]);
 
   return (
     <form
@@ -156,10 +155,11 @@ const ArticleEditSidebar = ({
               title: val.title,
               description: val.description,
               cover: val.cover,
-              author_id: user.id,
+              author_id: session.user.id,
               body: markdown,
             })
-            .eq("id", props.id);
+            .eq("id", props.id)
+            .select();
 
           if (error) {
             setLoading(false);
@@ -209,7 +209,8 @@ const ArticleEditSidebar = ({
                     .from("tags")
                     .insert({
                       title: mapped,
-                    });
+                    })
+                    .select();
                   const { error: tag2Error, data: tag2Data } =
                     await supabaseClient.from("articles_tags").insert({
                       title: mapped.title,
@@ -362,7 +363,7 @@ const ArticleEditSidebar = ({
           height={230}
           type={ImageUploaderType.NONE}
           theme={theme}
-          user={user}
+          user={session.user}
           setImage={setCoverImage}
           openRef={openRef}
         />

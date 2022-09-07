@@ -12,9 +12,9 @@ import "../styles/app.scss";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
 import { getCookie, setCookie } from "cookies-next";
-import { UserProvider } from "@supabase/auth-helpers-react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { appCache } from "../utils/cache";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import ErrorBoundary from "../components/global/error-boundary";
@@ -25,6 +25,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   //States
   const [iteration, setIteration] = useState(0);
   const preferredColorScheme = useColorScheme();
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   const [newColorScheme, setNewColorScheme] = useLocalStorage<ColorScheme>({
     key: "afridi-dev-color-scheme",
     defaultValue: props.colorScheme ?? null,
@@ -83,15 +84,16 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           emotionCache={appCache}
         >
           <RouterTransition />
-
-          <UserProvider supabaseClient={supabaseClient}>
-            {/** @ts-ignore */}
+          <SessionContextProvider
+            supabaseClient={supabaseClient}
+            initialSession={pageProps.initialSession}
+          >
             <NotificationsProvider position="top-right">
               <ModalsProvider>
                 <Component {...pageProps} />
               </ModalsProvider>
             </NotificationsProvider>
-          </UserProvider>
+          </SessionContextProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>

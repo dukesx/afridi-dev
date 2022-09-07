@@ -1,44 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  ActionIcon,
-  Badge,
-  Button,
   Card,
-  Center,
-  Divider,
   Grid,
   Group,
   Menu,
   Skeleton,
-  Stack,
-  Text,
   TextInput,
   ThemeIcon,
   Title,
-  Tooltip,
 } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
-import {
-  IconBrandAndroid,
-  IconBrandAngular,
-  IconBrandJavascript,
-  IconBrandKotlin,
-  IconBrandReact,
-  IconCode,
-  IconHash,
-  IconPencil,
-  IconTrendingUp,
-} from "@tabler/icons";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { IconCode, IconHash, IconPencil } from "@tabler/icons";
 import { Fragment, Suspense, useEffect, useState } from "react";
 import EmptyPlaceholder from "../../components/global/placeholders/empty";
 import TagComponent from "../../components/global/tags/tagComponent";
 import AppWrapper from "../../components/global/wrapper";
+import { supabase } from "../../utils/supabaseClient";
 
 const TagsPage = ({ tagsArr }) => {
   const [tags, setTags] = useState(tagsArr);
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const [authorFollowed, setAuthorFollowed] = useState([]);
   const [inputVal, setInputVal] = useDebouncedState(null, 200);
   const [loading, setLoading] = useState(false);
@@ -67,8 +49,9 @@ const TagsPage = ({ tagsArr }) => {
           count: "exact",
         }
       )
-      .ilike("title", `%${deferred}%`);
-    console.log();
+      .ilike("title", `%${deferred}%`)
+      .select();
+
     var tagsArr = [];
     data.map((mapped) =>
       tagsArr.push({
@@ -96,45 +79,47 @@ const TagsPage = ({ tagsArr }) => {
    *
    */
 
-  // const getTags = async () => {
-  //   setLoading(true);
-  //   const { error, data } = await supabaseClient
-  //     .from("tags")
-  //     .select(
-  //       `
-  //     title,
-  //     id
-  //     `
-  //     )
-  //     .range(tags.length, tags.length + 20)
-  //     .limit(20);
-  //   if (user) {
-  //     const { error: error2, data: data2 } = await supabaseClient
-  //       .from("authors")
-  //       .select(
-  //         `
-  //     tags (
-  //       title
-  //     )
-  //     `
-  //       )
-  //       .eq("id", user.id);
-  //     var followedTags = [];
-  //     if (data2[0].tags && data2[0].tags.length > 0) {
-  //       data2[0].tags.map((mapped) => followedTags.push(mapped.title));
-  //       setAuthorFollowed(followedTags);
-  //     }
-  //   }
-  //   var tagsArr = [...tags];
-  //   data.map((mapped) => tagsArr.push(mapped));
-  //   setTags(tagsArr);
-  //   setLoading(false);
-  // };
+  const getTags = async () => {
+    // setLoading(true);
+    // const { error, data } = await supabaseClient
+    //   .from("tags")
+    //   .select(
+    //     `
+    //   title,
+    //   id
+    //   `
+    //   )
+    //   .range(tags.length, tags.length + 20)
+    //   .limit(20);
+    if (session && session.user) {
+      const { error: error2, data: data2 } = await supabaseClient
+        .from("authors")
+        .select(
+          `
+      tags (
+        title
+      )
+      `
+        )
+        .eq("id", session.user.id);
+      var followedTags = [];
+      //@ts-ignore
+      if (data2[0].tags && data2[0].tags.length > 0) {
+        //@ts-ignore
+        data2[0].tags.map((mapped) => followedTags.push(mapped.title));
+        setAuthorFollowed(followedTags);
+      }
+    }
+    // var tagsArr = [...tags];
+    // data.map((mapped) => tagsArr.push(mapped));
+    // setTags(tagsArr);
+    // setLoading(false);
+  };
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   getTags();
-  // }, [user]);
+  useEffect(() => {
+    // setLoading(true);
+    getTags();
+  }, [session]);
 
   /**
    *
@@ -222,7 +207,7 @@ const TagsPage = ({ tagsArr }) => {
                     id={mapped.id}
                     authorTags={authorFollowed}
                     title={mapped.title}
-                    user={user}
+                    user={session && session.user}
                   />
                 </Grid.Col>
               ))
@@ -264,7 +249,7 @@ const TagsPage = ({ tagsArr }) => {
 export default TagsPage;
 
 export const getStaticProps = async () => {
-  const { error, data, count } = await supabaseClient
+  const { error, data, count } = await supabase
     .from("tags")
     .select(
       `
@@ -285,6 +270,7 @@ export const getStaticProps = async () => {
     tagsArr.push({
       id: mapped.id,
       title: mapped.title,
+      //@ts-ignore
       articleCount: mapped.articles.length,
       icon: mapped.icon,
       color: mapped.color,

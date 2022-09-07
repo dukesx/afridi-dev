@@ -13,8 +13,7 @@ import {
   Avatar,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
   IconArrowDown,
   IconArticle,
@@ -54,7 +53,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
   activeHeaderKey,
   theme,
 }) => {
-  const { user, isLoading, error, checkSession } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   //
   //
@@ -277,7 +276,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
           </MediaQuery>
 
           <Group className="max-w-[200px] xs:max-w-[250px] ml-auto" spacing={0}>
-            {user ? (
+            {session && session.user ? (
               <Menu width={300} position="bottom-end">
                 <Menu.Target>
                   <Button
@@ -326,7 +325,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               </Menu>
             ) : null}
 
-            {user ? (
+            {session && session.user ? (
               <Group>
                 <Menu position="bottom-end">
                   <Menu.Target>
@@ -345,7 +344,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     <Menu.Label className="">Control Center</Menu.Label>
                     <Menu.Item
                       component={NextLink}
-                      href={`/author/${user.id}`}
+                      href={`/author/${session.user.id}`}
                       rightSection={
                         <IconChevronRight
                           className="align-middle"
@@ -359,7 +358,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     </Menu.Item>
                     <Menu.Item
                       component={NextLink}
-                      href={`/author/${user.id}/settings`}
+                      href={`/author/${session.user.id}/settings`}
                       rightSection={
                         <IconChevronRight
                           className="align-middle"

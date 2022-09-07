@@ -5,8 +5,7 @@ import {
   type MantineNumberSize,
 } from "@mantine/core";
 import { openModal } from "@mantine/modals";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
 import { GeneralStore, useGeneralStore } from "../../data/static/store";
 import GlobalHeader from "./header";
@@ -26,7 +25,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
   noPadding,
 }) => {
   const theme = useMantineTheme();
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const appLoading = useGeneralStore((state: GeneralStore) => state.appLoading);
 
   const getUserProps = async () => {
@@ -37,9 +36,8 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       website_tour
       `
       )
-      .eq("id", user.id);
+      .eq("id", session.user.id);
 
-    console.log(data);
 
     if (data[0].website_tour) {
       openModal({
@@ -57,10 +55,10 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
     }
   };
   useEffect(() => {
-    if (user) {
+    if (session && session.user) {
       getUserProps();
     }
-  }, [user]);
+  }, [session]);
   return (
     <div className="relative">
       <AppLoader theme={theme} loading={appLoading} />

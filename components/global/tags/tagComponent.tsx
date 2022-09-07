@@ -13,7 +13,8 @@ import {
 } from "@mantine/core";
 import { closeAllModals, openModal } from "@mantine/modals";
 import { NextLink } from "@mantine/next";
-import { supabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { type User } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import {
   IconChevronDown,
   IconEye,
@@ -55,11 +56,12 @@ const TagComponent = ({
   IconName,
 }: TagComponentProps) => {
   const theme = useMantineTheme();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
 
   return (
     <Card
-      component={NextLink}
-      href={`/tags/${title}`}
+      // component={NextLink}
+      // href={`/tags/${title}`}
       withBorder
       my="sm"
       radius="lg"
@@ -116,7 +118,7 @@ const TagComponent = ({
            * Until Supabase V2 Upgrade
            *
            */}
-          {/* <Menu
+          <Menu
             styles={{
               dropdown: {
                 width: 220,
@@ -128,7 +130,8 @@ const TagComponent = ({
               {authorTags.includes(title) ? (
                 <Button
                   radius="xl"
-                  variant="subtle"
+                  variant="white"
+                  color="blue"
                   leftIcon={<IconEyeCheck size={18} />}
                   rightIcon={<IconChevronDown size={18} />}
                 >
@@ -184,7 +187,7 @@ const TagComponent = ({
                     }
                   }}
                   radius="xl"
-                  variant="subtle"
+                  variant="white"
                   color="blue"
                   leftIcon={<IconEye size={18} />}
                 >
@@ -220,7 +223,7 @@ const TagComponent = ({
                 </Menu.Item>
               </Menu.Dropdown>
             ) : null}
-          </Menu> */}
+          </Menu>
         </Stack>
       </Center>
     </Card>

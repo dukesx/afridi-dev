@@ -15,22 +15,10 @@ import {
 import { Fragment, Suspense, useEffect } from "react";
 import AppWrapper from "../components/global/wrapper";
 import LargeGridCard from "../components/global/grid-cards/largeGridCard";
-import HorizontalGridCard, {
-  CardStyle,
-} from "../components/global/grid-cards/horizontalGridCard";
-import { StickyContainer, Sticky } from "react-sticky";
 import LandingFeed from "../components/landing/feed";
 import SquareHorizontalWidget from "../components/landing/widgets/square-horizontal";
-import { IconStar, IconStars } from "@tabler/icons";
-import { useState } from "react";
-import {
-  getUser,
-  supabaseClient,
-  User,
-  withPageAuth,
-} from "@supabase/auth-helpers-nextjs";
 import HorizontalGridCardSkeleton from "../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
-import { parse } from "date-fns";
+import { supabase } from "../utils/supabaseClient";
 
 const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
   const theme = useMantineTheme();
@@ -374,7 +362,7 @@ export const getStaticProps = async (ctx) => {
     error,
     data: feedData,
     count: feedDataCount,
-  } = await supabaseClient
+  } = await supabase
     .from("articles")
     .select(
       `
@@ -405,7 +393,7 @@ export const getStaticProps = async (ctx) => {
       ascending: false,
     });
 
-  const { error: mustReadsError, data: mustReadsData } = await supabaseClient
+  const { error: mustReadsError, data: mustReadsData } = await supabase
     .from("articles")
     .select(
       `
@@ -445,7 +433,7 @@ export const getStaticProps = async (ctx) => {
   date2.setMonth(date2.getMonth() - 1);
   //
   //
-  const { error: topDataError, data: topData } = await supabaseClient
+  const { error: topDataError, data: topData } = await supabase
     .from("articles")
     .select(
       `

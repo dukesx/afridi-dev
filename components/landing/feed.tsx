@@ -24,7 +24,7 @@ import { Fragment } from "react";
 import HorizontalGridCard, {
   CardStyle,
 } from "../global/grid-cards/horizontalGridCard";
-import { User, useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import HorizontalGridCardSkeleton from "../global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import InfiniteScroll from "react-infinite-scroller";
 import {
@@ -53,7 +53,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
    *
    */
   const [key, setKey] = useState("feed");
-  const { user, isLoading } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   //
   //
   //
@@ -61,7 +61,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
 
   const [popularData, setPopularData] = useState([]);
   const [trendingData, setTrendingData] = useState([]);
-  const [feedData, setFeedData] = useState(prefetchedFeedData);
+  const [feedData, setFeedData] = useState<any>();
   const [articleCount, setArticleCount] = useState(feedDataCount);
   const [feedLoading, setFeedLoading] = useState(false);
   //
@@ -82,7 +82,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
     switch (key) {
       case "feed":
         await getFeedArticles({
-          user: user,
+          user: session && session.user,
           data: feedData,
           articleCount: articleCount,
           setData: setFeedData,
@@ -92,7 +92,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
 
       case "trending":
         await getTrendingArticles({
-          user: user,
+          user: session && session.user,
           data: trendingData,
           setData: setTrendingData,
         });
@@ -100,22 +100,21 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
 
       case "popular":
         await getPopularArticles({
-          user: user,
+          user: session && session.user,
           data: popularData,
           setData: setPopularData,
         });
         break;
     }
-
     setFeedLoading(false);
   };
 
   useEffect(() => {
-    if (key !== "feed") {
+    if (isLoading == false) {
       setFeedLoading(true);
       getFeed();
     }
-  }, [key]);
+  }, [key, isLoading]);
 
   /**
    *
@@ -221,13 +220,15 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
 
         <Tabs.Panel value="feed">
           <Stack className="relative" pt="xs" mt="xl">
-            {!feedLoading ? (
-              feedData.length > 0 ? (
+            {feedLoading == false ? (
+              feedData && feedData.length > 0 ? (
                 <InfiniteScroll
                   threshold={50}
                   pageStart={0}
                   loadMore={getFeed}
-                  hasMore={feedData.length < articleCount ? true : false}
+                  hasMore={
+                    feedData && feedData.length < articleCount ? true : false
+                  }
                   loader={
                     <Center key="something-list-loader">
                       <Stack align="center">
@@ -255,7 +256,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                     ))}
                   </Stack>
                 </InfiniteScroll>
-              ) : (
+              ) : feedData && feedData.length == 0 ? (
                 <Center mt={50}>
                   <Stack>
                     <Text
@@ -277,7 +278,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                     </Button>
                   </Stack>
                 </Center>
-              )
+              ) : null
             ) : (
               <Stack className="w-full h-full">
                 <HorizontalGridCardSkeleton />

@@ -40,11 +40,9 @@ import {
   IconX,
 } from "@tabler/icons";
 import React, { Fragment, Suspense, useEffect, useRef, useState } from "react";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import SquareHorizontalWidget from "../../../components/landing/widgets/square-horizontal";
 import "country-flag-icons/3x2/flags.css";
-
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import ImageUploader, {
   ImageUploaderType,
@@ -55,6 +53,7 @@ import { openConfirmModal } from "@mantine/modals";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
+import { supabase } from "../../../utils/supabaseClient";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -70,7 +69,8 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const [feed, setFeed] = useState(feedData);
   const [hot, setHot] = useState(null);
   const [thumbsUp, setThumbsUp] = useState(null);
-  const { user: usera } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
+
   var ref: any = React.createRef();
 
   const specialStyles = createStyles((theme) => ({
@@ -85,9 +85,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   }));
 
   const { classes } = specialStyles();
-
-  console.log(usera && usera.id);
-  console.log(id);
 
   const getData = async () => {
     const { data: userData, error: userDataError } = await supabaseClient
@@ -138,9 +135,10 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
 
     if (!userDataError) {
       var feed = [];
-
+      //@ts-ignore
       if (userData[0]["status_feed"].length > 0) {
-        userData[0]["status_feed"].map((mapped) =>
+        //@ts-ignore
+        userData[0].status_feed.map((mapped) =>
           feed.push({
             type: "status",
             data: mapped,
@@ -148,8 +146,11 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
           })
         );
       }
+      //@ts-ignore
 
       if (userData[0]["articles"].length > 0) {
+        //@ts-ignore
+
         userData[0]["articles"].map((mapped) =>
           feed.push({
             data: mapped,
@@ -273,12 +274,12 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
             <Skeleton height={450} />
           ) : (
             <Group className="overflow-hidden">
-              {usera && usera.id == id ? (
+              {session && session.user.id == id ? (
                 <ImageUploader
                   className="border-0"
                   type={ImageUploaderType.COVER}
                   theme={theme}
-                  user={usera}
+                  user={session.user}
                   py={0.01}
                   px={1}
                   setImage={setCover}
@@ -323,7 +324,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                 />
               )}
 
-              {usera && usera.id == id ? (
+              {session && session.user.id == id ? (
                 <Button
                   className="absolute rounded-full top-[20px] right-5"
                   color="blue"
@@ -346,7 +347,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                   <Skeleton height={120} />
                 ) : (
                   <Group>
-                    {usera && usera.id == id ? (
+                    {session && session.user.id == id ? (
                       <Button
                         className="absolute z-[100] rounded-full p-1 bottom-1 left-8 sm:bottom-[6px] right-0 sm:left-12 h-[30px] w-[30px]"
                         size="xs"
@@ -357,11 +358,11 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                         <IconUpload size={15} />
                       </Button>
                     ) : null}
-                    {usera && usera.id == id ? (
+                    {session && session.user.id == id ? (
                       <ImageUploader
                         type={ImageUploaderType.DP}
                         theme={theme}
-                        user={usera}
+                        user={session.user}
                         setImage={setDp}
                         openRef={openRef}
                         placeholder={
@@ -495,7 +496,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
               <Grid>
                 <Grid.Col span={12} sm={7}>
                   <Stack className="py-5 px-0 sm:pt-10 sm:pr-10" spacing="xl">
-                    {usera && user.id == id ? (
+                    {session && session.user.id == id ? (
                       <Fragment>
                         <Input.Wrapper className="w-full" label="">
                           <MarkDownEditor
@@ -673,8 +674,8 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                       </Text>
                                     </Stack>
                                   </Group>
-                                  {usera &&
-                                  usera.id == mapped.data.author_id &&
+                                  {session &&
+                                  session.user.id == mapped.data.author_id &&
                                   mapped.type == "status" ? (
                                     <Button
                                       size="xs"
@@ -1140,7 +1141,7 @@ export default UserProfilePage;
 
 export const getStaticProps = async (ctx) => {
   var id = ctx.params.id;
-  const { data: userData, error: userDataError } = await supabaseClient
+  const { data: userData, error: userDataError } = await supabase
     .from("authors")
     .select(
       `
@@ -1187,8 +1188,9 @@ export const getStaticProps = async (ctx) => {
     });
 
   var feed = [];
-
+  //@ts-ignore
   if (userData[0]["status_feed"].length > 0) {
+    //@ts-ignore
     userData[0]["status_feed"].map((mapped) =>
       feed.push({
         type: "status",
@@ -1198,7 +1200,9 @@ export const getStaticProps = async (ctx) => {
     );
   }
 
+  //@ts-ignore
   if (userData[0]["articles"].length > 0) {
+    //@ts-ignore
     userData[0]["articles"].map((mapped) =>
       feed.push({
         data: mapped,
@@ -1231,7 +1235,7 @@ export const getStaticProps = async (ctx) => {
 };
 
 export const getStaticPaths = async () => {
-  const { data, error } = await supabaseClient.from("authors").select("id");
+  const { data, error } = await supabase.from("authors").select("id");
 
   var ids = [];
 

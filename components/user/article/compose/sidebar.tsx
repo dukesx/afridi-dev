@@ -20,8 +20,7 @@ import {
 import { useForm } from "@mantine/form";
 import { closeAllModals, openContextModal, openModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
-import { useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
   IconCheck,
   IconCloudUpload,
@@ -51,7 +50,7 @@ const ArticleComposeSidebar = ({
   setLoading,
 }: ArticleComposerSidebarProps) => {
   //
-  const { user } = useUser();
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const theme = useMantineTheme();
   const [cover, setCover] = useState(null);
   var openRef: any = createRef();
@@ -106,10 +105,10 @@ const ArticleComposeSidebar = ({
   };
 
   useEffect(() => {
-    if (user) {
+    if (session.user) {
       getTags();
     }
-  }, [user]);
+  }, [session]);
 
   return (
     <form
@@ -147,9 +146,10 @@ const ArticleComposeSidebar = ({
               title: val.title,
               description: val.description,
               cover: val.cover,
-              author_id: user.id,
+              author_id: session.user.id,
               body: markdown,
-            });
+            })
+            .select();
 
           if (error) {
             setLoading(false);
@@ -187,13 +187,15 @@ const ArticleComposeSidebar = ({
                     title: mapped.title,
                     tag_id: tagData[0].id,
                     article_id: articleData[0].id,
-                  });
+                  })
+                  .select();
               } else {
                 const { data: insertedTagData } = await supabaseClient
                   .from("tags")
                   .insert({
                     title: mapped,
-                  });
+                  })
+                  .select();
                 const { error: tag2Error, data: tag2Data } =
                   await supabaseClient.from("articles_tags").insert({
                     title: mapped.title,
@@ -327,7 +329,7 @@ const ArticleComposeSidebar = ({
           height={230}
           type={ImageUploaderType.NONE}
           theme={theme}
-          user={user}
+          user={session.user}
           setImage={setCoverImage}
           openRef={openRef}
         />
