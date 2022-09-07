@@ -11,13 +11,12 @@ import { useEffect, useState } from "react";
 import "../styles/app.scss";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
-import { getCookie, setCookie } from "cookies-next";
+import { setCookie, getCookie } from "cookies-next";
 import { appCache } from "../utils/cache";
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
-import ErrorBoundary from "../components/global/error-boundary";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -60,8 +59,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     }
   }, [preferredColorScheme]);
 
-  //Return @JSX
-
   return (
     <>
       <Head>
@@ -84,16 +81,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           emotionCache={appCache}
         >
           <RouterTransition />
-          <SessionContextProvider
-            supabaseClient={supabaseClient}
-            initialSession={pageProps.initialSession}
-          >
-            <NotificationsProvider position="top-right">
-              <ModalsProvider>
+
+          <NotificationsProvider position="top-right">
+            <ModalsProvider>
+              <SessionContextProvider
+                supabaseClient={supabaseClient}
+                initialSession={pageProps ? pageProps.initialSession : {}}
+              >
                 <Component {...pageProps} />
-              </ModalsProvider>
-            </NotificationsProvider>
-          </SessionContextProvider>
+              </SessionContextProvider>
+            </ModalsProvider>
+          </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>
