@@ -25,7 +25,7 @@ import {
   IconTrophy,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
@@ -63,6 +63,23 @@ const Article = ({ article, tags }) => {
       title: "community-choice",
     },
   ];
+
+  const addViewCount = async () => {
+    const { data, error } = await supabaseClient
+      .from("articles")
+      .update({
+        views: article.views + 1,
+      })
+      .eq("id", article.id)
+      .select();
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      addViewCount();
+    }, 10000);
+  }, []);
+
   return (
     <AppWrapper activeHeaderKey="" size="xl">
       <Container className="px-0 sm:px-5" size="lg">
@@ -394,8 +411,9 @@ export const getStaticProps = async (ctx) => {
         description,
         cover,
         body,
+        views,
         author_id,
-        authors (
+        authors!articles_author_id_fkey (
             id,
             firstName,
             lastName,

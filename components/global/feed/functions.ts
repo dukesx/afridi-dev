@@ -35,7 +35,7 @@ export const getFeedArticles = async ({
                   title,
                   description,
                   cover,
-                  authors (
+                  authors!articles_author_id_fkey (
                     dp,
                     firstName,
                     lastName
@@ -85,7 +85,7 @@ export const getFeedArticles = async ({
                   title,
                   description,
                   cover,
-                  authors (
+                  authors!articles_author_id_fkey (
                     dp,
                     firstName,
                     lastName
@@ -138,7 +138,7 @@ export const getTrendingArticles = async ({ setData }: FeedFunctionProps) => {
                   title,
                   description,
                   cover,
-                  authors (
+                  authors!articles_author_id_fkey (
                     dp,
                     firstName,
                     lastName
@@ -186,7 +186,7 @@ export const getPopularArticles = async ({
                   title,
                   description,
                   cover,
-                  authors (
+                  authors!articles_author_id_fkey (
                     dp,
                     firstName,
                     lastName

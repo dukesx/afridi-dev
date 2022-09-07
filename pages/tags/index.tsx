@@ -21,9 +21,9 @@ import { supabase } from "../../utils/supabaseClient";
 const TagsPage = ({ tagsArr }) => {
   const [tags, setTags] = useState(tagsArr);
   const { isLoading, session, error, supabaseClient } = useSessionContext();
-  const [authorFollowed, setAuthorFollowed] = useState([]);
   const [inputVal, setInputVal] = useDebouncedState(null, 200);
   const [loading, setLoading] = useState(false);
+  const [authorFollowed, setAuthorFollowed] = useState([]);
 
   /**
    *
@@ -33,6 +33,32 @@ const TagsPage = ({ tagsArr }) => {
    *
    */
 
+  useEffect(() => {
+    getTags();
+  }, [session]);
+
+  const getTags = async () => {
+    if (session && session.user) {
+      const { error: error2, data: data2 } = await supabaseClient
+        .from("authors")
+        .select(
+          `
+      tags (
+        title
+      )
+      `
+        )
+        .eq("id", session.user.id);
+      var followedTags = [];
+      //@ts-ignore
+      if (data2[0].tags && data2[0].tags.length > 0) {
+        //@ts-ignore
+        data2[0].tags.map((mapped) => followedTags.push(mapped.title));
+        setAuthorFollowed(followedTags);
+      }
+    }
+  };
+
   const searchTags = async (deferred) => {
     setTags([]);
 
@@ -41,7 +67,9 @@ const TagsPage = ({ tagsArr }) => {
       .select(
         `
       title,
-      articles!inner(id),
+      articles!inner(
+        id
+        ),
       icon,
       color,
       id`,
@@ -49,14 +77,14 @@ const TagsPage = ({ tagsArr }) => {
           count: "exact",
         }
       )
-      .ilike("title", `%${deferred}%`)
-      .select();
+      .ilike("title", `%${deferred}%`);
 
     var tagsArr = [];
     data.map((mapped) =>
       tagsArr.push({
         id: mapped.id,
         title: mapped.title,
+        //@ts-ignore
         articleCount: mapped.articles.length,
         icon: mapped.icon,
         color: mapped.color,
@@ -78,48 +106,6 @@ const TagsPage = ({ tagsArr }) => {
    *  until Supabase v2 release
    *
    */
-
-  const getTags = async () => {
-    // setLoading(true);
-    // const { error, data } = await supabaseClient
-    //   .from("tags")
-    //   .select(
-    //     `
-    //   title,
-    //   id
-    //   `
-    //   )
-    //   .range(tags.length, tags.length + 20)
-    //   .limit(20);
-    if (session && session.user) {
-      const { error: error2, data: data2 } = await supabaseClient
-        .from("authors")
-        .select(
-          `
-      tags (
-        title
-      )
-      `
-        )
-        .eq("id", session.user.id);
-      var followedTags = [];
-      //@ts-ignore
-      if (data2[0].tags && data2[0].tags.length > 0) {
-        //@ts-ignore
-        data2[0].tags.map((mapped) => followedTags.push(mapped.title));
-        setAuthorFollowed(followedTags);
-      }
-    }
-    // var tagsArr = [...tags];
-    // data.map((mapped) => tagsArr.push(mapped));
-    // setTags(tagsArr);
-    // setLoading(false);
-  };
-
-  useEffect(() => {
-    // setLoading(true);
-    getTags();
-  }, [session]);
 
   /**
    *
@@ -159,87 +145,55 @@ const TagsPage = ({ tagsArr }) => {
           placeholder="e.g react-js"
         />
         <Grid gutter="xl">
-          <Suspense
-            fallback={
-              <Fragment>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-              </Fragment>
-            }
-          >
-            {!loading ? (
-              tags.map((mapped, index) => (
-                <Grid.Col key={"alock" + index} span={12} xs={6} sm={4} lg={3}>
-                  <TagComponent
-                    icon={mapped.icon}
-                    IconName={
-                      mapped.title == "programming"
-                        ? IconCode
-                        : mapped.title == "editors-pick"
-                        ? IconPencil
-                        : null
-                    }
-                    color={mapped.color ? mapped.color : "cyan"}
-                    count={mapped.articleCount}
-                    setAuthorFollowed={setAuthorFollowed}
-                    id={mapped.id}
-                    authorTags={authorFollowed}
-                    title={mapped.title}
-                    user={session && session.user}
-                  />
-                </Grid.Col>
-              ))
-            ) : (
-              <Fragment>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-                <Grid.Col span={12} xs={6} sm={4} lg={3}>
-                  <Skeleton className="aspect-square" />
-                </Grid.Col>
-              </Fragment>
-            )}
-          </Suspense>
+          {!loading ? (
+            tags.map((mapped, index) => (
+              <Grid.Col key={"alock" + index} span={12} xs={6} sm={4} lg={3}>
+                <TagComponent
+                  authorFollowed={authorFollowed}
+                  icon={mapped.icon}
+                  IconName={
+                    mapped.title == "programming"
+                      ? IconCode
+                      : mapped.title == "editors-pick"
+                      ? IconPencil
+                      : null
+                  }
+                  color={mapped.color ? mapped.color : "cyan"}
+                  count={mapped.articleCount}
+                  id={mapped.id}
+                  title={mapped.title}
+                  user={session && session.user}
+                />
+              </Grid.Col>
+            ))
+          ) : (
+            <Fragment>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+              <Grid.Col span={12} xs={6} sm={4} lg={3}>
+                <Skeleton className="aspect-square" />
+              </Grid.Col>
+            </Fragment>
+          )}
         </Grid>
       </Card>
     </AppWrapper>

@@ -1153,7 +1153,7 @@ export const getStaticProps = async (ctx) => {
       dp,
       bio,
       cover,
-      articles (
+      articles!articles_author_id_fkey (
         created_at,
         author_id,
         id,

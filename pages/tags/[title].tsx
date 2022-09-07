@@ -1,13 +1,29 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
+  ActionIcon,
   Avatar,
   Button,
   Center,
+  Group,
   Loader,
+  Menu,
   Stack,
   Text,
+  ThemeIcon,
+  Tooltip,
+  useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { IconBell, IconHash, IconNews } from "@tabler/icons";
+import {
+  IconArrowLeft,
+  IconBell,
+  IconBellOff,
+  IconBellPlus,
+  IconBellRinging,
+  IconChevronDown,
+  IconHash,
+  IconNews,
+} from "@tabler/icons";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import HorizontalGridCard, {
@@ -20,12 +36,43 @@ import Custom404 from "../404";
 import Custom500 from "../500";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
+import Unauthorized from "../../public/401.svg";
+import { closeAllModals, openModal } from "@mantine/modals";
+import { NextLink } from "@mantine/next";
 
 const ArticleTagPage = ({ taga, articles }) => {
   const theme = useMantineTheme();
   const [data, setData] = useState(articles);
   const router = useRouter();
   const { isLoading, session, error, supabaseClient } = useSessionContext();
+  const [authorFollowed, setAuthorFollowed] = useState([]);
+  const { colorScheme } = useMantineColorScheme();
+
+  useEffect(() => {
+    getTags();
+  }, [session]);
+
+  const getTags = async () => {
+    if (session && session.user) {
+      const { error: error2, data: data2 } = await supabaseClient
+        .from("authors")
+        .select(
+          `
+      tags (
+        title
+      )
+      `
+        )
+        .eq("id", session.user.id);
+      var followedTags = [];
+      //@ts-ignore
+      if (data2[0].tags && data2[0].tags.length > 0) {
+        //@ts-ignore
+        data2[0].tags.map((mapped) => followedTags.push(mapped.title));
+        setAuthorFollowed(followedTags);
+      }
+    }
+  };
 
   const getMoreArticles = async () => {
     const {
@@ -100,19 +147,139 @@ const ArticleTagPage = ({ taga, articles }) => {
         <Text weight={700} size="xl" className="text-center uppercase">
           {taga.title}
         </Text>
+        <Group>
+          <Button
+            onClick={() => router.back()}
+            color="gray"
+            variant="subtle"
+            leftIcon={<IconArrowLeft size={16} />}
+            radius="xl"
+          >
+            Go back
+          </Button>
+          <Menu
+            styles={{
+              dropdown: {
+                width: 220,
+              },
+            }}
+            position="bottom"
+          >
+            <Menu.Target>
+              {authorFollowed.includes(taga.title) ? (
+                <Button
+                  leftIcon={<IconBellRinging size={18} />}
+                  variant="light"
+                  radius="xl"
+                  color="teal"
+                  rightIcon={<IconChevronDown size={14} />}
+                >
+                  Following
+                </Button>
+              ) : (
+                <Tooltip label="follow tag">
+                  <Button
+                    onClick={async () => {
+                      if (session.user) {
+                        const { data } = await supabaseClient
+                          .from("author_followed_tags")
+                          .insert({
+                            tag_id: taga.id,
+                            author_id: session.user.id,
+                          })
+                          .select();
 
-        {/* 
-        
-        // Deprecated till supabase V2 upgrade
+                        if (data) {
+                          var newArr = [...authorFollowed];
+                          newArr.push(taga.title);
 
-        <Button
-          leftIcon={<IconBell size={20} />}
-          color={`${tag.color}`}
-          variant="light"
-          radius="xl"
-        >
-          Follow
-        </Button> */}
+                          setAuthorFollowed(newArr);
+                        }
+                      } else {
+                        openModal({
+                          title: "Unauthorised",
+                          children: (
+                            <Stack spacing={4} align="center">
+                              <Image
+                                src={Unauthorized}
+                                height={200}
+                                width={200}
+                                alt=""
+                              />
+                              <Text weight={600}>Ooops - Can&apos;t do it</Text>
+                              <Text size="sm" color="dimmed">
+                                You need to be signed in to follow tags
+                              </Text>
+                              <Button
+                                mt="xs"
+                                color="blue"
+                                fullWidth
+                                component={NextLink}
+                                onClick={() => {
+                                  closeAllModals();
+                                }}
+                                href="/get-started"
+                              >
+                                Sign in
+                              </Button>
+                            </Stack>
+                          ),
+                        });
+                      }
+                    }}
+                    color="blue"
+                    variant="light"
+                    radius="xl"
+                    leftIcon={<IconBell size={18} />}
+                  >
+                    Follow
+                  </Button>
+                </Tooltip>
+              )}
+            </Menu.Target>
+            {authorFollowed.includes(taga.title) ? (
+              <Menu.Dropdown>
+                <Menu.Item
+                  sx={(theme) => ({
+                    background:
+                      colorScheme == "dark"
+                        ? theme.colors.dark[6]
+                        : theme.colors.gray[1],
+                    fontWeight: colorScheme == "dark" ? 600 : 400,
+                    "&:hover": {
+                      background: theme.colors.red[6],
+                      color: theme.white,
+                      fontWeight: 400,
+                    },
+                  })}
+                  icon={
+                    <ThemeIcon size="sm" variant="light" color="red">
+                      <IconBellOff size={16} />
+                    </ThemeIcon>
+                  }
+                  color="red"
+                  onClick={async () => {
+                    const { data, error } = await supabaseClient
+                      .from("author_followed_tags")
+                      .delete()
+                      .eq("tag_id", taga.id);
+
+                    if (!error) {
+                      const index = authorFollowed.indexOf(taga.title);
+
+                      const newArr = [...authorFollowed];
+                      newArr.splice(index, 1);
+                      setAuthorFollowed(newArr);
+                    }
+                  }}
+                >
+                  Unfollow
+                </Menu.Item>
+              </Menu.Dropdown>
+            ) : null}
+          </Menu>
+        </Group>
+
         <InfiniteScroll
           threshold={50}
           pageStart={0}

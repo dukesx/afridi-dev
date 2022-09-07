@@ -180,74 +180,6 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
     <Fragment>
       <AppWrapper activeHeaderKey="home" size={1600}>
         {/**
-         *  Grid Starts
-         *
-         */}
-        {/* <Card withBorder className={classes.wrapper}>
-          <Grid className="mt-2" align="stretch" justify="center" gutter="xl">
-            <Grid.Col xs={6} sm={6} md={4}>
-              <LargeGridCard data={data ? data[0] : null} theme={theme} />
-            </Grid.Col>
-            <Grid.Col xs={6} sm={6} md={4}>
-              <Stack spacing={25}>
-                <Stack spacing={9}>
-                  <Title className="text-center" order={2}>
-                    <IconStar
-                      className="mr-3 align-[-2px]"
-                      fill={theme.colors.orange[4]}
-                      color={theme.colors.orange[4]}
-                    />
-                    Freshly Published
-                  </Title>
-                  <Divider color="orange" />
-                </Stack>
-
-                {data ? (
-                  data.map((mapped, index) => {
-                    if (index !== 0 && index !== data.length - 1 && index < 5) {
-                      return (
-                        <HorizontalGridCard
-                          key={"horizon" + index}
-                          style={CardStyle.DEFAULT}
-                          theme={theme}
-                          data={mapped}
-                        />
-                      );
-                    }
-                  })
-                ) : (
-                  <Stack>
-                    <HorizontalGridCardSkeleton />
-                    <HorizontalGridCardSkeleton />
-                    <HorizontalGridCardSkeleton />
-                    <HorizontalGridCardSkeleton />
-                  </Stack>
-                )}
-              </Stack>
-            </Grid.Col>
-            <MediaQuery
-              smallerThan="md"
-              styles={{
-                display: "none",
-              }}
-            >
-              <Grid.Col sm={4} md={4}>
-                <LargeGridCard
-                  className="max-w-[608px] mx-auto"
-                  theme={theme}
-                  data={data ? data[data.length - 1] : null}
-                />
-              </Grid.Col>
-            </MediaQuery>
-          </Grid>
-        </Card> */}
-
-        {/**
-         *
-         * Grid Ends
-         */}
-
-        {/**
          *  Feed + Sidebar
          *
          */}
@@ -358,41 +290,6 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
 export default LandingPage;
 
 export const getStaticProps = async (ctx) => {
-  const {
-    error,
-    data: feedData,
-    count: feedDataCount,
-  } = await supabase
-    .from("articles")
-    .select(
-      `
-                  id,
-                  title,
-                  description,
-                  cover,
-                  authors (
-                    dp,
-                    firstName,
-                    lastName
-                  ),
-                  co_authors_articles (
-                    authors (
-                      dp,
-                      firstName,
-                      lastName
-                    )
-                  )
-                `,
-      {
-        count: "exact",
-      }
-    )
-    .range(0, 10)
-    .limit(10)
-    .order("created_at", {
-      ascending: false,
-    });
-
   const { error: mustReadsError, data: mustReadsData } = await supabase
     .from("articles")
     .select(
@@ -402,7 +299,7 @@ export const getStaticProps = async (ctx) => {
         description,
         cover,
         body,
-        authors (
+        authors!articles_author_id_fkey  (
             id,
             firstName,
             lastName,
@@ -415,11 +312,11 @@ export const getStaticProps = async (ctx) => {
             lastName,
             dp
         )
-        )
-       
+        ),
+        tags!inner(*)
         `
     )
-    .contains("article_tags", ["must-reads"])
+    .eq("tags.title", "must-reads")
     .order("created_at", {
       ascending: false,
     })
@@ -442,26 +339,18 @@ export const getStaticProps = async (ctx) => {
         description,
         cover,
         body,
-        authors (
+        authors!articles_author_id_fkey (
             id,
             firstName,
             lastName,
             dp
         ),
-        co_authors_articles (
-        authors (
-            id,
-            firstName,
-            lastName,
-            dp
-        )
-        )
-      
+        tags!inner(title)
         `
     )
     .lte("created_at", date.toUTCString())
     .gte("created_at", date2.toUTCString())
-    .contains("article_tags", ["top"])
+    .eq("tags.title", "top")
     .order("created_at", {
       ascending: false,
     })
@@ -469,10 +358,8 @@ export const getStaticProps = async (ctx) => {
 
   return {
     props: {
-      feedData: feedData,
       mustReads: mustReadsData,
       top: topData,
-      feedDataCount: feedDataCount,
     },
   };
 };

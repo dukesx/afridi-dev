@@ -131,59 +131,59 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
         <Tabs.List grow position="center">
           <Tabs.Tab
             icon={
-              // user ? (
-              //   <Indicator
-              //     // offset={40}
-              //     position="top-end"
-              //     size={21}
-              //     radius="xl"
-              //     styles={{
-              //       indicator: {
-              //         padding: 0,
-              //         border: 0,
-              //         backgroundColor: "transparent",
-              //       },
-              //       root: {
-              //         border: 0,
-              //       },
-              //     }}
-              //     className="rounded-full"
-              //     label={
-              //       <Tooltip label="Filtered by tags you follow">
-              //         <ThemeIcon
-              //           variant="light"
-              //           color="teal"
-              //           radius="xl"
-              //           size={30}
-              //         >
-              //           <IconHash strokeWidth={2} size={16} />
-              //         </ThemeIcon>
-              //       </Tooltip>
-              //     }
-              //   >
-              //     <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
-              //       <IconHandRock
-              //         fill={
-              //           colorScheme == "dark"
-              //             ? theme.colors.blue[5]
-              //             : theme.colors.blue[2]
-              //         }
-              //         strokeWidth={1.5}
-              //       />
-              //     </ThemeIcon>
-              //   </Indicator>
-              // ) : (
-              <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
-                <IconHandRock
-                  fill={
-                    colorScheme == "dark"
-                      ? theme.colors.blue[5]
-                      : theme.colors.blue[2]
+              session && session.user ? (
+                <Indicator
+                  // offset={40}
+                  position="top-end"
+                  size={21}
+                  radius="xl"
+                  styles={{
+                    indicator: {
+                      padding: 0,
+                      border: 0,
+                      backgroundColor: "transparent",
+                    },
+                    root: {
+                      border: 0,
+                    },
+                  }}
+                  className="rounded-full"
+                  label={
+                    <Tooltip label="Filtered by tags you follow">
+                      <ThemeIcon
+                        variant="light"
+                        color="teal"
+                        radius="xl"
+                        size={30}
+                      >
+                        <IconHash strokeWidth={2} size={16} />
+                      </ThemeIcon>
+                    </Tooltip>
                   }
-                  strokeWidth={1.5}
-                />
-              </ThemeIcon>
-              // )
+                >
+                  <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
+                    <IconHandRock
+                      fill={
+                        colorScheme == "dark"
+                          ? theme.colors.blue[5]
+                          : theme.colors.blue[2]
+                      }
+                      strokeWidth={1.5}
+                    />
+                  </ThemeIcon>
+                </Indicator>
+              ) : (
+                <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
+                  <IconHandRock
+                    fill={
+                      colorScheme == "dark"
+                        ? theme.colors.blue[5]
+                        : theme.colors.blue[2]
+                    }
+                    strokeWidth={1.5}
+                  />
+                </ThemeIcon>
+              )
             }
             value="feed"
           >
