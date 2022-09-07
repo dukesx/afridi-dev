@@ -1,9 +1,6 @@
 // pages/api/revalidate.js
 
-import {
-  withApiAuth,
-  supabaseServerClient,
-} from "@supabase/auth-helpers-nextjs";
+import { withApiAuth } from "@supabase/auth-helpers-nextjs";
 
 export default withApiAuth(async function ProtectedRoute(req, res) {
   const { path } = req.body;
