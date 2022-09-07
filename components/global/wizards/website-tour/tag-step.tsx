@@ -10,7 +10,8 @@ import {
 } from "@mantine/core";
 import { getFloatingPosition } from "@mantine/core/lib/Floating";
 import { useForm } from "@mantine/form";
-import { supabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { type User } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { IconArrowLeft } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import { forbidden_tags } from "../../../../data/static/forbidden_tags";
@@ -23,6 +24,7 @@ export interface WelcomeWizardStepProps {
 }
 
 const TagPickingStep = ({ setStep, step, user }: WelcomeWizardStepProps) => {
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const [step3Loading, setStep3Loading] = useState(false);
   const [tagsLoading, setTagsLoading] = useState(false);
   const form2 = useForm({

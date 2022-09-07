@@ -16,9 +16,7 @@ import { NextLink } from "@mantine/next";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
   IconArrowDown,
-  IconArticle,
   IconBulb,
-  IconCaretDown,
   IconChecklist,
   IconChevronDown,
   IconChevronRight,
@@ -29,7 +27,6 @@ import {
   IconLogout,
   IconMoon,
   IconPencil,
-  IconPencilPlus,
   IconScale,
   IconSettings,
   IconSmartHome,
@@ -43,7 +40,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import { GeneralStore } from "../../data/static/store";
 import PublishArticle from "../../public/publish-article.svg";
-import { getFeedArticles } from "./feed/functions";
 
 interface GlobalHeaderProps {
   activeHeaderKey: string;

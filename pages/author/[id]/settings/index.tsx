@@ -27,7 +27,7 @@ import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
-import { MarkDownEditor } from "../../../../components/global/editorCaller";
+import { MarkDownEditor } from "../../../../components/global/editor/editorCaller";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();

@@ -20,14 +20,8 @@ import {
   IconEye,
   IconEyeCheck,
   IconEyeOff,
-  IconBrandReact,
-  IconBrandAngular,
-  IconBrandSvelte,
-  IconRadar,
   TablerIcon,
   IconHash,
-  IconTag,
-  IconNews,
 } from "@tabler/icons";
 import Image from "next/image";
 import Unauthorized from "../../../public/401.svg";

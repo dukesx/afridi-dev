@@ -7,7 +7,6 @@ import {
   createStyles,
   Skeleton,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { NextLink } from "@mantine/next";
 import { AfridiDevAuthor } from "../../article/sidebar";
 import AfridiImage from "../afridi-image";

@@ -1,6 +1,6 @@
 import { Button, Stack, Text } from "@mantine/core";
 import { closeAllModals } from "@mantine/modals";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useState } from "react";
 import { GeneralStore } from "../../../../data/static/store";
 import { getFeedArticles } from "../../feed/functions";
@@ -8,6 +8,8 @@ import { WelcomeWizardStepProps } from "./tag-step";
 
 const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
   const [step4Loading, setStep4Loading] = useState(false);
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
+
   //
   //
   //

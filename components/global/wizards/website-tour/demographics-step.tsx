@@ -1,10 +1,10 @@
 import { Button, Group, Select, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { supabaseClient } from "@supabase/auth-helpers-nextjs";
 import { forwardRef, useState } from "react";
 import { WelcomeWizardStepProps } from "./tag-step";
 import { countries } from "../../../../data/static/countries";
 import { IconArrowLeft } from "@tabler/icons";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 
 const DemographicsStep = ({
   step,
@@ -12,6 +12,7 @@ const DemographicsStep = ({
   user,
   theme,
 }: WelcomeWizardStepProps) => {
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const [step2Loading, setStep2Loading] = useState(false);
   const form = useForm({
     initialValues: {

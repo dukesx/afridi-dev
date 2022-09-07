@@ -47,7 +47,7 @@ import { showNotification } from "@mantine/notifications";
 import ImageUploader, {
   ImageUploaderType,
 } from "../../../components/global/image_uploader";
-import { MarkDownEditor } from "../../../components/global/editorCaller";
+import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
 import MarkDownRenderer from "../../../components/global/markdown-renderer";
 import { openConfirmModal } from "@mantine/modals";
 import { formatDistanceToNow, parseISO } from "date-fns";

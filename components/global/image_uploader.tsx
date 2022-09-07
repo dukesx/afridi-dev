@@ -8,7 +8,8 @@ import {
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { showNotification } from "@mantine/notifications";
-import { supabaseClient, type User } from "@supabase/auth-helpers-nextjs";
+import { type User } from "@supabase/auth-helpers-nextjs";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { IconCheck, IconUpload, IconX } from "@tabler/icons";
 import React, { useState, type MutableRefObject, type ReactNode } from "react";
 
@@ -43,6 +44,7 @@ const ImageUploader = ({
   py,
   type,
 }: ImageUploaderProps) => {
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const [reject, setReject] = useState(false);
   const [loading, setLoading] = useState(false);
   return (
