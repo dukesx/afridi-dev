@@ -5,8 +5,18 @@ import {
   Text,
   Card,
   Skeleton,
+  ThemeIcon,
+  ActionIcon,
+  useMantineColorScheme,
+  Tooltip,
+  Indicator,
+  Divider,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
+import { useSessionContext } from "@supabase/auth-helpers-react";
+import { IconBookmark, IconBookmarks } from "@tabler/icons";
+import { Fragment } from "react";
+import { supabase } from "../../../utils/supabaseClient";
 import AfridiImage from "../afridi-image";
 import { AfridiDevArticle } from "./largeGridCard";
 
@@ -21,13 +31,21 @@ interface HorizontalGridCardProps {
   style: CardStyle;
   data: AfridiDevArticle;
   coverClassName?: string;
+  bookmarks?: Array<any>;
+  setBookmarks?: Function;
+  appreciations?: Array<any>;
 }
 const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   theme,
   style,
   data,
   coverClassName,
+  setBookmarks,
+  bookmarks,
+  appreciations,
 }) => {
+  const { colorScheme } = useMantineColorScheme();
+  const { session } = useSessionContext();
   return data ? (
     <Group noWrap className="w-full">
       <AfridiImage
@@ -71,6 +89,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
         >
           {data.title}
         </Text>
+
         <Text
           lineClamp={2}
           className="text-xs xs:text-xs"
@@ -79,6 +98,97 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
         >
           {data.description}
         </Text>
+        <Group>
+          {session && bookmarks && bookmarks.includes(data.id) ? (
+            <Tooltip label="bookmarked">
+              <ActionIcon
+                onClick={async () => {
+                  const { error } = await supabase
+                    .from("bookmarks")
+                    .delete()
+                    .match({
+                      author_id: session.user.id,
+                      article_id: data.id,
+                    });
+
+                  if (!error) {
+                    var bookmarksArr = [...bookmarks];
+                    var newBookmarks = bookmarksArr.filter(
+                      (mapped) => mapped !== data.id
+                    );
+                    setBookmarks(newBookmarks);
+                  }
+                }}
+                color="gray"
+                size="md"
+                variant="light"
+                radius="xl"
+              >
+                <IconBookmark
+                  fill={
+                    colorScheme == "dark"
+                      ? theme.colors.gray[6]
+                      : theme.colors.gray[4]
+                  }
+                  size={18}
+                />
+              </ActionIcon>
+            </Tooltip>
+          ) : session && bookmarks ? (
+            <Tooltip label="bookmark this">
+              <ActionIcon
+                onClick={async () => {
+                  const { error } = await supabase.from("bookmarks").insert({
+                    article_id: data.id,
+                    author_id: session.user.id,
+                  });
+
+                  if (!error) {
+                    var bookmarksArr = [...bookmarks];
+                    bookmarksArr.push(data.id);
+                    setBookmarks(bookmarksArr);
+                  }
+                }}
+                color="gray"
+                size="md"
+                variant="light"
+                radius="xl"
+              >
+                <IconBookmark fill={"transparent"} size={18} />
+              </ActionIcon>
+            </Tooltip>
+          ) : null}
+
+          {appreciations && appreciations.length > 0 ? (
+            <Fragment>
+              <Divider
+                className="h-[14px] align-middle my-auto"
+                orientation="vertical"
+                size={1}
+              />
+              <Tooltip
+                label={`${appreciations.length} ${
+                  appreciations.length > 1 ? "people" : "person"
+                } appreciated it`}
+              >
+                <Group spacing="xs">
+                  <ThemeIcon
+                    radius="xl"
+                    color="yellow"
+                    size="md"
+                    variant="light"
+                  >
+                    <Text size="sm">👏</Text>
+                  </ThemeIcon>
+
+                  <Text color="dimmed" weight={700} size="xs">
+                    {appreciations.length}
+                  </Text>
+                </Group>
+              </Tooltip>
+            </Fragment>
+          ) : null}
+        </Group>
       </Stack>
     </Group>
   ) : null;

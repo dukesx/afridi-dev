@@ -64,6 +64,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
   const [feedData, setFeedData] = useState<any>();
   const [articleCount, setArticleCount] = useState(feedDataCount);
   const [feedLoading, setFeedLoading] = useState(false);
+  const [userBookmarks, setUserBookmarks] = useState([]);
   //
   //
   //
@@ -77,6 +78,25 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
    *
    *
    */
+
+  const getUserBookmarks = async () => {
+    const { data, error } = await supabaseClient
+      .from("authors")
+      .select(
+        `
+      bookmarks (
+        article_id
+      )
+    `
+      )
+      .eq("id", session.user.id);
+    console.log(data[0]);
+    var bookmarksArray = [];
+    //@ts-ignore
+    data[0].bookmarks.map((mapped) => bookmarksArray.push(mapped.article_id));
+    //@ts-ignore
+    setUserBookmarks(bookmarksArray);
+  };
 
   const getFeed = async () => {
     switch (key) {
@@ -113,6 +133,9 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
     if (isLoading == false) {
       setFeedLoading(true);
       getFeed();
+      if (session) {
+        getUserBookmarks();
+      }
     }
   }, [key, isLoading]);
 
@@ -248,6 +271,9 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                   >
                     {feedData.map((mapped, index) => (
                       <HorizontalGridCard
+                        appreciations={mapped.appreciations}
+                        setBookmarks={setUserBookmarks}
+                        bookmarks={userBookmarks}
                         key={"aloba" + index}
                         data={mapped}
                         style={CardStyle.FEED}
@@ -296,6 +322,8 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 <Stack spacing="xl" mb="xl" align="center">
                   {trendingData.map((mapped, index) => (
                     <HorizontalGridCard
+                      setBookmarks={setUserBookmarks}
+                      bookmarks={userBookmarks}
                       key={"aloban" + index}
                       data={mapped}
                       style={CardStyle.FEED}
@@ -343,6 +371,8 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 <Stack spacing="xl" mb="xl" align="center">
                   {popularData.map((mapped, index) => (
                     <HorizontalGridCard
+                      setBookmarks={setUserBookmarks}
+                      bookmarks={userBookmarks}
                       key={"alobis" + index}
                       data={mapped}
                       style={CardStyle.FEED}

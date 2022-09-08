@@ -381,6 +381,7 @@ const Article = ({ article, tags }) => {
             }
           >
             <ArticleSidebar
+              id={data.id}
               data={data}
               flipSidebarOrientation={flipSidebarOrientation}
               setFlipSidebarOrientation={setFlipSidebarOrientation}

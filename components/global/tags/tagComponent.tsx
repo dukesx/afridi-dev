@@ -46,14 +46,31 @@ const TagComponent = ({
   return (
     <Indicator
       disabled={authorFollowed.filter((mapped) => mapped == title).length == 0}
-      size={35}
+      size={40}
       withBorder
-      color={colorScheme == "dark" ? "dark.6" : "gray.1"}
+      className="rounded-full px-0"
       label={
-        <ThemeIcon size="md" radius="xl" color="blue" variant="filled">
-          <IconBellRinging size={16} />
-        </ThemeIcon>
+        <ActionIcon
+          className="mr-5"
+          size="xl"
+          radius="xl"
+          color="blue"
+          gradient={{
+            from: "blue.4",
+            to: "teal.4",
+          }}
+          variant={"gradient"}
+        >
+          <IconBellRinging size={20} />
+        </ActionIcon>
       }
+      styles={{
+        indicator: {
+          padding: "10px 0px",
+          background: "unset",
+          border: 0,
+        },
+      }}
     >
       <Card
         component={NextLink}

@@ -53,6 +53,10 @@ export const getFeedArticles = async ({
             id,
             firstName
           )
+          ),
+
+          appreciations (
+            id
           )
          `,
         { count: "exact" }
@@ -63,6 +67,8 @@ export const getFeedArticles = async ({
         ascending: false,
       })
       .range(data ? data.length : 0, data ? data.length + 9 : 9);
+
+    console.log(feedData);
     if (feedData && feedData.length > 0) {
       var articles = [];
       if (data) {
