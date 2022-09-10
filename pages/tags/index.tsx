@@ -222,7 +222,6 @@ export const getStaticProps = async () => {
     })
     .limit(100);
 
-  console.log(data);
   var tagsArr = [];
   data.map((mapped) =>
     tagsArr.push({

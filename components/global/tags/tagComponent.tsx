@@ -42,7 +42,6 @@ const TagComponent = ({
   authorFollowed,
 }: TagComponentProps) => {
   const { colorScheme } = useMantineColorScheme();
-  console.log(authorFollowed);
   return (
     <Indicator
       disabled={authorFollowed.filter((mapped) => mapped == title).length == 0}

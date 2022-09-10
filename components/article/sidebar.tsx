@@ -74,7 +74,6 @@ const ArticleSidebar = ({
     `
       )
       .eq("id", session.user.id);
-    console.log(data[0]);
     var bookmarksArray = [];
     //@ts-ignore
     data[0].bookmarks.map((mapped) => bookmarksArray.push(mapped.article_id));
