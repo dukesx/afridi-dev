@@ -11,10 +11,22 @@ import {
   Tooltip,
   Indicator,
   Divider,
+  Badge,
+  Avatar,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { IconBookmark, IconBookmarks } from "@tabler/icons";
+import {
+  IconAward,
+  IconBolt,
+  IconBookmark,
+  IconBookmarks,
+  IconCheck,
+  IconEye,
+  IconHeart,
+  IconPencil,
+  IconTrophy,
+} from "@tabler/icons";
 import { Fragment } from "react";
 import { supabase } from "../../../utils/supabaseClient";
 import AfridiImage from "../afridi-image";
@@ -44,6 +56,20 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   bookmarks,
   appreciations,
 }) => {
+  const awards = [
+    {
+      title: "trending",
+    },
+    {
+      title: "loved",
+    },
+    {
+      title: "editors-pick",
+    },
+    {
+      title: "community-choice",
+    },
+  ];
   const { colorScheme } = useMantineColorScheme();
   const { session } = useSessionContext();
   return data ? (
@@ -182,9 +208,56 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
                   </ThemeIcon>
 
                   <Text color="dimmed" weight={700} size="xs">
-                    {appreciations.length}
+                    {Intl.NumberFormat("en", {
+                      notation: "compact",
+                    }).format(appreciations.length)}
                   </Text>
                 </Group>
+              </Tooltip>
+            </Fragment>
+          ) : null}
+
+          {data.views ? (
+            <Fragment>
+              <Divider
+                className="h-[14px] align-middle my-auto"
+                orientation="vertical"
+                size={1}
+              />
+
+              <Group spacing="xs">
+                <ThemeIcon variant="light" size="md" color="gray" radius="xl">
+                  <IconEye size={16} />
+                </ThemeIcon>
+                <Text size="xs">
+                  {Intl.NumberFormat("en", { notation: "compact" }).format(
+                    data.views
+                  )}
+                </Text>
+              </Group>
+            </Fragment>
+          ) : null}
+
+          {data.editors_pick ? (
+            <Fragment>
+              <Divider
+                className="h-[14px] align-middle my-auto"
+                orientation="vertical"
+                size={1}
+              />
+              <Tooltip
+                label="Handpicked by the Editor 🤓"
+                position="bottom"
+                mb="xl"
+                ml="xl"
+              >
+                <Badge
+                  leftSection={<IconPencil className="align-sub" size={12} />}
+                  className="capitalize"
+                  size="sm"
+                >
+                  Editor&apos;s Pick
+                </Badge>
               </Tooltip>
             </Fragment>
           ) : null}

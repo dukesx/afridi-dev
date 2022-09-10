@@ -223,7 +223,7 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
             </Stack>
           </Grid.Col>
           <Grid.Col span={12} sm={5} xs={12} md={5}>
-            <div className="mx-5">
+            <div className="mx-0 sm:mx-5">
               <Suspense
                 fallback={
                   <Stack className="w-full h-full">

@@ -16,9 +16,12 @@ export type AfridiDevArticle = {
   id: string;
   title: string;
   description: string;
+  editors_pick?: boolean;
   cover: string;
   created_at?: string;
+  views?: number;
   authors: AfridiDevAuthor;
+  tags?: Array<any>;
   co_authors_articles: [
     {
       authors: AfridiDevAuthor;

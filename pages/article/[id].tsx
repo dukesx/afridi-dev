@@ -17,6 +17,7 @@ import {
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import {
+  IconAward,
   IconBolt,
   IconEdit,
   IconHeart,
@@ -48,21 +49,6 @@ const Article = ({ article, tags }) => {
     defaultValue: false,
   });
   const { isLoading, session, error, supabaseClient } = useSessionContext();
-
-  const awards = [
-    {
-      title: "trending",
-    },
-    {
-      title: "loved",
-    },
-    {
-      title: "editors-pick",
-    },
-    {
-      title: "community-choice",
-    },
-  ];
 
   const addViewCount = async () => {
     const { data, error } = await supabaseClient
@@ -135,28 +121,52 @@ const Article = ({ article, tags }) => {
                       <Skeleton height={40} className="w-full max-w-[400px]" />
                     </Stack>
                   )}
-                  {session && session.user ? (
-                    article.author_id == session.user.id ||
-                    (article.co_authors_articles.length > 0 &&
-                      article.co_authors_articles.filter(
-                        (mapped) => mapped.authors.id == session.user.id
-                      ).length > 0) ? (
-                      <Tooltip label="Edit article">
-                        <ActionIcon
-                          onClick={() =>
-                            router.push(`/article/edit/${article.id}`)
-                          }
+                  <Group>
+                    {session && session.user ? (
+                      article.author_id == session.user.id ||
+                      (article.co_authors_articles.length > 0 &&
+                        article.co_authors_articles.filter(
+                          (mapped) => mapped.authors.id == session.user.id
+                        ).length > 0) ? (
+                        <Tooltip label="Edit article">
+                          <ActionIcon
+                            radius="xl"
+                            onClick={() =>
+                              router.push(`/article/edit/${article.id}`)
+                            }
+                            mt="xl"
+                            size="xl"
+                            variant="light"
+                            color="indigo"
+                            className="align-middle"
+                          >
+                            <IconEdit size={20} />
+                          </ActionIcon>
+                        </Tooltip>
+                      ) : null
+                    ) : null}
+
+                    {data.editors_pick ? (
+                      <Tooltip
+                        label="Handpicked by the Editor 🤓"
+                        position="bottom"
+                        mb="xl"
+                        ml="xl"
+                      >
+                        <ThemeIcon
                           mt="xl"
-                          size="xl"
-                          variant="light"
-                          color="indigo"
                           className="align-middle"
+                          size="xl"
+                          radius="xl"
+                          color="cyan"
+                          variant="light"
                         >
-                          <IconEdit size={20} />
-                        </ActionIcon>
+                          {/* <IconPencil fill={theme.colors.blue[3]} size={18} /> */}
+                          <Text size="lg"> ✏️</Text>
+                        </ThemeIcon>
                       </Tooltip>
-                    ) : null
-                  ) : null}
+                    ) : null}
+                  </Group>
                 </Title>
 
                 <Text lineClamp={4} mt="xl" color="dimmed">
@@ -250,7 +260,7 @@ const Article = ({ article, tags }) => {
                     </Avatar.Group>
                   </Group>
                 ) : null}
-                {tags &&
+                {/* {tags &&
                 tags.filter((filtered) => {
                   if (
                     awards.filter((mapped) => mapped.title == filtered.title)
@@ -354,7 +364,7 @@ const Article = ({ article, tags }) => {
                       ) : null}
                     </Group>
                   </Group>
-                ) : null}
+                ) : null} */}
               </Stack>
             </Center>
           </Grid.Col>
@@ -413,6 +423,7 @@ export const getStaticProps = async (ctx) => {
         cover,
         body,
         views,
+        editors_pick,
         author_id,
         authors!articles_author_id_fkey (
             id,

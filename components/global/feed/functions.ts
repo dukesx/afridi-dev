@@ -34,7 +34,9 @@ export const getFeedArticles = async ({
               id,
                   title,
                   description,
+                  views,
                   cover,
+                  editors_pick,
                   authors!articles_author_id_fkey (
                     dp,
                     firstName,
@@ -54,7 +56,6 @@ export const getFeedArticles = async ({
             firstName
           )
           ),
-
           appreciations (
             id
           )
@@ -68,7 +69,6 @@ export const getFeedArticles = async ({
       })
       .range(data ? data.length : 0, data ? data.length + 9 : 9);
 
-    console.log(feedData);
     if (feedData && feedData.length > 0) {
       var articles = [];
       if (data) {
@@ -91,6 +91,8 @@ export const getFeedArticles = async ({
                   title,
                   description,
                   cover,
+                  editors_pick,
+                  views,
                   authors!articles_author_id_fkey (
                     dp,
                     firstName,
@@ -102,6 +104,9 @@ export const getFeedArticles = async ({
                       firstName,
                       lastName
                     )
+                  ),
+                appreciations (
+                id
                   )
                 `,
         {
