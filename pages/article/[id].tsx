@@ -148,21 +148,20 @@ const Article = ({ article, tags }) => {
 
                     {data.editors_pick ? (
                       <Tooltip
-                        label="Handpicked by the Editor 🤓"
+                        label="Editor's Choice 🤓"
                         position="bottom"
                         mb="xl"
                         ml="xl"
                       >
                         <ThemeIcon
+                          className="cursor-help"
                           mt="xl"
-                          className="align-middle"
                           size="xl"
-                          radius="xl"
-                          color="cyan"
                           variant="light"
+                          color="yellow"
+                          radius="xl"
                         >
-                          {/* <IconPencil fill={theme.colors.blue[3]} size={18} /> */}
-                          <Text size="lg"> ✏️</Text>
+                          <Text size="xl">👍‍</Text>
                         </ThemeIcon>
                       </Tooltip>
                     ) : null}

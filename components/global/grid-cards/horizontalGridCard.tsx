@@ -246,18 +246,14 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
                 size={1}
               />
               <Tooltip
-                label="Handpicked by the Editor 🤓"
+                label="Editor's Choice 🤓"
                 position="bottom"
                 mb="xl"
                 ml="xl"
               >
-                <Badge
-                  leftSection={<IconPencil className="align-sub" size={12} />}
-                  className="capitalize"
-                  size="sm"
-                >
-                  Editor&apos;s Pick
-                </Badge>
+                <ThemeIcon variant="light" color="yellow" radius="xl">
+                  <Text size="sm">👍‍</Text>
+                </ThemeIcon>
               </Tooltip>
             </Fragment>
           ) : null}
