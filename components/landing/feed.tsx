@@ -35,6 +35,7 @@ import {
 import EmptyPlaceholder from "../global/placeholders/empty";
 import { GeneralStore } from "../../data/static/store";
 import { AfridiDevArticle } from "../global/grid-cards/largeGridCard";
+import FeedLoader from "../global/skeletons/feedLoader";
 interface LandingFeedProps {
   theme: MantineTheme;
   prefetchedFeedData: Array<AfridiDevArticle>;
@@ -303,13 +304,11 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                     </Button>
                   </Stack>
                 </Center>
-              ) : null
+              ) : (
+                <FeedLoader />
+              )
             ) : (
-              <Stack className="w-full h-full">
-                <HorizontalGridCardSkeleton />
-                <HorizontalGridCardSkeleton />
-                <HorizontalGridCardSkeleton />
-              </Stack>
+              <FeedLoader />
             )}
           </Stack>
         </Tabs.Panel>
@@ -354,11 +353,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 </Center>
               )
             ) : (
-              <Stack className="w-full h-full">
-                <HorizontalGridCardSkeleton />
-                <HorizontalGridCardSkeleton />
-                <HorizontalGridCardSkeleton />
-              </Stack>
+              <FeedLoader />
             )}
           </Stack>
         </Tabs.Panel>
@@ -383,11 +378,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 <EmptyPlaceholder />
               )
             ) : (
-              <Stack className="w-full h-full">
-                <HorizontalGridCardSkeleton />
-                <HorizontalGridCardSkeleton />
-                <HorizontalGridCardSkeleton />
-              </Stack>
+              <FeedLoader />
             )}
           </Stack>
         </Tabs.Panel>

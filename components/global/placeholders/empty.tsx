@@ -1,22 +1,24 @@
 import { Stack, Text } from "@mantine/core";
 import Image from "next/image";
 import { Fragment } from "react";
-import EmptyImagePlaceholder from "../../../public/empty.svg";
+import EmptyImagePlaceholder from "../../../public/empty-2.svg";
 
 interface EmptyPlaceholderProps {
   title?: string;
   description?: string;
   height?: number;
+  image?: string | any;
 }
 
 const EmptyPlaceholder = ({
   title,
   description,
   height,
+  image,
 }: EmptyPlaceholderProps) => (
   <Stack align="center" spacing={0} className="w-full">
     <Image
-      src={EmptyImagePlaceholder}
+      src={image ? image : EmptyImagePlaceholder}
       alt="no data"
       height={height ? height : 300}
       width={400}

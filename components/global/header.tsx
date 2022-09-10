@@ -16,6 +16,7 @@ import { NextLink } from "@mantine/next";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
   IconArrowDown,
+  IconBookmarks,
   IconBulb,
   IconChecklist,
   IconChevronDown,
@@ -185,14 +186,14 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                  <Menu.Item
+                  {/* <Menu.Item
                     href="/authors"
                     component={NextLink}
                     icon={<IconUsers size={20} />}
                   >
                     <Text>Author&apos;s Listing</Text>
-                  </Menu.Item>
-                  <Menu.Item
+                  </Menu.Item> */}
+                  {/* <Menu.Item
                     component={NextLink}
                     href="/dazzle-me"
                     icon={
@@ -204,7 +205,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     }
                   >
                     Random Article
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Label>
                     <Text weight={600}>Legal</Text>
                   </Menu.Label>
@@ -351,6 +352,20 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                       icon={<IconUserCircle color={theme.colors.cyan[4]} />}
                     >
                       Profile
+                    </Menu.Item>
+                    <Menu.Item
+                      component={NextLink}
+                      href={`/author/${session.user.id}/bookmarks`}
+                      rightSection={
+                        <IconChevronRight
+                          className="align-middle"
+                          color={theme.colors.dark[1]}
+                          size={22}
+                        />
+                      }
+                      icon={<IconBookmarks color={theme.colors.gray[6]} />}
+                    >
+                      Bookmarks
                     </Menu.Item>
                     <Menu.Item
                       component={NextLink}

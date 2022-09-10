@@ -86,7 +86,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
             <ModalsProvider>
               <SessionContextProvider
                 supabaseClient={supabaseClient}
-                initialSession={pageProps ? pageProps.initialSession : {}}
+                initialSession={pageProps.initialSession}
               >
                 <Component {...pageProps} />
               </SessionContextProvider>
@@ -98,6 +98,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   );
 }
 
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie("afridi-dev-color-scheme", ctx) || "light",
-});
+// App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
+//   colorScheme: getCookie("afridi-dev-color-scheme", ctx) || "light",
+// });

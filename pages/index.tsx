@@ -19,12 +19,10 @@ import LandingFeed from "../components/landing/feed";
 import SquareHorizontalWidget from "../components/landing/widgets/square-horizontal";
 import HorizontalGridCardSkeleton from "../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import { supabase } from "../utils/supabaseClient";
+import FeedLoader from "../components/global/skeletons/feedLoader";
 
 const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
   const theme = useMantineTheme();
-  // const [data, setData] = useState(null);
-  // const [mustReads, setMustReads] = useState(null);
-  // const [monthsTop, setMonthsTop] = useState(null);
 
   const largeCardClass = createStyles((theme, _params, getRef) => ({
     wrapper: {
@@ -45,126 +43,6 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
       },
     },
   }));
-
-  // const getArticle = async () => {
-  //   const { error, data } = await supabaseClient
-  //     .from("articles")
-  //     .select(
-  //       `
-  //       id,
-  //       title,
-  //       description,
-  //       cover,
-  //       body,
-  //       authors (
-  //           id,
-  //           firstName,
-  //           lastName,
-  //           dp
-  //       ),
-  //       co_authors_articles (
-  //       authors (
-  //           id,
-  //           firstName,
-  //           lastName,
-  //           dp
-  //       )
-  //       )
-  //       `
-  //     )
-  //     .order("created_at", {
-  //       ascending: false,
-  //     })
-  //     .limit(6);
-  //   setData(data);
-  // };
-
-  // const getMonthsTop = async () => {
-  //   var date = new Date();
-  //   var date2 = new Date();
-  //   //
-  //   //
-  //   date.setMonth(date.getMonth());
-  //   date2.setMonth(date2.getMonth() - 1);
-  //   //
-  //   //
-  //   const { error, data } = await supabaseClient
-  //     .from("articles")
-  //     .select(
-  //       `
-  //       id,
-  //       title,
-  //       description,
-  //       cover,
-  //       body,
-  //       authors (
-  //           id,
-  //           firstName,
-  //           lastName,
-  //           dp
-  //       ),
-  //       co_authors_articles (
-  //       authors (
-  //           id,
-  //           firstName,
-  //           lastName,
-  //           dp
-  //       )
-  //       )
-
-  //       `
-  //     )
-  //     .lte("created_at", date.toUTCString())
-  //     .gte("created_at", date2.toUTCString())
-  //     .contains("article_tags", ["top"])
-  //     .order("created_at", {
-  //       ascending: false,
-  //     })
-  //     .limit(3);
-
-  //   setMonthsTop(data);
-  // };
-
-  // const getMustReads = async () => {
-  //   const { error, data } = await supabaseClient
-  //     .from("articles")
-  //     .select(
-  //       `
-  //       id,
-  //       title,
-  //       description,
-  //       cover,
-  //       body,
-  //       authors (
-  //           id,
-  //           firstName,
-  //           lastName,
-  //           dp
-  //       ),
-  //       co_authors_articles (
-  //       authors (
-  //           id,
-  //           firstName,
-  //           lastName,
-  //           dp
-  //       )
-  //       )
-
-  //       `
-  //     )
-  //     .contains("article_tags", ["must-reads"])
-  //     .order("created_at", {
-  //       ascending: false,
-  //     })
-  //     .limit(3);
-  //   setMustReads(data);
-  // };
-
-  // useEffect(() => {
-  //   getArticle();
-  //   getMustReads();
-  //   getMonthsTop();
-  // }, []);
 
   /**
    *
@@ -224,15 +102,7 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
           </Grid.Col>
           <Grid.Col span={12} sm={5} xs={12} md={5}>
             <div className="mx-0 sm:mx-5">
-              <Suspense
-                fallback={
-                  <Stack className="w-full h-full">
-                    <HorizontalGridCardSkeleton />
-                    <HorizontalGridCardSkeleton />
-                    <HorizontalGridCardSkeleton />
-                  </Stack>
-                }
-              >
+              <Suspense fallback={<FeedLoader />}>
                 <LandingFeed
                   prefetchedFeedData={feedData}
                   feedDataCount={feedDataCount}

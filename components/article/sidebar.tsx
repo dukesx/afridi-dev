@@ -311,15 +311,6 @@ const ArticleSidebar = ({
                           " " +
                           mapped.authors.lastName}
                       </Text>
-
-                      {/* <Button
-                        className="px-0 w-[120px] mx-auto"
-                        rightIcon={<IconBellRinging size={18} />}
-                        size="xs"
-                        radius="xl"
-                      >
-                        Subscribe
-                      </Button> */}
                     </Stack>
                   </Grid.Col>
                 ))
@@ -363,15 +354,6 @@ const ArticleSidebar = ({
           />
         </Group>
       </Card>
-      <Suspense>
-        <SquareHorizontalWidget
-          theme={theme}
-          icon={"✅"}
-          title="Similar Articles"
-          color="indigo"
-          data={[]}
-        />
-      </Suspense>
     </Fragment>
   );
 };

@@ -259,111 +259,6 @@ const Article = ({ article, tags }) => {
                     </Avatar.Group>
                   </Group>
                 ) : null}
-                {/* {tags &&
-                tags.filter((filtered) => {
-                  if (
-                    awards.filter((mapped) => mapped.title == filtered.title)
-                      .length > 0
-                  ) {
-                    return filtered;
-                  }
-                }).length > 0 ? (
-                  <Group>
-                    <Text size="sm" weight={600} color="dimmed">
-                      Awards:
-                    </Text>
-                    <Group className="h-full" spacing="xs">
-                      {tags.filter((mapped) => mapped.title == "trending")
-                        .length > 0 ? (
-                        <Tooltip
-                          label="Trending 💪"
-                          position="bottom"
-                          mb="xl"
-                          ml="xl"
-                        >
-                          <ThemeIcon
-                            size="xl"
-                            radius="xl"
-                            variant="gradient"
-                            gradient={{
-                              from: "blue",
-                              to: "indigo",
-                            }}
-                          >
-                            <IconBolt size={20} />
-                          </ThemeIcon>
-                        </Tooltip>
-                      ) : null}
-
-                      {tags.filter((mapped) => mapped.title == "loved").length >
-                      0 ? (
-                        <Tooltip
-                          label="Loved By Readers 😍"
-                          position="bottom"
-                          mb="xl"
-                          ml="xl"
-                        >
-                          <ThemeIcon
-                            size="xl"
-                            radius="xl"
-                            variant="gradient"
-                            gradient={{
-                              from: "pink",
-                              to: "red.4",
-                            }}
-                          >
-                            <IconHeart size={20} />
-                          </ThemeIcon>
-                        </Tooltip>
-                      ) : null}
-
-                      {tags.filter(
-                        (mapped) => mapped.title == "community-choice"
-                      ).length > 0 ? (
-                        <Tooltip
-                          label="Community's Choice 👍‍"
-                          position="bottom"
-                          mb="xl"
-                          ml="xl"
-                        >
-                          <ThemeIcon
-                            size="xl"
-                            radius="xl"
-                            variant="gradient"
-                            gradient={{
-                              from: "orange.6",
-                              to: "yellow.4",
-                            }}
-                          >
-                            <IconTrophy size={22} />
-                          </ThemeIcon>
-                        </Tooltip>
-                      ) : null}
-
-                      {tags.filter((mapped) => mapped.title == "editors-pick")
-                        .length > 0 ? (
-                        <Tooltip
-                          label="Editor's Pick 💯"
-                          position="bottom"
-                          mb="xl"
-                          ml="xl"
-                        >
-                          <ThemeIcon
-                            size="xl"
-                            radius="xl"
-                            variant="gradient"
-                            gradient={{
-                              from: "blue.7",
-                              to: "blue.4",
-                            }}
-                          >
-                            <IconPencil size={18} />
-                          </ThemeIcon>
-                        </Tooltip>
-                      ) : null}
-                    </Group>
-                  </Group>
-                ) : null} */}
               </Stack>
             </Center>
           </Grid.Col>
@@ -386,7 +281,7 @@ const Article = ({ article, tags }) => {
               (flipSidebarOrientation
                 ? "md:!left-10 lg:!left-10 xl:!left-10 mr-5 xs:mr-0 "
                 : "md:!right-5 lg:!right-10 xl:!right-0 ml-5  ") +
-              "gap-y-5 flex flex-col items-center sticky h-screen top-1 min-h-[1200px]"
+              "gap-y-5 flex flex-col items-center sticky h-screen top-1 min-h-[1200px] w-full"
             }
           >
             <ArticleSidebar
