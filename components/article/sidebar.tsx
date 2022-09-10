@@ -216,7 +216,7 @@ const ArticleSidebar = ({
           </Group>
         </Stack>
       </Card>
-      <Card mt="xl" className="w-full pb-2" withBorder>
+      <Card mt="xl" className="w-full pb-6" withBorder>
         <Group className="w-full items-center xs:justify-center md:justify-start">
           <Tooltip
             mt="xl"
