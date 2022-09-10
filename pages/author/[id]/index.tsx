@@ -745,11 +745,13 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                     >
                                       <ThemeIcon
                                         className="cursor-help"
-                                        size={40}
+                                        size={45}
                                         variant="light"
                                         radius="xl"
                                       >
-                                        <Text>✏️</Text>
+                                        <Text weight={600} size="xs">
+                                          .Dev
+                                        </Text>
                                       </ThemeIcon>
                                     </Tooltip>
                                   ) : null}

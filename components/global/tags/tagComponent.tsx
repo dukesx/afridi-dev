@@ -50,19 +50,21 @@ const TagComponent = ({
       withBorder
       className="rounded-full px-0"
       label={
-        <ActionIcon
-          className="mr-5"
-          size="xl"
-          radius="xl"
-          color="blue"
-          gradient={{
-            from: "blue.4",
-            to: "teal.4",
-          }}
-          variant={"gradient"}
-        >
-          <IconBellRinging size={20} />
-        </ActionIcon>
+        <Tooltip label="Followed">
+          <ActionIcon
+            className="mr-5"
+            size="xl"
+            radius="xl"
+            color="blue"
+            gradient={{
+              from: `${color}.4`,
+              to: `${color}.6`,
+            }}
+            variant={"gradient"}
+          >
+            <IconBellRinging size={20} />
+          </ActionIcon>
+        </Tooltip>
       }
       styles={{
         indicator: {

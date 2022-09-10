@@ -14,8 +14,8 @@ const Custom404 = () => {
         className="object-fit"
         src={colorScheme == "dark" ? Dark404Image : Light404Image}
         alt=""
-        height={400}
-        width={600}
+        height={500}
+        width={800}
       />
       <Button
         color="blue.4"

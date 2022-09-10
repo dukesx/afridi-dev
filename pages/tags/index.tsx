@@ -67,7 +67,7 @@ const TagsPage = ({ tagsArr }) => {
       .select(
         `
       title,
-      articles!inner(
+      articles (
         id
         ),
       icon,
@@ -77,7 +77,7 @@ const TagsPage = ({ tagsArr }) => {
           count: "exact",
         }
       )
-      .ilike("title", `%${deferred}%`);
+      .ilike("title", `%${deferred.toLowerCase()}%`);
 
     var tagsArr = [];
     data.map((mapped) =>
@@ -217,8 +217,12 @@ export const getStaticProps = async () => {
         count: "exact",
       }
     )
-    .range(0, 99)
+    .order("created_at", {
+      ascending: true,
+    })
     .limit(100);
+
+  console.log(data);
   var tagsArr = [];
   data.map((mapped) =>
     tagsArr.push({
