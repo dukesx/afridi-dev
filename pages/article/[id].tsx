@@ -146,7 +146,7 @@ const Article = ({ article, tags }) => {
                       ) : null
                     ) : null}
 
-                    {data.editors_pick ? (
+                    {data && data.editors_pick ? (
                       <Tooltip
                         label="Editor's Choice 🤓"
                         position="bottom"
