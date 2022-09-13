@@ -117,7 +117,7 @@ const StudioSidebar = ({ path, subPath }: StudioSidebarProps) => {
           <SidebarSubItem
             setActiveKey={setSubSidebarActiveLink}
             activeKey={subSidebarActiveLink}
-            label="All Articles"
+            label="My Articles"
             path={path}
             subPath={subPath}
           />

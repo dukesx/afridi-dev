@@ -12,6 +12,7 @@ import {
   Divider,
   Avatar,
   ThemeIcon,
+  ActionIcon,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
@@ -32,6 +33,7 @@ import {
   IconLayoutDashboard,
   IconLogout,
   IconMoon,
+  IconNews,
   IconPencil,
   IconScale,
   IconSettings,
@@ -164,9 +166,9 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               <Link href="/tags" passHref>
                 <Button
                   leftIcon={<IconHash size={18} />}
-                  variant={activeHeaderKey == "topics" ? "gradient" : "subtle"}
+                  variant={activeHeaderKey == "tags" ? "gradient" : "subtle"}
                   gradient={
-                    activeHeaderKey == "topics"
+                    activeHeaderKey == "tags"
                       ? {
                           from: "cyan",
                           to: "teal",
@@ -343,7 +345,9 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     </Button>
                   </Menu.Target>
                   <Menu.Dropdown className="w-[250px] xs:w-[300px]">
-                    <Menu.Label className="">Control Center</Menu.Label>
+                    <Menu.Label mt="sm" className="">
+                      Control Center
+                    </Menu.Label>
                     <Menu.Item
                       component={NextLink}
                       href={`/author/${session.user.id}`}
@@ -358,36 +362,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     >
                       Profile
                     </Menu.Item>
-                    <Menu.Item
-                      component={NextLink}
-                      href={`/creator-studio`}
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
-                        />
-                      }
-                      icon={
-                        <ThemeIcon
-                          className="rounded-full"
-                          size="lg"
-                          radius="xl"
-                          variant="gradient"
-                          gradient={{
-                            from: "blue.6",
-                            to: "indigo.4",
-                          }}
-                        >
-                          <IconGauge
-                            size={18}
-                            // color={theme.colors.cyan[4]}
-                          />
-                        </ThemeIcon>
-                      }
-                    >
-                      Creator Studio
-                    </Menu.Item>
+
                     <Menu.Item
                       component={NextLink}
                       href={`/author/${session.user.id}/bookmarks`}
@@ -415,6 +390,65 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                       icon={<IconSettings color={theme.colors.blue[4]} />}
                     >
                       Settings
+                    </Menu.Item>
+
+                    <Menu.Label>Creator Studio</Menu.Label>
+
+                    <Menu.Item
+                      component={NextLink}
+                      href={`/creator-studio`}
+                      rightSection={
+                        <IconChevronRight
+                          className="align-middle"
+                          color={theme.colors.dark[1]}
+                          size={22}
+                        />
+                      }
+                      icon={
+                        <ThemeIcon
+                          className="rounded-full"
+                          size="xl"
+                          radius="xl"
+                          variant="gradient"
+                          gradient={{
+                            from: "blue.5",
+                            to: "cyan.5",
+                          }}
+                        >
+                          <Text className="text-sm" weight={700}>
+                            <b className="font-normal">{"{"}</b>
+                            {"CS"}
+                            <b className="font-normal">{"}"}</b>
+                          </Text>
+                        </ThemeIcon>
+                      }
+                    >
+                      Visit Studio
+                    </Menu.Item>
+
+                    <Menu.Item
+                      component={NextLink}
+                      href={`/creator-studio/my-articles`}
+                      rightSection={
+                        <IconChevronRight
+                          className="align-middle"
+                          color={theme.colors.dark[1]}
+                          size={22}
+                        />
+                      }
+                      icon={
+                        <ActionIcon
+                          className="rounded-full"
+                          size="lg"
+                          radius="xl"
+                          color="blue"
+                          variant="subtle"
+                        >
+                          <IconNews size={24} />
+                        </ActionIcon>
+                      }
+                    >
+                      My Articles
                     </Menu.Item>
                     <Menu.Label>Actions</Menu.Label>
                     <Menu.Item
@@ -445,6 +479,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                         : "Toggle Dark Mode"}
                     </Menu.Item>
                     <Menu.Item
+                      mb="sm"
                       icon={
                         <IconLogout color={theme.colors.yellow[6]} size={22} />
                       }

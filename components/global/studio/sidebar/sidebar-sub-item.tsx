@@ -55,7 +55,7 @@ const SidebarSubItem = ({
 
   const { classes, cx } = useStyles();
   console.log(activeKey);
-  console.log(label);
+  // console.log(label);
   return (
     <UnstyledButton
       component={NextLink}
@@ -67,7 +67,7 @@ const SidebarSubItem = ({
           : label.toLowerCase()
       }`}
       className={cx(classes.link + " w-full max-w-[90%]", {
-        [classes.linkActive]: activeKey === label.toLowerCase(),
+        [classes.linkActive]: activeKey.toLowerCase() === label.toLowerCase(),
       })}
     >
       {label}

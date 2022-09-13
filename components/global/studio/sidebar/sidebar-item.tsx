@@ -65,7 +65,8 @@ const SidebarItem = ({
         component={NextLink}
         href={`/creator-studio/${label === "home" ? "/" : label}`}
         className={cx(classes.mainLink, {
-          [classes.mainLinkActive]: activeKey === label.toLowerCase(),
+          [classes.mainLinkActive]:
+            activeKey.toLowerCase() === label.toLowerCase(),
         })}
       >
         <ItemIcon stroke={1.5} />

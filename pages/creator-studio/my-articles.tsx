@@ -40,7 +40,7 @@ const CreatorsStudio = () => {
     }
   }, [isLoading]);
   return (
-    <StudioWrapper path="home" subPath="all articles" loading={loading}>
+    <StudioWrapper path="home" subPath="My Articles" loading={loading}>
       <DataTable
         className="w-full"
         withBorder

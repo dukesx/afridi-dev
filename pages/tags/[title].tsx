@@ -113,7 +113,7 @@ const ArticleTagPage = ({ taga, articles }) => {
       <Custom404 />
     </AppWrapper>
   ) : (
-    <AppWrapper size="lg" activeHeaderKey="">
+    <AppWrapper size="lg" activeHeaderKey="tags">
       <Stack mt={50} align="center">
         <Avatar
           className="rounded-full"

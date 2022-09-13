@@ -114,7 +114,7 @@ const TagsPage = ({ tagsArr }) => {
    *
    */
   return (
-    <AppWrapper size="lg" activeHeaderKey="">
+    <AppWrapper size="lg" activeHeaderKey="tags">
       <Card p="xl">
         <Group spacing="sm" position="center">
           <ThemeIcon
