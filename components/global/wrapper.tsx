@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  AppShell,
   Container,
   useMantineTheme,
   type MantineNumberSize,
@@ -10,12 +11,16 @@ import { useEffect } from "react";
 import { GeneralStore, useGeneralStore } from "../../data/static/store";
 import GlobalHeader from "./header";
 import AppLoader from "./loaders/appLoader";
+import StudioSidebar from "./studio/sidebar/sidebar";
 import WebsiteTourWizardBase from "./wizards/website-tour/wizardBase";
 interface AppWrapperProps {
   children: any;
   size?: MantineNumberSize | number;
   activeHeaderKey: string;
   noPadding?: boolean;
+  studio?: boolean;
+  studioPath?: string;
+  studioSubPath?: string;
 }
 
 const AppWrapper: React.FC<AppWrapperProps> = ({
@@ -23,6 +28,9 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
   size,
   activeHeaderKey,
   noPadding,
+  studio,
+  studioPath,
+  studioSubPath,
 }) => {
   const theme = useMantineTheme();
   const { isLoading, session, error, supabaseClient } = useSessionContext();
@@ -37,7 +45,6 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       `
       )
       .eq("id", session.user.id);
-
 
     if (data[0].website_tour) {
       openModal({
@@ -60,16 +67,23 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
     }
   }, [session]);
   return (
-    <div className="relative">
+    <AppShell
+      navbar={
+        studio ? (
+          <StudioSidebar path={studioPath} subPath={studioSubPath} />
+        ) : null
+      }
+      header={<GlobalHeader theme={theme} activeHeaderKey={activeHeaderKey} />}
+      className="relative"
+    >
       <AppLoader theme={theme} loading={appLoading} />
-      <GlobalHeader theme={theme} activeHeaderKey={activeHeaderKey} />
       <Container
-        className={(noPadding ? "px-0" : "px-0 xs:px-5 ") + ""}
+        className={(noPadding ? "px-0 mx-0" : "px-0 xs:px-5 ") + ""}
         size={size ?? "xl"}
       >
         {children}
       </Container>
-    </div>
+    </AppShell>
   );
 };
 

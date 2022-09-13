@@ -11,6 +11,7 @@ import {
   useMantineColorScheme,
   Divider,
   Avatar,
+  ThemeIcon,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
@@ -21,10 +22,14 @@ import {
   IconChecklist,
   IconChevronDown,
   IconChevronRight,
+  IconCode,
+  IconDashboard,
   IconDice,
   IconExternalLink,
   IconEyeOff,
+  IconGauge,
   IconHash,
+  IconLayoutDashboard,
   IconLogout,
   IconMoon,
   IconPencil,
@@ -296,7 +301,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   <Menu.Item
                     component={NextLink}
                     passHref
-                    href="/article/compose"
+                    href="/creator-studio/publish/article"
                   >
                     <Stack align="center" spacing={0}>
                       <Image
@@ -352,6 +357,36 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                       icon={<IconUserCircle color={theme.colors.cyan[4]} />}
                     >
                       Profile
+                    </Menu.Item>
+                    <Menu.Item
+                      component={NextLink}
+                      href={`/creator-studio`}
+                      rightSection={
+                        <IconChevronRight
+                          className="align-middle"
+                          color={theme.colors.dark[1]}
+                          size={22}
+                        />
+                      }
+                      icon={
+                        <ThemeIcon
+                          className="rounded-full"
+                          size="lg"
+                          radius="xl"
+                          variant="gradient"
+                          gradient={{
+                            from: "blue.6",
+                            to: "indigo.4",
+                          }}
+                        >
+                          <IconGauge
+                            size={18}
+                            // color={theme.colors.cyan[4]}
+                          />
+                        </ThemeIcon>
+                      }
+                    >
+                      Creator Studio
                     </Menu.Item>
                     <Menu.Item
                       component={NextLink}
