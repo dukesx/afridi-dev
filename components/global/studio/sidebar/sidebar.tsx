@@ -89,7 +89,7 @@ const StudioSidebar = ({ path, subPath }: StudioSidebarProps) => {
   const [subSidebarActiveLink, setSubSidebarActiveLink] = useState(subPath);
 
   return (
-    <Navbar height={750} width={{ sm: 350 }}>
+    <Navbar height={750} width={{ sm: 350 }} hiddenBreakpoint="sm" hidden>
       <Navbar.Section grow className={classes.wrapper}>
         <div className={classes.aside + " pt-5 px-3"}>
           <SidebarItem
