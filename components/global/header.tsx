@@ -200,19 +200,19 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   >
                     <Text>Author&apos;s Listing</Text>
                   </Menu.Item> */}
-                  {/* <Menu.Item
+                  <Menu.Item
                     component={NextLink}
                     href="/dazzle-me"
                     icon={
                       <IconDice
                         // fill={theme.colors.blue[6]}
-                        color={theme.colors.blue[6]}
+                        color={theme.colors.indigo[6]}
                         size={23}
                       />
                     }
                   >
                     Random Article
-                  </Menu.Item> */}
+                  </Menu.Item>
                   <Menu.Label>
                     <Text weight={600}>Legal</Text>
                   </Menu.Label>
