@@ -31,12 +31,12 @@ export const getFeedArticles = async ({
       .from("articles")
       .select(
         `
-              id,
+                  id,
                   title,
                   description,
-                  views,
                   cover,
                   editors_pick,
+                  views,
                   authors!articles_author_id_fkey (
                     dp,
                     firstName,
@@ -89,10 +89,10 @@ export const getFeedArticles = async ({
         `
                   id,
                   title,
+                  views,
                   description,
                   cover,
                   editors_pick,
-                  views,
                   authors!articles_author_id_fkey (
                     dp,
                     firstName,
