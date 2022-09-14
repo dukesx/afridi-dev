@@ -147,15 +147,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               <Link href="/" passHref>
                 <Button
                   leftIcon={<IconSmartHome size={18} />}
-                  variant={activeHeaderKey == "home" ? "gradient" : "subtle"}
-                  gradient={
-                    activeHeaderKey == "home"
-                      ? {
-                          from: "cyan",
-                          to: "teal",
-                        }
-                      : null
-                  }
+                  variant={activeHeaderKey == "home" ? "light" : "subtle"}
                   color="blue"
                   component="a"
                 >
