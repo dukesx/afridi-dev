@@ -170,8 +170,8 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   gradient={
                     activeHeaderKey == "tags"
                       ? {
-                          from: "cyan",
-                          to: "teal",
+                          from: "blue",
+                          to: "cyan",
                         }
                       : null
                   }
