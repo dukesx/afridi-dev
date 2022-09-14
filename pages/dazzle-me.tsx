@@ -64,7 +64,7 @@ const DazzleMe = () => {
   //
   //
   return (
-    <AppWrapper activeHeaderKey="">
+    <AppWrapper activeHeaderKey="dazzle-me">
       <Card className="h-screen" withBorder>
         <Center className="h-full w-full items-center justify-center flex flex-col">
           <Stack className="mb-[3%]" align="center" spacing={0}>
@@ -80,7 +80,7 @@ const DazzleMe = () => {
             </ThemeIcon>
             <Title mb="xs">Random Article Generator</Title>
             <Text size="sm" mb="xl" color="dimmed">
-              Generate random articles to read
+              Generate random articles, for the busy Devs ☕
             </Text>
             <Button
               color="indigo"

@@ -182,6 +182,27 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                 </Button>
               </Link>
 
+              <Link href="/dazzle-me" passHref>
+                <Button
+                  leftIcon={<IconDice size={18} />}
+                  variant={
+                    activeHeaderKey == "dazzle-me" ? "gradient" : "subtle"
+                  }
+                  gradient={
+                    activeHeaderKey == "dazzle-me"
+                      ? {
+                          from: "indigo",
+                          to: "blue",
+                        }
+                      : null
+                  }
+                  color="indigo"
+                  component="a"
+                >
+                  Random Article
+                </Button>
+              </Link>
+
               <Menu width={200}>
                 <Menu.Target>
                   <Button
@@ -200,7 +221,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   >
                     <Text>Author&apos;s Listing</Text>
                   </Menu.Item> */}
-                  <Menu.Item
+                  {/* <Menu.Item
                     component={NextLink}
                     href="/dazzle-me"
                     icon={
@@ -212,7 +233,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     }
                   >
                     Random Article
-                  </Menu.Item>
+                  </Menu.Item> */}
                   <Menu.Label>
                     <Text weight={600}>Legal</Text>
                   </Menu.Label>
