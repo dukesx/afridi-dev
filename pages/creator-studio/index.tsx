@@ -70,7 +70,7 @@ const CreatorsStudio = () => {
       xAxisKey: "views",
       yAxisKey: "title",
     },
-    indexAxis: "y" as const,
+    indexAxis: "y",
     elements: {
       bar: {
         borderWidth: 2,
@@ -96,7 +96,7 @@ const CreatorsStudio = () => {
     },
     scales: {
       x: {
-        beginAtZero: false,
+        // beginAtZero: false,
         ticks: {
           color: colorScheme == "dark" ? theme.white : theme.black,
           callback: (val, _, __) => {
@@ -174,6 +174,8 @@ const CreatorsStudio = () => {
       return b.views - a.views;
     });
 
+    console.log(newArticlesArr);
+
     const chartData = {
       datasets: [
         {
@@ -220,7 +222,7 @@ const CreatorsStudio = () => {
       </Stack>
 
       <Card mb="xl" mt="xl" withBorder className="w-full">
-        {articles ? (
+        {articles && !loading ? (
           //@ts-ignore
           <Bar
             className="w-full max-w-[1000px]"
@@ -228,12 +230,7 @@ const CreatorsStudio = () => {
             options={options}
             data={articles}
           />
-        ) : (
-          <Stack align="center">
-            <Loader variant="bars" color="blue" />
-            <Text>Loading Chart</Text>
-          </Stack>
-        )}
+        ) : null}
       </Card>
     </StudioWrapper>
   );
