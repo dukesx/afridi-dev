@@ -1,4 +1,5 @@
 import {
+  Button,
   Center,
   Group,
   Loader,
@@ -10,21 +11,26 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconListDetails } from "@tabler/icons";
+import { IconEdit, IconListDetails } from "@tabler/icons";
+import Image from "next/image";
 import { Fragment } from "react";
 import AppWrapper from "../wrapper";
+import OopsPlaceholder from "../../../public/oops.svg";
+import { NextLink } from "@mantine/next";
 
 interface StudioWrapperProps {
   loading: boolean | false;
   children: any;
   path: string;
   subPath: string;
+  authored: boolean;
 }
 
 const StudioWrapper = ({
   children,
   loading,
   path,
+  authored,
   subPath,
 }: StudioWrapperProps) => {
   const theme = useMantineTheme();
@@ -50,7 +56,7 @@ const StudioWrapper = ({
             Laptop/Desktop Computer
           </Text>
         </Stack>
-      ) : (
+      ) : authored ? (
         <Fragment>
           <LoadingOverlay
             loader={
@@ -107,6 +113,28 @@ const StudioWrapper = ({
           />
           {children}
         </Fragment>
+      ) : (
+        <Center className="mt-[5%]">
+          <Stack spacing={0}>
+            <Title>Hmmmm.... Seems Empty</Title>
+            <Text mt={10} size="sm" color="dimmed">
+              It seems you haven&apos;t authored any articles at the moment.
+            </Text>
+            <Image alt="" src={OopsPlaceholder} height={350} width={350} />
+
+            <Button
+              component={NextLink}
+              href="/creator-studio/publish"
+              className="max-w-[300px] mx-auto"
+              variant="outline"
+              radius="xl"
+              color="blue"
+              leftIcon={<IconEdit size={20} />}
+            >
+              Let&apos;s Create
+            </Button>
+          </Stack>
+        </Center>
       )}
     </AppWrapper>
   );

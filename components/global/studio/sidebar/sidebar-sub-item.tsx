@@ -54,8 +54,7 @@ const SidebarSubItem = ({
   }));
 
   const { classes, cx } = useStyles();
-  console.log(activeKey);
-  // console.log(label);
+
   return (
     <UnstyledButton
       component={NextLink}

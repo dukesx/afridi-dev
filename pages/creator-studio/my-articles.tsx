@@ -11,7 +11,7 @@ import { openConfirmModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { IconX } from "@tabler/icons";
 
-const CreatorsStudio = () => {
+const CreatorsStudio = ({ authored }) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
   const [articles, setArticles] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -37,8 +37,6 @@ const CreatorsStudio = () => {
       )
       .eq("author_id", session && session.user.id)
       .limit(PAGE_SIZE);
-
-    console.log(count);
     //@ts-ignore
     setArticles(data);
     setTotalRecords(count);
@@ -60,8 +58,8 @@ const CreatorsStudio = () => {
     `
       )
       .range(currentIndex, currentIndex + PAGE_SIZE)
-      .limit(PAGE_SIZE);
-
+      .limit(PAGE_SIZE)
+      .eq("author_id", session && session.user.id);
     setArticles(data);
     setTableLoading(false);
   };
@@ -75,9 +73,14 @@ const CreatorsStudio = () => {
     }
   }, [isLoading]);
   return (
-    <StudioWrapper path="home" subPath="My Articles" loading={loading}>
+    <StudioWrapper
+      authored={authored}
+      path="home"
+      subPath="My Articles"
+      loading={loading}
+    >
       <DataTable
-        className="w-full"
+        className="w-full min-h-[400px] pb-10"
         withBorder={false}
         borderRadius="md"
         loaderVariant="bars"
@@ -158,7 +161,7 @@ const CreatorsStudio = () => {
                           color: "red",
                         },
                         labels: { confirm: "Confirm", cancel: "Cancel" },
-                        onCancel: () => console.log("Cancel"),
+                        onCancel: () => {},
                         onConfirm: async () => {
                           const { error, data } = await supabaseClient
                             .from("articles")
@@ -201,4 +204,31 @@ export default CreatorsStudio;
 
 export const getServerSideProps = withPageAuth({
   redirectTo: "/get-started",
+  getServerSideProps: async ({ req, res }, supabase) => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (!session) {
+      return { props: {} };
+    }
+    const { data, error } = await supabase
+      .from("articles")
+      .select("id")
+      .eq("author_id", session.user.id);
+
+    if (data && data.length > 0) {
+      return {
+        props: {
+          authored: true,
+        },
+      };
+    } else {
+      return {
+        props: {
+          authored: false,
+        },
+      };
+    }
+  },
 });

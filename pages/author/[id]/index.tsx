@@ -640,7 +640,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                         <Skeleton height={40} />
                                       ) : dp ? (
                                         <AfridiImage
-                                          fillImage={false}
                                           className=""
                                           height={50}
                                           width={50}
@@ -781,12 +780,12 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                       }}
                                       withBorder
                                     >
-                                      <Card.Section>
+                                      <Card.Section className="h-[400px] relative">
                                         <AfridiImage
-                                          fillImage={true}
                                           path={mapped.data.cover}
-                                          height={300}
-                                          width={300}
+                                          height={400}
+                                          width={400}
+                                          fillImage
                                         />
                                       </Card.Section>
                                       <Group

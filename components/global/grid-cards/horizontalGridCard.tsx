@@ -77,7 +77,6 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
       <AfridiImage
         imageClassName={coverClassName}
         className="rounded-full"
-        fillImage={false}
         path={data.cover}
         width={style == CardStyle.FEED ? 100 : 100}
         height={

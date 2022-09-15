@@ -13,12 +13,12 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { AfridiDevArticle } from "../../components/global/grid-cards/largeGridCard";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import StudioWrapper from "../../components/global/studio/studio-wrapper";
-import { IconTrendingUp } from "@tabler/icons";
+import { IconArrowRight, IconEdit, IconTrendingUp } from "@tabler/icons";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,6 +30,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
+import Image from "next/image";
+import OopsPlaceholer from "../../public/oops.svg";
 
 ChartJS.register(
   CategoryScale,
@@ -49,7 +51,7 @@ ChartJS.register(
   Legend
 );
 
-const CreatorsStudio = () => {
+const CreatorsStudio = ({ authored }) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
   const [articles, setArticles] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -88,7 +90,7 @@ const CreatorsStudio = () => {
         font: {
           size: 14,
         },
-        text: `Top 10 Articles,  ${format(
+        text: `Top 10 Performing Articles,  ${format(
           new Date().setMonth(new Date().getMonth() - 1),
           "MMMM dd"
         )} - ${format(new Date(), "MMMM dd yyyy")}`,
@@ -174,12 +176,10 @@ const CreatorsStudio = () => {
       return b.views - a.views;
     });
 
-    console.log(newArticlesArr);
-
     const chartData = {
       datasets: [
         {
-          label: `Total Monthly Views`,
+          label: ` Total Monthly Views`,
           data: newArticlesArr,
           borderColor: theme.colors.yellow[6],
           borderWidth: 4,
@@ -197,41 +197,48 @@ const CreatorsStudio = () => {
     }
   }, [isLoading]);
   return (
-    <StudioWrapper path="home" subPath="analytics" loading={loading}>
-      <Stack mb={50} align="center" spacing={0}>
-        <ThemeIcon
-          mt="xl"
-          size={90}
-          className="rounded-full"
-          radius="xl"
-          color="yellow"
-          variant="gradient"
-          gradient={{
-            from: "orange.5",
-            to: "yellow.4",
-          }}
-        >
-          <IconTrendingUp fill="white" strokeWidth={1.3} size={40} />
-        </ThemeIcon>
-        <Title className="text-center " mt="md" order={2}>
-          Performance at a Glance
-        </Title>
-        <Text size="sm" color="dimmed">
-          How well your articles are performing
-        </Text>
-      </Stack>
+    <StudioWrapper
+      authored={authored}
+      path="home"
+      subPath="analytics"
+      loading={loading}
+    >
+      <Fragment>
+        <Stack mb={50} align="center" spacing={0}>
+          <ThemeIcon
+            mt="xl"
+            size={90}
+            className="rounded-full"
+            radius="xl"
+            color="yellow"
+            variant="gradient"
+            gradient={{
+              from: "orange.5",
+              to: "yellow.4",
+            }}
+          >
+            <IconTrendingUp fill="white" strokeWidth={1.3} size={40} />
+          </ThemeIcon>
+          <Title className="text-center " mt="md" order={2}>
+            Performance at a Glance
+          </Title>
+          <Text size="sm" color="dimmed">
+            How well your articles are performing
+          </Text>
+        </Stack>
 
-      <Card mb="xl" mt="xl" withBorder className="w-full">
-        {articles && !loading ? (
-          //@ts-ignore
-          <Bar
-            className="w-full max-w-[1000px]"
+        <Card mb="xl" mt="xl" withBorder className="w-full">
+          {articles && !loading ? (
             //@ts-ignore
-            options={options}
-            data={articles}
-          />
-        ) : null}
-      </Card>
+            <Bar
+              className="w-full max-w-[1000px]"
+              //@ts-ignore
+              options={options}
+              data={articles}
+            />
+          ) : null}
+        </Card>
+      </Fragment>
     </StudioWrapper>
   );
 };
@@ -240,4 +247,31 @@ export default CreatorsStudio;
 
 export const getServerSideProps = withPageAuth({
   redirectTo: "/get-started",
+  getServerSideProps: async ({ req, res }, supabase) => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+    if (!session) {
+      return { props: {} };
+    }
+    const { data, error } = await supabase
+      .from("articles")
+      .select("id")
+      .eq("author_id", session.user.id);
+
+    if (data && data.length > 0) {
+      return {
+        props: {
+          authored: true,
+        },
+      };
+    } else {
+      return {
+        props: {
+          authored: false,
+        },
+      };
+    }
+  },
 });

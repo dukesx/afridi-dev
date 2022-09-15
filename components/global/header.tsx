@@ -498,7 +498,6 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                       }
                       onClick={async () => {
                         await supabaseClient.auth.signOut();
-                        document.location = "/";
                       }}
                     >
                       Sign out

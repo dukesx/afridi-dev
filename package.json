@@ -55,6 +55,7 @@
     "@mantine/prism": "^5.2.3",
     "@mantine/spotlight": "^5.2.3",
     "@next/env": "^12.2.3",
+    "@plaiceholder/next": "^2.5.0",
     "@supabase/auth-helpers-nextjs": "0.4.0-next.0",
     "@supabase/auth-helpers-react": "0.3.0-next.0",
     "@supabase/supabase-js": "2.0.0-rc.8",
@@ -73,6 +74,7 @@
     "next-remove-imports": "^1.0.6",
     "next-seo": "^5.5.0",
     "next-sitemap": "^3.1.11",
+    "plaiceholder": "^2.5.0",
     "postcss-nesting": "^10.1.10",
     "prismjs": "^1.28.0",
     "react": "^18.2.0",
@@ -90,6 +92,7 @@
     "remark-git-contributors": "^4.0.1",
     "remark-github": "^11.2.4",
     "sass": "^1.54.0",
+    "sharp": "^0.31.0",
     "sticky-sidebar-v2": "^1.1.1",
     "url-slug": "^3.0.4",
     "zustand": "^4.1.1"

@@ -32,6 +32,8 @@ import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
 import { useLocalStorage } from "@mantine/hooks";
 import ArticleSidebar from "../../components/article/sidebar";
+import { getPlaiceholder } from "plaiceholder";
+
 import {
   useSessionContext,
   useSupabaseClient,
@@ -94,6 +96,7 @@ const Article = ({ article, tags }) => {
             >
               {data ? (
                 <AfridiImage
+                  cover_base_64={data.cover_base_64}
                   fillImage={true}
                   path={data ? data.cover : null}
                   height={500}
@@ -348,9 +351,24 @@ export const getStaticProps = async (ctx) => {
     .eq("id", id);
 
   if (data) {
+    var newData = await Promise.all(
+      data.map(async (mapped) => {
+        const { base64, img } = await getPlaiceholder(
+          `https://ik.imagekit.io/afrididotdev/tr:w-400/${mapped.cover}`,
+          {
+            size: 30,
+          }
+        );
+        return {
+          ...mapped,
+          cover_base_64: base64,
+        };
+      })
+    );
+
     return {
       props: {
-        article: data[0],
+        article: newData[0],
         tags: data[0].tags,
       },
     };
