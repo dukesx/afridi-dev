@@ -226,10 +226,80 @@ export const getStaticProps = async (ctx) => {
     })
     .limit(3);
 
+  const {
+    error,
+    data: feedData,
+    count: count,
+  } = await supabase
+    .from("articles")
+    .select(
+      `
+                  id,
+                  title,
+                  views,
+                  description,
+                  cover,
+                  editors_pick,
+                  authors!articles_author_id_fkey (
+                    dp,
+                    firstName,
+                    lastName
+                  ),
+                  co_authors_articles (
+                    authors (
+                      dp,
+                      firstName,
+                      lastName
+                    )
+                  ),
+                appreciations (
+                id
+                  ),
+
+            article_views (
+            id
+          )
+                `,
+      {
+        count: "exact",
+      }
+    )
+    .order("created_at", {
+      ascending: false,
+    })
+    .limit(5)
+    .order("created_at", {
+      ascending: false,
+    })
+    .range(0, 4);
+
+  var newFeedData = await Promise.all(
+    feedData.map(async (mapped) => {
+      var res = await fetch(
+        `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            cover: mapped.cover,
+          }),
+        }
+      );
+
+      var data = await res.json();
+
+      return { ...mapped, cover_base_64: data.placeholder };
+    })
+  );
+
   return {
     props: {
       mustReads: mustReadsData,
+      feedDataCount: count,
       top: topData,
+      feedData: newFeedData,
     },
   };
 };

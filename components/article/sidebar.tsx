@@ -29,6 +29,7 @@ import {
   IconStar,
 } from "@tabler/icons";
 import { Fragment, Suspense, useEffect, useState } from "react";
+import { ShowUnauthorizedModal } from "../../utils/helpers";
 import AfridiImage from "../global/afridi-image";
 import SquareHorizontalWidget from "../landing/widgets/square-horizontal";
 
@@ -144,21 +145,25 @@ const ArticleSidebar = ({
                   />
                 </ActionIcon>
               </Tooltip>
-            ) : session && bookmarks ? (
+            ) : (
               <Tooltip label="bookmark this">
                 <ActionIcon
                   onClick={async () => {
-                    const { error } = await supabaseClient
-                      .from("bookmarks")
-                      .insert({
-                        article_id: id,
-                        author_id: session.user.id,
-                      });
+                    if (session && session.user) {
+                      const { error } = await supabaseClient
+                        .from("bookmarks")
+                        .insert({
+                          article_id: id,
+                          author_id: session.user.id,
+                        });
 
-                    if (!error) {
-                      var bookmarksArr = [...bookmarks];
-                      bookmarksArr.push(id);
-                      setBookmarks(bookmarksArr);
+                      if (!error) {
+                        var bookmarksArr = [...bookmarks];
+                        bookmarksArr.push(id);
+                        setBookmarks(bookmarksArr);
+                      }
+                    } else {
+                      ShowUnauthorizedModal();
                     }
                   }}
                   color="gray"
@@ -169,16 +174,16 @@ const ArticleSidebar = ({
                   <IconBookmark fill={"transparent"} size={22} />
                 </ActionIcon>
               </Tooltip>
-            ) : null}
+            )}
 
-            {session ? (
-              <Tooltip
-                label={
-                  starred ? "Remove Appreciation" : "Appreciate the article!"
-                }
-              >
-                <ActionIcon
-                  onClick={async () => {
+            <Tooltip
+              label={
+                starred ? "Remove Appreciation" : "Appreciate the article!"
+              }
+            >
+              <ActionIcon
+                onClick={async () => {
+                  if (session && session.user) {
                     if (starred) {
                       const { error } = await supabaseClient
                         .from("appreciations")
@@ -202,17 +207,19 @@ const ArticleSidebar = ({
                         setStarred(true);
                       }
                     }
-                  }}
-                  radius="xl"
-                  className="cursor-pointer"
-                  color="yellow"
-                  variant={starred ? "light" : "subtle"}
-                  size="xl"
-                >
-                  <Text size="xl">👏</Text>
-                </ActionIcon>
-              </Tooltip>
-            ) : null}
+                  } else {
+                    ShowUnauthorizedModal();
+                  }
+                }}
+                radius="xl"
+                className="cursor-pointer"
+                color="yellow"
+                variant={starred ? "light" : "subtle"}
+                size="xl"
+              >
+                <Text size="xl">👏</Text>
+              </ActionIcon>
+            </Tooltip>
           </Group>
         </Stack>
       </Card>

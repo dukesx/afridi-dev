@@ -33,12 +33,9 @@ import AppWrapper from "../../components/global/wrapper";
 import InfiniteScroll from "react-infinite-scroller";
 import { useRouter } from "next/router";
 import Custom404 from "../404";
-import Custom500 from "../500";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
-import Unauthorized from "../../public/401.svg";
-import { closeAllModals, openModal } from "@mantine/modals";
-import { NextLink } from "@mantine/next";
+import { ShowUnauthorizedModal } from "../../utils/helpers";
 
 const ArticleTagPage = ({ taga, articles }) => {
   const theme = useMantineTheme();
@@ -180,7 +177,7 @@ const ArticleTagPage = ({ taga, articles }) => {
                 <Tooltip label="follow tag">
                   <Button
                     onClick={async () => {
-                      if (session.user) {
+                      if (session && session.user) {
                         const { data } = await supabaseClient
                           .from("author_followed_tags")
                           .insert({
@@ -196,35 +193,7 @@ const ArticleTagPage = ({ taga, articles }) => {
                           setAuthorFollowed(newArr);
                         }
                       } else {
-                        openModal({
-                          title: "Unauthorised",
-                          children: (
-                            <Stack spacing={4} align="center">
-                              <Image
-                                src={Unauthorized}
-                                height={200}
-                                width={200}
-                                alt=""
-                              />
-                              <Text weight={600}>Ooops - Can&apos;t do it</Text>
-                              <Text size="sm" color="dimmed">
-                                You need to be signed in to follow tags
-                              </Text>
-                              <Button
-                                mt="xs"
-                                color="blue"
-                                fullWidth
-                                component={NextLink}
-                                onClick={() => {
-                                  closeAllModals();
-                                }}
-                                href="/get-started"
-                              >
-                                Sign in
-                              </Button>
-                            </Stack>
-                          ),
-                        });
+                        ShowUnauthorizedModal();
                       }
                     }}
                     color="blue"

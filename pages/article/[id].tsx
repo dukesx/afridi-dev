@@ -346,15 +346,23 @@ export const getStaticProps = async (ctx) => {
   if (data) {
     var newData = await Promise.all(
       data.map(async (mapped) => {
-        const { base64, img } = await getPlaiceholder(
-          `https://ik.imagekit.io/afrididotdev/tr:w-400/${mapped.cover}`,
+        var res = await fetch(
+          `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
           {
-            size: 30,
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+              cover: mapped.cover,
+            }),
           }
         );
+
+        var data = await res.json();
         return {
           ...mapped,
-          cover_base_64: base64,
+          cover_base_64: data.placeholder,
         };
       })
     );
