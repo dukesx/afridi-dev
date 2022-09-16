@@ -271,7 +271,7 @@ export const getStaticProps = async (ctx) => {
     .order("created_at", {
       ascending: false,
     })
-    .range(0, 4);
+    .range(0, 9);
 
   var newFeedData = await Promise.all(
     feedData.map(async (mapped) => {

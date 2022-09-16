@@ -47,6 +47,7 @@ const DazzleMe = () => {
         .from("articles")
         .select(
           `
+          id,
           title,
           description,
           cover,

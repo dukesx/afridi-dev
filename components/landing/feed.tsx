@@ -136,7 +136,6 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
         getUserBookmarks();
         getFeed();
       } else {
-        console.log(prefetchedFeedData);
         setFeedData(prefetchedFeedData);
         setArticleCount(feedDataCount);
         setFeedLoading(false);
