@@ -55,6 +55,7 @@ import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
 import { supabase } from "../../../utils/supabaseClient";
 import { AfridiDevArticle } from "../../../components/global/grid-cards/largeGridCard";
+import { GetServerSideProps, GetStaticPropsContext } from "next";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -1170,8 +1171,8 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
 
 export default UserProfilePage;
 
-export const getStaticProps = async (ctx) => {
-  var id = ctx.params.id;
+export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
+  var id = params.id;
   const { data: userData, error: userDataError } = await supabase
     .from("authors")
     .select(
@@ -1239,7 +1240,7 @@ export const getStaticProps = async (ctx) => {
       //@ts-ignore
       userData[0]["articles"].map(async (mapped: AfridiDevArticle) => {
         var res = await fetch(
-          "http://localhost:3000/api/generate-placeholder",
+          `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
           {
             headers: {
               "content-type": "application/json",

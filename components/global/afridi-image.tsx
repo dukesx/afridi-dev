@@ -75,8 +75,8 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         alt="article's cover image"
         src={path && path.replaceAll("/", "")}
         layout={fillImage ? "fill" : "fixed"}
-        width={width}
-        height={height}
+        width={fillImage ? false : width}
+        height={fillImage ? false : height}
         quality={75}
         loader={({ src, width, quality }) =>
           `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${src}`
