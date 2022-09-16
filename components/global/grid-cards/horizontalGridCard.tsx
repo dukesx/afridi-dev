@@ -73,6 +73,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   ];
   const { colorScheme } = useMantineColorScheme();
   const { session } = useSessionContext();
+  console.log(data.tags);
   return data ? (
     <Group noWrap className="w-full">
       <AfridiImage
@@ -258,6 +259,22 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
               </Tooltip>
             </Fragment>
           ) : null}
+          <Fragment>
+            {data.tags &&
+            data.tags.filter((mapped) => mapped.title == "trending").length >
+              0 ? (
+              <Tooltip label="Trending">
+                <Avatar
+                  size="sm"
+                  color="blue"
+                  className="rounded-full"
+                  radius="xl"
+                >
+                  <IconBolt size={18} />
+                </Avatar>
+              </Tooltip>
+            ) : null}
+          </Fragment>
         </Group>
       </Stack>
     </Group>

@@ -76,7 +76,7 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
           >
             <Stack
               spacing="xl"
-              className="sticky min-h-[1000px] h-screen w-full top-8 pb-10 mr-10"
+              className="sticky min-h-[1000px] h-screen w-full top-20 pb-10 mr-10"
             >
               <Suspense>
                 <SquareHorizontalWidget
@@ -121,7 +121,7 @@ const LandingPage = ({ feedData, top, mustReads, feedDataCount }) => {
           >
             <Stack
               spacing="xl"
-              className="sticky min-h-[1000px] h-screen w-full top-8 pb-10 ml-10"
+              className="sticky min-h-[1000px] h-screen w-full top-20 pb-10 ml-10"
             >
               <Suspense>
                 <SquareHorizontalWidget

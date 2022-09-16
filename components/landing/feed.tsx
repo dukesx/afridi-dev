@@ -136,9 +136,14 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
         getUserBookmarks();
         getFeed();
       } else {
-        setFeedData(prefetchedFeedData);
-        setArticleCount(feedDataCount);
-        setFeedLoading(false);
+        if (key == "feed") {
+          setFeedData(prefetchedFeedData);
+          setArticleCount(feedDataCount);
+          setFeedLoading(false);
+        } else {
+          setFeedLoading(true);
+          getFeed();
+        }
       }
     }
   }, [key, isLoading]);
@@ -288,25 +293,10 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 </InfiniteScroll>
               ) : feedData && feedData.length == 0 ? (
                 <Center mt={50}>
-                  <Stack>
-                    <Text
-                      className="text-center text-3xl"
-                      weight={800}
-                      color="dimmed"
-                      size="xl"
-                    >
-                      Hmmmm...Empty
-                    </Text>
-                    <Text size="md" color="dimmed">
-                      Susbscribe to some topics in order to see articles here
-                    </Text>
-                    <Button
-                      color="cyan"
-                      rightIcon={<IconArrowRight size={theme.fontSizes.xl} />}
-                    >
-                      Go to Topics and Subscribe
-                    </Button>
-                  </Stack>
+                  <EmptyPlaceholder
+                    title="Hmmm.... Seems empty"
+                    description="Subscribe some tags to see articles here"
+                  />
                 </Center>
               ) : (
                 <FeedLoader />
@@ -319,8 +309,8 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
 
         <Tabs.Panel value="trending">
           <Stack pt="xs" mt="xl">
-            {!feedLoading ? (
-              trendingData.length > 0 ? (
+            {feedLoading == false ? (
+              trendingData && trendingData.length > 0 ? (
                 <Stack spacing="xl" mb="xl" align="center">
                   {trendingData.map((mapped, index) => (
                     <HorizontalGridCard
@@ -335,25 +325,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 </Stack>
               ) : (
                 <Center mt={50}>
-                  <Stack>
-                    <Text
-                      className="text-center text-3xl"
-                      weight={800}
-                      color="dimmed"
-                      size="xl"
-                    >
-                      Hmmmm...Empty
-                    </Text>
-                    <Text size="md" color="dimmed">
-                      Susbscribe to some topics in order to see articles here
-                    </Text>
-                    <Button
-                      color="cyan"
-                      rightIcon={<IconArrowRight size={theme.fontSizes.xl} />}
-                    >
-                      Go to Topics and Subscribe
-                    </Button>
-                  </Stack>
+                  <EmptyPlaceholder />
                 </Center>
               )
             ) : (
