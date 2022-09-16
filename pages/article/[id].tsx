@@ -53,20 +53,13 @@ const Article = ({ article, tags }) => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
 
   const addViewCount = async () => {
+    //
     const { data: returnedData, error } = await supabaseClient
       .from("article_views")
       .insert({
         article_id: article.id,
       });
-
-    const { error: returnedError } = await supabaseClient
-      .from("articles")
-      .update({
-        views: article.views + 1,
-      })
-      .match({
-        id: article.id,
-      });
+    //
   };
 
   useEffect(() => {

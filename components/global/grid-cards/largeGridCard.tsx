@@ -14,12 +14,13 @@ import LargeGridCardSkeleton from "../skeletons/grid-cards/largeGridCardSkeleton
 
 export type AfridiDevArticle = {
   id: string;
+  cover_base_64?: string;
   title: string;
   description: string;
   editors_pick?: boolean;
   cover: string;
   created_at?: string;
-  views?: number;
+  article_views?: Array<string>;
   authors: AfridiDevAuthor;
   tags?: Array<any>;
   co_authors_articles: [

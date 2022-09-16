@@ -21,13 +21,14 @@ import HorizontalGridCard, {
   CardStyle,
 } from "../components/global/grid-cards/horizontalGridCard";
 import { AfridiDevArticle } from "../components/global/grid-cards/largeGridCard";
+import EmptyPlaceholder from "../components/global/placeholders/empty";
 import AppWrapper from "../components/global/wrapper";
 import { getRandomNumber } from "../utils/helpers";
 
 const DazzleMe = () => {
   const { supabaseClient } = useSessionContext();
   const [loading, setLoading] = useState(false);
-  const [article, setArticle] = useState<AfridiDevArticle>(null);
+  const [article, setArticle] = useState(null);
   const theme = useMantineTheme();
   //
   //
@@ -44,10 +45,24 @@ const DazzleMe = () => {
       const rand = getRandomNumber(1, count);
       const { data } = await supabaseClient
         .from("articles")
-        .select()
+        .select(
+          `
+          title,
+          description,
+          cover,
+          appreciations (
+            id
+          ),
+          article_views (
+            id
+          )
+          `
+        )
         .limit(1)
         .range(rand, rand)
         .single();
+
+      console.log(data);
 
       setArticle(data);
       setLoading(false);
@@ -97,9 +112,10 @@ const DazzleMe = () => {
                   <Loader variant="bars" color="indigo" />
                   <Text>Finding you a random article</Text>
                 </Stack>
-              ) : (
+              ) : article ? (
                 <Group position="apart" noWrap className="mx-auto w-full">
                   <HorizontalGridCard
+                    appreciations={article.appreciations}
                     coverClassName="rounded-md"
                     data={article}
                     theme={theme}
@@ -119,6 +135,11 @@ const DazzleMe = () => {
                     </ActionIcon>
                   </Tooltip>
                 </Group>
+              ) : (
+                <EmptyPlaceholder
+                  height={100}
+                  description={`Try Clicking "Randomize" Again`}
+                />
               )}
             </div>
           </Stack>

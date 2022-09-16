@@ -47,6 +47,7 @@ interface HorizontalGridCardProps {
   setBookmarks?: Function;
   appreciations?: Array<any>;
 }
+
 const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   theme,
   style,
@@ -76,6 +77,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
     <Group noWrap className="w-full">
       <AfridiImage
         imageClassName={coverClassName}
+        cover_base_64={data.cover_base_64 ? data.cover_base_64 : null}
         className="rounded-full"
         path={data.cover}
         width={style == CardStyle.FEED ? 100 : 100}
@@ -216,7 +218,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
             </Fragment>
           ) : null}
 
-          {data.views ? (
+          {data.article_views ? (
             <Fragment>
               <Divider
                 className="h-[14px] align-middle my-auto"
@@ -230,7 +232,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
                 </ThemeIcon>
                 <Text size="xs">
                   {Intl.NumberFormat("en", { notation: "compact" }).format(
-                    data.views
+                    data.article_views.length
                   )}
                 </Text>
               </Group>

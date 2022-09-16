@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/display-name */
 import {
   Button,
@@ -13,6 +14,7 @@ import {
   Avatar,
   ThemeIcon,
   ActionIcon,
+  Card,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
@@ -45,9 +47,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GeneralStore } from "../../data/static/store";
 import PublishArticle from "../../public/publish-article.svg";
+import AfridiImage from "./afridi-image";
 
 interface GlobalHeaderProps {
   activeHeaderKey: string;
@@ -59,6 +62,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 }) => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const [userData, setUserData] = useState(null);
   //
   //
   //
@@ -67,8 +71,31 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 
   //
   //
+
+  const getUserDetails = async () => {
+    const { data, error } = await supabaseClient
+      .from("authors")
+      .select(
+        `
+      firstName,
+      lastName,
+      role,
+      dp
+      `
+      )
+      .eq("id", session.user.id);
+
+    setUserData(data[0]);
+  };
   //
   //
+
+  useEffect(() => {
+    if (session) {
+      getUserDetails();
+    }
+  }, [isLoading]);
+
   return (
     <Header className="w-full" height={70}>
       <Stack className="h-full w-full" justify="center" spacing={0}>
@@ -293,7 +320,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
           </MediaQuery>
 
           <Group className="max-w-[200px] xs:max-w-[250px] ml-auto" spacing={0}>
-            {session && session.user ? (
+            {session && session.user && userData ? (
               <Menu width={300} position="bottom-end">
                 <Menu.Target>
                   <Button
@@ -342,7 +369,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               </Menu>
             ) : null}
 
-            {session && session.user ? (
+            {session && session.user && userData ? (
               <Group>
                 <Menu position="bottom-end">
                   <Menu.Target>
@@ -358,9 +385,34 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     </Button>
                   </Menu.Target>
                   <Menu.Dropdown className="w-[250px] xs:w-[300px]">
-                    <Menu.Label mt="sm" className="">
+                    <Card>
+                      <Group noWrap>
+                        <Avatar size={50} radius="xl">
+                          <AfridiImage
+                            priority
+                            width={60}
+                            height={60}
+                            path={userData.dp}
+                          />
+                        </Avatar>
+                        <Stack spacing={0}>
+                          <Text
+                            className="max-w-[200px]"
+                            lineClamp={1}
+                            weight={700}
+                            size="sm"
+                          >
+                            {userData.firstName + " " + userData.lastName}
+                          </Text>
+                          <Text color="dimmed" className="capitalize" size="xs">
+                            {userData.role}
+                          </Text>
+                        </Stack>
+                      </Group>
+                    </Card>
+                    {/* <Menu.Label mt="sm" className="">
                       Control Center
-                    </Menu.Label>
+                    </Menu.Label> */}
                     <Menu.Item
                       component={NextLink}
                       href={`/author/${session.user.id}`}

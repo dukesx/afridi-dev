@@ -80,7 +80,7 @@ const CreatorsStudio = ({ authored }) => {
       loading={loading}
     >
       <DataTable
-        className="w-full min-h-[400px] pb-10"
+        className="w-full min-h-[400px]"
         withBorder={false}
         borderRadius="md"
         loaderVariant="bars"

@@ -58,6 +58,9 @@ export const getFeedArticles = async ({
           ),
           appreciations (
             id
+          ),
+          article_views (
+            id
           )
          `,
         { count: "exact" }
@@ -74,7 +77,23 @@ export const getFeedArticles = async ({
       if (data) {
         articles = [...data];
       }
-      feedData.map((mapped) => articles.push(mapped));
+      await Promise.all(
+        feedData.map(async (mapped) => {
+          var res = await fetch("/api/generate-placeholder", {
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+              cover: mapped.cover,
+            }),
+          });
+
+          var data = await res.json();
+          var mappa = { ...mapped, cover_base_64: data.placeholder };
+          articles.push(mappa);
+        })
+      );
       setArticleCount(count);
       setData(articles);
     }
@@ -107,7 +126,11 @@ export const getFeedArticles = async ({
                   ),
                 appreciations (
                 id
-                  )
+                  ),
+
+            article_views (
+            id
+          )
                 `,
         {
           count: "exact",
@@ -129,7 +152,23 @@ export const getFeedArticles = async ({
       if (data) {
         articles = [...data];
       }
-      feedData.map((mapped) => articles.push(mapped));
+      await Promise.all(
+        feedData.map(async (mapped) => {
+          var res = await fetch("/api/generate-placeholder", {
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+              cover: mapped.cover,
+            }),
+          });
+
+          var data = await res.json();
+          var mappa = { ...mapped, cover_base_64: data.placeholder };
+          articles.push(mappa);
+        })
+      );
       setArticleCount(count);
       setData(articles);
     }
@@ -175,7 +214,26 @@ export const getTrendingArticles = async ({ setData }: FeedFunctionProps) => {
     .order("created_at", {
       ascending: false,
     });
-  setData(trendingData);
+  //
+  //
+  //
+  var newTrending = await Promise.all(
+    trendingData.map(async (mapped) => {
+      var res = await fetch("/api/generate-placeholder", {
+        headers: {
+          "content-type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          cover: mapped.cover,
+        }),
+      });
+
+      var data = await res.json();
+      return { ...mapped, cover_base_64: data.placeholder };
+    })
+  );
+  setData(newTrending);
 };
 
 export const getPopularArticles = async ({
@@ -222,5 +280,24 @@ export const getPopularArticles = async ({
     .order("created_at", {
       ascending: false,
     });
-  setData(popularArticles);
+  //
+  //
+  //
+  var newPopular = await Promise.all(
+    popularArticles.map(async (mapped) => {
+      var res = await fetch("/api/generate-placeholder", {
+        headers: {
+          "content-type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          cover: mapped.cover,
+        }),
+      });
+
+      var data = await res.json();
+      return { ...mapped, cover_base_64: data.placeholder };
+    })
+  );
+  setData(newPopular);
 };

@@ -20,6 +20,7 @@ interface AfridiImageProps {
   fillImage?: boolean | false;
   imageClassName?: string;
   cover_base_64?: string;
+  priority?: boolean | false;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
@@ -30,6 +31,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   imageClassName,
   cover_base_64,
   onClick,
+  priority,
 }) => {
   const theme = useMantineTheme();
   const AfridiImageClasses = createStyles((theme) => ({
@@ -41,7 +43,6 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
 
   const { classes } = AfridiImageClasses();
   const { colorScheme } = useMantineColorScheme();
-  console.log(path.replaceAll("/", ""));
   return (
     // <div
     //   className={
@@ -67,6 +68,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
       }}
     >
       <Image
+        priority={priority ?? false}
         className={
           (imageClassName ? imageClassName : "") + " object-cover w-full"
         }

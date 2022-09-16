@@ -173,7 +173,7 @@ const CreatorsStudio = ({ authored }) => {
       })
     );
     newArticlesArr.sort((a, b) => {
-      return b.views - a.views;
+      return b.views.length - a.views.length;
     });
 
     const chartData = {

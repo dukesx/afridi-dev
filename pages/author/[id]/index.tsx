@@ -54,6 +54,7 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
 import { supabase } from "../../../utils/supabaseClient";
+import { AfridiDevArticle } from "../../../components/global/grid-cards/largeGridCard";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -66,10 +67,16 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const openRef = useRef<() => void>(null);
   const openRef2 = useRef<() => void>(null);
   const [submittingStatus, setSubmittingStatus] = useState(false);
-  const [feed, setFeed] = useState(feedData);
+  const [feed, setFeed] = useState<Array<Feed>>(feedData);
   const [hot, setHot] = useState(null);
   const [thumbsUp, setThumbsUp] = useState(null);
   const { isLoading, session, error, supabaseClient } = useSessionContext();
+
+  interface Feed {
+    created_at: string;
+    type: "article" | "status";
+    data: AfridiDevArticle | any;
+  }
 
   var ref: any = React.createRef();
 
@@ -134,7 +141,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
       });
 
     if (!userDataError) {
-      var feed = [];
+      var feed: Array<Feed> = [];
       //@ts-ignore
       if (userData[0]["status_feed"].length > 0) {
         //@ts-ignore
@@ -151,14 +158,30 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
       if (userData[0]["articles"].length > 0) {
         //@ts-ignore
 
-        userData[0]["articles"].map((mapped) =>
-          feed.push({
-            data: mapped,
-            type: "article",
-            created_at: mapped.created_at,
+        await Promise.all(
+          //@ts-ignore
+          userData[0]["articles"].map(async (mapped: AfridiDevArticle) => {
+            var res = await fetch("/api/generate-placeholder", {
+              headers: {
+                "content-type": "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify({
+                cover: mapped.cover,
+              }),
+            });
+
+            var data = await res.json();
+            var mappa = { ...mapped, cover_base_64: data.placeholder };
+            feed.push({
+              data: mappa,
+              type: "article",
+              created_at: mapped.created_at,
+            });
           })
         );
       }
+
       feed.sort((a, b) => {
         return compareDesc(parseISO(a.created_at), parseISO(b.created_at));
       });
@@ -286,6 +309,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                   openRef={openRef2}
                   placeholder={
                     <AfridiImage
+                      priority
                       fillImage={false}
                       height={450}
                       width={1320}
@@ -306,6 +330,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                 />
               ) : (
                 <AfridiImage
+                  priority
                   fillImage={false}
                   height={450}
                   width={1320}
@@ -367,6 +392,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                         openRef={openRef}
                         placeholder={
                           <AfridiImage
+                            priority
                             fillImage={false}
                             className=""
                             height={140}
@@ -385,6 +411,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                       />
                     ) : (
                       <AfridiImage
+                        priority
                         className=""
                         fillImage={false}
                         height={140}
@@ -782,6 +809,9 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                     >
                                       <Card.Section className="h-[400px] relative">
                                         <AfridiImage
+                                          cover_base_64={
+                                            mapped.data.cover_base_64
+                                          }
                                           path={mapped.data.cover}
                                           height={400}
                                           width={400}
@@ -1204,11 +1234,30 @@ export const getStaticProps = async (ctx) => {
   //@ts-ignore
   if (userData[0]["articles"].length > 0) {
     //@ts-ignore
-    userData[0]["articles"].map((mapped) =>
-      feed.push({
-        data: mapped,
-        type: "article",
-        created_at: mapped.created_at,
+
+    await Promise.all(
+      //@ts-ignore
+      userData[0]["articles"].map(async (mapped: AfridiDevArticle) => {
+        var res = await fetch(
+          "http://localhost:3000/api/generate-placeholder",
+          {
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+              cover: mapped.cover,
+            }),
+          }
+        );
+
+        var data = await res.json();
+        var mappa = { ...mapped, cover_base_64: data.placeholder };
+        feed.push({
+          data: mappa,
+          type: "article",
+          created_at: mapped.created_at,
+        });
       })
     );
   }

@@ -226,16 +226,20 @@ const UserSettingsPage = () => {
               ) : (
                 <form
                   onSubmit={form1.onSubmit(async (val) => {
-                    const { error, status } = await supabaseClient
+                    const { error, data } = await supabaseClient
                       .from("authors")
                       .update({
                         firstName: val.firstName,
                         lastName: val.lastName,
                         location: val.location,
                       })
-                      .eq("id", session.user.id);
+                      .eq("id", session.user.id).select(`
+                      firstName,
+                      lastName,
+                      location
+                      `);
 
-                    if (status == 200) {
+                    if (data) {
                       showNotification({
                         message: "Your changes have been saved successfully",
                         title: "Saved Successfully",
@@ -243,12 +247,14 @@ const UserSettingsPage = () => {
                         icon: <IconCheck size={18} />,
                       });
                     } else {
-                      showNotification({
-                        message: "A server error has occurred",
-                        title: "Your changes could not be saved",
-                        color: "red",
-                        icon: <IconX size={18} />,
-                      });
+                      if (error) {
+                        showNotification({
+                          message: error.message,
+                          title: "Your changes could not be saved",
+                          color: "red",
+                          icon: <IconX size={18} />,
+                        });
+                      }
                     }
                   })}
                 >
