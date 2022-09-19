@@ -242,7 +242,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
             </Navbar.Section> */}
           </Navbar>
 
-          <Grid.Col span={12} sm={7} xs={12} md={12} lg={7}>
+          <Grid.Col span={12} sm={12} xs={12} md={12} lg={7}>
             <div className="mx-0">
               <Suspense fallback={<FeedLoader />}>
                 <LandingFeed

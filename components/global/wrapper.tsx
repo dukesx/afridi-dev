@@ -81,6 +81,18 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       }
       header={<GlobalHeader theme={theme} activeHeaderKey={activeHeaderKey} />}
       className="relative"
+      styles={{
+        body: {
+          paddingLeft: 0,
+          paddingRight: 0,
+        },
+        main: {
+          "@media (max-width: 576px)": {
+            paddingLeft: 0,
+            paddingRight: 0,
+          },
+        },
+      }}
     >
       <AppLoader theme={theme} loading={appLoading} />
       <Container

@@ -162,7 +162,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 
           {/* </Stack> */}
           <MediaQuery
-            smallerThan={950}
+            smallerThan={1000}
             styles={{
               display: "none",
             }}
