@@ -24,6 +24,7 @@ interface ImageUploaderProps {
   px?: MantineSize | number;
   py?: MantineSize | number;
   height?: string | number;
+  client?: any;
 }
 
 export enum ImageUploaderType {
@@ -42,6 +43,7 @@ const AfridiImageUploader = ({
   height,
   px,
   py,
+  client,
   type,
 }: ImageUploaderProps) => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
@@ -95,7 +97,7 @@ const AfridiImageUploader = ({
 
           if (result) {
             if (type == ImageUploaderType.COVER) {
-              const { error } = await supabaseClient
+              const { error } = await (client ? client : supabaseClient)
                 .from("authors")
                 .update({
                   cover: result.file.url.split("tr:n-400x")[1],
@@ -112,7 +114,7 @@ const AfridiImageUploader = ({
               }
             }
             if (type == ImageUploaderType.DP) {
-              const { error } = await supabaseClient
+              const { error } = await (client ? client : supabaseClient)
                 .from("authors")
                 .update({
                   dp: result.file.url.split("tr:n-400x")[1],
@@ -173,6 +175,7 @@ const AfridiImageUploader = ({
               align="center"
             >
               <IconUpload />
+              <Text size="sm">Upload an Image 🙃</Text>
             </Stack>
           )}
         </Dropzone.Idle>

@@ -7,6 +7,7 @@ import WelcomeStep from "./welcome-step";
 import DemographicsStep from "./demographics-step";
 import FinishStep from "./finish-step";
 import { type Session } from "@supabase/supabase-js";
+import DPStep from "./dp-step";
 
 interface WebsiteTourWizardBaseProps {
   theme: MantineTheme;
@@ -57,6 +58,15 @@ const WebsiteTourWizardBase = ({
               />
             </Fade>
           ) : step == 3 ? (
+            <Fade key={3}>
+              <DPStep
+                setStep={setStep}
+                step={step}
+                session={session}
+                client={client}
+              />
+            </Fade>
+          ) : step == 4 ? (
             <Fade key={3}>
               <FinishStep
                 setStep={setStep}
