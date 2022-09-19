@@ -94,6 +94,16 @@ const Article = ({ article, tags }) => {
     }, 10000);
   }, []);
 
+  var relatedArticles = [];
+
+  article.tags.map((mapped) => {
+    var art = mapped.articles.map((mapped2) => {
+      if (mapped2.id !== data.id) {
+        relatedArticles.push(mapped2);
+      }
+    });
+  });
+
   return (
     <AppWrapper activeHeaderKey="" size="xl">
       <Container className="px-0 sm:px-5" size="lg">
@@ -207,25 +217,21 @@ const Article = ({ article, tags }) => {
             component={ScrollArea}
           >
             <Stack>
-              {data.tags.map((mapped1, index) => {
-                return mapped1.articles.map((mapped2, index2) => {
-                  if (mapped2.id !== data.id) {
-                    return (
-                      <Group key={"abox" + index2} mx="sm" noWrap>
-                        <Text size="xl" weight={800} color="gray.4">
-                          {index + 1}
-                        </Text>
-                        <Divider className="min-w-[20px]" />
-                        <HorizontalArticleGridCard
-                          data={mapped2}
-                          titleClamp={2}
-                          theme={theme}
-                          style={CardStyle.WIDGET}
-                        />
-                      </Group>
-                    );
-                  }
-                });
+              {relatedArticles.map((mapped, index) => {
+                return (
+                  <Group key={"abox" + index} mx="sm" noWrap>
+                    <Text size="xl" weight={800} color="gray.4">
+                      {index + 1}
+                    </Text>
+                    <Divider className="min-w-[20px]" />
+                    <HorizontalArticleGridCard
+                      data={mapped}
+                      titleClamp={2}
+                      theme={theme}
+                      style={CardStyle.WIDGET}
+                    />
+                  </Group>
+                );
               })}
             </Stack>
           </Navbar.Section>
@@ -308,8 +314,6 @@ export const getStaticProps = async (ctx) => {
         };
       })
     );
-
-    console.log(newData[0].tags);
 
     return {
       props: {
