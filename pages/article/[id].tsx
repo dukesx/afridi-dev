@@ -1,12 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   ActionIcon,
+  Aside,
   Avatar,
+  Box,
   Button,
   Center,
   Container,
+  createStyles,
+  Divider,
   Grid,
   Group,
+  MediaQuery,
+  Navbar,
+  ScrollArea,
   Skeleton,
   Stack,
   Text,
@@ -20,7 +27,10 @@ import {
   IconAward,
   IconBolt,
   IconEdit,
+  IconHash,
   IconHeart,
+  IconInfinity,
+  IconNews,
   IconPencil,
   IconPencilPlus,
   IconTrophy,
@@ -41,8 +51,24 @@ import {
 } from "@supabase/auth-helpers-react";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "../../utils/supabaseClient";
+import ArticleRightSidebar from "../../components/article/sidebar";
+import HorizontalGridCard, {
+  CardStyle,
+} from "../../components/article/grid-cards/horizontal-article-card";
+import HorizontalArticleGridCard from "../../components/article/grid-cards/horizontal-article-card";
+import SquareHorizontalArticleWidget from "../../components/landing/widgets/articles/square-horizontal-article";
+
+const styles = createStyles((theme, _params, getRef) => ({
+  mainContent: {
+    width: "100%",
+    [`@media (min-width: ${theme.breakpoints.md}px)`]: {
+      // width: "calc(100% - 300px)",
+    },
+  },
+}));
 
 const Article = ({ article, tags }) => {
+  const { classes } = styles();
   const [data, setData] = useState(article);
   const router = useRouter();
   const theme = useMantineTheme();
@@ -71,239 +97,140 @@ const Article = ({ article, tags }) => {
   return (
     <AppWrapper activeHeaderKey="" size="xl">
       <Container className="px-0 sm:px-5" size="lg">
-        <Grid mt="xl" className="mt-0 sm:mt-10">
-          <Grid.Col
-            className="mx-auto pt-0 pr-0"
-            span={12}
-            lg={6}
-            md={6}
-            sm={6}
-            xs={6}
-            xl={6}
+        <Stack spacing="xs" className={classes.mainContent}>
+          <Skeleton
+            className="w-full rounded-none sm:rounded-lg mx-auto h-full sm:h-full lg:h-[550px] xl:max-h-[600px] sm:max-h-[600px]"
+            visible={!data}
+            height={300}
+            width={300}
           >
-            <Skeleton
-              className="w-full rounded-none sm:rounded-lg mx-auto h-full sm:h-full lg:h-[550px] xl:max-h-[600px] sm:max-h-[600px]"
-              visible={!data}
-              height={600}
-              width={600}
-            >
-              {data ? (
-                <AfridiImage
-                  // isResponsive
-                  cover_base_64={data.cover_base_64}
-                  // fillImage={true}
-                  fillImage
-                  path={data ? data.cover : null}
-                  height={500}
-                  width={500}
-                  className="h-full md:w-full"
-                />
-              ) : null}
-            </Skeleton>
-          </Grid.Col>
+            {data ? (
+              <AfridiImage
+                // isResponsive
+                cover_base_64={data.cover_base_64}
+                fillImage={true}
+                path={data ? data.cover : null}
+                height={400}
+                width={300}
+                className="h-full md:w-full"
+              />
+            ) : null}
+          </Skeleton>
 
-          <Grid.Col
-            className="mx-auto"
-            span={12}
-            xl={6}
-            lg={5}
-            md={6}
-            sm={6}
-            xs={6}
-          >
-            <Center className="xl:h-full xs:items-baseline xs:justify-start">
-              <Stack className="mx-5  sm:ml-10 md:ml-14 lg:ml-5 xl:ml-14 my-auto w-full">
-                <Title
-                  mt="xl"
-                  order={1}
-                  className="text-2xl xs:text-xl md:text-[34px] sm:text-[30px] !leading-normal"
-                >
-                  {data ? (
-                    data.title
-                  ) : (
-                    <Stack mt="xl">
-                      <Skeleton height={40} className="w-full max-w-[800px]" />
-                      <Skeleton height={40} className="w-full max-w-[400px]" />
-                    </Stack>
-                  )}
-                  <Group>
-                    {session && session.user ? (
-                      article.author_id == session.user.id ||
-                      (article.co_authors_articles.length > 0 &&
-                        article.co_authors_articles.filter(
-                          (mapped) => mapped.authors.id == session.user.id
-                        ).length > 0) ? (
-                        <Tooltip label="Edit article">
-                          <ActionIcon
-                            radius="xl"
-                            onClick={() =>
-                              router.push(`/article/edit/${article.id}`)
-                            }
-                            mt="xl"
-                            size="xl"
-                            variant="light"
-                            color="indigo"
-                            className="align-middle"
-                          >
-                            <IconEdit size={20} />
-                          </ActionIcon>
-                        </Tooltip>
-                      ) : null
-                    ) : null}
+          <Center className="xl:h-full xs:items-baseline xs:justify-start">
+            <Stack className="my-auto w-full">
+              <Title
+                mt="xl"
+                order={1}
+                className="text-2xl xs:text-xl md:text-[34px] sm:text-[30px] !leading-normal"
+              >
+                {data ? (
+                  data.title
+                ) : (
+                  <Stack mt="xl">
+                    <Skeleton height={40} className="w-full max-w-[800px]" />
+                    <Skeleton height={40} className="w-full max-w-[400px]" />
+                  </Stack>
+                )}
+              </Title>
 
-                    {data && data.editors_pick ? (
-                      <Tooltip
-                        label="Editor's Choice 🤓"
-                        position="bottom"
-                        mb="xl"
-                        ml="xl"
-                      >
-                        <ThemeIcon
-                          className="cursor-help"
-                          mt="xl"
-                          size="xl"
-                          variant="light"
-                          color="yellow"
-                          radius="xl"
-                        >
-                          <Text size="xl">👍‍</Text>
-                        </ThemeIcon>
-                      </Tooltip>
-                    ) : null}
-                  </Group>
-                </Title>
-
-                <Text lineClamp={4} mt="xl" color="dimmed">
-                  {data ? (
-                    data.description
-                  ) : (
-                    <Stack mb="xl">
-                      <Skeleton height={20} className="w-full max-w-[800px]" />
-                      <Skeleton height={20} className="w-full max-w-[400px]" />
-                      <Skeleton height={20} className="w-full max-w-[400px]" />
-                    </Stack>
-                  )}
-                </Text>
-
-                <Group mt="lg">
-                  <Text size="sm" color="dimmed" weight={600}>
-                    Lead Author:
-                  </Text>
-
-                  <Tooltip
-                    label={
-                      data
-                        ? data.authors.firstName + " " + data.authors.lastName
-                        : "loading author"
-                    }
-                  >
-                    <Avatar
-                      className="rounded-full"
-                      component={NextLink}
-                      href={data ? `/author/${data.authors.id}` : ""}
-                      radius="xl"
-                      color="blue"
-                      size={40}
-                    >
-                      {data ? (
-                        <AfridiImage
-                          fillImage
-                          height={43}
-                          width={43}
-                          path={data.authors.dp}
-                        />
-                      ) : (
-                        <Skeleton height={50} width={50} />
-                      )}
-                    </Avatar>
-                  </Tooltip>
-                </Group>
-                {data && data.co_authors_articles.length > 0 ? (
-                  <Group>
-                    <Text size="sm" color="dimmed" weight={600}>
-                      In Collaboration With:
-                    </Text>
-                    <Avatar.Group className="align-middle">
-                      {data
-                        ? data.co_authors_articles.length > 0
-                          ? data.co_authors_articles.map((mapped, index) => (
-                              <Tooltip
-                                key={index + "alma"}
-                                label={
-                                  data
-                                    ? mapped.authors.firstName +
-                                      " " +
-                                      mapped.authors.lastName
-                                    : "loading author"
-                                }
-                              >
-                                <Avatar
-                                  size={40}
-                                  component={NextLink}
-                                  href={
-                                    mapped ? `/author/${mapped.authors.id}` : ""
-                                  }
-                                  radius="xl"
-                                  color="blue"
-                                >
-                                  {data ? (
-                                    <AfridiImage
-                                      fillImage
-                                      height={43}
-                                      width={43}
-                                      path={mapped.authors.dp}
-                                    />
-                                  ) : (
-                                    <Skeleton height={50} width={50} />
-                                  )}
-                                </Avatar>
-                              </Tooltip>
-                            ))
-                          : null
-                        : null}
-                    </Avatar.Group>
-                  </Group>
-                ) : null}
-              </Stack>
-            </Center>
-          </Grid.Col>
-        </Grid>
+              <Text lineClamp={4} mt="xl" color="dimmed">
+                {data ? (
+                  data.description
+                ) : (
+                  <Stack mb="xl">
+                    <Skeleton height={20} className="w-full max-w-[800px]" />
+                    <Skeleton height={20} className="w-full max-w-[400px]" />
+                    <Skeleton height={20} className="w-full max-w-[400px]" />
+                  </Stack>
+                )}
+              </Text>
+            </Stack>
+          </Center>
+        </Stack>
       </Container>
-      <Grid className="gap-y-0 md:gap-y-20 " mt="xl" pt="xl">
-        <Grid.Col
-          id="main-content"
-          className={
-            (flipSidebarOrientation ? "-order-1" : "order-1") +
-            " hidden md:flex"
-          }
-          span={12}
-          lg={4}
-          xs={5}
-          sm={0}
+      <Aside
+        hiddenBreakpoint="xs"
+        hidden
+        height={600}
+        p="md"
+        zIndex={50}
+        styles={{
+          root: {
+            zIndex: 50,
+          },
+        }}
+        width={{ xs: 250, sm: 300, md: 300, lg: 300 }}
+      >
+        <Aside.Section>
+          <ArticleRightSidebar
+            id={data && data.id}
+            data={data}
+            flipSidebarOrientation={flipSidebarOrientation}
+            setFlipSidebarOrientation={setFlipSidebarOrientation}
+            theme={theme}
+          />
+        </Aside.Section>
+      </Aside>
+
+      <Box mt={50} className={classes.mainContent}>
+        <MarkDownRenderer>{article && article.body}</MarkDownRenderer>
+      </Box>
+      <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+        <Navbar
+          hiddenBreakpoint="md"
+          hidden={true}
+          height={600}
+          p="xs"
+          width={{ sm: 0, md: 250, lg: 350 }}
         >
-          <div
-            className={
-              (flipSidebarOrientation
-                ? "md:!left-10 lg:!left-10 xl:!left-10 mr-5 xs:mr-0 "
-                : "md:!right-5 lg:!right-10 xl:!right-0 ml-5  ") +
-              "gap-y-5 flex flex-col items-center sticky h-screen top-1 min-h-[1200px] w-full"
-            }
+          <Group position="apart" mt="xs" mx="sm">
+            <Text color="cyan.5" weight={500} size="sm">
+              Similar Articles
+            </Text>
+            <ThemeIcon
+              className="rounded-full"
+              radius="xl"
+              size="lg"
+              color="cyan"
+              variant="light"
+            >
+              <IconHash size={16} />
+            </ThemeIcon>
+          </Group>
+          <Divider mt="xs" color="cyan.4" />
+
+          <Navbar.Section
+            mt="xl"
+            grow
+            className="h-[400px]"
+            component={ScrollArea}
           >
-            <ArticleSidebar
-              id={data && data.id}
-              data={data}
-              flipSidebarOrientation={flipSidebarOrientation}
-              setFlipSidebarOrientation={setFlipSidebarOrientation}
-              theme={theme}
-            />
-          </div>
-        </Grid.Col>
-        <Grid.Col xs={12} className="px-0 md:px-5 -order-1" span={12} lg={8}>
-          <MarkDownRenderer className="ml-5 xs:max-w-[700px] md:max-w-full xs:mx-auto">
-            {article && article.body}
-          </MarkDownRenderer>
-        </Grid.Col>
-      </Grid>
+            <Stack>
+              {data.tags.map((mapped1, index) => {
+                return mapped1.articles.map((mapped2, index2) => {
+                  if (mapped2.id !== data.id) {
+                    return (
+                      <Group key={"abox" + index2} mx="sm" noWrap>
+                        <Text size="xl" weight={800} color="gray.4">
+                          {index + 1}
+                        </Text>
+                        <Divider className="min-w-[20px]" />
+                        <HorizontalArticleGridCard
+                          data={mapped2}
+                          titleClamp={2}
+                          theme={theme}
+                          style={CardStyle.WIDGET}
+                        />
+                      </Group>
+                    );
+                  }
+                });
+              })}
+            </Stack>
+          </Navbar.Section>
+        </Navbar>
+      </MediaQuery>
     </AppWrapper>
   );
 };
@@ -339,11 +266,24 @@ export const getStaticProps = async (ctx) => {
         )
         ),
         tags (
-          title
+          title,
+        articles (
+        id,
+        title,
+        description,
+        cover,
+        body,
+        editors_pick,
+        author_id,
+        views
+          )
         )
     `
     )
-    .eq("id", id);
+    .eq("id", id)
+    .limit(5, {
+      foreignTable: "tags.articles",
+    });
 
   if (data) {
     var newData = await Promise.all(
@@ -368,6 +308,8 @@ export const getStaticProps = async (ctx) => {
         };
       })
     );
+
+    console.log(newData[0].tags);
 
     return {
       props: {

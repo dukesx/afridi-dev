@@ -287,6 +287,8 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                         data={mapped}
                         style={CardStyle.FEED}
                         theme={theme}
+                        withCover
+                        withFooter
                       />
                     ))}
                   </Stack>
@@ -314,6 +316,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 <Stack spacing="xl" mb="xl" align="center">
                   {trendingData.map((mapped, index) => (
                     <HorizontalGridCard
+                      withCover
                       setBookmarks={setUserBookmarks}
                       bookmarks={userBookmarks}
                       key={"aloban" + index}
@@ -341,6 +344,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 <Stack spacing="xl" mb="xl" align="center">
                   {popularData.map((mapped, index) => (
                     <HorizontalGridCard
+                      withCover
                       setBookmarks={setUserBookmarks}
                       bookmarks={userBookmarks}
                       key={"alobis" + index}

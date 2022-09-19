@@ -45,34 +45,32 @@ const ArticleComposer = () => {
   };
   //
 
-  const getTourModalValue = async () => {
-    const { error, data } = await supabaseClient
-      .from("authors")
-      .select("article_editor_tour")
-      .eq("id", session.user.id);
+  // const getTourModalValue = async () => {
+  //   const { error, data } = await supabaseClient
+  //     .from("authors")
+  //     .select("article_editor_tour")
+  //     .eq("id", session.user.id);
 
-    // setArticleEditorTour(data[0].article_editor_tour);
-    if (data[0].article_editor_tour) {
-      openModal({
-        title: "",
-        size: "xl",
-        withCloseButton: false,
-        fullScreen: true,
-        children: <EditorTourModal />,
-        transitionTimingFunction: "easeInOut",
-        transition: "pop",
-        transitionDuration: 1000,
-        closeOnClickOutside: false,
-        closeOnEscape: false,
-      });
-    }
-  };
+  //   if (data[0].article_editor_tour) {
+  //     openModal({
+  //       title: "",
+  //       size: "xl",
+  //       withCloseButton: false,
+  //       children: <EditorTourModal />,
+  //       transitionTimingFunction: "easeInOut",
+  //       transition: "pop",
+  //       transitionDuration: 1000,
+  //       closeOnClickOutside: false,
+  //       closeOnEscape: false,
+  //     });
+  //   }
+  // };
 
-  useEffect(() => {
-    if (session.user) {
-      getTourModalValue();
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session.user) {
+  //     getTourModalValue();
+  //   }
+  // }, [session]);
 
   //
 

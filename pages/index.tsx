@@ -212,7 +212,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
                         <IconHash size={15} />
                       </ThemeIcon>
                     }
-                    color="blue"
+                    color="gray"
                     path={`/tags/${mapped.title}`}
                     text={mapped.title}
                     description={
@@ -236,10 +236,6 @@ const LandingPage = ({ feedData, feedDataCount }) => {
                 </Center>
               )}
             </Navbar.Section>
-
-            {/* <Navbar.Section>
-              <Text>This is my footer</Text>
-            </Navbar.Section> */}
           </Navbar>
 
           <Grid.Col span={12} sm={12} xs={12} md={12} lg={7}>

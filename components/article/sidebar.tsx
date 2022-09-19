@@ -17,6 +17,7 @@ import {
   useMantineColorScheme,
   ThemeIcon,
   HoverCard,
+  Aside,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -52,7 +53,7 @@ interface ArticleSidebarProps {
   id: string;
 }
 
-const ArticleSidebar = ({
+const ArticleRightSidebar = ({
   data,
   theme,
   id,
@@ -103,13 +104,14 @@ const ArticleSidebar = ({
     }
   }, [isLoading]);
   return (
-    <Fragment>
-      <Card withBorder className="w-full">
-        <Stack align="start">
-          <Text weight={700} size="lg">
-            Your Feedback <span className="ml-2">😊 👇</span>
+    <Aside.Section>
+      <Card className="w-full overflow-hidden px-0">
+        <Stack spacing={0} align="start">
+          <Text pb="sm" color="dimmed" weight={400} size="xs">
+            Your Feedback
           </Text>
-          <Group spacing="lg" className="pt-3">
+          <Divider mb="md" className="w-full" />
+          <Group spacing="lg">
             {session && bookmarks && bookmarks.includes(id) ? (
               <Tooltip label="bookmarked">
                 <ActionIcon
@@ -223,8 +225,13 @@ const ArticleSidebar = ({
           </Group>
         </Stack>
       </Card>
-      <Card mt="xl" className="w-full pb-6" withBorder>
-        <Group className="w-full items-center xs:justify-center md:justify-start">
+
+      <Text size="xs" mt="xl" weight={400} color="dimmed" mb="sm">
+        Author&apos;s Section
+      </Text>
+      <Divider />
+      <Card className="w-full pb-6 px-0">
+        <Group className="w-full" noWrap>
           <Tooltip
             mt="xl"
             label={
@@ -254,13 +261,7 @@ const ArticleSidebar = ({
             </Avatar>
           </Tooltip>
           <Stack className="md:mr-auto sm:mr-0" spacing={0}>
-            <Text
-              lineClamp={1}
-              className="max-w-[130px]"
-              mt={5}
-              weight={700}
-              size="xs"
-            >
+            <Text lineClamp={1} mt={5} weight={700} size="xs">
               {data
                 ? data.authors.firstName + " " + data.authors.lastName
                 : null}
@@ -279,6 +280,9 @@ const ArticleSidebar = ({
               label="Co-Authors Section"
               labelPosition="center"
               color="gray"
+              labelProps={{
+                size: "xs",
+              }}
             ></Divider>
           ) : null}
           <Grid>
@@ -325,44 +329,8 @@ const ArticleSidebar = ({
           </Grid>
         </div>
       </Card>
-      <Card className="w-full h-[70px]" withBorder>
-        <Group position="apart">
-          <Input.Wrapper
-            label={
-              <Text size="sm">
-                Switch sidebar side
-                <Tooltip label="Click to learn more">
-                  <Text component="a" href="#">
-                    <IconInfoCircle
-                      size={18}
-                      className="align-sub ml-1"
-                      color="gray"
-                    />
-                  </Text>
-                </Tooltip>
-              </Text>
-            }
-            description="to ease eye travel 👀"
-          >
-            {}
-          </Input.Wrapper>
-          <Switch
-            size="xl"
-            onLabel="Left"
-            offLabel="Right"
-            checked={flipSidebarOrientation}
-            styles={{
-              label: {},
-              input: {
-                width: !flipSidebarOrientation ? 74 : 65,
-              },
-            }}
-            onChange={() => setFlipSidebarOrientation(!flipSidebarOrientation)}
-          />
-        </Group>
-      </Card>
-    </Fragment>
+    </Aside.Section>
   );
 };
 
-export default ArticleSidebar;
+export default ArticleRightSidebar;

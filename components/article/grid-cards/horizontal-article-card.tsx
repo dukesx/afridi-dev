@@ -46,16 +46,22 @@ interface HorizontalGridCardProps {
   bookmarks?: Array<any>;
   setBookmarks?: Function;
   appreciations?: Array<any>;
+  withCover?: boolean | false;
+  withFooter?: boolean | false;
+  titleClamp?: number;
 }
 
-const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
+const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
   theme,
   style,
   data,
   coverClassName,
   setBookmarks,
+  titleClamp,
   bookmarks,
+  withFooter,
   appreciations,
+  withCover,
 }) => {
   const awards = [
     {
@@ -75,19 +81,21 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   const { session } = useSessionContext();
   return data ? (
     <Group noWrap className="w-full">
-      <AfridiImage
-        imageClassName={coverClassName}
-        cover_base_64={data.cover_base_64 ? data.cover_base_64 : null}
-        className="rounded-full"
-        path={data.cover}
-        width={style == CardStyle.FEED ? 90 : 100}
-        height={
-          style == CardStyle.WIDGET ? 100 : style == CardStyle.FEED ? 90 : 100
-        }
-        style={{
-          borderRadius: theme.radius.sm,
-        }}
-      />
+      {withCover ? (
+        <AfridiImage
+          imageClassName={coverClassName}
+          cover_base_64={data.cover_base_64 ? data.cover_base_64 : null}
+          className="rounded-full"
+          path={data.cover}
+          width={style == CardStyle.FEED ? 90 : 90}
+          height={
+            style == CardStyle.WIDGET ? 90 : style == CardStyle.FEED ? 90 : 100
+          }
+          style={{
+            borderRadius: theme.radius.sm,
+          }}
+        />
+      ) : null}
       <Stack
         spacing="xs"
         className={
@@ -101,7 +109,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
         <Text
           component={NextLink}
           href={`/article/${data.id}`}
-          lineClamp={2}
+          lineClamp={titleClamp ?? 2}
           className={
             style == CardStyle.DEFAULT
               ? "text-xs xs:text-xs max-w-[270px]"
@@ -125,159 +133,145 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
         >
           {data.description}
         </Text>
-        <Group spacing="xs">
-          {session && bookmarks && bookmarks.includes(data.id) ? (
-            <Tooltip label="bookmarked">
-              <ActionIcon
-                onClick={async () => {
-                  const { error } = await supabase
-                    .from("bookmarks")
-                    .delete()
-                    .match({
-                      author_id: session.user.id,
-                      article_id: data.id,
-                    });
+        {withFooter ? (
+          <Group spacing="xs">
+            {session && bookmarks && bookmarks.includes(data.id) ? (
+              <Tooltip label="bookmarked">
+                <ActionIcon
+                  onClick={async () => {
+                    const { error } = await supabase
+                      .from("bookmarks")
+                      .delete()
+                      .match({
+                        author_id: session.user.id,
+                        article_id: data.id,
+                      });
 
-                  if (!error) {
-                    var bookmarksArr = [...bookmarks];
-                    var newBookmarks = bookmarksArr.filter(
-                      (mapped) => mapped !== data.id
-                    );
-                    setBookmarks(newBookmarks);
-                  }
-                }}
-                color="gray"
-                size="md"
-                variant="light"
-                radius="xl"
-              >
-                <IconBookmark
-                  fill={
-                    colorScheme == "dark"
-                      ? theme.colors.gray[6]
-                      : theme.colors.gray[4]
-                  }
-                  size={18}
-                />
-              </ActionIcon>
-            </Tooltip>
-          ) : session && bookmarks ? (
-            <Tooltip label="bookmark this">
-              <ActionIcon
-                onClick={async () => {
-                  const { error } = await supabase.from("bookmarks").insert({
-                    article_id: data.id,
-                    author_id: session.user.id,
-                  });
-
-                  if (!error) {
-                    var bookmarksArr = [...bookmarks];
-                    bookmarksArr.push(data.id);
-                    setBookmarks(bookmarksArr);
-                  }
-                }}
-                color="gray"
-                size="md"
-                variant="light"
-                radius="xl"
-              >
-                <IconBookmark fill={"transparent"} size={18} />
-              </ActionIcon>
-            </Tooltip>
-          ) : null}
-
-          {appreciations && appreciations.length > 0 ? (
-            <Fragment>
-              <Divider
-                className="h-[14px] align-middle my-auto"
-                orientation="vertical"
-                size={1}
-              />
-              <Tooltip
-                label={`${appreciations.length} ${
-                  appreciations.length > 1 ? "people" : "person"
-                } appreciated it`}
-              >
-                <Group spacing="xs">
-                  <ThemeIcon
-                    radius="xl"
-                    color="yellow"
-                    size="sm"
-                    variant="light"
-                  >
-                    <Text size="sm">👏</Text>
-                  </ThemeIcon>
-
-                  <Text color="dimmed" weight={700} size="xs">
-                    {Intl.NumberFormat("en", {
-                      notation: "compact",
-                    }).format(appreciations.length)}
-                  </Text>
-                </Group>
-              </Tooltip>
-            </Fragment>
-          ) : null}
-
-          {data.article_views ? (
-            <Fragment>
-              <Divider
-                className="h-[14px] align-middle my-auto"
-                orientation="vertical"
-                size={1}
-              />
-
-              <Group spacing="xs">
-                <ThemeIcon variant="light" size="md" color="gray" radius="xl">
-                  <IconEye size={16} />
-                </ThemeIcon>
-                <Text size="xs">
-                  {Intl.NumberFormat("en", { notation: "compact" }).format(
-                    data.article_views.length
-                  )}
-                </Text>
-              </Group>
-            </Fragment>
-          ) : null}
-
-          {data.editors_pick ? (
-            <Fragment>
-              <Divider
-                className="h-[14px] align-middle my-auto"
-                orientation="vertical"
-                size={1}
-              />
-              <Tooltip
-                label="Editor's Choice 🤓"
-                position="bottom"
-                mb="xl"
-                ml="xl"
-              >
-                <ThemeIcon variant="light" color="yellow" radius="xl">
-                  <Text size="sm">👍‍</Text>
-                </ThemeIcon>
-              </Tooltip>
-            </Fragment>
-          ) : null}
-          <Fragment>
-            {data.tags &&
-            data.tags.filter((mapped) => mapped.title == "trending").length >
-              0 ? (
-              <Tooltip label="Trending">
-                <Avatar
-                  size="sm"
-                  color="blue"
-                  className="rounded-full"
+                    if (!error) {
+                      var bookmarksArr = [...bookmarks];
+                      var newBookmarks = bookmarksArr.filter(
+                        (mapped) => mapped !== data.id
+                      );
+                      setBookmarks(newBookmarks);
+                    }
+                  }}
+                  color="gray"
+                  size="md"
+                  variant="light"
                   radius="xl"
                 >
-                  <IconBolt size={18} />
-                </Avatar>
+                  <IconBookmark
+                    fill={
+                      colorScheme == "dark"
+                        ? theme.colors.gray[6]
+                        : theme.colors.gray[4]
+                    }
+                    size={18}
+                  />
+                </ActionIcon>
+              </Tooltip>
+            ) : session && bookmarks ? (
+              <Tooltip label="bookmark this">
+                <ActionIcon
+                  onClick={async () => {
+                    const { error } = await supabase.from("bookmarks").insert({
+                      article_id: data.id,
+                      author_id: session.user.id,
+                    });
+
+                    if (!error) {
+                      var bookmarksArr = [...bookmarks];
+                      bookmarksArr.push(data.id);
+                      setBookmarks(bookmarksArr);
+                    }
+                  }}
+                  color="gray"
+                  size="md"
+                  variant="light"
+                  radius="xl"
+                >
+                  <IconBookmark fill={"transparent"} size={18} />
+                </ActionIcon>
               </Tooltip>
             ) : null}
-          </Fragment>
-        </Group>
+
+            {appreciations && appreciations.length > 0 ? (
+              <Fragment>
+                <Divider
+                  className="h-[14px] align-middle my-auto"
+                  orientation="vertical"
+                  size={1}
+                />
+                <Tooltip
+                  label={`${appreciations.length} ${
+                    appreciations.length > 1 ? "people" : "person"
+                  } appreciated it`}
+                >
+                  <Group spacing="xs">
+                    <ThemeIcon
+                      radius="xl"
+                      color="yellow"
+                      size="sm"
+                      variant="light"
+                    >
+                      <Text size="sm">👏</Text>
+                    </ThemeIcon>
+
+                    <Text color="dimmed" weight={700} size="xs">
+                      {Intl.NumberFormat("en", {
+                        notation: "compact",
+                      }).format(appreciations.length)}
+                    </Text>
+                  </Group>
+                </Tooltip>
+              </Fragment>
+            ) : null}
+
+            {data.article_views ? (
+              <Fragment>
+                <Divider
+                  className="h-[14px] align-middle my-auto"
+                  orientation="vertical"
+                  size={1}
+                />
+
+                <Group spacing="xs">
+                  <ThemeIcon variant="light" size="md" color="gray" radius="xl">
+                    <IconEye size={16} />
+                  </ThemeIcon>
+                  <Text size="xs">
+                    {Intl.NumberFormat("en", { notation: "compact" }).format(
+                      data.article_views.length
+                    )}
+                  </Text>
+                </Group>
+              </Fragment>
+            ) : null}
+
+            {data.editors_pick ? (
+              <Fragment>
+                <Divider
+                  className="h-[14px] align-middle my-auto"
+                  orientation="vertical"
+                  size={1}
+                />
+                <Tooltip
+                  label="Editor's Choice 🤓"
+                  position="bottom"
+                  mb="xl"
+                  ml="xl"
+                >
+                  <ThemeIcon variant="light" color="yellow" radius="xl">
+                    <Text size="sm">👍‍</Text>
+                  </ThemeIcon>
+                </Tooltip>
+              </Fragment>
+            ) : null}
+          </Group>
+        ) : null}
       </Stack>
     </Group>
   ) : null;
 };
 
-export default HorizontalGridCard;
+export default HorizontalArticleGridCard;

@@ -306,7 +306,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               <Skeleton radius="xl" height={35} width={150} mr="sm" />
             ) : session ? (
               <Fragment>
-                <Menu width={300} position="bottom-end">
+                <Menu zIndex={99999999999} width={300} position="bottom-end">
                   <Menu.Target>
                     <Button
                       leftIcon={<IconPencil size={18} />}
