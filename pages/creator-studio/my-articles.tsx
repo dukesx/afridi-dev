@@ -3,10 +3,10 @@ import { Button, Group, LoadingOverlay, Text } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { useEffect, useState } from "react";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { AfridiDevArticle } from "../../components/global/grid-cards/largeGridCard";
+import { AfridiDevArticle } from "../../components/article/grid-cards/large-article-card";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { format } from "date-fns";
-import StudioWrapper from "../../components/global/studio/studio-wrapper";
+import StudioWrapper from "../../components/studio/studio-wrapper";
 import { openConfirmModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { IconX } from "@tabler/icons";
@@ -163,22 +163,75 @@ const CreatorsStudio = ({ authored }) => {
                         labels: { confirm: "Confirm", cancel: "Cancel" },
                         onCancel: () => {},
                         onConfirm: async () => {
-                          const { error, data } = await supabaseClient
-                            .from("articles")
-                            .delete()
-                            .match({
-                              id: id,
-                            });
+                          const { error: deleteTagsError } =
+                            await supabaseClient
+                              .from("articles_tags")
+                              .delete()
+                              .match({
+                                article_id: id,
+                              });
 
-                          if (!error) {
-                            getAuthorArticles();
-                          } else {
-                            showNotification({
-                              title: "Error",
-                              message: error.message,
-                              color: "red",
-                              icon: <IconX size={18} />,
-                            });
+                          const { error: deleteBookmarksError } =
+                            await supabaseClient
+                              .from("bookmarks")
+                              .delete()
+                              .match({
+                                article_id: id,
+                              });
+
+                          const { error: deleteViewsError } =
+                            await supabaseClient
+                              .from("article_views")
+                              .delete()
+                              .match({
+                                article_id: id,
+                              });
+
+                          if (
+                            !deleteTagsError &&
+                            !deleteBookmarksError &&
+                            !deleteViewsError
+                          ) {
+                            const { error, data } = await supabaseClient
+                              .from("articles")
+                              .delete()
+                              .match({
+                                id: id,
+                              }).select(`
+                            id,
+                            authors!articles_author_id_fkey
+                             (
+                              id,
+                              content_count
+                            )
+                            `);
+
+                            if (!error) {
+                              const { error: decreaseAuthorCount } =
+                                await supabaseClient
+                                  .from("authors")
+                                  .update({
+                                    content_count:
+                                      //@ts-ignore
+                                      data[0].authors.content_count - 1,
+                                  })
+                                  .eq(
+                                    "id",
+                                    //@ts-ignore
+                                    data[0].authors.id
+                                  );
+
+                              if (!decreaseAuthorCount) {
+                                getAuthorArticles();
+                              }
+                            } else {
+                              showNotification({
+                                title: "Error",
+                                message: error.message,
+                                color: "red",
+                                icon: <IconX size={18} />,
+                              });
+                            }
                           }
                         },
                       });

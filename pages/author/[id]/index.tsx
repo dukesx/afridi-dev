@@ -40,7 +40,7 @@ import {
   IconX,
 } from "@tabler/icons";
 import React, { Fragment, Suspense, useEffect, useRef, useState } from "react";
-import SquareHorizontalWidget from "../../../components/landing/widgets/square-horizontal";
+import SquareHorizontalWidget from "../../../components/landing/widgets/articles/square-horizontal-article";
 import "country-flag-icons/3x2/flags.css";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
@@ -54,7 +54,7 @@ import { formatDistanceToNow, parseISO } from "date-fns";
 import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
 import { supabase } from "../../../utils/supabaseClient";
-import { AfridiDevArticle } from "../../../components/global/grid-cards/largeGridCard";
+import { AfridiDevArticle } from "../../../components/article/grid-cards/large-article-card";
 import { GetServerSideProps, GetStaticPropsContext } from "next";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
@@ -311,6 +311,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                   placeholder={
                     <AfridiImage
                       priority
+                      isResponsive
                       fillImage={false}
                       height={450}
                       width={1320}
@@ -334,6 +335,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                   priority
                   fillImage={false}
                   height={450}
+                  isResponsive
                   width={1320}
                   path={
                     cover

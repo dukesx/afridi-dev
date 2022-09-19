@@ -18,7 +18,7 @@ import { IconBookmarks, IconX } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import HorizontalGridCard, {
   CardStyle,
-} from "../../../components/global/grid-cards/horizontalGridCard";
+} from "../../../components/article/grid-cards/horizontal-article-card";
 import EmptyPlaceholder from "../../../components/global/placeholders/empty";
 import FeedLoader from "../../../components/global/skeletons/feedLoader";
 import AppWrapper from "../../../components/global/wrapper";

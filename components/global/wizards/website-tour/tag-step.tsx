@@ -12,6 +12,7 @@ import { getFloatingPosition } from "@mantine/core/lib/Floating";
 import { useForm } from "@mantine/form";
 import { type User } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import { type Session } from "@supabase/supabase-js";
 import { IconArrowLeft } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import { forbidden_tags } from "../../../../data/static/forbidden_tags";
@@ -21,10 +22,16 @@ export interface WelcomeWizardStepProps {
   step: number;
   user?: User;
   theme?: MantineTheme;
+  client?: any;
+  session?: Session;
 }
 
-const TagPickingStep = ({ setStep, step, user }: WelcomeWizardStepProps) => {
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
+const TagPickingStep = ({
+  setStep,
+  step,
+  client,
+  session,
+}: WelcomeWizardStepProps) => {
   const [step3Loading, setStep3Loading] = useState(false);
   const [tagsLoading, setTagsLoading] = useState(false);
   const form2 = useForm({
@@ -41,7 +48,7 @@ const TagPickingStep = ({ setStep, step, user }: WelcomeWizardStepProps) => {
 
   const getTags = async () => {
     setTagsLoading(true);
-    const { error, data } = await supabaseClient
+    const { error, data } = await client
       .from("tags")
       .select(
         `
@@ -81,10 +88,10 @@ const TagPickingStep = ({ setStep, step, user }: WelcomeWizardStepProps) => {
         onSubmit={form2.onSubmit(async (val) => {
           setStep3Loading(true);
           val.tags.map(async (mapped) => {
-            const { error, data } = await supabaseClient
+            const { error, data } = await client
               .from("author_followed_tags")
               .insert({
-                author_id: user.id,
+                author_id: session.user.id,
                 tag_id: mapped,
               });
           });
@@ -105,7 +112,7 @@ const TagPickingStep = ({ setStep, step, user }: WelcomeWizardStepProps) => {
               !forbidden_tags.includes(query.toLowerCase())
             ) {
               setTagsLoading(true);
-              const { error, data, count } = await supabaseClient
+              const { error, data, count } = await client
                 .from("tags")
                 .select("title", { count: "exact" })
                 .match({ title: query });

@@ -32,7 +32,7 @@ export enum ImageUploaderType {
   NONE,
 }
 
-const ImageUploader = ({
+const AfridiImageUploader = ({
   placeholder,
   user,
   setImage,
@@ -181,4 +181,4 @@ const ImageUploader = ({
   );
 };
 
-export default ImageUploader;
+export default AfridiImageUploader;

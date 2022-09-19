@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { GeneralStore, useGeneralStore } from "../../data/static/store";
 import GlobalHeader from "./header";
 import AppLoader from "./loaders/appLoader";
-import StudioSidebar from "./studio/sidebar/sidebar";
+import StudioSidebar from "../studio/sidebar/sidebar";
 import WebsiteTourWizardBase from "./wizards/website-tour/wizardBase";
 interface AppWrapperProps {
   children: any;
@@ -54,7 +54,13 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
         withCloseButton: false,
         closeOnClickOutside: false,
         closeOnEscape: false,
-        children: <WebsiteTourWizardBase theme={theme} />,
+        children: (
+          <WebsiteTourWizardBase
+            client={supabaseClient}
+            session={session}
+            theme={theme}
+          />
+        ),
         transitionTimingFunction: "easeInOut",
         transition: "pop",
         transitionDuration: 1000,

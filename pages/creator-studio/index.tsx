@@ -1,11 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Button,
   Card,
-  Center,
-  Group,
-  Loader,
-  LoadingOverlay,
   Stack,
   Text,
   ThemeIcon,
@@ -15,10 +10,9 @@ import {
 } from "@mantine/core";
 import { Fragment, useEffect, useState } from "react";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { AfridiDevArticle } from "../../components/global/grid-cards/largeGridCard";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
-import StudioWrapper from "../../components/global/studio/studio-wrapper";
-import { IconArrowRight, IconEdit, IconTrendingUp } from "@tabler/icons";
+import StudioWrapper from "../../components/studio/studio-wrapper";
+import { IconTrendingUp } from "@tabler/icons";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -30,26 +24,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
-import Image from "next/image";
-import OopsPlaceholer from "../../public/oops.svg";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ChartTitle,
-  Tooltip,
-  Legend
-);
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ChartTitle,
-  Tooltip,
-  Legend
-);
 
 const CreatorsStudio = ({ authored }) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
@@ -160,6 +134,9 @@ const CreatorsStudio = ({ authored }) => {
       .eq("author_id", session && session.user.id)
       .lte("article_views.created_at", date.toUTCString())
       .gte("article_views.created_at", date2.toUTCString())
+      .order("id", {
+        ascending: false,
+      })
       .limit(10);
 
     //@ts-ignore
@@ -172,14 +149,15 @@ const CreatorsStudio = ({ authored }) => {
         title: mapped.title,
       })
     );
+
     newArticlesArr.sort((a, b) => {
-      return b.views.length - a.views.length;
+      return b.views - a.views;
     });
 
     const chartData = {
       datasets: [
         {
-          label: ` Total Monthly Views`,
+          label: `  Views This Month`,
           data: newArticlesArr,
           borderColor: theme.colors.yellow[6],
           borderWidth: 4,

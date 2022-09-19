@@ -31,11 +31,11 @@ import {
 import { useRouter } from "next/router";
 import React, { createRef, Fragment, useEffect } from "react";
 import { useState } from "react";
-import { forbidden_tags } from "../../../../data/static/forbidden_tags";
-import AfridiImage from "../../../global/afridi-image";
-import ImageUploader, {
+import { forbidden_tags } from "../../../../../data/static/forbidden_tags";
+import AfridiImage from "../../../../global/afridi-image";
+import AfridiImageUploader, {
   ImageUploaderType,
-} from "../../../global/image_uploader";
+} from "../../../../global/image_uploader";
 
 //
 
@@ -341,7 +341,7 @@ const ArticleEditSidebar = ({
       </Input.Wrapper>
 
       <Input.Wrapper pb="xl" label="Cover" required error={form.errors.cover}>
-        <ImageUploader
+        <AfridiImageUploader
           px={1}
           py={1}
           placeholder={

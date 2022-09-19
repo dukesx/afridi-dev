@@ -89,8 +89,10 @@ const Article = ({ article, tags }) => {
             >
               {data ? (
                 <AfridiImage
+                  // isResponsive
                   cover_base_64={data.cover_base_64}
-                  fillImage={true}
+                  // fillImage={true}
+                  fillImage
                   path={data ? data.cover : null}
                   height={500}
                   width={500}

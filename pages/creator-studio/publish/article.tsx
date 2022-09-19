@@ -22,7 +22,7 @@ import React, { useEffect, useState } from "react";
 import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
 import EditorTourModal from "../../../components/global/editor/tour-modal";
 import AppWrapper from "../../../components/global/wrapper";
-import ArticleComposeSidebar from "../../../components/user/article/compose/sidebar";
+import ArticleComposeSidebar from "../../../components/studio/publish/article/compose/article-compose-sidebar";
 
 const ArticleComposer = () => {
   //

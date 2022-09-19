@@ -1,26 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { useState } from "react";
-import {
-  createStyles,
-  Navbar,
-  UnstyledButton,
-  Tooltip,
-  Title,
-  Text,
-  Group,
-  Button,
-} from "@mantine/core";
-import {
-  IconHome2,
-  IconGauge,
-  IconDeviceDesktopAnalytics,
-  IconFingerprint,
-  IconCalendarStats,
-  IconUser,
-  IconSettings,
-  IconDashboard,
-  IconBrandGoogleAnalytics,
-} from "@tabler/icons";
+import { createStyles, Navbar, Title } from "@mantine/core";
+import { IconHome2 } from "@tabler/icons";
 import SidebarItem from "./sidebar-item";
 import SidebarSubItem from "./sidebar-sub-item";
 

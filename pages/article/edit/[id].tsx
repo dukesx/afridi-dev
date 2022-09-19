@@ -16,7 +16,7 @@ import React, { useEffect, useState } from "react";
 import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
 import AppWrapper from "../../../components/global/wrapper";
 import { openModal } from "@mantine/modals";
-import ArticleEditSidebar from "../../../components/user/article/edit/sidebar";
+import ArticleEditSidebar from "../../../components/studio/publish/article/edit/article-edit-sidebar";
 import EditorTourModal from "../../../components/global/editor/tour-modal";
 
 const EditArticle = ({ user, data }) => {

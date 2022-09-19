@@ -29,8 +29,8 @@ import {
 } from "@tabler/icons";
 import { Fragment } from "react";
 import { supabase } from "../../../utils/supabaseClient";
-import AfridiImage from "../afridi-image";
-import { AfridiDevArticle } from "./largeGridCard";
+import AfridiImage from "../../global/afridi-image";
+import { AfridiDevArticle } from "./large-article-card";
 
 export enum CardStyle {
   DEFAULT,
@@ -73,7 +73,6 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
   ];
   const { colorScheme } = useMantineColorScheme();
   const { session } = useSessionContext();
-  console.log(data.tags);
   return data ? (
     <Group noWrap className="w-full">
       <AfridiImage
@@ -81,12 +80,12 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
         cover_base_64={data.cover_base_64 ? data.cover_base_64 : null}
         className="rounded-full"
         path={data.cover}
-        width={style == CardStyle.FEED ? 100 : 100}
+        width={style == CardStyle.FEED ? 90 : 100}
         height={
-          style == CardStyle.WIDGET ? 100 : style == CardStyle.FEED ? 100 : 100
+          style == CardStyle.WIDGET ? 100 : style == CardStyle.FEED ? 90 : 100
         }
         style={{
-          borderRadius: theme.radius.lg,
+          borderRadius: theme.radius.sm,
         }}
       />
       <Stack
@@ -112,7 +111,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
           }
           size={style == CardStyle.FEED ? "sm" : "xs"}
           style={{
-            lineHeight: 1.5,
+            lineHeight: 1.8,
           }}
         >
           {data.title}
@@ -126,7 +125,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
         >
           {data.description}
         </Text>
-        <Group>
+        <Group spacing="xs">
           {session && bookmarks && bookmarks.includes(data.id) ? (
             <Tooltip label="bookmarked">
               <ActionIcon
@@ -203,7 +202,7 @@ const HorizontalGridCard: React.FC<HorizontalGridCardProps> = ({
                   <ThemeIcon
                     radius="xl"
                     color="yellow"
-                    size="md"
+                    size="sm"
                     variant="light"
                   >
                     <Text size="sm">👏</Text>

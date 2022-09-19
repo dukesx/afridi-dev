@@ -4,15 +4,16 @@ import { forwardRef, useState } from "react";
 import { WelcomeWizardStepProps } from "./tag-step";
 import { countries } from "../../../../data/static/countries";
 import { IconArrowLeft } from "@tabler/icons";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { supabase } from "../../../../utils/supabaseClient";
 
 const DemographicsStep = ({
   step,
   setStep,
-  user,
+  session,
+  client,
   theme,
 }: WelcomeWizardStepProps) => {
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
   const [step2Loading, setStep2Loading] = useState(false);
   const form = useForm({
     initialValues: {
@@ -69,14 +70,14 @@ const DemographicsStep = ({
       <form
         onSubmit={form.onSubmit(async (val) => {
           setStep2Loading(true);
-          const { error, data } = await supabaseClient
+          const { error } = await client
             .from("authors")
             .update({
               firstName: val.firstName,
               lastName: val.lastName,
               location: val.location,
             })
-            .eq("id", user.id);
+            .eq("id", session.user.id);
 
           if (!error) {
             setStep2Loading(false);

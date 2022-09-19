@@ -8,9 +8,9 @@ import {
   Skeleton,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { AfridiDevAuthor } from "../../article/sidebar";
-import AfridiImage from "../afridi-image";
-import LargeGridCardSkeleton from "../skeletons/grid-cards/largeGridCardSkeleton";
+import { AfridiDevAuthor } from "../sidebar";
+import AfridiImage from "../../global/afridi-image";
+import LargeGridCardSkeleton from "../../global/skeletons/grid-cards/largeGridCardSkeleton";
 
 export type AfridiDevArticle = {
   id: string;

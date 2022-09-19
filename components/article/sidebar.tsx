@@ -31,7 +31,7 @@ import {
 import { Fragment, Suspense, useEffect, useState } from "react";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
 import AfridiImage from "../global/afridi-image";
-import SquareHorizontalWidget from "../landing/widgets/square-horizontal";
+import SquareHorizontalWidget from "../landing/widgets/articles/square-horizontal-article";
 
 export type AfridiDevAuthor = {
   firstName: string;

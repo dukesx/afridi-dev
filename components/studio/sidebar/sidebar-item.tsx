@@ -1,8 +1,6 @@
 import { createStyles, Tooltip, UnstyledButton } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { TablerIcon } from "@tabler/icons";
-import { sub } from "date-fns";
-import { ReactNode, useState } from "react";
 
 export interface SidebarItemProps {
   label: string;

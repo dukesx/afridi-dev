@@ -21,6 +21,7 @@ interface AfridiImageProps {
   imageClassName?: string;
   cover_base_64?: string;
   priority?: boolean | false;
+  isResponsive?: boolean | false;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
@@ -28,6 +29,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   path,
   style,
   fillImage,
+  isResponsive,
   imageClassName,
   cover_base_64,
   onClick,
@@ -70,11 +72,12 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
       <Image
         priority={priority ?? false}
         className={
-          (imageClassName ? imageClassName : "") + " object-cover w-full"
+          (imageClassName ? imageClassName : "") +
+          " object-cover w-full rounded-sm"
         }
         alt="article's cover image"
         src={path && path.replaceAll("/", "")}
-        layout={fillImage ? "fill" : "fixed"}
+        layout={fillImage ? "fill" : isResponsive ? "responsive" : "fixed"}
         width={fillImage ? false : width}
         height={fillImage ? false : height}
         quality={75}

@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { Fragment } from "react";
 import HorizontalGridCard, {
   CardStyle,
-} from "../global/grid-cards/horizontalGridCard";
+} from "../article/grid-cards/horizontal-article-card";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import HorizontalGridCardSkeleton from "../global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import InfiniteScroll from "react-infinite-scroller";
@@ -34,7 +34,7 @@ import {
 } from "../global/feed/functions";
 import EmptyPlaceholder from "../global/placeholders/empty";
 import { GeneralStore } from "../../data/static/store";
-import { AfridiDevArticle } from "../global/grid-cards/largeGridCard";
+import { AfridiDevArticle } from "../article/grid-cards/large-article-card";
 import FeedLoader from "../global/skeletons/feedLoader";
 interface LandingFeedProps {
   theme: MantineTheme;

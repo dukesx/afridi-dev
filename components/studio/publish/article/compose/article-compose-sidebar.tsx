@@ -31,11 +31,11 @@ import {
 import { useRouter } from "next/router";
 import React, { createRef, Fragment, useEffect } from "react";
 import { useState } from "react";
-import { forbidden_tags } from "../../../../data/static/forbidden_tags";
-import AfridiImage from "../../../global/afridi-image";
-import ImageUploader, {
+import { forbidden_tags } from "../../../../../data/static/forbidden_tags";
+import AfridiImage from "../../../../global/afridi-image";
+import AfridiImageUploader, {
   ImageUploaderType,
-} from "../../../global/image_uploader";
+} from "../../../../global/image_uploader";
 
 //
 
@@ -149,7 +149,16 @@ const ArticleComposeSidebar = ({
               author_id: session.user.id,
               body: markdown,
             })
-            .select();
+            .select(
+              `
+              id,
+              authors!articles_author_id_fkey
+              (
+                  id,
+                  content_count
+               )
+              `
+            );
 
           if (error) {
             setLoading(false);
@@ -204,6 +213,14 @@ const ArticleComposeSidebar = ({
                   });
               }
             });
+
+            const { error } = await supabaseClient
+              .from("authors")
+              .update({
+                //@ts-ignore
+                content_count: articleData[0].authors.content_count + 1,
+              })
+              .eq("id", session.user.id);
 
             setLoading(false);
             form.reset();
@@ -307,7 +324,7 @@ const ArticleComposeSidebar = ({
       </Input.Wrapper>
 
       <Input.Wrapper pb="xl" label="Cover" required error={form.errors.cover}>
-        <ImageUploader
+        <AfridiImageUploader
           px={1}
           py={1}
           placeholder={

@@ -19,8 +19,8 @@ import { IconArrowRight, IconArrowsShuffle, IconDice } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import HorizontalGridCard, {
   CardStyle,
-} from "../components/global/grid-cards/horizontalGridCard";
-import { AfridiDevArticle } from "../components/global/grid-cards/largeGridCard";
+} from "../components/article/grid-cards/horizontal-article-card";
+import { AfridiDevArticle } from "../components/article/grid-cards/large-article-card";
 import EmptyPlaceholder from "../components/global/placeholders/empty";
 import AppWrapper from "../components/global/wrapper";
 import { getRandomNumber } from "../utils/helpers";
@@ -63,7 +63,6 @@ const DazzleMe = () => {
         .range(rand, rand)
         .single();
 
-      console.log(data);
 
       setArticle(data);
       setLoading(false);

@@ -14,8 +14,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import { IconEdit, IconListDetails } from "@tabler/icons";
 import Image from "next/image";
 import { Fragment } from "react";
-import AppWrapper from "../wrapper";
-import OopsPlaceholder from "../../../public/oops.svg";
+import AppWrapper from "../global/wrapper";
+import OopsPlaceholder from "../../public/oops.svg";
 import { NextLink } from "@mantine/next";
 
 interface StudioWrapperProps {

@@ -15,6 +15,7 @@ import {
   ThemeIcon,
   ActionIcon,
   Card,
+  Skeleton,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
@@ -47,10 +48,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { GeneralStore } from "../../data/static/store";
 import PublishArticle from "../../public/publish-article.svg";
 import AfridiImage from "./afridi-image";
+import CreatorStudioIcon from "./creator-studio-icon";
 
 interface GlobalHeaderProps {
   activeHeaderKey: string;
@@ -233,26 +235,6 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                  {/* <Menu.Item
-                    href="/authors"
-                    component={NextLink}
-                    icon={<IconUsers size={20} />}
-                  >
-                    <Text>Author&apos;s Listing</Text>
-                  </Menu.Item> */}
-                  {/* <Menu.Item
-                    component={NextLink}
-                    href="/dazzle-me"
-                    icon={
-                      <IconDice
-                        // fill={theme.colors.blue[6]}
-                        color={theme.colors.indigo[6]}
-                        size={23}
-                      />
-                    }
-                  >
-                    Random Article
-                  </Menu.Item> */}
                   <Menu.Label>
                     <Text weight={600}>Legal</Text>
                   </Menu.Label>
@@ -320,243 +302,240 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
           </MediaQuery>
 
           <Group className="max-w-[200px] xs:max-w-[250px] ml-auto" spacing={0}>
-            {session && session.user && userData ? (
-              <Menu width={300} position="bottom-end">
-                <Menu.Target>
-                  <Button
-                    leftIcon={<IconPencil size={18} />}
-                    color="blue"
-                    variant="subtle"
-                    radius="xl"
-                    rightIcon={
-                      <IconChevronDown
-                        size={18}
-                        className="align-super mt-0.5"
-                      />
-                    }
-                    className="mr-1 xs:mr-4 text-xs xs:text-sm"
-                  >
-                    Compose
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    component={NextLink}
-                    passHref
-                    href="/creator-studio/publish/article"
-                  >
-                    <Stack align="center" spacing={0}>
-                      <Image
-                        alt=""
-                        src={PublishArticle}
-                        height={200}
-                        width={200}
-                      />
-                      <Text mt="xl" weight={700}>
-                        ARTICLE
-                      </Text>
-                      <Text
-                        className="text-center capitalize"
-                        size="xs"
-                        color="dimmed"
-                      >
-                        Craft beautiful articles like <b>Dev.to</b>,{" "}
-                        <b>Hashnode</b>, <b>Medium</b> & More
-                      </Text>
-                    </Stack>
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            ) : null}
-
-            {session && session.user && userData ? (
-              <Group>
-                <Menu position="bottom-end">
+            {isLoading ? (
+              <Skeleton radius="xl" height={35} width={150} mr="sm" />
+            ) : session ? (
+              <Fragment>
+                <Menu width={300} position="bottom-end">
                   <Menu.Target>
                     <Button
-                      px={5}
-                      className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
-                      radius="xl"
+                      leftIcon={<IconPencil size={18} />}
+                      color="blue"
                       variant="subtle"
+                      radius="xl"
+                      rightIcon={
+                        <IconChevronDown
+                          size={18}
+                          className="align-super mt-0.5"
+                        />
+                      }
+                      className="mr-1 xs:mr-4 text-xs xs:text-sm"
                     >
-                      <Group className="items-center h-full">
-                        <Avatar color="cyan" className="h-[40px]" radius="xl" />
-                      </Group>
+                      Compose
                     </Button>
                   </Menu.Target>
-                  <Menu.Dropdown className="w-[250px] xs:w-[300px]">
-                    <Card>
-                      <Group noWrap>
-                        <Avatar size={50} radius="xl">
-                          <AfridiImage
-                            priority
-                            width={60}
-                            height={60}
-                            path={userData.dp}
-                          />
-                        </Avatar>
-                        <Stack spacing={0}>
-                          <Text
-                            className="max-w-[200px]"
-                            lineClamp={1}
-                            weight={700}
-                            size="sm"
-                          >
-                            {userData.firstName + " " + userData.lastName}
-                          </Text>
-                          <Text color="dimmed" className="capitalize" size="xs">
-                            {userData.role}
-                          </Text>
-                        </Stack>
-                      </Group>
-                    </Card>
-                    {/* <Menu.Label mt="sm" className="">
-                      Control Center
-                    </Menu.Label> */}
+                  <Menu.Dropdown>
                     <Menu.Item
                       component={NextLink}
-                      href={`/author/${session.user.id}`}
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
-                        />
-                      }
-                      icon={<IconUserCircle color={theme.colors.cyan[4]} />}
+                      passHref
+                      href="/creator-studio/publish/article"
                     >
-                      Profile
-                    </Menu.Item>
-
-                    <Menu.Item
-                      component={NextLink}
-                      href={`/author/${session.user.id}/bookmarks`}
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
+                      <Stack align="center" spacing={0}>
+                        <Image
+                          alt=""
+                          src={PublishArticle}
+                          height={200}
+                          width={200}
                         />
-                      }
-                      icon={<IconBookmarks color={theme.colors.gray[6]} />}
-                    >
-                      Bookmarks
-                    </Menu.Item>
-                    <Menu.Item
-                      component={NextLink}
-                      href={`/author/${session.user.id}/settings`}
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
-                        />
-                      }
-                      icon={<IconSettings color={theme.colors.blue[4]} />}
-                    >
-                      Settings
-                    </Menu.Item>
-
-                    <Menu.Label>Creator Studio</Menu.Label>
-
-                    <Menu.Item
-                      component={NextLink}
-                      href={`/creator-studio`}
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
-                        />
-                      }
-                      icon={
-                        <ThemeIcon
-                          className="rounded-full"
-                          size="xl"
-                          radius="xl"
-                          variant="gradient"
-                          gradient={{
-                            from: "blue.5",
-                            to: "cyan.5",
-                          }}
+                        <Text mt="xl" weight={700}>
+                          ARTICLE
+                        </Text>
+                        <Text
+                          className="text-center capitalize"
+                          size="xs"
+                          color="dimmed"
                         >
-                          <Text className="text-sm" weight={700}>
-                            <b className="font-normal">{"{"}</b>
-                            {"CS"}
-                            <b className="font-normal">{"}"}</b>
-                          </Text>
-                        </ThemeIcon>
-                      }
-                    >
-                      Visit Studio
-                    </Menu.Item>
-
-                    <Menu.Item
-                      component={NextLink}
-                      href={`/creator-studio/my-articles`}
-                      rightSection={
-                        <IconChevronRight
-                          className="align-middle"
-                          color={theme.colors.dark[1]}
-                          size={22}
-                        />
-                      }
-                      icon={
-                        <ActionIcon
-                          className="rounded-full"
-                          size="lg"
-                          radius="xl"
-                          color="blue"
-                          variant="subtle"
-                        >
-                          <IconNews size={24} />
-                        </ActionIcon>
-                      }
-                    >
-                      My Articles
-                    </Menu.Item>
-                    <Menu.Label>Actions</Menu.Label>
-                    <Menu.Item
-                      onClick={() => toggleColorScheme()}
-                      icon={
-                        <Avatar
-                          size={35}
-                          radius="xl"
-                          styles={{
-                            placeholder: {
-                              backgroundColor:
-                                colorScheme == "dark"
-                                  ? theme.colors.yellow[6]
-                                  : theme.black,
-                            },
-                          }}
-                        >
-                          {colorScheme == "dark" ? (
-                            <IconSun color={theme.white} size={20} />
-                          ) : (
-                            <IconMoon color={theme.white} size={20} />
-                          )}
-                        </Avatar>
-                      }
-                    >
-                      {colorScheme == "dark"
-                        ? "Toggle Light Mode"
-                        : "Toggle Dark Mode"}
-                    </Menu.Item>
-                    <Menu.Item
-                      mb="sm"
-                      icon={
-                        <IconLogout color={theme.colors.yellow[6]} size={22} />
-                      }
-                      onClick={async () => {
-                        await supabaseClient.auth.signOut();
-                      }}
-                    >
-                      Sign out
+                          Craft beautiful articles like <b>Dev.to</b>,{" "}
+                          <b>Hashnode</b>, <b>Medium</b> & More
+                        </Text>
+                      </Stack>
                     </Menu.Item>
                   </Menu.Dropdown>
                 </Menu>
-              </Group>
+
+                <Group>
+                  <Menu position="bottom-end">
+                    <Menu.Target>
+                      <Button
+                        px={5}
+                        className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
+                        radius="xl"
+                        variant="subtle"
+                      >
+                        <Group className="items-center h-full">
+                          <Avatar
+                            color="cyan"
+                            className="h-[40px]"
+                            radius="xl"
+                          />
+                        </Group>
+                      </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown className="w-[250px] xs:w-[300px]">
+                      <Card>
+                        <Group noWrap>
+                          <Avatar size={50} radius="xl">
+                            <AfridiImage
+                              priority
+                              width={60}
+                              height={60}
+                              path={userData && userData.dp}
+                            />
+                          </Avatar>
+                          <Stack spacing={0}>
+                            {userData ? (
+                              <Text
+                                className="max-w-[200px]"
+                                lineClamp={1}
+                                weight={700}
+                                size="sm"
+                              >
+                                {userData.firstName + " " + userData.lastName}
+                              </Text>
+                            ) : null}
+
+                            <Text
+                              color="dimmed"
+                              className="capitalize"
+                              size="xs"
+                            >
+                              {userData && userData.role}
+                            </Text>
+                          </Stack>
+                        </Group>
+                      </Card>
+
+                      <Menu.Item
+                        component={NextLink}
+                        href={`/author/${session.user.id}`}
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={<IconUserCircle color={theme.colors.cyan[4]} />}
+                      >
+                        Profile
+                      </Menu.Item>
+
+                      <Menu.Item
+                        component={NextLink}
+                        href={`/author/${session.user.id}/bookmarks`}
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={<IconBookmarks color={theme.colors.gray[6]} />}
+                      >
+                        Bookmarks
+                      </Menu.Item>
+                      <Menu.Item
+                        component={NextLink}
+                        href={`/author/${session.user.id}/settings`}
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={<IconSettings color={theme.colors.blue[4]} />}
+                      >
+                        Settings
+                      </Menu.Item>
+
+                      <Menu.Label>Creator Studio</Menu.Label>
+
+                      <Menu.Item
+                        component={NextLink}
+                        href={`/creator-studio`}
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={<CreatorStudioIcon />}
+                      >
+                        Visit Studio
+                      </Menu.Item>
+
+                      <Menu.Item
+                        component={NextLink}
+                        href={`/creator-studio/my-articles`}
+                        rightSection={
+                          <IconChevronRight
+                            className="align-middle"
+                            color={theme.colors.dark[1]}
+                            size={22}
+                          />
+                        }
+                        icon={
+                          <ActionIcon
+                            className="rounded-full"
+                            size="lg"
+                            radius="xl"
+                            color="blue"
+                            variant="subtle"
+                          >
+                            <IconNews size={24} />
+                          </ActionIcon>
+                        }
+                      >
+                        My Articles
+                      </Menu.Item>
+                      <Menu.Label>Actions</Menu.Label>
+                      <Menu.Item
+                        onClick={() => toggleColorScheme()}
+                        icon={
+                          <Avatar
+                            size={35}
+                            radius="xl"
+                            styles={{
+                              placeholder: {
+                                backgroundColor:
+                                  colorScheme == "dark"
+                                    ? theme.colors.yellow[6]
+                                    : theme.black,
+                              },
+                            }}
+                          >
+                            {colorScheme == "dark" ? (
+                              <IconSun color={theme.white} size={20} />
+                            ) : (
+                              <IconMoon color={theme.white} size={20} />
+                            )}
+                          </Avatar>
+                        }
+                      >
+                        {colorScheme == "dark"
+                          ? "Toggle Light Mode"
+                          : "Toggle Dark Mode"}
+                      </Menu.Item>
+                      <Menu.Item
+                        mb="sm"
+                        icon={
+                          <IconLogout
+                            color={theme.colors.yellow[6]}
+                            size={22}
+                          />
+                        }
+                        onClick={async () => {
+                          await supabaseClient.auth.signOut();
+                        }}
+                      >
+                        Sign out
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                </Group>
+              </Fragment>
             ) : (
               <Link href="/get-started" passHref>
                 <Button
@@ -576,6 +555,258 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                 </Button>
               </Link>
             )}
+            {/* {isLoading == false ? (
+              session && session.user && userData ? (
+                <Fragment>
+                  <Menu width={300} position="bottom-end">
+                    <Menu.Target>
+                      <Button
+                        leftIcon={<IconPencil size={18} />}
+                        color="blue"
+                        variant="subtle"
+                        radius="xl"
+                        rightIcon={
+                          <IconChevronDown
+                            size={18}
+                            className="align-super mt-0.5"
+                          />
+                        }
+                        className="mr-1 xs:mr-4 text-xs xs:text-sm"
+                      >
+                        Compose
+                      </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      <Menu.Item
+                        component={NextLink}
+                        passHref
+                        href="/creator-studio/publish/article"
+                      >
+                        <Stack align="center" spacing={0}>
+                          <Image
+                            alt=""
+                            src={PublishArticle}
+                            height={200}
+                            width={200}
+                          />
+                          <Text mt="xl" weight={700}>
+                            ARTICLE
+                          </Text>
+                          <Text
+                            className="text-center capitalize"
+                            size="xs"
+                            color="dimmed"
+                          >
+                            Craft beautiful articles like <b>Dev.to</b>,{" "}
+                            <b>Hashnode</b>, <b>Medium</b> & More
+                          </Text>
+                        </Stack>
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+
+                  <Group>
+                    <Menu position="bottom-end">
+                      <Menu.Target>
+                        <Button
+                          px={5}
+                          className="mr-2 xs:mr-5 max-w-[90px] h-[50px] xs:h-[45px]"
+                          radius="xl"
+                          variant="subtle"
+                        >
+                          <Group className="items-center h-full">
+                            <Avatar
+                              color="cyan"
+                              className="h-[40px]"
+                              radius="xl"
+                            />
+                          </Group>
+                        </Button>
+                      </Menu.Target>
+                      <Menu.Dropdown className="w-[250px] xs:w-[300px]">
+                        <Card>
+                          <Group noWrap>
+                            <Avatar size={50} radius="xl">
+                              <AfridiImage
+                                priority
+                                width={60}
+                                height={60}
+                                path={userData.dp}
+                              />
+                            </Avatar>
+                            <Stack spacing={0}>
+                              <Text
+                                className="max-w-[200px]"
+                                lineClamp={1}
+                                weight={700}
+                                size="sm"
+                              >
+                                {userData.firstName + " " + userData.lastName}
+                              </Text>
+                              <Text
+                                color="dimmed"
+                                className="capitalize"
+                                size="xs"
+                              >
+                                {userData.role}
+                              </Text>
+                            </Stack>
+                          </Group>
+                        </Card>
+
+                        <Menu.Item
+                          component={NextLink}
+                          href={`/author/${session.user.id}`}
+                          rightSection={
+                            <IconChevronRight
+                              className="align-middle"
+                              color={theme.colors.dark[1]}
+                              size={22}
+                            />
+                          }
+                          icon={<IconUserCircle color={theme.colors.cyan[4]} />}
+                        >
+                          Profile
+                        </Menu.Item>
+
+                        <Menu.Item
+                          component={NextLink}
+                          href={`/author/${session.user.id}/bookmarks`}
+                          rightSection={
+                            <IconChevronRight
+                              className="align-middle"
+                              color={theme.colors.dark[1]}
+                              size={22}
+                            />
+                          }
+                          icon={<IconBookmarks color={theme.colors.gray[6]} />}
+                        >
+                          Bookmarks
+                        </Menu.Item>
+                        <Menu.Item
+                          component={NextLink}
+                          href={`/author/${session.user.id}/settings`}
+                          rightSection={
+                            <IconChevronRight
+                              className="align-middle"
+                              color={theme.colors.dark[1]}
+                              size={22}
+                            />
+                          }
+                          icon={<IconSettings color={theme.colors.blue[4]} />}
+                        >
+                          Settings
+                        </Menu.Item>
+
+                        <Menu.Label>Creator Studio</Menu.Label>
+
+                        <Menu.Item
+                          component={NextLink}
+                          href={`/creator-studio`}
+                          rightSection={
+                            <IconChevronRight
+                              className="align-middle"
+                              color={theme.colors.dark[1]}
+                              size={22}
+                            />
+                          }
+                          icon={<CreatorStudioIcon />}
+                        >
+                          Visit Studio
+                        </Menu.Item>
+
+                        <Menu.Item
+                          component={NextLink}
+                          href={`/creator-studio/my-articles`}
+                          rightSection={
+                            <IconChevronRight
+                              className="align-middle"
+                              color={theme.colors.dark[1]}
+                              size={22}
+                            />
+                          }
+                          icon={
+                            <ActionIcon
+                              className="rounded-full"
+                              size="lg"
+                              radius="xl"
+                              color="blue"
+                              variant="subtle"
+                            >
+                              <IconNews size={24} />
+                            </ActionIcon>
+                          }
+                        >
+                          My Articles
+                        </Menu.Item>
+                        <Menu.Label>Actions</Menu.Label>
+                        <Menu.Item
+                          onClick={() => toggleColorScheme()}
+                          icon={
+                            <Avatar
+                              size={35}
+                              radius="xl"
+                              styles={{
+                                placeholder: {
+                                  backgroundColor:
+                                    colorScheme == "dark"
+                                      ? theme.colors.yellow[6]
+                                      : theme.black,
+                                },
+                              }}
+                            >
+                              {colorScheme == "dark" ? (
+                                <IconSun color={theme.white} size={20} />
+                              ) : (
+                                <IconMoon color={theme.white} size={20} />
+                              )}
+                            </Avatar>
+                          }
+                        >
+                          {colorScheme == "dark"
+                            ? "Toggle Light Mode"
+                            : "Toggle Dark Mode"}
+                        </Menu.Item>
+                        <Menu.Item
+                          mb="sm"
+                          icon={
+                            <IconLogout
+                              color={theme.colors.yellow[6]}
+                              size={22}
+                            />
+                          }
+                          onClick={async () => {
+                            await supabaseClient.auth.signOut();
+                          }}
+                        >
+                          Sign out
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
+                  </Group>
+                </Fragment>
+              ) : (
+                <Link href="/get-started" passHref>
+                  <Button
+                    component="a"
+                    radius="xl"
+                    rightIcon={
+                      <IconExternalLink className="align-middle" size={20} />
+                    }
+                    className="mr-5 xs:mr-5 xs:ml-2 sm:mr-5 md:mr-5 lg:mr-5 xl:mr-5 text-sm w-[150px] xs:w-full"
+                    variant="gradient"
+                    gradient={{
+                      from: "cyan",
+                      to: "blue",
+                    }}
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              )
+            ) : (
+              <Skeleton height={45} width={230} pr="md" />
+            )} */}
           </Group>
         </Group>
       </Stack>

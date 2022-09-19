@@ -1,4 +1,4 @@
-import { AfridiDevArticle } from "../../components/global/grid-cards/largeGridCard";
+import { AfridiDevArticle } from "../../components/article/grid-cards/large-article-card";
 import create from "zustand";
 /**
  *  General Store

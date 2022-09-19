@@ -28,7 +28,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import HorizontalGridCard, {
   CardStyle,
-} from "../../components/global/grid-cards/horizontalGridCard";
+} from "../../components/article/grid-cards/horizontal-article-card";
 import AppWrapper from "../../components/global/wrapper";
 import InfiniteScroll from "react-infinite-scroller";
 import { useRouter } from "next/router";
@@ -144,7 +144,7 @@ const ArticleTagPage = ({ taga, articles }) => {
         <Text weight={700} size="xl" className="text-center uppercase">
           {taga.title}
         </Text>
-        <Group>
+        <Group mt="xs">
           <Button
             onClick={() => router.back()}
             color="gray"
@@ -183,14 +183,28 @@ const ArticleTagPage = ({ taga, articles }) => {
                           .insert({
                             tag_id: taga.id,
                             author_id: session.user.id,
-                          })
-                          .select();
+                          }).select(`
+                          tags (
+                            followers
+                          )
+                          `);
 
                         if (data) {
-                          var newArr = [...authorFollowed];
-                          newArr.push(taga.title);
+                          const { error: addFollowerError } =
+                            await supabaseClient
+                              .from("tags")
+                              .update({
+                                //@ts-ignore
+                                followers: data[0].tags.followers + 1,
+                              })
+                              .eq("id", taga.id);
 
-                          setAuthorFollowed(newArr);
+                          if (!addFollowerError) {
+                            var newArr = [...authorFollowed];
+                            newArr.push(taga.title);
+
+                            setAuthorFollowed(newArr);
+                          }
                         }
                       } else {
                         ShowUnauthorizedModal();
@@ -231,14 +245,29 @@ const ArticleTagPage = ({ taga, articles }) => {
                     const { data, error } = await supabaseClient
                       .from("author_followed_tags")
                       .delete()
-                      .eq("tag_id", taga.id);
+                      .eq("tag_id", taga.id).select(`
+                      tags (
+                        followers
+                      )
+                      `);
 
                     if (!error) {
-                      const index = authorFollowed.indexOf(taga.title);
+                      const { error: decreaseFollowerError } =
+                        await supabaseClient
+                          .from("tags")
+                          .update({
+                            //@ts-ignore
+                            followers: data[0].tags.followers - 1,
+                          })
+                          .eq("id", taga.id);
 
-                      const newArr = [...authorFollowed];
-                      newArr.splice(index, 1);
-                      setAuthorFollowed(newArr);
+                      if (!decreaseFollowerError) {
+                        const index = authorFollowed.indexOf(taga.title);
+
+                        const newArr = [...authorFollowed];
+                        newArr.splice(index, 1);
+                        setAuthorFollowed(newArr);
+                      }
                     }
                   }}
                 >

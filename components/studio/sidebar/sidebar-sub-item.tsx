@@ -1,6 +1,5 @@
-import { Button, createStyles, UnstyledButton } from "@mantine/core";
+import { createStyles, UnstyledButton } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import Link from "next/link";
 import { SidebarItemProps } from "./sidebar-item";
 
 const SidebarSubItem = ({

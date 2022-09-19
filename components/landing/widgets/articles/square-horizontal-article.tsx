@@ -12,12 +12,12 @@ import {
 import { Fragment, ReactNode } from "react";
 import HorizontalGridCard, {
   CardStyle,
-} from "../../global/grid-cards/horizontalGridCard";
-import { AfridiDevArticle } from "../../global/grid-cards/largeGridCard";
-import HorizontalGridCardSkeleton from "../../global/skeletons/grid-cards/horizontalGridCardSkeleton";
+} from "../../../article/grid-cards/horizontal-article-card";
+import { AfridiDevArticle } from "../../../article/grid-cards/large-article-card";
+import HorizontalGridCardSkeleton from "../../../global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import EmptyImagePlaceholder from "../../../public/empty.svg";
 import Image from "next/image";
-import EmptyPlaceholder from "../../global/placeholders/empty";
+import EmptyPlaceholder from "../../../global/placeholders/empty";
 
 interface SquareHorizontalWidgetProps {
   theme: MantineTheme;
@@ -28,7 +28,7 @@ interface SquareHorizontalWidgetProps {
   data: Array<AfridiDevArticle>;
 }
 
-const SquareHorizontalWidget: React.FC<SquareHorizontalWidgetProps> = ({
+const SquareHorizontalArticleWidget: React.FC<SquareHorizontalWidgetProps> = ({
   theme,
   color,
   icon,
@@ -86,4 +86,4 @@ const SquareHorizontalWidget: React.FC<SquareHorizontalWidgetProps> = ({
   );
 };
 
-export default SquareHorizontalWidget;
+export default SquareHorizontalArticleWidget;

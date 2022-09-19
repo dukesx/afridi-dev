@@ -6,9 +6,13 @@ import { GeneralStore } from "../../../../data/static/store";
 import { getFeedArticles } from "../../feed/functions";
 import { WelcomeWizardStepProps } from "./tag-step";
 
-const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
+const FinishStep = ({
+  step,
+  setStep,
+  session,
+  client,
+}: WelcomeWizardStepProps) => {
   const [step4Loading, setStep4Loading] = useState(false);
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
 
   //
   //
@@ -33,12 +37,12 @@ const FinishStep = ({ step, setStep, user }: WelcomeWizardStepProps) => {
         loading={step4Loading}
         onClick={async () => {
           setStep4Loading(true);
-          const { error, data } = await supabaseClient
+          const { error, data } = await client
             .from("authors")
             .update({
               website_tour: false,
             })
-            .eq("id", user.id);
+            .eq("id", session.user.id);
 
           if (!error) {
             setStep4Loading(false);

@@ -1,19 +1,26 @@
 import { Stack, Center, type MantineTheme } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { Fade } from "react-awesome-reveal";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+// import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import TagPickingStep from "./tag-step";
 import WelcomeStep from "./welcome-step";
 import DemographicsStep from "./demographics-step";
 import FinishStep from "./finish-step";
+import { type Session } from "@supabase/supabase-js";
 
 interface WebsiteTourWizardBaseProps {
   theme: MantineTheme;
+  session: Session;
+  client: any;
 }
 
-const WebsiteTourWizardBase = ({ theme }: WebsiteTourWizardBaseProps) => {
+const WebsiteTourWizardBase = ({
+  theme,
+  client,
+  session,
+}: WebsiteTourWizardBaseProps) => {
   const [step, setStep] = useState(0);
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
+  // const { isLoading, session, error, supabaseClient } = useSessionContext();
   const importFlags = async () =>
     //@ts-ignore
     await import("country-flag-icons/3x2/flags.css");
@@ -36,20 +43,27 @@ const WebsiteTourWizardBase = ({ theme }: WebsiteTourWizardBaseProps) => {
                 setStep={setStep}
                 theme={theme}
                 step={step}
-                user={session.user}
+                session={session}
+                client={client}
               />
             </Fade>
           ) : step == 2 ? (
             <Fade key={2}>
               <TagPickingStep
-                user={session.user}
                 setStep={setStep}
                 step={step}
+                session={session}
+                client={client}
               />
             </Fade>
           ) : step == 3 ? (
             <Fade key={3}>
-              <FinishStep user={session.user} setStep={setStep} step={step} />
+              <FinishStep
+                setStep={setStep}
+                step={step}
+                session={session}
+                client={client}
+              />
             </Fade>
           ) : null}
         </Stack>
