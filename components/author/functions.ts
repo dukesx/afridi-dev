@@ -205,6 +205,7 @@ export const getSimilarAuthors = async (
       `
       tags (
         authors (
+          content_count,
           id,
           firstName,
           lastName,
@@ -214,7 +215,8 @@ export const getSimilarAuthors = async (
       )
     `
     )
-    .eq("author_id", id);
+    .eq("author_id", id)
+    .gt("tags.authors.content_count", 0);
 
   var authorsArray = [];
 
