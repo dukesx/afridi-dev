@@ -199,6 +199,7 @@ const CreatorsStudio = ({ authored }) => {
                                 id: id,
                               }).select(`
                             id,
+                            author_id,
                             authors!articles_author_id_fkey
                              (
                               id,
@@ -222,15 +223,34 @@ const CreatorsStudio = ({ authored }) => {
                                   );
 
                               if (!decreaseAuthorCount) {
-                                getAuthorArticles();
+                                const fetcher = await fetch("/api/revalidate", {
+                                  method: "POST",
+                                  headers: {
+                                    "content-type": "application/json",
+                                    accept: "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    paths: [
+                                      `/article/ + ${data[0].id}`,
+                                      `/author/${data[0].author_id}`,
+                                      `/`,
+                                    ],
+                                  }),
+                                });
+
+                                const returned = await fetcher.json();
+
+                                if (returned && returned.revalidated) {
+                                  getAuthorArticles();
+                                }
+                              } else {
+                                showNotification({
+                                  title: "Error",
+                                  message: error.message,
+                                  color: "red",
+                                  icon: <IconX size={18} />,
+                                });
                               }
-                            } else {
-                              showNotification({
-                                title: "Error",
-                                message: error.message,
-                                color: "red",
-                                icon: <IconX size={18} />,
-                              });
                             }
                           }
                         },

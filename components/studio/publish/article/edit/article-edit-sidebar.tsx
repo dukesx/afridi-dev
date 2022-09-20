@@ -227,7 +227,11 @@ const ArticleEditSidebar = ({
                   accept: "application/json",
                 },
                 body: JSON.stringify({
-                  path: "/article/" + articleData[0].id,
+                  paths: [
+                    `/article/ + ${articleData[0].id}`,
+                    `/author/${articleData[0].author_id}`,
+                    `/`,
+                  ],
                 }),
               });
 

@@ -152,6 +152,7 @@ const ArticleComposeSidebar = ({
             .select(
               `
               id,
+              author_id,
               authors!articles_author_id_fkey
               (
                   id,
@@ -222,10 +223,29 @@ const ArticleComposeSidebar = ({
               })
               .eq("id", session.user.id);
 
-            setLoading(false);
-            form.reset();
-            setCover(null);
-            router.push("/article/" + articleData[0].id);
+            const fetcher = await fetch("/api/revalidate", {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                accept: "application/json",
+              },
+              body: JSON.stringify({
+                paths: [
+                  `/article/ + ${articleData[0].id}`,
+                  `/author/${articleData[0].author_id}`,
+                  `/`,
+                ],
+              }),
+            });
+
+            const returned = await fetcher.json();
+
+            if (returned && returned.revalidated) {
+              setLoading(false);
+              form.reset();
+              setCover(null);
+              router.push("/article/" + articleData[0].id);
+            }
           }
         }
       })}

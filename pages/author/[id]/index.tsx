@@ -740,24 +740,48 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                             cancel: "No, don't delete it",
                                           },
                                           onConfirm: async () => {
-                                            const { error } =
+                                            const { error, data } =
                                               await supabaseClient
                                                 .from("status_feed")
                                                 .delete()
                                                 .match({
                                                   id: mapped.data.id,
-                                                });
+                                                })
+                                                .select();
 
                                             if (!error) {
-                                              showNotification({
-                                                title: "Success",
-                                                message:
-                                                  "Status deleted successfully",
-                                                color: "teal",
-                                                icon: <IconCheck />,
-                                              });
-                                              setFeed(null);
-                                              getData();
+                                              const fetcher = await fetch(
+                                                "/api/revalidate",
+                                                {
+                                                  method: "POST",
+                                                  headers: {
+                                                    "content-type":
+                                                      "application/json",
+                                                    accept: "application/json",
+                                                  },
+                                                  body: JSON.stringify({
+                                                    path: `/author/${data[0].author_id}`,
+                                                  }),
+                                                }
+                                              );
+
+                                              const returned =
+                                                await fetcher.json();
+
+                                              if (
+                                                returned &&
+                                                returned.revalidated
+                                              ) {
+                                                showNotification({
+                                                  title: "Success",
+                                                  message:
+                                                    "Status deleted successfully",
+                                                  color: "teal",
+                                                  icon: <IconCheck />,
+                                                });
+                                                setFeed(null);
+                                                getData();
+                                              }
                                             }
                                           },
                                           onCancel: () => {},

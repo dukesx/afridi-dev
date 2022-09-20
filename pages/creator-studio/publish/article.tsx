@@ -1,12 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  Aside,
   Button,
   Card,
+  Center,
+  Drawer,
   Grid,
   Input,
   Loader,
   LoadingOverlay,
   Modal,
+  ScrollArea,
   Stack,
   Text,
   TextInput,
@@ -17,6 +21,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { openModal } from "@mantine/modals";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { IconArrowRight, IconMenu, IconMenu2 } from "@tabler/icons";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
@@ -27,12 +32,11 @@ import ArticleComposeSidebar from "../../../components/studio/publish/article/co
 const ArticleComposer = () => {
   //
   var ref: any = React.createRef();
-  const media = useMediaQuery("(min-width: 900px)", false);
+  const media = useMediaQuery("(min-width: 700px)", false);
   const [loading, setLoading] = useState(false);
-  const [articleEditorTour, setArticleEditorTour] = useState(false);
   const { isLoading, session, error, supabaseClient } = useSessionContext();
   const { colorScheme } = useMantineColorScheme();
-  const [loadingSetTour, setLoadingSetTour] = useState(false);
+  const [drawer, setDrawer] = useState(false);
   //
 
   //
@@ -45,36 +49,22 @@ const ArticleComposer = () => {
   };
   //
 
-  // const getTourModalValue = async () => {
-  //   const { error, data } = await supabaseClient
-  //     .from("authors")
-  //     .select("article_editor_tour")
-  //     .eq("id", session.user.id);
-
-  //   if (data[0].article_editor_tour) {
-  //     openModal({
-  //       title: "",
-  //       size: "xl",
-  //       withCloseButton: false,
-  //       children: <EditorTourModal />,
-  //       transitionTimingFunction: "easeInOut",
-  //       transition: "pop",
-  //       transitionDuration: 1000,
-  //       closeOnClickOutside: false,
-  //       closeOnEscape: false,
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (session.user) {
-  //     getTourModalValue();
-  //   }
-  // }, [session]);
-
   //
 
-  return (
+  return media == false ? (
+    <AppWrapper noPadding activeHeaderKey="" size={1400}>
+      <Center className="h-[600px]">
+        <Stack align="center">
+          <Title order={1} weight={700}>
+            Ooops
+          </Title>
+          <Text size="sm" color="dimmed" weight={400}>
+            Composer is not available for small devices yet
+          </Text>
+        </Stack>
+      </Center>
+    </AppWrapper>
+  ) : (
     <AppWrapper noPadding activeHeaderKey="" size={1400}>
       <div className="relative ml-0 sm:ml-5">
         <LoadingOverlay
@@ -99,7 +89,7 @@ const ArticleComposer = () => {
                 value=""
                 saveData={save}
                 autoFocus={false}
-                className="mt-5 h-full min-h-[700px]"
+                className="mt-5 h-full min-h-[400px]"
                 plugins
                 previewStyle={"tab"}
                 height="800px"
@@ -108,10 +98,28 @@ const ArticleComposer = () => {
             </Input.Wrapper>
           </Grid.Col>
 
-          <Grid.Col span={12} md={4}>
+          <Grid.Col span={12} md={4} xs={12}>
+            {/* <Aside
+              hiddenBreakpoint="md"
+              hidden
+              p="md"
+              zIndex={50}
+              styles={{
+                root: {
+                  zIndex: 50,
+                },
+              }}
+              width={{ sm: 0, md: 400, lg: 500 }}
+              sx={(theme) => ({
+                backgroundColor:
+                  colorScheme == "dark"
+                    ? theme.colors.dark[6]
+                    : theme.fn.lighten(theme.colors.gray[0], 0.9),
+              })}
+            >
+              <Aside.Section component={ScrollArea} pr="xl" grow> */}
             <Card
               sx={(theme) => ({
-                height: "100%",
                 backgroundColor:
                   colorScheme == "dark"
                     ? theme.colors.dark[6]
@@ -127,12 +135,13 @@ const ArticleComposer = () => {
               >
                 Article Settings
               </Text>
-
               <ArticleComposeSidebar
                 setLoading={setLoading}
                 getMarkdown={getMarkdown}
               />
             </Card>
+            {/* </Aside.Section>
+            </Aside> */}
           </Grid.Col>
         </Grid>
       </div>
