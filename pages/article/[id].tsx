@@ -96,13 +96,14 @@ const Article = ({ article, tags }) => {
 
   var relatedArticles = [];
 
-  article.tags.map((mapped) => {
-    var art = mapped.articles.map((mapped2) => {
-      if (mapped2.id !== data.id) {
-        relatedArticles.push(mapped2);
-      }
+  article &&
+    article.tags.map((mapped) => {
+      var art = mapped.articles.map((mapped2) => {
+        if (mapped2.id !== data.id) {
+          relatedArticles.push(mapped2);
+        }
+      });
     });
-  });
 
   return (
     <AppWrapper activeHeaderKey="" size="xl">
