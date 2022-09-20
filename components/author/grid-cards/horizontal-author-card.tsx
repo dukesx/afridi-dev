@@ -7,6 +7,7 @@ import {
   type MantineTheme,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
+import { Fragment } from "react";
 import AfridiImage from "../../global/afridi-image";
 import EmptyPlaceholder from "../../global/placeholders/empty";
 import { AfridiDevAuthor } from "../../landing/widgets/authors/square-horizontal-author";
@@ -48,15 +49,19 @@ const HorizontalAuthorGridCard = ({
               <Text className="capitalize" size="xs" color="dimmed">
                 {author.location && author.location.split("-")[0]}
               </Text>
-              <Divider className="min-w-[10px] align-middle mt-1 px-0 mx-0" />
-              <Group spacing={8} noWrap>
-                <Text size="xs" weight={700}>
-                  {author.content_count}
-                </Text>
-                <Text size="xs">
-                  {author.content_count > 1 ? "Articles" : "Article"}
-                </Text>
-              </Group>
+              {author.content_count ? (
+                <Fragment>
+                  <Divider className="min-w-[10px] align-middle mt-1 px-0 mx-0" />
+                  <Group spacing={8} noWrap>
+                    <Text size="xs" weight={700}>
+                      {author.content_count}
+                    </Text>
+                    <Text size="xs">
+                      {author.content_count > 1 ? "Articles" : "Article"}
+                    </Text>
+                  </Group>
+                </Fragment>
+              ) : null}
             </Group>
           </Stack>
         </Group>
