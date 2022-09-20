@@ -223,16 +223,17 @@ export const getStaticProps = async () => {
     .limit(100);
 
   var tagsArr = [];
-  data.map((mapped) =>
-    tagsArr.push({
-      id: mapped.id,
-      title: mapped.title,
-      //@ts-ignore
-      articleCount: mapped.articles.length,
-      icon: mapped.icon,
-      color: mapped.color,
-    })
-  );
+  data &&
+    data.map((mapped) =>
+      tagsArr.push({
+        id: mapped.id,
+        title: mapped.title,
+        //@ts-ignore
+        articleCount: mapped.articles.length,
+        icon: mapped.icon,
+        color: mapped.color,
+      })
+    );
 
   return {
     props: {

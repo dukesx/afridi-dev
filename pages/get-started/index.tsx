@@ -35,7 +35,7 @@ const GetStarted = () => {
 
           <Stack mt={50}>
             <Button
-              className="shadow-md max-w-[300px] text-center mx-auto"
+              className="shadow-md w-[200px] text-center mx-auto"
               radius="xl"
               variant="white"
               onClick={async () => {
@@ -56,7 +56,7 @@ const GetStarted = () => {
               Sign in with Github
             </Button>
             <Button
-              className="shadow-md max-w-[300px] text-center mx-auto"
+              className="shadow-md w-[200px] text-center mx-auto"
               radius="xl"
               variant="white"
               leftIcon={
@@ -78,7 +78,7 @@ const GetStarted = () => {
             </Button>
 
             <Button
-              className="shadow-md max-w-[300px] text-center mx-auto"
+              className="shadow-md w-[200px] text-center mx-auto"
               radius="xl"
               variant="white"
               onClick={async () => {
@@ -106,7 +106,7 @@ const GetStarted = () => {
                     provider: "slack",
                   });
               }}
-              className="shadow-md max-w-[300px] text-center mx-auto"
+              className="shadow-md w-[200px] text-center mx-auto"
               radius="xl"
               variant="white"
               leftIcon={

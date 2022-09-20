@@ -362,13 +362,14 @@ export const getStaticPaths = async () => {
 
   var ids = [];
 
-  data.map((mapped) =>
-    ids.push({
-      params: {
-        title: mapped.title,
-      },
-    })
-  );
+  data &&
+    data.map((mapped) =>
+      ids.push({
+        params: {
+          title: mapped.title,
+        },
+      })
+    );
 
   return {
     paths: ids,

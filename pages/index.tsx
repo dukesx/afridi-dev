@@ -53,7 +53,8 @@ const LandingPage = ({ feedData, feedDataCount }) => {
       .order("content_count", {
         ascending: false,
       })
-      .limit(10);
+      .limit(10)
+      .gt("content_count", 0);
 
     setAuthors(getAuthorData);
   };
@@ -427,24 +428,25 @@ export const getStaticProps = async (ctx) => {
     .range(0, 9);
 
   var newFeedData = await Promise.all(
-    feedData.map(async (mapped) => {
-      var res = await fetch(
-        `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
-        {
-          headers: {
-            "content-type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify({
-            cover: mapped.cover,
-          }),
-        }
-      );
+    feedData &&
+      feedData.map(async (mapped) => {
+        var res = await fetch(
+          `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+          {
+            headers: {
+              "content-type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+              cover: mapped.cover,
+            }),
+          }
+        );
 
-      var data = await res.json();
+        var data = await res.json();
 
-      return { ...mapped, cover_base_64: data.placeholder };
-    })
+        return { ...mapped, cover_base_64: data.placeholder };
+      })
   );
 
   return {

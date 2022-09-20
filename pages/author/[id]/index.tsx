@@ -55,7 +55,17 @@ import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
 import { supabase } from "../../../utils/supabaseClient";
 import { AfridiDevArticle } from "../../../components/article/grid-cards/large-article-card";
-import { GetServerSideProps, GetStaticPropsContext } from "next";
+import { type GetStaticPropsContext } from "next";
+import {
+  AuthorStatusFeed,
+  getData,
+  getHotArticles,
+  getSimilarAuthors,
+  getThumbsUpArticles,
+} from "../../../components/author/functions";
+import AuthorProfileHeader from "../../../components/author/components/header";
+import NumberedAuthorsWidget from "../../../components/author/widgets/numbered-authors-widget";
+import HorizontalGridCardSkeleton from "../../../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -68,16 +78,11 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const openRef = useRef<() => void>(null);
   const openRef2 = useRef<() => void>(null);
   const [submittingStatus, setSubmittingStatus] = useState(false);
-  const [feed, setFeed] = useState<Array<Feed>>(feedData);
+  const [feed, setFeed] = useState<Array<AuthorStatusFeed>>(feedData);
   const [hot, setHot] = useState(null);
   const [thumbsUp, setThumbsUp] = useState(null);
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
-
-  interface Feed {
-    created_at: string;
-    type: "article" | "status";
-    data: AfridiDevArticle | any;
-  }
+  const { session, supabaseClient } = useSessionContext();
+  const [similarAuthors, setSimilarAuthors] = useState(null);
 
   var ref: any = React.createRef();
 
@@ -92,193 +97,10 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
     },
   }));
 
-  const { classes } = specialStyles();
-
-  const getData = async () => {
-    const { data: userData, error: userDataError } = await supabaseClient
-      .from("authors")
-      .select(
-        `
-      id,
-      firstName,
-      lastName,
-      location,
-      github,
-      dp,
-      bio,
-      cover,
-      articles (
-        created_at,
-        author_id,
-        id,
-        title,
-        description,
-        cover,
-        co_authors_articles (
-          authors (
-            dp,
-            firstName,
-            lastName
-          )
-        )
-      ),
-      status_feed (
-        body,
-        created_at,
-        id,
-        author_id
-      )
-      `
-      )
-      .limit(100)
-      .eq("id", id)
-      .order("created_at", {
-        foreignTable: "status_feed",
-        ascending: false,
-      })
-      .order("created_at", {
-        foreignTable: "articles",
-        ascending: false,
-      });
-
-    if (!userDataError) {
-      var feed: Array<Feed> = [];
-      //@ts-ignore
-      if (userData[0]["status_feed"].length > 0) {
-        //@ts-ignore
-        userData[0].status_feed.map((mapped) =>
-          feed.push({
-            type: "status",
-            data: mapped,
-            created_at: mapped.created_at,
-          })
-        );
-      }
-      //@ts-ignore
-
-      if (userData[0]["articles"].length > 0) {
-        //@ts-ignore
-
-        await Promise.all(
-          //@ts-ignore
-          userData[0]["articles"].map(async (mapped: AfridiDevArticle) => {
-            var res = await fetch("/api/generate-placeholder", {
-              headers: {
-                "content-type": "application/json",
-              },
-              method: "POST",
-              body: JSON.stringify({
-                cover: mapped.cover,
-              }),
-            });
-
-            var data = await res.json();
-            var mappa = { ...mapped, cover_base_64: data.placeholder };
-            feed.push({
-              data: mappa,
-              type: "article",
-              created_at: mapped.created_at,
-            });
-          })
-        );
-      }
-
-      feed.sort((a, b) => {
-        return compareDesc(parseISO(a.created_at), parseISO(b.created_at));
-      });
-
-      setFeed(feed);
-    }
-  };
-
-  const getThumbsUpArticles = async () => {
-    var date = new Date();
-    var date2 = new Date();
-    //
-    //
-    date.setMonth(date.getMonth());
-    date2.setMonth(date2.getMonth() - 1);
-    //
-    //
-    const { error, data } = await supabaseClient
-      .from("articles")
-      .select(
-        `
-        id,
-        title,
-        description,
-        cover,
-        body,
-        authors (
-            id,
-            firstName,
-            lastName,
-            dp
-        ),
-        co_authors_articles (
-        authors (
-            id,
-            firstName,
-            lastName,
-            dp
-        )
-        ),
-        tags!inner(
-          title
-        )
-        `
-      )
-      .lte("created_at", date.toUTCString())
-      .gte("created_at", date2.toUTCString())
-      .eq("tags.title", "thumbs-up")
-      .order("created_at", {
-        ascending: false,
-      })
-      .limit(3);
-
-    setThumbsUp(data);
-  };
-
-  const getHotArticles = async () => {
-    const { error, data } = await supabaseClient
-      .from("articles")
-      .select(
-        `
-        id,
-        title,
-        description,
-        cover,
-        body,
-        authors (
-            id,
-            firstName,
-            lastName,
-            dp
-        ),
-        co_authors_articles (
-        authors (
-            id,
-            firstName,
-            lastName,
-            dp
-        )
-        ),
-          tags!inner (
-            title
-        )
-        `
-      )
-      .eq("tags.title", "hot")
-      .order("created_at", {
-        ascending: false,
-      })
-      .limit(3);
-    setHot(data);
-  };
-
   useEffect(() => {
-    getThumbsUpArticles();
-    getHotArticles();
+    getThumbsUpArticles(setThumbsUp, supabaseClient);
+    getHotArticles(setHot, supabaseClient);
+    getSimilarAuthors(setSimilarAuthors, supabaseClient, id);
   }, []);
 
   const save = (data) => {
@@ -293,79 +115,20 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
           overflow: "unset",
         }}
       >
-        <Card.Section className="mx-0">
-          {!data ? (
-            <Skeleton height={450} />
-          ) : (
-            <Group className="overflow-hidden">
-              {session && session.user.id == id ? (
-                <ImageUploader
-                  className="border-0"
-                  type={ImageUploaderType.COVER}
-                  theme={theme}
-                  user={session.user}
-                  py={0.01}
-                  px={1}
-                  setImage={setCover}
-                  openRef={openRef2}
-                  placeholder={
-                    <AfridiImage
-                      priority
-                      isResponsive
-                      fillImage={false}
-                      height={450}
-                      width={1320}
-                      path={
-                        cover
-                          ? `/${cover}`
-                          : user.cover
-                          ? `/${user.cover}`
-                          : colorScheme == "dark"
-                          ? "/image-horizontal-placeholder-dark.png"
-                          : "/image-horizontal-placeholder.png"
-                      }
-                      style={{
-                        objectFit: "cover",
-                      }}
-                    />
-                  }
-                />
-              ) : (
-                <AfridiImage
-                  priority
-                  fillImage={false}
-                  height={450}
-                  isResponsive
-                  width={1320}
-                  path={
-                    cover
-                      ? `/${cover}`
-                      : user.cover
-                      ? `/${user.cover}`
-                      : colorScheme == "dark"
-                      ? "/image-horizontal-placeholder-dark.png"
-                      : "/image-horizontal-placeholder.png"
-                  }
-                  style={{
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-
-              {session && session.user.id == id ? (
-                <Button
-                  className="absolute rounded-full top-[20px] right-5"
-                  color="blue"
-                  variant="filled"
-                  leftIcon={<IconPhoto size={15} />}
-                  onClick={() => openRef2.current()}
-                >
-                  Change Cover
-                </Button>
-              ) : null}
-            </Group>
-          )}
-        </Card.Section>
+        <AuthorProfileHeader
+          colorScheme={colorScheme}
+          cover={cover}
+          dp={dp}
+          setCover={setCover}
+          setDp={setDp}
+          data={data}
+          //@ts-ignore
+          id={id}
+          openRef2={openRef2}
+          session={session}
+          theme={theme}
+          user={user}
+        />
 
         <Stack className="max-w-[1000px] mx-auto">
           <Group position="apart">
@@ -524,7 +287,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
 
             <Tabs.Panel value="feed" pt="xs" className="px-3">
               <Grid>
-                <Grid.Col span={12} sm={7}>
+                <Grid.Col span={12} sm={12} md={7}>
                   <Stack className="py-5 px-0 sm:pt-10 sm:pr-10" spacing="xl">
                     {session && session.user.id == id ? (
                       <Fragment>
@@ -586,7 +349,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                     icon: <IconCheck />,
                                   });
                                   setFeed(null);
-                                  getData();
+                                  getData(supabaseClient, id);
                                 }
                               }
 
@@ -780,7 +543,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                                   icon: <IconCheck />,
                                                 });
                                                 setFeed(null);
-                                                getData();
+                                                getData(supabaseClient, id);
                                               }
                                             }
                                           },
@@ -1000,26 +763,51 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                   </Stack>
                 </Grid.Col>
 
-                <Grid.Col span={0} sm={5}>
-                  <Stack spacing="xl" className="sticky top-8 mt-8 pb-10 ml-10">
-                    <Suspense>
-                      <SquareHorizontalWidget
-                        title="ON FIRE"
-                        icon="🔥"
-                        theme={theme}
-                        color="orange"
-                        data={hot ? hot : []}
-                      />
-                    </Suspense>
+                <Grid.Col span={0} sm={0} md={5}>
+                  <Stack spacing="xl" className="sticky top-28 mt-8 pb-10 pr-5">
+                    <Suspense fallback={<HorizontalGridCardSkeleton />}>
+                      <Card
+                        className="w-full"
+                        sx={(theme) => ({
+                          borderColor: theme.colors.blue[4],
+                        })}
+                        withBorder
+                        radius="lg"
+                      >
+                        <Stack pb="md">
+                          <Group position="apart">
+                            <Text weight={800} size="xl">
+                              {"Similar Authors"}
+                            </Text>
 
-                    <Suspense>
-                      <SquareHorizontalWidget
-                        title="Thumbs up"
-                        icon="👍‍"
-                        theme={theme}
-                        color="yellow"
-                        data={thumbsUp ? thumbsUp : []}
-                      />
+                            <ThemeIcon
+                              color="blue"
+                              size="xl"
+                              variant="light"
+                              radius="xl"
+                            >
+                              <Text size="xl">✍</Text>
+                            </ThemeIcon>
+                          </Group>
+                          <Divider mb="xs" />
+
+                          {similarAuthors ? (
+                            similarAuthors.map((mapped, index) => (
+                              <NumberedAuthorsWidget
+                                key={"ahab" + index}
+                                author={mapped}
+                                index={index}
+                                theme={theme}
+                              />
+                            ))
+                          ) : (
+                            <Stack>
+                              <HorizontalGridCardSkeleton />
+                              <HorizontalGridCardSkeleton />
+                            </Stack>
+                          )}
+                        </Stack>
+                      </Card>
                     </Suspense>
                   </Stack>
                 </Grid.Col>
@@ -1247,7 +1035,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 
   var feed = [];
   //@ts-ignore
-  if (userData[0]["status_feed"].length > 0) {
+  if (userData && userData[0]["status_feed"].length > 0) {
     //@ts-ignore
     userData[0]["status_feed"].map((mapped) =>
       feed.push({
@@ -1259,7 +1047,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   }
 
   //@ts-ignore
-  if (userData[0]["articles"].length > 0) {
+  if (userData && userData[0]["articles"].length > 0) {
     //@ts-ignore
 
     await Promise.all(

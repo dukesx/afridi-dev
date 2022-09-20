@@ -7,8 +7,9 @@ import {
   type MantineTheme,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import AfridiImage from "../global/afridi-image";
-import { AfridiDevAuthor } from "../landing/widgets/authors/square-horizontal-author";
+import AfridiImage from "../../global/afridi-image";
+import EmptyPlaceholder from "../../global/placeholders/empty";
+import { AfridiDevAuthor } from "../../landing/widgets/authors/square-horizontal-author";
 
 interface HorizontalAuthorGridCardProps {
   author: AfridiDevAuthor;
@@ -18,7 +19,7 @@ interface HorizontalAuthorGridCardProps {
 const HorizontalAuthorGridCard = ({
   author,
 }: HorizontalAuthorGridCardProps) => {
-  return (
+  return author ? (
     <Group noWrap className="w-full" position="left">
       <Avatar size={45} color="blue" className="rounded-full">
         {author.dp ? (
@@ -61,6 +62,8 @@ const HorizontalAuthorGridCard = ({
         </Group>
       </Group>
     </Group>
+  ) : (
+    <EmptyPlaceholder />
   );
 };
 

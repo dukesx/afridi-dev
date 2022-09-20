@@ -10,8 +10,8 @@ import Image from "next/image";
 // import ProgressiveImage from "react-progressive-graceful-image";
 
 interface AfridiImageProps {
-  width: number | string;
-  height: number;
+  width?: number | string;
+  height?: number;
   path: string;
   loading?: "lazy" | "normal";
   style?: object;

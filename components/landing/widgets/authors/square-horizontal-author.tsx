@@ -12,7 +12,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { ReactNode } from "react";
-import HorizontalAuthorGridCard from "../../../author/horizontal-author-card";
+import HorizontalAuthorGridCard from "../../../author/grid-cards/horizontal-author-card";
 import EmptyPlaceholder from "../../../global/placeholders/empty";
 import HorizontalGridCardSkeleton from "../../../global/skeletons/grid-cards/horizontalGridCardSkeleton";
 

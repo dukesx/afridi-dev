@@ -57,6 +57,7 @@ import HorizontalGridCard, {
 } from "../../components/article/grid-cards/horizontal-article-card";
 import HorizontalArticleGridCard from "../../components/article/grid-cards/horizontal-article-card";
 import SquareHorizontalArticleWidget from "../../components/landing/widgets/articles/square-horizontal-article";
+import NumberedArticlesWidget from "../../components/article/widgets/numbered-articles";
 
 const styles = createStyles((theme, _params, getRef) => ({
   mainContent: {
@@ -220,18 +221,12 @@ const Article = ({ article, tags }) => {
             <Stack>
               {relatedArticles.map((mapped, index) => {
                 return (
-                  <Group key={"abox" + index} mx="sm" noWrap>
-                    <Text size="xl" weight={800} color="gray.4">
-                      {index + 1}
-                    </Text>
-                    <Divider className="min-w-[20px]" />
-                    <HorizontalArticleGridCard
-                      data={mapped}
-                      titleClamp={2}
-                      theme={theme}
-                      style={CardStyle.WIDGET}
-                    />
-                  </Group>
+                  <NumberedArticlesWidget
+                    theme={theme}
+                    article={mapped}
+                    index={index}
+                    key={"ahoba" + index}
+                  />
                 );
               })}
             </Stack>

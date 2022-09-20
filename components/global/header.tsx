@@ -238,14 +238,14 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   <Menu.Item
                     component={NextLink}
                     href="/legal/privacy-policy"
-                    icon={<IconEyeOff size={20} />}
+                    icon={<Text size="lg">👀</Text>}
                   >
                     Privacy Policy
                   </Menu.Item>
                   <Menu.Item
                     component={NextLink}
                     href="/legal/terms"
-                    icon={<IconScale size={20} />}
+                    icon={<Text size="lg">⚖️</Text>}
                   >
                     Terms
                   </Menu.Item>
@@ -253,12 +253,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                   <Menu.Item
                     component={NextLink}
                     href="/legal/terms"
-                    icon={
-                      <IconHeartHandshake
-                        color={theme.colors.violet[5]}
-                        size={20}
-                      />
-                    }
+                    icon={<Text size="lg">🤝</Text>}
                   >
                     Acknowledgements
                   </Menu.Item>

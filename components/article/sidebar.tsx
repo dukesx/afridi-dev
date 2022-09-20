@@ -33,14 +33,7 @@ import { Fragment, Suspense, useEffect, useState } from "react";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
 import AfridiImage from "../global/afridi-image";
 import SquareHorizontalWidget from "../landing/widgets/articles/square-horizontal-article";
-
-export type AfridiDevAuthor = {
-  firstName: string;
-  lastName: string;
-  dp: string;
-  cover?: string;
-  id: string;
-};
+import { AfridiDevAuthor } from "../landing/widgets/authors/square-horizontal-author";
 
 interface ArticleSidebarProps {
   data: {
@@ -105,7 +98,7 @@ const ArticleRightSidebar = ({
   }, [isLoading]);
   return (
     <Aside.Section>
-      <Card className="w-full overflow-hidden px-0">
+      <Card className="w-full overflow-hidden px-0 bg-transparent">
         <Stack spacing={0} align="start">
           <Text pb="sm" color="dimmed" weight={400} size="xs">
             Your Feedback
@@ -230,7 +223,7 @@ const ArticleRightSidebar = ({
         Author&apos;s Section
       </Text>
       <Divider />
-      <Card className="w-full pb-6 px-0">
+      <Card className="w-full pb-6 px-0 bg-transparent">
         <Group className="w-full" noWrap>
           <Tooltip
             mt="xl"
