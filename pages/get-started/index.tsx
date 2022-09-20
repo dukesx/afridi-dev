@@ -13,8 +13,8 @@ import AppWrapper from "../../components/global/wrapper";
 import SlackLogo from "../../public/slack.png";
 import DiscordLogo from "../../public/discord.png";
 import GoogleLogo from "../../public/google.png";
+import GithubLogo from "../../public/github.svg";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { supabase } from "../../utils/supabaseClient";
 
 const GetStarted = () => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
@@ -38,12 +38,33 @@ const GetStarted = () => {
               className="shadow-md max-w-[300px] text-center mx-auto"
               radius="xl"
               variant="white"
+              onClick={async () => {
+                const { data, error } =
+                  await supabaseClient.auth.signInWithOAuth({
+                    provider: "github",
+                  });
+              }}
+              leftIcon={
+                <Image
+                  src={GithubLogo}
+                  height={22}
+                  width={22}
+                  alt="Login with Github"
+                />
+              }
+            >
+              Sign in with Github
+            </Button>
+            <Button
+              className="shadow-md max-w-[300px] text-center mx-auto"
+              radius="xl"
+              variant="white"
               leftIcon={
                 <Image
                   src={GoogleLogo}
                   height={23}
                   width={23}
-                  alt="slack icon"
+                  alt="Login with Google"
                 />
               }
               onClick={async () => {
@@ -71,7 +92,7 @@ const GetStarted = () => {
                   src={DiscordLogo}
                   height={25}
                   width={25}
-                  alt="slack icon"
+                  alt="Login with Discord"
                 />
               }
             >
@@ -93,7 +114,7 @@ const GetStarted = () => {
                   src={SlackLogo}
                   height={20}
                   width={20}
-                  alt="slack icon"
+                  alt="Login with Slack"
                 />
               }
             >

@@ -26,14 +26,11 @@ import {
   IconChecklist,
   IconChevronDown,
   IconChevronRight,
-  IconCode,
-  IconDashboard,
   IconDice,
   IconExternalLink,
   IconEyeOff,
-  IconGauge,
   IconHash,
-  IconLayoutDashboard,
+  IconHeartHandshake,
   IconLogout,
   IconMoon,
   IconNews,
@@ -43,7 +40,6 @@ import {
   IconSmartHome,
   IconSun,
   IconUserCircle,
-  IconUsers,
 } from "@tabler/icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -252,6 +248,19 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     icon={<IconScale size={20} />}
                   >
                     Terms
+                  </Menu.Item>
+
+                  <Menu.Item
+                    component={NextLink}
+                    href="/legal/terms"
+                    icon={
+                      <IconHeartHandshake
+                        color={theme.colors.violet[5]}
+                        size={20}
+                      />
+                    }
+                  >
+                    Acknowledgements
                   </Menu.Item>
 
                   <Menu.Label>

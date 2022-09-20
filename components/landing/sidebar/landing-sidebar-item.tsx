@@ -14,24 +14,29 @@ interface LandingSidebarItemProps {
   text: string;
   leftIcon?: string | ReactNode;
   rightIcon?: string | ReactNode;
-  path: string | "/";
+  path?: string | "/";
   color: MantineColor;
   buttonSize?: MantineSize;
   maxWidth?: number;
   description?: string;
+  noLink?: boolean;
+  refer?: any;
 }
 const LandingSidebarItem = ({
   text,
   path,
   leftIcon,
+  refer,
   color,
   rightIcon,
   description,
   buttonSize,
   maxWidth,
+  noLink,
 }: LandingSidebarItemProps) => {
   return (
     <Button
+      ref={refer}
       style={{
         maxWidth: maxWidth ?? "100%",
       }}
@@ -41,8 +46,8 @@ const LandingSidebarItem = ({
       mt="xs"
       size={buttonSize ?? "lg"}
       fullWidth
-      component={NextLink}
-      href={path}
+      component={noLink ? "button" : NextLink}
+      href={noLink ? null : path}
       leftIcon={leftIcon ?? null}
       variant="subtle"
       color={color ?? "cyan"}
