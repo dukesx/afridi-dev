@@ -1,39 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Avatar,
-  Button,
   Divider,
   Grid,
   Stack,
   Group,
   Text,
-  Input,
   Tooltip,
   Card,
   Skeleton,
-  Switch,
   type MantineTheme,
   ActionIcon,
   useMantineColorScheme,
-  ThemeIcon,
-  HoverCard,
   Aside,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import {
-  IconBellRinging,
-  IconBookmark,
-  IconInfoCircle,
-  IconMedal,
-  IconMedal2,
-  IconStar,
-} from "@tabler/icons";
-import { Fragment, Suspense, useEffect, useState } from "react";
-import { ShowUnauthorizedModal } from "../../utils/helpers";
-import AfridiImage from "../global/afridi-image";
-import SquareHorizontalWidget from "../author/widgets/square-horizontal-article";
-import { AfridiDevAuthor } from "../landing/widgets/authors/square-horizontal-author";
+import { IconBookmark } from "@tabler/icons";
+import { useEffect, useState } from "react";
+import { ShowUnauthorizedModal } from "../../../utils/helpers";
+import { AfridiDevAuthor } from "../../author/widgets/square-horizontal-author";
+import AfridiImage from "../../global/afridi-image";
 
 interface ArticleSidebarProps {
   data: {
@@ -41,18 +28,10 @@ interface ArticleSidebarProps {
     co_authors_articles: [{ authors: AfridiDevAuthor }];
   };
   theme: MantineTheme;
-  flipSidebarOrientation: boolean;
-  setFlipSidebarOrientation: (data: boolean) => void;
   id: string;
 }
 
-const ArticleRightSidebar = ({
-  data,
-  theme,
-  id,
-  flipSidebarOrientation,
-  setFlipSidebarOrientation,
-}: ArticleSidebarProps) => {
+const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
   const [bookmarks, setBookmarks] = useState([]);
   const { colorScheme } = useMantineColorScheme();

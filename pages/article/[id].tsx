@@ -1,15 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  ActionIcon,
   Aside,
-  Avatar,
   Box,
-  Button,
   Center,
   Container,
   createStyles,
   Divider,
-  Grid,
   Group,
   MediaQuery,
   Navbar,
@@ -19,44 +15,18 @@ import {
   Text,
   ThemeIcon,
   Title,
-  Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { NextLink } from "@mantine/next";
-import {
-  IconAward,
-  IconBolt,
-  IconEdit,
-  IconHash,
-  IconHeart,
-  IconInfinity,
-  IconNews,
-  IconPencil,
-  IconPencilPlus,
-  IconTrophy,
-} from "@tabler/icons";
+import { IconHash } from "@tabler/icons";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
 import { useLocalStorage } from "@mantine/hooks";
-import ArticleSidebar from "../../components/article/sidebar";
-import { getPlaiceholder } from "plaiceholder";
-
-import {
-  useSessionContext,
-  useSupabaseClient,
-  useUser,
-} from "@supabase/auth-helpers-react";
-import { SupabaseClient } from "@supabase/supabase-js";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
-import ArticleRightSidebar from "../../components/article/sidebar";
-import HorizontalGridCard, {
-  CardStyle,
-} from "../../components/article/grid-cards/horizontal-article-card";
-import HorizontalArticleGridCard from "../../components/article/grid-cards/horizontal-article-card";
-import SquareHorizontalArticleWidget from "../../components/author/widgets/square-horizontal-article";
+import ArticleRightSidebar from "../../components/article/components/sidebar";
 import NumberedArticlesWidget from "../../components/article/widgets/numbered-articles";
 
 const styles = createStyles((theme, _params, getRef) => ({
@@ -71,13 +41,8 @@ const styles = createStyles((theme, _params, getRef) => ({
 const Article = ({ article, tags }) => {
   const { classes } = styles();
   const [data, setData] = useState(article);
-  const router = useRouter();
   const theme = useMantineTheme();
-  const [flipSidebarOrientation, setFlipSidebarOrientation] = useLocalStorage({
-    key: "article-sidebar-orientation",
-    defaultValue: false,
-  });
-  const { isLoading, session, error, supabaseClient } = useSessionContext();
+  const { supabaseClient } = useSessionContext();
 
   const addViewCount = async () => {
     //
@@ -175,13 +140,7 @@ const Article = ({ article, tags }) => {
         width={{ xs: 250, sm: 300, md: 300, lg: 300 }}
       >
         <Aside.Section>
-          <ArticleRightSidebar
-            id={data && data.id}
-            data={data}
-            flipSidebarOrientation={flipSidebarOrientation}
-            setFlipSidebarOrientation={setFlipSidebarOrientation}
-            theme={theme}
-          />
+          <ArticleRightSidebar id={data && data.id} data={data} theme={theme} />
         </Aside.Section>
       </Aside>
 

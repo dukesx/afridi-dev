@@ -63,8 +63,8 @@ import {
 import AuthorProfileHeader from "../../../components/author/components/header";
 import HorizontalGridCardSkeleton from "../../../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import SquareHorizontalAuthorWidget from "../../../components/author/widgets/square-horizontal-author";
-import AuthorFeedRenderer from "../../../components/author/author-feed-renderer";
-import ExclusivePlaceholder from "../../../components/author/exclusive-placeholder";
+import AuthorFeedRenderer from "../../../components/author/components/author-feed-renderer";
+import ExclusivePlaceholder from "../../../components/author/components/exclusive-placeholder";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -84,17 +84,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const [similarAuthors, setSimilarAuthors] = useState(null);
 
   var ref: any = React.createRef();
-
-  const specialStyles = createStyles((theme) => ({
-    col: {
-      display: "flex",
-      flexDirection: "column",
-
-      [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-        display: "none",
-      },
-    },
-  }));
 
   useEffect(() => {
     getSimilarAuthors(setSimilarAuthors, supabaseClient, id);

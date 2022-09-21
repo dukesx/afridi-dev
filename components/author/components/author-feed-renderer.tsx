@@ -17,9 +17,9 @@ import { showNotification } from "@mantine/notifications";
 import { Session, SupabaseClient } from "@supabase/supabase-js";
 import { IconCheck, IconExternalLink, IconTrash } from "@tabler/icons";
 import { formatDistanceToNow } from "date-fns";
-import AfridiImage from "../global/afridi-image";
-import MarkDownRenderer from "../global/markdown-renderer";
-import { getData } from "./functions";
+import AfridiImage from "../../global/afridi-image";
+import MarkDownRenderer from "../../global/markdown-renderer";
+import { getData } from "../functions";
 
 interface AuthorFeedRendererProps {
   data: any;
