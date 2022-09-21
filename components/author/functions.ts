@@ -219,18 +219,21 @@ export const getSimilarAuthors = async (
 
   var authorsArray = [];
 
-  data.map((mapped) => {
-    //@ts-ignore
-    mapped.tags.map((mapped2) => {
-      mapped2.authors.map((mapped3) => {
-        var newArr = authorsArray.filter((mapped4) => mapped4.id == mapped3.id);
-        if (newArr.length > 0) {
-        } else {
-          authorsArray.push(mapped3);
-        }
+  data &&
+    data.map((mapped) => {
+      //@ts-ignore
+      mapped.tags.map((mapped2) => {
+        mapped2.authors.map((mapped3) => {
+          var newArr = authorsArray.filter(
+            (mapped4) => mapped4.id == mapped3.id
+          );
+          if (newArr.length > 0) {
+          } else {
+            authorsArray.push(mapped3);
+          }
+        });
       });
     });
-  });
 
   setSimilarAuthors(authorsArray);
 };

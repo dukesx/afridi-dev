@@ -41,7 +41,7 @@ const AuthorProfileHeader = ({
   openRef2,
 }: AuthorProfileHeaderProps) => {
   return (
-    <Card.Section className="mx-0 relative h-[400px]">
+    <Card.Section className="mx-0 relative h-[400px] block w-full">
       {!data ? (
         <Skeleton height={450} />
       ) : (
@@ -58,9 +58,9 @@ const AuthorProfileHeader = ({
               openRef={openRef2}
               placeholder={
                 <AfridiImage
+                  height={400}
                   priority
-                  isResponsive
-                  fillImage={false}
+                  fillImage
                   path={
                     cover
                       ? `/${cover}`
@@ -80,6 +80,7 @@ const AuthorProfileHeader = ({
             <AfridiImage
               priority
               fillImage={true}
+              height={400}
               path={
                 cover
                   ? `/${cover}`

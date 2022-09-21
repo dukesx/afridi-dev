@@ -50,7 +50,7 @@ const AfridiImageUploader = ({
   const [reject, setReject] = useState(false);
   const [loading, setLoading] = useState(false);
   return (
-    <div className={" relative"}>
+    <div className="w-full relative">
       <LoadingOverlay
         loader={
           <Stack className="h-full w-full" align="center">

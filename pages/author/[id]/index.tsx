@@ -98,8 +98,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   }));
 
   useEffect(() => {
-    getThumbsUpArticles(setThumbsUp, supabaseClient);
-    getHotArticles(setHot, supabaseClient);
     getSimilarAuthors(setSimilarAuthors, supabaseClient, id);
   }, []);
 
@@ -1104,13 +1102,14 @@ export const getStaticPaths = async () => {
 
   var ids = [];
 
-  data.map((mapped) =>
-    ids.push({
-      params: {
-        id: mapped.id,
-      },
-    })
-  );
+  data &&
+    data.map((mapped) =>
+      ids.push({
+        params: {
+          id: mapped.id,
+        },
+      })
+    );
 
   return {
     paths: ids,
