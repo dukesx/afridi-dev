@@ -32,7 +32,7 @@ import {
 import { Fragment, Suspense, useEffect, useState } from "react";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
 import AfridiImage from "../global/afridi-image";
-import SquareHorizontalWidget from "../landing/widgets/articles/square-horizontal-article";
+import SquareHorizontalWidget from "../author/widgets/square-horizontal-article";
 import { AfridiDevAuthor } from "../landing/widgets/authors/square-horizontal-author";
 
 interface ArticleSidebarProps {

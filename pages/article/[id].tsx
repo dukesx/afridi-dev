@@ -56,7 +56,7 @@ import HorizontalGridCard, {
   CardStyle,
 } from "../../components/article/grid-cards/horizontal-article-card";
 import HorizontalArticleGridCard from "../../components/article/grid-cards/horizontal-article-card";
-import SquareHorizontalArticleWidget from "../../components/landing/widgets/articles/square-horizontal-article";
+import SquareHorizontalArticleWidget from "../../components/author/widgets/square-horizontal-article";
 import NumberedArticlesWidget from "../../components/article/widgets/numbered-articles";
 
 const styles = createStyles((theme, _params, getRef) => ({

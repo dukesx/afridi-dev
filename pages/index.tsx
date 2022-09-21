@@ -19,7 +19,6 @@ import AppWrapper from "../components/global/wrapper";
 import LandingFeed from "../components/landing/feed";
 import { supabase } from "../utils/supabaseClient";
 import FeedLoader from "../components/global/skeletons/feedLoader";
-import SquareHorizontalAuthorWidget from "../components/landing/widgets/authors/square-horizontal-author";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import {
   IconHash,
@@ -30,6 +29,7 @@ import {
 } from "@tabler/icons";
 import LandingSidebarItem from "../components/landing/sidebar/landing-sidebar-item";
 import CreatorStudioIcon from "../components/global/creator-studio-icon";
+import SquareHorizontalAuthorWidget from "../components/author/widgets/square-horizontal-author";
 
 const LandingPage = ({ feedData, feedDataCount }) => {
   const theme = useMantineTheme();
@@ -236,97 +236,6 @@ const LandingPage = ({ feedData, feedDataCount }) => {
                 </Center>
               )}
             </Navbar.Section>
-            {/* <Navbar.Section mt="sm">
-              <Menu position="right" width={250}>
-                <Menu.Target>
-                  <Button
-                    color="blue"
-                    fullWidth
-                    variant="light"
-                    rightIcon={<IconArrowRight size={18} />}
-                  >
-                    More
-                  </Button>
-                </Menu.Target>
-
-                <Menu.Dropdown>
-                  <Menu.Label>
-                    <Text weight={600}>Legal</Text>
-                  </Menu.Label>
-
-                  <Menu.Item
-                    component={NextLink}
-                    href="/legal/privacy-policy"
-                    icon={<IconEyeOff size={20} />}
-                  >
-                    Privacy Policy
-                  </Menu.Item>
-                  <Menu.Item
-                    component={NextLink}
-                    href="/legal/terms"
-                    icon={<IconScale size={20} />}
-                  >
-                    Terms
-                  </Menu.Item>
-
-                  <Menu.Item
-                    component={NextLink}
-                    href="/legal/terms"
-                    icon={
-                      <IconHeartHandshake
-                        color={theme.colors.violet[5]}
-                        size={20}
-                      />
-                    }
-                  >
-                    Acknowledgements
-                  </Menu.Item>
-
-                  <Menu.Label>
-                    <Text weight={600}>About</Text>
-                  </Menu.Label>
-                  <Menu.Item
-                    component={NextLink}
-                    href="/about/dev"
-                    icon={
-                      <IconUserCircle color={theme.colors.cyan[6]} size={20} />
-                    }
-                  >
-                    <Group spacing={5}>
-                      <Text>The</Text>
-                      <Stack spacing={0}>
-                        <Text color="cyan" weight={700} className="">
-                          DEV
-                        </Text>
-                        <Divider color="cyan" size="xs" />
-                      </Stack>
-                    </Group>
-                  </Menu.Item>
-                  <Menu.Item
-                    component={NextLink}
-                    href="/about/vision"
-                    icon={
-                      <IconBulb
-                        color={theme.colors.yellow[6]}
-                        // fill={theme.colors.yellow[6]}
-                        size={20}
-                      />
-                    }
-                  >
-                    The Vision
-                  </Menu.Item>
-                  <Menu.Item
-                    component={NextLink}
-                    href="/about/roadmap"
-                    icon={
-                      <IconChecklist color={theme.colors.blue[6]} size={20} />
-                    }
-                  >
-                    The Roadmap
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </Navbar.Section> */}
           </Navbar>
 
           <Grid.Col span={12} sm={12} xs={12} md={12} lg={7}>
