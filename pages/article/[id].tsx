@@ -18,12 +18,10 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { IconHash } from "@tabler/icons";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
-import { useLocalStorage } from "@mantine/hooks";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
 import ArticleRightSidebar from "../../components/article/components/sidebar";

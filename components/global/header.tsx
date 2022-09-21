@@ -40,6 +40,7 @@ import {
   IconSmartHome,
   IconSun,
   IconUserCircle,
+  IconVersions,
 } from "@tabler/icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -250,14 +251,6 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     Terms
                   </Menu.Item>
 
-                  <Menu.Item
-                    component={NextLink}
-                    href="/legal/terms"
-                    icon={<Text size="lg">🤝</Text>}
-                  >
-                    Acknowledgements
-                  </Menu.Item>
-
                   <Menu.Label>
                     <Text weight={600}>About</Text>
                   </Menu.Label>
@@ -295,10 +288,18 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                     component={NextLink}
                     href="/about/roadmap"
                     icon={
-                      <IconChecklist color={theme.colors.blue[6]} size={20} />
+                      <IconVersions color={theme.colors.blue[6]} size={20} />
                     }
                   >
                     The Roadmap
+                  </Menu.Item>
+
+                  <Menu.Item
+                    component={NextLink}
+                    href="/about/acknowledgements"
+                    icon={<Text size="lg">🤝</Text>}
+                  >
+                    Acknowledgements
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>

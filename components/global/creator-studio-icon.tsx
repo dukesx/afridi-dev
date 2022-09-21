@@ -2,7 +2,7 @@ import { MantineSize, Text, ThemeIcon } from "@mantine/core";
 
 interface CreatorStudioIconProps {
   size?: MantineSize;
-  textSize?: MantineSize;
+  textSize?: MantineSize | number;
 }
 const CreatorStudioIcon = ({ size, textSize }: CreatorStudioIconProps) => {
   return (
