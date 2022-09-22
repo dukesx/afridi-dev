@@ -26,6 +26,7 @@ import {
   IconNews,
   IconScale,
   IconStar,
+  IconUsers,
 } from "@tabler/icons";
 import LandingSidebarItem from "../components/landing/sidebar/landing-sidebar-item";
 import CreatorStudioIcon from "../components/global/creator-studio-icon";
@@ -266,9 +267,9 @@ const LandingPage = ({ feedData, feedDataCount }) => {
                 <SquareHorizontalAuthorWidget
                   cardClassName=""
                   title="Top 10 Contributors"
-                  icon="👍"
+                  icon={<IconUsers />}
                   theme={theme}
-                  color="yellow"
+                  color="cyan"
                   data={authors}
                 />
               </Suspense>
