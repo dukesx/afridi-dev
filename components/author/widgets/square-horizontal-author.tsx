@@ -23,6 +23,9 @@ interface SquareHorizontalWidgetProps {
   title: string;
   cardClassName?: string;
   data: Array<AfridiDevAuthor>;
+  placeholderHeight?: number;
+  placeholderTitle?: string;
+  placeholderDescription?: string;
 }
 
 export interface AfridiDevAuthor {
@@ -42,6 +45,9 @@ const SquareHorizontalAuthorWidget: React.FC<SquareHorizontalWidgetProps> = ({
   title,
   cardClassName,
   data,
+  placeholderDescription,
+  placeholderHeight,
+  placeholderTitle,
 }) => {
   const { colorScheme } = useMantineColorScheme();
   return (
@@ -95,7 +101,11 @@ const SquareHorizontalAuthorWidget: React.FC<SquareHorizontalWidgetProps> = ({
               </Group>
             ))
           ) : (
-            <EmptyPlaceholder height={250} />
+            <EmptyPlaceholder
+              title={placeholderTitle ?? null}
+              description={placeholderDescription ?? null}
+              height={placeholderHeight ?? null}
+            />
           )
         ) : (
           <Stack className="w-full">

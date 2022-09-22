@@ -17,7 +17,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { IconHash } from "@tabler/icons";
+import { IconHash, IconNews } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
@@ -157,40 +157,23 @@ const Article = ({ article, tags }) => {
           p="xs"
           width={{ sm: 0, md: 250, lg: 350 }}
         >
-          <Group position="apart" mt="xs" mx="sm">
-            <Text color="cyan.5" weight={500} size="sm">
-              Similar Articles
-            </Text>
-            <ThemeIcon
-              className="rounded-full"
-              radius="xl"
-              size="lg"
-              color="cyan"
-              variant="light"
-            >
-              <IconHash size={16} />
-            </ThemeIcon>
-          </Group>
-          <Divider mt="xs" color="cyan.4" />
-
           <Navbar.Section
             mt="xl"
             grow
             className="h-[400px]"
             component={ScrollArea}
           >
-            <Stack>
-              {relatedArticles.map((mapped, index) => {
-                return (
-                  <NumberedArticlesWidget
-                    theme={theme}
-                    article={mapped}
-                    index={index}
-                    key={"ahoba" + index}
-                  />
-                );
-              })}
-            </Stack>
+            <NumberedArticlesWidget
+              titleOrder={4}
+              title="Similar Articles"
+              placeholderHeight={140}
+              icon={<IconNews />}
+              color="blue"
+              placeholderTitle="Hmmm!"
+              placeholderDescription="No similar articles yet 🤔"
+              theme={theme}
+              articles={relatedArticles ?? []}
+            />
           </Navbar.Section>
         </Navbar>
       </MediaQuery>

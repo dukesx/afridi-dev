@@ -554,6 +554,9 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                         theme={theme}
                         data={similarAuthors}
                         color="gray"
+                        placeholderHeight={140}
+                        placeholderTitle="Hmmm!"
+                        placeholderDescription="No similar articles yet 🤔"
                         icon={<Text>✍</Text>}
                         title="Similar Authors"
                       />
