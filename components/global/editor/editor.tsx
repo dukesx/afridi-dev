@@ -15,6 +15,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import React, { useState } from "react";
+// import Editor from "rich-markdown-editor";
 
 /**
  * @property {String} value
@@ -83,7 +84,9 @@ export const TextEditor: React.FC<MarkDownEditorProps> = React.memo(
                 ]
               : null
           }
-          minHeight={height ? height : "600px"}
+          // minheight={height ? height : "100px"}
+          minHeight={height ?? "400px"}
+          height={height ?? "400px"}
           placeholder={
             placeholder ?? "Write something awesome with GFM Supported Markdown"
           }

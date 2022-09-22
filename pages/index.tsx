@@ -30,13 +30,16 @@ import {
 import LandingSidebarItem from "../components/landing/sidebar/landing-sidebar-item";
 import CreatorStudioIcon from "../components/global/creator-studio-icon";
 import SquareHorizontalAuthorWidget from "../components/author/widgets/square-horizontal-author";
+import dynamic from "next/dynamic";
 
 const LandingPage = ({ feedData, feedDataCount }) => {
   const theme = useMantineTheme();
   const [authors, setAuthors] = useState(null);
   const { supabaseClient, session, isLoading } = useSessionContext();
   const [mostFollowedTags, setMostFollowedTags] = useState(null);
-
+  const Editor = dynamic(() => import("rich-markdown-editor"), {
+    ssr: false,
+  });
   const fetchAuthors = async () => {
     const { error: getAuthorError, data: getAuthorData } = await supabaseClient
       .from("authors")
@@ -241,6 +244,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
           <Grid.Col span={12} sm={12} xs={12} md={12} lg={7}>
             <div className="mx-0">
               <Suspense fallback={<FeedLoader />}>
+               
                 <LandingFeed
                   prefetchedFeedData={feedData}
                   feedDataCount={feedDataCount}

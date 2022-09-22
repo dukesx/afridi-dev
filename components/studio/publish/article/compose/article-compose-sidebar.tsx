@@ -36,7 +36,6 @@ import AfridiImage from "../../../../global/afridi-image";
 import AfridiImageUploader, {
   ImageUploaderType,
 } from "../../../../global/image_uploader";
-
 //
 
 interface ArticleComposerSidebarProps {
@@ -56,6 +55,9 @@ const ArticleComposeSidebar = ({
   var openRef: any = createRef();
   const [tagsLoading, setTagsLoading] = useState(false);
   const router = useRouter();
+  const [editorVal, setEditorVal] = useState("");
+
+  console.log(editorVal);
 
   const form = useForm({
     initialValues: {

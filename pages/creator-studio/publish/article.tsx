@@ -120,10 +120,11 @@ const ArticleComposer = () => {
               <Aside.Section component={ScrollArea} pr="xl" grow> */}
             <Card
               sx={(theme) => ({
-                backgroundColor:
-                  colorScheme == "dark"
-                    ? theme.colors.dark[6]
-                    : theme.colors.gray[0],
+                background: "transparent",
+                // backgroundColor:
+                //   colorScheme == "dark"
+                //     ? theme.colors.dark[6]
+                //     : theme.colors.gray[0],
               })}
             >
               <Text
