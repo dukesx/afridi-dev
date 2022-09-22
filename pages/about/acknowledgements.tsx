@@ -1,5 +1,4 @@
 import { Divider, List, Stack, Text, ThemeIcon, Title } from "@mantine/core";
-import { IconBulb } from "@tabler/icons";
 import AppWrapper from "../../components/global/wrapper";
 
 const Acknowledgements = () => {

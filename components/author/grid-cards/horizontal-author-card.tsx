@@ -10,7 +10,7 @@ import { NextLink } from "@mantine/next";
 import { Fragment } from "react";
 import AfridiImage from "../../global/afridi-image";
 import EmptyPlaceholder from "../../global/placeholders/empty";
-import { AfridiDevAuthor } from "../../landing/widgets/authors/square-horizontal-author";
+import { AfridiDevAuthor } from "../widgets/square-horizontal-author";
 
 interface HorizontalAuthorGridCardProps {
   author: AfridiDevAuthor;

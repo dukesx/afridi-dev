@@ -6,9 +6,9 @@ import {
   type MantineNumberSize,
 } from "@mantine/core";
 import { openModal } from "@mantine/modals";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useEffect } from "react";
-import { GeneralStore, useGeneralStore } from "../../data/static/store";
+import { type GeneralStore, useGeneralStore } from "../../data/static/store";
 import GlobalHeader from "./header";
 import AppLoader from "./loaders/appLoader";
 import StudioSidebar from "../studio/sidebar/sidebar";

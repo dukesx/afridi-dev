@@ -8,7 +8,7 @@ import {
   Skeleton,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
-import { AfridiDevAuthor } from "../components/sidebar";
+import { AfridiDevAuthor } from "../../author/widgets/square-horizontal-author";
 import AfridiImage from "../../global/afridi-image";
 import LargeGridCardSkeleton from "../../global/skeletons/grid-cards/largeGridCardSkeleton";
 
