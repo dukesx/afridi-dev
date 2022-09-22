@@ -83,7 +83,7 @@ export const TextEditor: React.FC<MarkDownEditorProps> = React.memo(
                 ]
               : null
           }
-          height={height ? height : "600px"}
+          minHeight={height ? height : "600px"}
           placeholder={
             placeholder ?? "Write something awesome with GFM Supported Markdown"
           }

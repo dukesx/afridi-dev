@@ -157,7 +157,7 @@ const Acknowledgements = () => {
               <a href="https://github.com/danbovey/react-infinite-scroller">
                 React Infinite Scroller
               </a>{" "}
-              library to load infinite articls lists inside article feed.
+              library to load infinite articles lists inside article feed.
             </List.Item>
           </List>
         </Text>
