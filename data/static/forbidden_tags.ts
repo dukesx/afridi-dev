@@ -6,6 +6,7 @@ export const forbidden_tags = [
   "must-reads",
   "mustReads",
   "trending",
+  "programming",
   "top",
   "most loved",
   "awesome",

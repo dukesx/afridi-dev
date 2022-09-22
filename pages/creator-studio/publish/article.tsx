@@ -1,31 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Aside,
-  Button,
   Card,
   Center,
-  Drawer,
   Grid,
   Input,
   Loader,
   LoadingOverlay,
-  Modal,
-  ScrollArea,
   Stack,
   Text,
-  TextInput,
   Title,
   useMantineColorScheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { openModal } from "@mantine/modals";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
-import { IconArrowRight, IconMenu, IconMenu2 } from "@tabler/icons";
-import Image from "next/image";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
 import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
-import EditorTourModal from "../../../components/global/editor/tour-modal";
 import AppWrapper from "../../../components/global/wrapper";
 import ArticleComposeSidebar from "../../../components/studio/publish/article/compose/article-compose-sidebar";
 
@@ -99,32 +89,12 @@ const ArticleComposer = () => {
           </Grid.Col>
 
           <Grid.Col span={12} md={4} xs={12}>
-            {/* <Aside
-              hiddenBreakpoint="md"
-              hidden
-              p="md"
-              zIndex={50}
-              styles={{
-                root: {
-                  zIndex: 50,
-                },
-              }}
-              width={{ sm: 0, md: 400, lg: 500 }}
+            <Card
               sx={(theme) => ({
                 backgroundColor:
                   colorScheme == "dark"
                     ? theme.colors.dark[6]
-                    : theme.fn.lighten(theme.colors.gray[0], 0.9),
-              })}
-            >
-              <Aside.Section component={ScrollArea} pr="xl" grow> */}
-            <Card
-              sx={(theme) => ({
-                background: "transparent",
-                // backgroundColor:
-                //   colorScheme == "dark"
-                //     ? theme.colors.dark[6]
-                //     : theme.colors.gray[0],
+                    : theme.colors.gray[0],
               })}
             >
               <Text
@@ -141,8 +111,6 @@ const ArticleComposer = () => {
                 getMarkdown={getMarkdown}
               />
             </Card>
-            {/* </Aside.Section>
-            </Aside> */}
           </Grid.Col>
         </Grid>
       </div>
