@@ -178,7 +178,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
               <LandingSidebarItem
                 leftIcon={<IconNews size={25} />}
                 color="gray"
-                path="/creator-studio/all-articles"
+                path="/creator-studio/my-articles"
                 text="My Articles"
                 // maxWidth={255}
               />
