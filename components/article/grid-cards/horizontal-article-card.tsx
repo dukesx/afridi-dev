@@ -250,29 +250,23 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                 </Group>
               </Fragment>
             ) : null}
-
-            {data.editors_pick ? (
-              <Fragment>
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={1}
-                />
-                <Tooltip
-                  label="Editor's Choice 🤓"
-                  position="bottom"
-                  mb="xl"
-                  ml="xl"
-                >
-                  <ThemeIcon variant="light" color="yellow" radius="xl">
-                    <Text size="sm">👍‍</Text>
-                  </ThemeIcon>
-                </Tooltip>
-              </Fragment>
-            ) : null}
           </Group>
         ) : null}
       </Stack>
+      {data.editors_pick ? (
+        <Fragment>
+          <Divider
+            className="h-[14px] align-middle my-auto"
+            orientation="vertical"
+            size={1}
+          />
+          <Tooltip label="Editor's Choice 🤓" position="bottom" mb="xl" ml="xl">
+            <ThemeIcon variant="light" color="yellow" size="xl" radius="xl">
+              <Text size="xl">👍‍</Text>
+            </ThemeIcon>
+          </Tooltip>
+        </Fragment>
+      ) : null}
     </Group>
   ) : null;
 };
