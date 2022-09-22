@@ -42,6 +42,10 @@ const Article = ({ article, tags }) => {
   const theme = useMantineTheme();
   const { supabaseClient } = useSessionContext();
 
+  useEffect(() => {
+    setData(article);
+  }, [article]);
+
   const addViewCount = async () => {
     //
     const { data: returnedData, error } = await supabaseClient
@@ -296,6 +300,6 @@ export const getStaticPaths = async () => {
 
   return {
     paths: ids,
-    fallback: true,
+    fallback: "blocking",
   };
 };

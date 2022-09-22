@@ -89,6 +89,13 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
     getSimilarAuthors(setSimilarAuthors, supabaseClient, id);
   }, []);
 
+  useEffect(() => {
+    setFeed(feedData);
+    setDp(dpo);
+    setData(user);
+    setCover(covera);
+  }, [feedData]);
+
   const save = (data) => {
     ref = data;
   };

@@ -233,7 +233,14 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
             </Avatar>
           </Tooltip>
           <Stack className="md:mr-auto sm:mr-0" spacing={0}>
-            <Text lineClamp={1} mt={5} weight={700} size="xs">
+            <Text
+              component={NextLink}
+              href={`/author/${data.authors.id}`}
+              lineClamp={1}
+              mt={5}
+              weight={700}
+              size="xs"
+            >
               {data
                 ? data.authors.firstName + " " + data.authors.lastName
                 : null}
@@ -289,7 +296,12 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
                         </Avatar>
                       </Tooltip>
 
-                      <Text weight={700} size="xs">
+                      <Text
+                        component={NextLink}
+                        href={`/author/${mapped.authors.id}`}
+                        weight={700}
+                        size="xs"
+                      >
                         {mapped.authors.firstName +
                           " " +
                           mapped.authors.lastName}
