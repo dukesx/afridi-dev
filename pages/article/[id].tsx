@@ -236,7 +236,6 @@ export const getStaticProps = async (ctx) => {
         description,
         cover,
         body,
-        editors_pick,
         author_id,
         views
           )
