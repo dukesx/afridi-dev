@@ -235,7 +235,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
           <Stack className="md:mr-auto sm:mr-0" spacing={0}>
             <Text
               component={NextLink}
-              href={`/author/${data.authors.id}`}
+              href={`/author/${data && data.authors.id}`}
               lineClamp={1}
               mt={5}
               weight={700}
@@ -298,7 +298,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
 
                       <Text
                         component={NextLink}
-                        href={`/author/${mapped.authors.id}`}
+                        href={mapped && `/author/${mapped.authors.id}`}
                         weight={700}
                         size="xs"
                       >
