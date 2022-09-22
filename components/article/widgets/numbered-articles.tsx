@@ -22,6 +22,7 @@ const NumberedArticlesWidget = ({
       </Text>
       <Divider className="min-w-[20px]" />
       <HorizontalArticleGridCard
+        notLocal
         data={article}
         titleClamp={2}
         theme={theme}

@@ -27,6 +27,7 @@ import {
   IconPencil,
   IconTrophy,
 } from "@tabler/icons";
+import Link from "next/link";
 import { Fragment } from "react";
 import { supabase } from "../../../utils/supabaseClient";
 import AfridiImage from "../../global/afridi-image";
@@ -49,11 +50,13 @@ interface HorizontalGridCardProps {
   withCover?: boolean | false;
   withFooter?: boolean | false;
   titleClamp?: number;
+  notLocal?: boolean;
 }
 
 const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
   theme,
   style,
+  notLocal,
   data,
   coverClassName,
   setBookmarks,
@@ -107,8 +110,8 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
         }
       >
         <Text
-          component={NextLink}
           href={`/article/${data.id}`}
+          component={notLocal ? "a" : NextLink}
           lineClamp={titleClamp ?? 2}
           className={
             style == CardStyle.DEFAULT

@@ -156,7 +156,9 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
             }
           },
           ol: ({ children, node }) => <List type="ordered">{children}</List>,
-          p: ({ children }) => <Text pb="sm">{children}</Text>,
+          p: ({ children, node }) => {
+            return <Text pb="sm">{children}</Text>;
+          },
           q: ({ children, ...props }) => <Blockquote>{children}</Blockquote>,
           blockquote: ({ children, ...props }) => {
             return (
