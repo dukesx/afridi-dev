@@ -29,7 +29,12 @@ const CreatorsStudio = ({ authored }) => {
       title,
       description,
       cover,
-      created_at
+      created_at,
+     tags (
+        title,
+        content_count,
+        id
+      )
     `,
         {
           count: "exact",
@@ -55,7 +60,12 @@ const CreatorsStudio = ({ authored }) => {
       title,
       description,
       cover,
-      created_at
+      created_at,
+      tags (
+        title,
+        content_count,
+        id
+      )
     `
       )
       .range(currentIndex, currentIndex + PAGE_SIZE)
@@ -134,7 +144,7 @@ const CreatorsStudio = ({ authored }) => {
             accessor: "id",
             title: "Actions",
             width: 250,
-            render: ({ id }: AfridiDevArticle) => {
+            render: ({ id, tags }: AfridiDevArticle) => {
               return (
                 <Group>
                   <Button
@@ -165,6 +175,7 @@ const CreatorsStudio = ({ authored }) => {
                         onCancel: () => {},
                         onConfirm: async () => {
                           setTableLoading(true);
+
                           const { error: deleteTagsError } =
                             await supabaseClient
                               .from("articles_tags")
@@ -172,6 +183,17 @@ const CreatorsStudio = ({ authored }) => {
                               .match({
                                 article_id: id,
                               });
+
+                          await Promise.all(
+                            tags.map(async (mapped) => {
+                              const { error } = await supabaseClient
+                                .from("tags")
+                                .update({
+                                  content_count: mapped.content_count - 1,
+                                })
+                                .eq("id", mapped.id);
+                            })
+                          );
 
                           const { error: deleteBookmarksError } =
                             await supabaseClient
