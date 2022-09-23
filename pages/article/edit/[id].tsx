@@ -70,6 +70,15 @@ const EditArticle = ({ user, data }) => {
 
   //
 
+  var coAuthors =
+    data &&
+    data.co_authors_articles.map((mapped) => {
+      return {
+        ...mapped.authors,
+        value: mapped.authors.id,
+      };
+    });
+
   return (
     <AppWrapper noPadding activeHeaderKey="" size={1400}>
       <div className="relative ml-0 sm:ml-5">
@@ -133,6 +142,7 @@ const EditArticle = ({ user, data }) => {
                   cover: data.cover,
                   tags: data.tags.map((mapped) => mapped.title),
                   id: data.id,
+                  coAuthors: coAuthors,
                 }}
               />
             </Card>
@@ -168,7 +178,10 @@ export const getServerSideProps = withPageAuth({
         ),
         co_authors_articles (
           authors (
-            id
+            id,
+            firstName,
+            lastName,
+            dp
           )
         )
         `

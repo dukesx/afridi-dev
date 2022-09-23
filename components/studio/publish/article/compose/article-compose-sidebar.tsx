@@ -1,8 +1,12 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   ActionIcon,
+  Avatar,
   Button,
+  Card,
   CheckIcon,
+  Chip,
   Code,
   ColorSwatch,
   CopyButton,
@@ -31,7 +35,7 @@ import {
   IconX,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
-import React, { createRef, Fragment, useEffect } from "react";
+import React, { createRef, forwardRef, Fragment, useEffect } from "react";
 import { useState } from "react";
 import { forbidden_tags } from "../../../../../data/static/forbidden_tags";
 import AfridiImage from "../../../../global/afridi-image";
@@ -58,6 +62,8 @@ const ArticleComposeSidebar = ({
   const [tagsLoading, setTagsLoading] = useState(false);
   const router = useRouter();
   const [editorVal, setEditorVal] = useState("");
+  const [coAuthorsLoading, setCoAuthorsLoading] = useState(false);
+  const [coAuthors, setCoAuthors] = useState([]);
 
   console.log(editorVal);
 
@@ -65,6 +71,7 @@ const ArticleComposeSidebar = ({
     initialValues: {
       tags: [],
       content: "",
+      coAuthors: [],
       title: "",
       description: "",
       cover: "",
@@ -99,7 +106,10 @@ const ArticleComposeSidebar = ({
     const { error, data } = await supabaseClient
       .from("tags")
       .select("title")
-      .limit(5);
+      .limit(10)
+      .order("content_count", {
+        ascending: false,
+      });
     var tagsa = [];
     if (data && data.length > 0) {
       data.map((mapped) => tagsa.push(mapped.title));
@@ -113,6 +123,29 @@ const ArticleComposeSidebar = ({
       getTags();
     }
   }, [session]);
+
+  interface CoAuthorsItemProps extends React.ComponentPropsWithoutRef<"div"> {
+    dp: string;
+    firstName: string;
+    lastName: string;
+  }
+
+  const CoAuthorCustomSelectComponent = forwardRef<
+    HTMLDivElement,
+    CoAuthorsItemProps
+  >(({ dp, firstName, lastName, ...others }: CoAuthorsItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Group spacing="xs" className="w-full mr-4" noWrap>
+        <Avatar radius="xl" className="rounded-full">
+          {dp && <AfridiImage height={30} width={30} path={dp ?? null} />}
+        </Avatar>
+
+        <Stack>
+          <Text>{firstName + " " + lastName} </Text>
+        </Stack>
+      </Group>
+    </div>
+  ));
 
   return (
     <form
@@ -235,6 +268,21 @@ const ArticleComposeSidebar = ({
               })
               .eq("id", session.user.id);
 
+            if (val.coAuthors.length > 0) {
+              await Promise.all(
+                val.coAuthors.map(async (mapped) => {
+                  if (mapped !== articleData[0].author_id) {
+                    const { error: AddCoAuthorsError } = await supabaseClient
+                      .from("co_authors_articles")
+                      .insert({
+                        article_id: articleData[0].id,
+                        author_id: mapped,
+                      });
+                  }
+                })
+              );
+            }
+
             const fetcher = await fetch("/api/revalidate", {
               method: "POST",
               headers: {
@@ -291,6 +339,78 @@ const ArticleComposeSidebar = ({
           pt="md"
           minRows={4}
           placeholder="TL;DR, Markdown is the future because it is parsable in a very distinct but consistent language standard called AST"
+        />
+      </Input.Wrapper>
+
+      <Input.Wrapper
+        styles={{
+          label: {
+            fontSize: 12.5,
+          },
+        }}
+        label="Co-Authors"
+        description="Add More Collaborators"
+      >
+        <MultiSelect
+          rightSection={coAuthorsLoading ? <Loader size="xs" /> : null}
+          mt="md"
+          mb="md"
+          searchable
+          valueComponent={CoAuthorCustomSelectComponent}
+          itemComponent={CoAuthorCustomSelectComponent}
+          filter={(value, selected, item) =>
+            !selected &&
+            (item.firstName
+              .toLowerCase()
+              .includes(value.toLowerCase().trim()) ||
+              item.lastName.toLowerCase().includes(value.toLowerCase().trim()))
+          }
+          data={coAuthors ?? []}
+          onSearchChange={async (query) => {
+            setCoAuthorsLoading(true);
+            const { error, data, count } = await supabaseClient
+              .from("authors")
+              .select(
+                `
+              firstName,
+              lastName,
+              id,
+              dp
+              `,
+                { count: "exact" }
+              )
+              .ilike("firstName", `%${query}%`);
+
+            if (data && data.length > 0) {
+              if (count <= 0) {
+              } else {
+                setCoAuthorsLoading(false);
+                var newMap = data.map((mapped) => {
+                  var filtered = coAuthors.filter(
+                    (filter) => filter.id == mapped.id
+                  );
+
+                  if (filtered.length == 0) {
+                    return mapped;
+                  }
+                });
+                var coauthors = [...coAuthors];
+                newMap.map((mapped) => {
+                  if (mapped !== undefined) {
+                    coauthors.push({
+                      ...mapped,
+                      value: mapped.id,
+                      id: mapped.id,
+                    });
+                  }
+                });
+                setCoAuthors(coauthors);
+              }
+            }
+          }}
+          maxDropdownHeight={160}
+          onChange={(value) => form.setFieldValue("coAuthors", value)}
+          error={form.errors.tags}
         />
       </Input.Wrapper>
 

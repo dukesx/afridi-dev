@@ -1,6 +1,8 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   ActionIcon,
+  Avatar,
   Button,
   Code,
   CopyButton,
@@ -29,7 +31,7 @@ import {
   IconX,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
-import React, { createRef, Fragment, useEffect } from "react";
+import React, { createRef, forwardRef, Fragment, useEffect } from "react";
 import { useState } from "react";
 import { forbidden_tags } from "../../../../../data/static/forbidden_tags";
 import AfridiImage from "../../../../global/afridi-image";
@@ -48,6 +50,7 @@ interface ArticleEditSidebarProps {
     tags: Array<any>;
     cover: string;
     id: string;
+    coAuthors: Array<any>;
   };
 }
 
@@ -64,6 +67,8 @@ const ArticleEditSidebar = ({
   var openRef: any = createRef();
   const [tagsLoading, setTagsLoading] = useState(false);
   const router = useRouter();
+  const [coAuthorsLoading, setCoAuthorsLoading] = useState(false);
+  const [coAuthors, setCoAuthors] = useState([]);
 
   const form = useForm({
     initialValues: {
@@ -72,6 +77,7 @@ const ArticleEditSidebar = ({
       title: props.title,
       description: props.description,
       cover: props.cover,
+      coAuthors: props.coAuthors,
     },
 
     validate: {
@@ -118,6 +124,29 @@ const ArticleEditSidebar = ({
       getTags();
     }
   }, [session]);
+
+  interface CoAuthorsItemProps extends React.ComponentPropsWithoutRef<"div"> {
+    dp: string;
+    firstName: string;
+    lastName: string;
+  }
+
+  const CoAuthorCustomSelectComponent = forwardRef<
+    HTMLDivElement,
+    CoAuthorsItemProps
+  >(({ dp, firstName, lastName, ...others }: CoAuthorsItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Group spacing="xs" className="w-full mr-4" noWrap>
+        <Avatar radius="xl" className="rounded-full">
+          {dp && <AfridiImage height={30} width={30} path={dp ?? null} />}
+        </Avatar>
+
+        <Stack>
+          <Text>{firstName + " " + lastName} </Text>
+        </Stack>
+      </Group>
+    </div>
+  ));
 
   return (
     <form
@@ -175,7 +204,12 @@ const ArticleEditSidebar = ({
               .delete()
               .eq("article_id", props.id);
 
-            if (!deleteTagError) {
+            const { error: deleteCoAuthorsError } = await supabaseClient
+              .from("co_authors_articles")
+              .delete()
+              .eq("article_id", props.id);
+
+            if (!deleteTagError && !deleteCoAuthorsError) {
               val.tags.map(async (mapped) => {
                 const {
                   error,
@@ -219,6 +253,21 @@ const ArticleEditSidebar = ({
                     });
                 }
               });
+
+              if (val.coAuthors.length > 0) {
+                await Promise.all(
+                  val.coAuthors.map(async (mapped) => {
+                    if (mapped !== articleData[0].author_id) {
+                      const { error: AddCoAuthorsError } = await supabaseClient
+                        .from("co_authors_articles")
+                        .insert({
+                          article_id: articleData[0].id,
+                          author_id: mapped,
+                        });
+                    }
+                  })
+                );
+              }
 
               const fetcher = await fetch("/api/revalidate", {
                 method: "POST",
@@ -277,6 +326,81 @@ const ArticleEditSidebar = ({
           pt="md"
           minRows={4}
           placeholder="TL;DR, Markdown is the future because it is parsable in a very distinct but consistent language standard called AST"
+        />
+      </Input.Wrapper>
+
+      <Input.Wrapper
+        styles={{
+          label: {
+            fontSize: 12.5,
+          },
+        }}
+        label="Co-Authors"
+        description="Update Collaborators"
+      >
+        <MultiSelect
+          defaultValue={props.coAuthors.map((mapped) => {
+            return mapped.value;
+          })}
+          rightSection={coAuthorsLoading ? <Loader size="xs" /> : null}
+          mt="md"
+          mb="md"
+          searchable
+          valueComponent={CoAuthorCustomSelectComponent}
+          itemComponent={CoAuthorCustomSelectComponent}
+          filter={(value, selected, item) =>
+            !selected &&
+            (item.firstName
+              .toLowerCase()
+              .includes(value.toLowerCase().trim()) ||
+              item.lastName.toLowerCase().includes(value.toLowerCase().trim()))
+          }
+          data={coAuthors.length > 0 ? coAuthors : props.coAuthors}
+          onSearchChange={async (query) => {
+            setCoAuthorsLoading(true);
+            const { error, data, count } = await supabaseClient
+              .from("authors")
+              .select(
+                `
+              firstName,
+              lastName,
+              id,
+              dp
+              `,
+                { count: "exact" }
+              )
+              .ilike("firstName", `%${query}%`);
+
+            if (data && data.length > 0) {
+              if (count <= 0) {
+              } else {
+                setCoAuthorsLoading(false);
+                var newMap = data.map((mapped) => {
+                  var filtered = coAuthors.filter(
+                    (filter) => filter.id == mapped.id
+                  );
+
+                  if (filtered.length == 0) {
+                    return mapped;
+                  }
+                });
+                var coauthors = [...coAuthors];
+                newMap.map((mapped) => {
+                  if (mapped !== undefined) {
+                    coauthors.push({
+                      ...mapped,
+                      value: mapped.id,
+                      id: mapped.id,
+                    });
+                  }
+                });
+                setCoAuthors(coauthors);
+              }
+            }
+          }}
+          maxDropdownHeight={160}
+          onChange={(value) => form.setFieldValue("coAuthors", value)}
+          error={form.errors.coAuthors}
         />
       </Input.Wrapper>
 
