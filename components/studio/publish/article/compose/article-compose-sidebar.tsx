@@ -182,6 +182,7 @@ const ArticleComposeSidebar = ({
                 .select(
                   `
                 title,
+                content_count,
                 id
                 `,
                   {
@@ -196,16 +197,23 @@ const ArticleComposeSidebar = ({
                 const { data: finalData } = await supabaseClient
                   .from("articles_tags")
                   .insert({
-                    title: mapped.title,
                     tag_id: tagData[0].id,
                     article_id: articleData[0].id,
                   })
                   .select();
+
+                const { error: increaseCountError } = await supabaseClient
+                  .from("tags")
+                  .update({
+                    content_count: tagData[0].content_count + 1,
+                  })
+                  .eq("id", tagData[0].id);
               } else {
                 const { data: insertedTagData } = await supabaseClient
                   .from("tags")
                   .insert({
                     title: mapped,
+                    content_count: 1,
                   })
                   .select();
                 const { error: tag2Error, data: tag2Data } =

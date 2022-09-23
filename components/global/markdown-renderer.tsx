@@ -61,32 +61,32 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
             }
           },
           h1: ({ children }) => (
-            <Title className="leading-none" pb={3} order={1}>
+            <Title pt="xl" pb="xl" className="leading-none" order={1}>
               {children}
             </Title>
           ),
           h2: ({ children }) => (
-            <Title className="leading-none" pb={3} order={2}>
+            <Title pt="xl" pb="xl" className="leading-none" order={2}>
               {children}
             </Title>
           ),
           h3: ({ children }) => (
-            <Title className="leading-none" pb={3} order={3}>
+            <Title pt="xl" pb="xl" className="leading-none" order={3}>
               {children}
             </Title>
           ),
           h4: ({ children }) => (
-            <Title className="leading-none" pb={0} order={4}>
+            <Title pt="xl" pb="xl" className="leading-none" order={4}>
               {children}
             </Title>
           ),
           h5: ({ children }) => (
-            <Title className="leading-none" pb={3} order={5}>
+            <Title pt="" pb="xl" className="leading-none" order={5}>
               {children}
             </Title>
           ),
           h6: ({ children }) => (
-            <Title className="leading-none" pb={3} order={6}>
+            <Title pt="xl" pb="xl" className="leading-none" order={6}>
               {children}
             </Title>
           ),

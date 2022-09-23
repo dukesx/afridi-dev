@@ -36,6 +36,7 @@ import Custom404 from "../404";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
+import EmptyPlaceholder from "../../components/global/placeholders/empty";
 
 const ArticleTagPage = ({ taga, articles }) => {
   const theme = useMantineTheme();
@@ -107,7 +108,23 @@ const ArticleTagPage = ({ taga, articles }) => {
 
   return taga == null ? (
     <AppWrapper size="sm" activeHeaderKey="">
-      <Custom404 />
+      <Stack>
+        <EmptyPlaceholder
+          title="Sorry! no articles for this tag yet"
+          description="Check back later, maybe?"
+        />
+        <Button
+          mt="sm"
+          className="max-w-[300px] mx-auto"
+          onClick={() => router.back()}
+          color="blue"
+          variant="subtle"
+          leftIcon={<IconArrowLeft size={16} />}
+          radius="xl"
+        >
+          Go back
+        </Button>
+      </Stack>
     </AppWrapper>
   ) : (
     <AppWrapper size="lg" activeHeaderKey="tags">
@@ -341,6 +358,7 @@ export const getStaticProps = async (ctx) => {
       title: data[0].tags[0].title,
       icon: data[0].tags[0].icon,
       color: data[0].tags[0].color,
+      articleCount: count,
     };
 
     return {

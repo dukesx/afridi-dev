@@ -11,7 +11,14 @@ import {
 } from "@mantine/core";
 import { useDebouncedState } from "@mantine/hooks";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
-import { IconCode, IconHash, IconPencil } from "@tabler/icons";
+import {
+  IconBrandNotion,
+  IconBrandWhatsapp,
+  IconCode,
+  IconHash,
+  IconPencil,
+  IconThumbUp,
+} from "@tabler/icons";
 import { Fragment, Suspense, useEffect, useState } from "react";
 import EmptyPlaceholder from "../../components/global/placeholders/empty";
 import TagComponent from "../../components/global/tags/tagComponent";
@@ -155,10 +162,14 @@ const TagsPage = ({ tagsArr }) => {
                     mapped.title == "programming"
                       ? IconCode
                       : mapped.title == "editors-pick"
-                      ? IconPencil
+                      ? IconThumbUp
+                      : mapped.title == "notion"
+                      ? IconBrandNotion
+                      : mapped.title == "whatsapp"
+                      ? IconBrandWhatsapp
                       : null
                   }
-                  color={mapped.color ? mapped.color : "cyan"}
+                  color={mapped.color ? mapped.color : "gray"}
                   count={mapped.articleCount}
                   id={mapped.id}
                   title={mapped.title}
@@ -211,14 +222,14 @@ export const getStaticProps = async () => {
       id,
       color,
       icon,
-      articles!inner(id)
+      content_count
       `,
       {
         count: "exact",
       }
     )
-    .order("created_at", {
-      ascending: true,
+    .order("content_count", {
+      ascending: false,
     })
     .limit(100);
 
@@ -229,7 +240,7 @@ export const getStaticProps = async () => {
         id: mapped.id,
         title: mapped.title,
         //@ts-ignore
-        articleCount: mapped.articles.length,
+        articleCount: mapped.content_count,
         icon: mapped.icon,
         color: mapped.color,
       })

@@ -41,6 +41,7 @@ const CreatorsStudio = ({ authored }) => {
     setArticles(data);
     setTotalRecords(count);
     setLoading(false);
+    setTableLoading(false);
   };
 
   const loadMore = async (page) => {
@@ -163,6 +164,7 @@ const CreatorsStudio = ({ authored }) => {
                         labels: { confirm: "Confirm", cancel: "Cancel" },
                         onCancel: () => {},
                         onConfirm: async () => {
+                          setTableLoading(true);
                           const { error: deleteTagsError } =
                             await supabaseClient
                               .from("articles_tags")
@@ -187,10 +189,23 @@ const CreatorsStudio = ({ authored }) => {
                                 article_id: id,
                               });
 
+                          const { error: coAuthorsError } = await supabaseClient
+                            .from("co_authors_articles")
+                            .delete()
+                            .eq("article_id", id);
+
+                          const { error: appreciationsError } =
+                            await supabaseClient
+                              .from("appreciations")
+                              .delete()
+                              .eq("reacted_article", id);
+
                           if (
                             !deleteTagsError &&
                             !deleteBookmarksError &&
-                            !deleteViewsError
+                            !deleteViewsError &&
+                            !coAuthorsError &&
+                            !appreciationsError
                           ) {
                             const { error, data } = await supabaseClient
                               .from("articles")

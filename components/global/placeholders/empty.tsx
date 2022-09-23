@@ -26,7 +26,7 @@ const EmptyPlaceholder = ({
     <Text size="md" weight={700}>
       {title ? title : "Oops... No Data Found"}
     </Text>
-    <Text mt="xs" size="sm" color="dimmed">
+    <Text mt={4} size="sm" color="dimmed">
       {description ? description : "Will be available soon 🤗😇"}
     </Text>
   </Stack>

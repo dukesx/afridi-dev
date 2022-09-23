@@ -125,7 +125,7 @@ const Bookmarks = ({ user }) => {
                   ))
                 ) : (
                   <EmptyPlaceholder
-                    height={250}
+                    height={150}
                     description="Bookmark some articles to see them here"
                   />
                 )

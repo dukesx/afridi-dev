@@ -96,7 +96,16 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
   }, [isLoading]);
 
   return (
-    <Header className="w-full" height={70}>
+    <Header
+      className="w-full"
+      zIndex={1000}
+      styles={{
+        root: {
+          zIndex: 1000,
+        },
+      }}
+      height={70}
+    >
       <Stack className="h-full w-full" justify="center" spacing={0}>
         <Group
           className="w-full align-middle h-full"
@@ -311,7 +320,19 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
               <Skeleton radius="xl" height={35} width={150} mr="sm" />
             ) : session ? (
               <Fragment>
-                <Menu zIndex={99999999999} width={300} position="bottom-end">
+                <Menu
+                  zIndex={1000}
+                  styles={{
+                    dropdown: {
+                      zIndex: 1000,
+                    },
+                    item: {
+                      zIndex: 1000,
+                    },
+                  }}
+                  width={300}
+                  position="bottom-end"
+                >
                   <Menu.Target>
                     <Button
                       leftIcon={<IconPencil size={18} />}

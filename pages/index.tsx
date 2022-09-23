@@ -267,6 +267,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
                 <SquareHorizontalAuthorWidget
                   cardClassName=""
                   title="Top 10 Contributors"
+                  placeholderHeight={140}
                   icon={<IconUsers />}
                   theme={theme}
                   color="cyan"

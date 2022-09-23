@@ -261,7 +261,13 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
             size={1}
           />
           <Tooltip label="Editor's Choice 🤓" position="bottom" mb="xl" ml="xl">
-            <ThemeIcon variant="light" color="yellow" size="xl" radius="xl">
+            <ThemeIcon
+              className="cursor-help"
+              variant="light"
+              color="yellow"
+              size="xl"
+              radius="xl"
+            >
               <Text size="xl">👍‍</Text>
             </ThemeIcon>
           </Tooltip>
