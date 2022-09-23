@@ -553,6 +553,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                       <SquareHorizontalAuthorWidget
                         theme={theme}
                         data={similarAuthors}
+                        titleOrder={4}
                         color="gray"
                         placeholderHeight={140}
                         placeholderTitle="Hmmm!"

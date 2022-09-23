@@ -265,6 +265,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
             >
               <Suspense>
                 <SquareHorizontalAuthorWidget
+                  titleOrder={4}
                   cardClassName=""
                   title="Top 10 Contributors"
                   placeholderHeight={140}

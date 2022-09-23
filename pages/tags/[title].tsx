@@ -42,6 +42,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
 import EmptyPlaceholder from "../../components/global/placeholders/empty";
+import GenericAfridiImage from "../../components/generic-afridi-image";
 
 const ArticleTagPage = ({ taga, articles }) => {
   const theme = useMantineTheme();
@@ -93,6 +94,7 @@ const ArticleTagPage = ({ taga, articles }) => {
       tags!inner(  
       title,
       id,
+      image,
       color,
       icon
       )
@@ -168,15 +170,8 @@ const ArticleTagPage = ({ taga, articles }) => {
             <IconBrandWhatsapp size={40} />
           ) : taga.title == "google analytics" ? (
             <IconBrandGoogleAnalytics size={40} />
-          ) : taga.title == "posthog" ? (
-            <Image
-              className="mx-auto"
-              src="/posthog-logomark.svg"
-              loader={({ src }) => `https://posthog.com/brand${src}`}
-              width={90}
-              height={90}
-              alt=""
-            />
+          ) : taga.image ? (
+            <GenericAfridiImage width={70} height={70} path={taga.image} />
           ) : (
             <IconHash />
           )}
@@ -366,6 +361,7 @@ export const getStaticProps = async (ctx) => {
       title,
       id,
       color,
+      image,
       icon
       )
       `,
@@ -382,6 +378,7 @@ export const getStaticProps = async (ctx) => {
       title: data[0].tags[0].title,
       icon: data[0].tags[0].icon,
       color: data[0].tags[0].color,
+      image: data[0].tags[0].image,
       articleCount: count,
     };
 

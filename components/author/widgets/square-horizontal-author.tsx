@@ -26,6 +26,7 @@ interface SquareHorizontalWidgetProps {
   placeholderHeight?: number;
   placeholderTitle?: string;
   placeholderDescription?: string;
+  titleOrder?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 export interface AfridiDevAuthor {
@@ -41,6 +42,7 @@ export interface AfridiDevAuthor {
 const SquareHorizontalAuthorWidget: React.FC<SquareHorizontalWidgetProps> = ({
   theme,
   color,
+  titleOrder,
   icon,
   title,
   cardClassName,
@@ -63,7 +65,7 @@ const SquareHorizontalAuthorWidget: React.FC<SquareHorizontalWidgetProps> = ({
         <ThemeIcon variant="light" size={50} radius="xl" color={color}>
           {typeof icon == "string" ? <Text size="xl">{icon}</Text> : icon}
         </ThemeIcon>
-        <Title mr="xl" order={3} py="md">
+        <Title mr="xl" order={titleOrder ?? 3} py="md">
           {title}
         </Title>
       </Group>

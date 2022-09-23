@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Aside,
+  Badge,
   Box,
   Center,
   Container,
@@ -17,7 +18,7 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { IconHash, IconNews } from "@tabler/icons";
+import { IconArrowRight, IconBell, IconHash, IconNews } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
@@ -26,6 +27,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
 import ArticleRightSidebar from "../../components/article/components/sidebar";
 import NumberedArticlesWidget from "../../components/article/widgets/numbered-articles";
+import { NextLink } from "@mantine/next";
 
 const styles = createStyles((theme, _params, getRef) => ({
   mainContent: {
@@ -113,7 +115,7 @@ const Article = ({ article, tags }) => {
                 )}
               </Title>
 
-              <Text lineClamp={4} mt="xl" color="dimmed">
+              <Text mt="sm" lineClamp={4} color="dimmed">
                 {data ? (
                   data.description
                 ) : (
@@ -124,6 +126,22 @@ const Article = ({ article, tags }) => {
                   </Stack>
                 )}
               </Text>
+
+              <Group mt="sm">
+                {article &&
+                  article.tags.map((mapped) => (
+                    <Badge
+                      variant="dot"
+                      component={NextLink}
+                      href={`/tags/${mapped.title}`}
+                      className="capitalize font-semibold cursor-pointer"
+                      color={mapped.color ?? "gray"}
+                      key={mapped.color + mapped.title}
+                    >
+                      {mapped.title}
+                    </Badge>
+                  ))}
+              </Group>
             </Stack>
           </Center>
         </Stack>
@@ -213,6 +231,7 @@ export const getStaticProps = async (ctx) => {
         ),
         tags (
           title,
+          color,
         articles (
         id,
         title,

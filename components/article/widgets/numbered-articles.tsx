@@ -28,6 +28,7 @@ interface NumberedArticlesWidgetProps {
   title: string;
   icon: string | ReactNode;
   titleOrder?: 1 | 2 | 3 | 4 | 5 | 6;
+  withBorder?: boolean;
 }
 
 const NumberedArticlesWidget = ({
@@ -39,13 +40,14 @@ const NumberedArticlesWidget = ({
   color,
   title,
   titleOrder,
+  withBorder,
   icon,
 }: NumberedArticlesWidgetProps) => {
   return (
     <Card
       px="xs"
       radius="lg"
-      withBorder
+      withBorder={withBorder}
       sx={(theme) => ({
         borderColor: theme.fn.themeColor(color),
       })}

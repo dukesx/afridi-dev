@@ -173,6 +173,7 @@ const TagsPage = ({ tagsArr }) => {
                       ? IconBrandGoogleAnalytics
                       : null
                   }
+                  image={mapped.image}
                   color={mapped.color ? mapped.color : "gray"}
                   count={mapped.articleCount}
                   id={mapped.id}
@@ -225,6 +226,7 @@ export const getStaticProps = async () => {
       title,
       id,
       color,
+      image,
       icon,
       content_count
       `,
@@ -247,6 +249,7 @@ export const getStaticProps = async () => {
         articleCount: mapped.content_count,
         icon: mapped.icon,
         color: mapped.color,
+        image: mapped.image,
       })
     );
 

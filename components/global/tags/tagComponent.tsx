@@ -21,6 +21,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { IconEye, TablerIcon, IconHash, IconBellRinging } from "@tabler/icons";
 import Image from "next/image";
 import Link from "next/link";
+import GenericAfridiImage from "../../generic-afridi-image";
 
 interface TagComponentProps {
   title: string;
@@ -31,6 +32,7 @@ interface TagComponentProps {
   count: number;
   icon: string;
   authorFollowed: Array<any>;
+  image?: string;
 }
 
 const TagComponent = ({
@@ -40,6 +42,7 @@ const TagComponent = ({
   icon,
   IconName,
   authorFollowed,
+  image,
 }: TagComponentProps) => {
   const { colorScheme } = useMantineColorScheme();
   return (
@@ -121,15 +124,8 @@ const TagComponent = ({
                   size={35}
                   className="align-middle"
                 />
-              ) : title == "posthog" ? (
-                <Image
-                  className="mx-auto"
-                  src="/posthog-logomark.svg"
-                  loader={({ src }) => `https://posthog.com/brand${src}`}
-                  width={40}
-                  height={40}
-                  alt=""
-                />
+              ) : image ? (
+                <GenericAfridiImage width={40} height={40} path={image} />
               ) : (
                 <IconHash />
               )}
