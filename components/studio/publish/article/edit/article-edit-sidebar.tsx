@@ -105,7 +105,7 @@ const ArticleEditSidebar = ({
       .from("tags")
       .select("title")
       .limit(10);
-    var tagsa = [];
+    var tagsa = [...props.tags];
     if (data && data.length > 0) {
       data.map((mapped) => tagsa.push(mapped.title));
       setTags(tagsa);

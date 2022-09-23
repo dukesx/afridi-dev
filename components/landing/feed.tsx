@@ -296,6 +296,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
               ) : feedData && feedData.length == 0 ? (
                 <Center mt={50}>
                   <EmptyPlaceholder
+                    height={140}
                     title="Hmmm.... Seems empty"
                     description="Subscribe some tags to see articles here"
                   />
@@ -328,7 +329,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                 </Stack>
               ) : (
                 <Center mt={50}>
-                  <EmptyPlaceholder />
+                  <EmptyPlaceholder height={140} />
                 </Center>
               )
             ) : (
@@ -355,7 +356,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                   ))}
                 </Stack>
               ) : (
-                <EmptyPlaceholder />
+                <EmptyPlaceholder height={140} />
               )
             ) : (
               <FeedLoader />

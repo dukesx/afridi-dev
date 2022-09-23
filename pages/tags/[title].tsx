@@ -20,9 +20,14 @@ import {
   IconBellOff,
   IconBellPlus,
   IconBellRinging,
+  IconBrandGoogleAnalytics,
+  IconBrandNotion,
+  IconBrandWhatsapp,
   IconChevronDown,
+  IconCode,
   IconHash,
   IconNews,
+  IconThumbUp,
 } from "@tabler/icons";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -130,9 +135,9 @@ const ArticleTagPage = ({ taga, articles }) => {
     <AppWrapper size="lg" activeHeaderKey="tags">
       <Stack mt={50} align="center">
         <Avatar
-          className="rounded-full"
+          className="rounded-full block relative"
           variant="light"
-          color={taga.color ? `${taga.color}.4` : "cyan"}
+          color={taga.color ? `${taga.color}.4` : "gray"}
           radius="xl"
           size={130}
         >
@@ -152,6 +157,25 @@ const ArticleTagPage = ({ taga, articles }) => {
               strokeWidth={1.3}
               size={35}
               className="align-middle"
+            />
+          ) : taga.title == "programming" ? (
+            <IconCode size={40} />
+          ) : taga.title == "editors-pick" ? (
+            <IconThumbUp size={40} />
+          ) : taga.title == "notion" ? (
+            <IconBrandNotion size={40} />
+          ) : taga.title == "whatsapp" ? (
+            <IconBrandWhatsapp size={40} />
+          ) : taga.title == "google analytics" ? (
+            <IconBrandGoogleAnalytics size={40} />
+          ) : taga.title == "posthog" ? (
+            <Image
+              className="mx-auto"
+              src="/posthog-logomark.svg"
+              loader={({ src }) => `https://posthog.com/brand${src}`}
+              width={90}
+              height={90}
+              alt=""
             />
           ) : (
             <IconHash />

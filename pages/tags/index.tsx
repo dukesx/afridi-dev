@@ -12,6 +12,7 @@ import {
 import { useDebouncedState } from "@mantine/hooks";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
+  IconBrandGoogleAnalytics,
   IconBrandNotion,
   IconBrandWhatsapp,
   IconCode,
@@ -19,6 +20,7 @@ import {
   IconPencil,
   IconThumbUp,
 } from "@tabler/icons";
+import Image from "next/image";
 import { Fragment, Suspense, useEffect, useState } from "react";
 import EmptyPlaceholder from "../../components/global/placeholders/empty";
 import TagComponent from "../../components/global/tags/tagComponent";
@@ -167,6 +169,8 @@ const TagsPage = ({ tagsArr }) => {
                       ? IconBrandNotion
                       : mapped.title == "whatsapp"
                       ? IconBrandWhatsapp
+                      : mapped.title == "google analytics"
+                      ? IconBrandGoogleAnalytics
                       : null
                   }
                   color={mapped.color ? mapped.color : "gray"}

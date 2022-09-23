@@ -122,7 +122,7 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
           }
           size={style == CardStyle.FEED ? "sm" : "xs"}
           style={{
-            lineHeight: 1.8,
+            lineHeight: 1.5,
           }}
         >
           {data.title}

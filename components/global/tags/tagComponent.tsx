@@ -121,6 +121,15 @@ const TagComponent = ({
                   size={35}
                   className="align-middle"
                 />
+              ) : title == "posthog" ? (
+                <Image
+                  className="mx-auto"
+                  src="/posthog-logomark.svg"
+                  loader={({ src }) => `https://posthog.com/brand${src}`}
+                  width={40}
+                  height={40}
+                  alt=""
+                />
               ) : (
                 <IconHash />
               )}

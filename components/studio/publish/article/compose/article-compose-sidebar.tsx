@@ -2,7 +2,9 @@
 import {
   ActionIcon,
   Button,
+  CheckIcon,
   Code,
+  ColorSwatch,
   CopyButton,
   Group,
   Input,
