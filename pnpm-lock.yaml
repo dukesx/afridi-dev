@@ -37,6 +37,7 @@ specifiers:
   country-flag-icons: ^1.5.5
   date-fns: ^2.29.1
   dayjs: ^1.11.4
+  dotenv: ^16.0.2
   embla-carousel-react: 7.0.1
   eslint: 8.22.0
   eslint-config-next: 12.2.5
@@ -102,6 +103,7 @@ dependencies:
   country-flag-icons: 1.5.5
   date-fns: 2.29.1
   dayjs: 1.11.4
+  dotenv: 16.0.2
   embla-carousel-react: 7.0.1_react@18.2.0
   mantine-datatable: 1.5.0_bw5bzqfwhbnl7fpvpqdm2zwomu
   next: 12.3.1_ckhwt5v7fywslkplh6p4u2aony
@@ -3330,6 +3332,11 @@ packages:
     dependencies:
       is-obj: 2.0.0
     dev: true
+
+  /dotenv/16.0.2:
+    resolution: {integrity: sha512-JvpYKUmzQhYoIFgK2MOnF3bciIZoItIIoryihy0rIA+H4Jy0FmgyKYAHCTN98P5ybGSJcIFbh6QKeJdtZd1qhA==}
+    engines: {node: '>=12'}
+    dev: false
 
   /duplexer2/0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}

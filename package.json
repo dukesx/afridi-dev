@@ -68,6 +68,7 @@
     "country-flag-icons": "^1.5.5",
     "date-fns": "^2.29.1",
     "dayjs": "^1.11.4",
+    "dotenv": "^16.0.2",
     "embla-carousel-react": "7.0.1",
     "mantine-datatable": "^1.5.0",
     "next": "^12.3.1",
