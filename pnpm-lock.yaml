@@ -21,7 +21,7 @@ specifiers:
   '@mantine/spotlight': ^5.2.3
   '@next/env': ^12.2.3
   '@plaiceholder/next': ^2.5.0
-  '@playwright/test': ^1.23.4
+  '@playwright/test': ^1.26.0
   '@supabase/auth-helpers-nextjs': 0.4.0-next.3
   '@supabase/auth-helpers-react': 0.3.0-next.2
   '@supabase/supabase-js': 2.0.0-rc.10
@@ -130,7 +130,7 @@ dependencies:
   zustand: 4.1.1_react@18.2.0
 
 devDependencies:
-  '@playwright/test': 1.23.4
+  '@playwright/test': 1.26.0
   '@testing-library/jest-dom': 5.16.4
   '@testing-library/react': 13.3.0_biqbaboplfbrettd7655fr4n2y
   autoprefixer: 10.4.7_postcss@8.4.14
@@ -1472,13 +1472,13 @@ packages:
       sharp: 0.31.0
     dev: false
 
-  /@playwright/test/1.23.4:
-    resolution: {integrity: sha512-iIsoMJDS/lyuhw82FtcV/B3PXikgVD3hNe5hyvOpRM0uRr1OIpN3LgPeRbBjhzBWmyf6RgRg5fqK5sVcpA03yA==}
+  /@playwright/test/1.26.0:
+    resolution: {integrity: sha512-D24pu1k/gQw3Lhbpc38G5bXlBjGDrH5A52MsrH12wz6ohGDeQ+aZg/JFSEsT/B3G8zlJe/EU4EkJK74hpqsjEg==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
       '@types/node': 18.0.6
-      playwright-core: 1.23.4
+      playwright-core: 1.26.0
     dev: true
 
   /@pnpm/network.ca-file/1.0.1:
@@ -6797,8 +6797,8 @@ packages:
     dependencies:
       find-up: 4.1.0
 
-  /playwright-core/1.23.4:
-    resolution: {integrity: sha512-h5V2yw7d8xIwotjyNrkLF13nV9RiiZLHdXeHo+nVJIYGVlZ8U2qV0pMxNJKNTvfQVT0N8/A4CW6/4EW2cOcTiA==}
+  /playwright-core/1.26.0:
+    resolution: {integrity: sha512-p8huU8eU4gD3VkJd3DA1nA7R3XA6rFvFL+1RYS96cSljCF2yJE9CWEHTPF4LqX8KN9MoWCrAfVKP5381X3CZqg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
