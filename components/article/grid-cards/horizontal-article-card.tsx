@@ -86,6 +86,7 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
     <Group noWrap className="w-full">
       {withCover ? (
         <AfridiImage
+          priority
           imageClassName={coverClassName}
           cover_base_64={data.cover_base_64 ? data.cover_base_64 : null}
           className="rounded-full"

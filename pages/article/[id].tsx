@@ -98,6 +98,7 @@ const Article = ({ article, tags }) => {
                 path={data ? data.cover : null}
                 height={400}
                 width={300}
+                priority
                 className="h-full md:w-full"
               />
             ) : null}
