@@ -80,15 +80,18 @@ export const getData = async (
       await Promise.all(
         //@ts-ignore
         userData[0]["articles"].map(async (mapped: AfridiDevArticle) => {
-          var res = await fetch("/api/generate-placeholder", {
-            headers: {
-              "content-type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-              cover: mapped.cover,
-            }),
-          });
+          var res = await fetch(
+            `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+            {
+              headers: {
+                "content-type": "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify({
+                cover: mapped.cover,
+              }),
+            }
+          );
 
           var data = await res.json();
           var mappa = { ...mapped, cover_base_64: data.placeholder };

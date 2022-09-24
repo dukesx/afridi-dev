@@ -79,15 +79,18 @@ export const getFeedArticles = async ({
       }
       await Promise.all(
         feedData.map(async (mapped) => {
-          var res = await fetch("/api/generate-placeholder", {
-            headers: {
-              "content-type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-              cover: mapped.cover,
-            }),
-          });
+          var res = await fetch(
+            `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+            {
+              headers: {
+                "content-type": "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify({
+                cover: mapped.cover,
+              }),
+            }
+          );
 
           var data = await res.json();
           var mappa = { ...mapped, cover_base_64: data.placeholder };
@@ -154,15 +157,18 @@ export const getFeedArticles = async ({
       }
       await Promise.all(
         feedData.map(async (mapped) => {
-          var res = await fetch("/api/generate-placeholder", {
-            headers: {
-              "content-type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-              cover: mapped.cover,
-            }),
-          });
+          var res = await fetch(
+            `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+            {
+              headers: {
+                "content-type": "application/json",
+              },
+              method: "POST",
+              body: JSON.stringify({
+                cover: mapped.cover,
+              }),
+            }
+          );
 
           var data = await res.json();
           var mappa = { ...mapped, cover_base_64: data.placeholder };
@@ -219,15 +225,18 @@ export const getTrendingArticles = async ({ setData }: FeedFunctionProps) => {
   //
   var newTrending = await Promise.all(
     trendingData.map(async (mapped) => {
-      var res = await fetch("/api/generate-placeholder", {
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          cover: mapped.cover,
-        }),
-      });
+      var res = await fetch(
+        `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            cover: mapped.cover,
+          }),
+        }
+      );
 
       var data = await res.json();
       return { ...mapped, cover_base_64: data.placeholder };
@@ -285,15 +294,18 @@ export const getPopularArticles = async ({
   //
   var newPopular = await Promise.all(
     popularArticles.map(async (mapped) => {
-      var res = await fetch("/api/generate-placeholder", {
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({
-          cover: mapped.cover,
-        }),
-      });
+      var res = await fetch(
+        `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            cover: mapped.cover,
+          }),
+        }
+      );
 
       var data = await res.json();
       return { ...mapped, cover_base_64: data.placeholder };

@@ -68,9 +68,14 @@ const Article = ({ article, tags }) => {
 
   article &&
     article.tags.map((mapped) => {
-      var art = mapped.articles.map((mapped2) => {
+      mapped.articles.map((mapped2) => {
         if (mapped2.id !== data.id) {
-          relatedArticles.push(mapped2);
+          var filtered = relatedArticles.filter(
+            (filtera) => filtera.id == mapped2.id
+          );
+          if (filtered.length == 0) {
+            relatedArticles.push(mapped2);
+          }
         }
       });
     });
@@ -230,8 +235,8 @@ export const getStaticProps = async (ctx) => {
         )
         ),
         tags (
-          title,
-          color,
+        title,
+        color,
         articles (
         id,
         title,
@@ -245,7 +250,7 @@ export const getStaticProps = async (ctx) => {
     `
     )
     .eq("id", id)
-    .limit(5, {
+    .limit(4, {
       foreignTable: "tags.articles",
     });
 

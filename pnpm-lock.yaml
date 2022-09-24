@@ -22,9 +22,9 @@ specifiers:
   '@next/env': ^12.2.3
   '@plaiceholder/next': ^2.5.0
   '@playwright/test': ^1.23.4
-  '@supabase/auth-helpers-nextjs': 0.4.0-next.0
-  '@supabase/auth-helpers-react': 0.3.0-next.0
-  '@supabase/supabase-js': 2.0.0-rc.8
+  '@supabase/auth-helpers-nextjs': 0.4.0-next.3
+  '@supabase/auth-helpers-react': 0.3.0-next.2
+  '@supabase/supabase-js': 2.0.0-rc.10
   '@tabler/icons': ^1.91.0
   '@testing-library/jest-dom': ^5.16.4
   '@testing-library/react': ^13.3.0
@@ -91,9 +91,9 @@ dependencies:
   '@mantine/spotlight': 5.2.3_gtpyizsqksopg24uajf25sqkj4
   '@next/env': 12.2.3
   '@plaiceholder/next': 2.5.0_next@12.2.5+sharp@0.31.0
-  '@supabase/auth-helpers-nextjs': 0.4.0-next.0
-  '@supabase/auth-helpers-react': 0.3.0-next.0
-  '@supabase/supabase-js': 2.0.0-rc.8
+  '@supabase/auth-helpers-nextjs': 0.4.0-next.3
+  '@supabase/auth-helpers-react': 0.3.0-next.2
+  '@supabase/supabase-js': 2.0.0-rc.10
   '@tabler/icons': 1.91.0_biqbaboplfbrettd7655fr4n2y
   '@toast-ui/editor-plugin-code-syntax-highlight': 3.1.0
   '@toast-ui/react-editor': 3.2.0_react@18.2.0
@@ -1635,20 +1635,20 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@supabase/auth-helpers-nextjs/0.4.0-next.0:
-    resolution: {integrity: sha512-0zCfE3gYZdU0TyAdNaC1PRP6QpsFdwDWi/l91EVk9qFp7KotDoANMMfbxb3QEdzwFGvqBuhUez8ugeWWADh3OA==}
+  /@supabase/auth-helpers-nextjs/0.4.0-next.3:
+    resolution: {integrity: sha512-WfYHNTPK3SNfotaYXNxrrn39nmKrbyt0yzp+sAr+VA1PEpNQKutilIqvGSFDq+6laaYUVtMSLsoAcuTPI62WYQ==}
     dependencies:
-      '@supabase/auth-helpers-shared': 0.2.0-next.0
+      '@supabase/auth-helpers-shared': 0.2.0-next.2
     dev: false
 
-  /@supabase/auth-helpers-react/0.3.0-next.0:
-    resolution: {integrity: sha512-zxHVyNmF8LmcHnRr7nC61JkFUUFB3K7EDKqGLqkzxGX4z0wzCZ1hSFrVhfW+E9D78FknWGzS3kpfP+ogQKnqAA==}
+  /@supabase/auth-helpers-react/0.3.0-next.2:
+    resolution: {integrity: sha512-V3VaeMjLQFz+uK9KmBWC8/YIcI+CJf+zgAxd8/+/kstyCs2CYMH/hEIE5O8ciTBnfWvlzznttQTasoRxqecCNA==}
     dependencies:
-      '@supabase/auth-helpers-shared': 0.2.0-next.0
+      '@supabase/auth-helpers-shared': 0.2.0-next.2
     dev: false
 
-  /@supabase/auth-helpers-shared/0.2.0-next.0:
-    resolution: {integrity: sha512-kFCaIVtubgp+9sRcWZmfIjyzSRgiCYIB1tEPvbl9DoYJW6zp6jpRe0528jx464o+FhNcLw+12WQUxygzhg8hKw==}
+  /@supabase/auth-helpers-shared/0.2.0-next.2:
+    resolution: {integrity: sha512-e+u5EuMgQoLVP4cHXdv22V4L7seSKObZVCtkkBT+eqOuHVuJlc/VDM7PYoJVX57gZoUl1Gi1TuZ+ZO70CYgG6A==}
     dependencies:
       cookie: 0.5.0
     dev: false
@@ -1694,8 +1694,8 @@ packages:
       - encoding
     dev: false
 
-  /@supabase/supabase-js/2.0.0-rc.8:
-    resolution: {integrity: sha512-4FPLWnDTCTKDrX2yklNYplI7apg5repOwFqLf06NuucNubgdqv/MI4wU+djdEf5cUb4XMwRbkw1Ktss2BEsSAA==}
+  /@supabase/supabase-js/2.0.0-rc.10:
+    resolution: {integrity: sha512-0yjcWm7YnyPcuHl4OOhUkWzyyvFpGeuKdK0x5HKVROApadVcUZEz5/Zng8J32TbmD0nSMhU/IDBYhVfjZrLSYw==}
     dependencies:
       '@supabase/functions-js': 2.0.0-rc.1
       '@supabase/gotrue-js': 2.0.0-rc.4
