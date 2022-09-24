@@ -86,6 +86,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
             <ModalsProvider>
               <SessionContextProvider
                 supabaseClient={supabaseClient}
+                //@ts-ignore
                 initialSession={pageProps && pageProps.initialSession}
               >
                 <Component {...pageProps} />
