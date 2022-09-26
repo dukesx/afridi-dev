@@ -302,9 +302,9 @@ export const getStaticProps = async (ctx) => {
       `
                   id,
                   title,
-                  views,
                   description,
                   cover,
+                  views,
                   editors_pick,
                   authors!articles_author_id_fkey (
                     dp,

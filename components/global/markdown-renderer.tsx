@@ -20,6 +20,7 @@ import { Suspense } from "react";
 interface MarkDownRendererProps {
   children: any;
   className?: string;
+  commentMode?: boolean;
 }
 
 var checked = null;
@@ -29,7 +30,11 @@ const ReactMarkDownRenderer = dynamic(() => import("react-markdown"), {
   suspense: true,
 });
 
-const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
+const MarkDownRenderer = ({
+  children,
+  className,
+  commentMode,
+}: MarkDownRendererProps) => {
   return (
     <Suspense
       fallback={
@@ -157,7 +162,15 @@ const MarkDownRenderer = ({ children, className }: MarkDownRendererProps) => {
           },
           ol: ({ children, node }) => <List type="ordered">{children}</List>,
           p: ({ children, node }) => {
-            return <Text pb="sm">{children}</Text>;
+            return (
+              <Text
+                size={commentMode ? "sm" : "md"}
+                className={commentMode ? "leading-7" : ""}
+                pb="sm"
+              >
+                {children}
+              </Text>
+            );
           },
           q: ({ children, ...props }) => <Blockquote>{children}</Blockquote>,
           blockquote: ({ children, ...props }) => {

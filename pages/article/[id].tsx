@@ -3,6 +3,7 @@ import {
   Aside,
   Badge,
   Box,
+  Button,
   Center,
   Container,
   createStyles,
@@ -14,12 +15,11 @@ import {
   Skeleton,
   Stack,
   Text,
-  ThemeIcon,
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { IconArrowRight, IconBell, IconHash, IconNews } from "@tabler/icons";
-import { useEffect, useState } from "react";
+import { IconNews } from "@tabler/icons";
+import { useEffect, useRef, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
@@ -28,10 +28,19 @@ import { supabase } from "../../utils/supabaseClient";
 import ArticleRightSidebar from "../../components/article/components/sidebar";
 import NumberedArticlesWidget from "../../components/article/widgets/numbered-articles";
 import { NextLink } from "@mantine/next";
+import ArticleComments from "../../components/article/components/comments/comments";
+import ArticleCommentEditorDrawer from "../../components/article/components/comments/editor-drawer";
+import { useScrollIntoView } from "@mantine/hooks";
+import LazyLoad from "react-lazy-load";
 
+//
+//
+//
 const styles = createStyles((theme, _params, getRef) => ({
   mainContent: {
     width: "100%",
+    marginLeft: theme.spacing.sm,
+    paddingRight: theme.spacing.xs,
     [`@media (min-width: ${theme.breakpoints.md}px)`]: {
       // width: "calc(100% - 300px)",
     },
@@ -42,11 +51,62 @@ const Article = ({ article, tags }) => {
   const { classes } = styles();
   const [data, setData] = useState(article);
   const theme = useMantineTheme();
-  const { supabaseClient } = useSessionContext();
+  const { supabaseClient, session } = useSessionContext();
+  const [comments, setComments] = useState(null);
+  const [editorDrawer, setEditorDrawer] = useState(false);
+  var ref = useRef<any>();
+  const [commentId, setCommentId] = useState(null);
+  const { scrollIntoView: scrollToComment, targetRef: targetComment } =
+    useScrollIntoView<HTMLDivElement>({
+      offset: 30,
+      easing: (t) =>
+        t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2,
+    });
 
   useEffect(() => {
     setData(article);
   }, [article]);
+
+  const setCommentEditorRef = (refer: any) => {
+    ref = refer;
+  };
+
+  const getComments = async () => {
+    const { error, data } = await supabaseClient
+      .from("comments")
+      .select(
+        `
+       id,
+       created_at,
+       body,
+       authors (
+        id,
+        firstName,
+        lastName,
+        dp
+       ),
+
+       replies (
+        id,
+        body,
+        created_at,
+        authors (
+        id,
+        firstName,
+        lastName,
+        dp
+        )
+       )
+      `
+      )
+      .eq("article_id", article.id);
+
+    setComments(data);
+  };
+
+  useEffect(() => {
+    getComments();
+  }, []);
 
   const addViewCount = async () => {
     //
@@ -55,6 +115,19 @@ const Article = ({ article, tags }) => {
       .insert({
         article_id: article.id,
       });
+    const update = await fetch("/api/updateViews", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        views: article.views,
+        id: article.id,
+      }),
+    });
+
+    const data = await update.json();
+
     //
   };
 
@@ -79,6 +152,10 @@ const Article = ({ article, tags }) => {
         }
       });
     });
+
+  const getMarkdown = () => {
+    return ref.current.getInstance().getMarkdown() as string;
+  };
 
   return (
     <AppWrapper activeHeaderKey="" size="xl">
@@ -152,55 +229,110 @@ const Article = ({ article, tags }) => {
           </Center>
         </Stack>
       </Container>
-      <Aside
-        hiddenBreakpoint="xs"
-        hidden
-        height={600}
-        p="md"
-        zIndex={50}
-        styles={{
-          root: {
-            zIndex: 50,
-          },
-        }}
-        width={{ xs: 250, sm: 300, md: 300, lg: 300 }}
-      >
-        <Aside.Section>
-          <ArticleRightSidebar id={data && data.id} data={data} theme={theme} />
-        </Aside.Section>
-      </Aside>
-
-      <Box mt={50} className={classes.mainContent}>
-        <MarkDownRenderer>{article && article.body}</MarkDownRenderer>
-      </Box>
-      <MediaQuery smallerThan="md" styles={{ display: "none" }}>
-        <Navbar
-          hiddenBreakpoint="md"
-          hidden={true}
+      <Stack>
+        <Aside
+          hiddenBreakpoint="xs"
+          hidden
           height={600}
-          p="xs"
-          width={{ sm: 0, md: 250, lg: 350 }}
+          p="md"
+          zIndex={50}
+          styles={{
+            root: {
+              zIndex: 50,
+            },
+          }}
+          width={{ xs: 220, sm: 300, md: 300, lg: 300 }}
         >
-          <Navbar.Section
-            mt="xl"
-            grow
-            className="h-[400px]"
-            component={ScrollArea}
-          >
-            <NumberedArticlesWidget
-              titleOrder={4}
-              title="Similar Articles"
-              placeholderHeight={140}
-              icon={<IconNews />}
-              color="blue"
-              placeholderTitle="Hmmm!"
-              placeholderDescription="No similar articles yet 🤔"
+          <Aside.Section>
+            <ArticleRightSidebar
+              id={data && data.id}
+              data={data}
               theme={theme}
-              articles={relatedArticles ?? []}
             />
-          </Navbar.Section>
-        </Navbar>
-      </MediaQuery>
+          </Aside.Section>
+        </Aside>
+        <Box mt={50} className={classes.mainContent}>
+          <MarkDownRenderer>{article && article.body}</MarkDownRenderer>
+        </Box>
+        <Divider />
+        <Stack mt="xs" className="pb-10 pl-5">
+          <Group position="apart" spacing="xs" mb="sm">
+            <Title id="comments" order={2}>
+              Comments
+            </Title>
+
+            <Button
+              onClick={() => {
+                setCommentId({
+                  type: "comment",
+                });
+                setEditorDrawer(true);
+              }}
+              variant="light"
+              size="xs"
+              radius="xl"
+              color="blue"
+            >
+              Write a comment
+            </Button>
+          </Group>
+          <LazyLoad>
+            <ArticleComments
+              getComments={getComments}
+              coAuthors={article.co_authors_articles}
+              author_id={article.author_id}
+              openCommentEditor={setEditorDrawer}
+              comments={comments ?? []}
+              setCommentId={setCommentId}
+            />
+          </LazyLoad>
+          <div ref={targetComment} />
+        </Stack>
+
+        <ArticleCommentEditorDrawer
+          article_id={article.id}
+          article_title={article.title}
+          commentId={commentId}
+          editorDrawer={editorDrawer}
+          setEditorDrawer={setEditorDrawer}
+          getComments={getComments}
+          getMarkdown={getMarkdown}
+          session={session}
+          setCommentEditorRef={setCommentEditorRef}
+          setCommentId={setCommentId}
+          supabaseClient={supabaseClient}
+          scrollToComment={scrollToComment}
+        />
+
+        <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+          <Navbar
+            hiddenBreakpoint="md"
+            hidden={true}
+            height={600}
+            p="xs"
+            width={{ sm: 0, md: 250, lg: 350 }}
+          >
+            <Navbar.Section
+              mt="xl"
+              grow
+              className="h-[400px]"
+              component={ScrollArea}
+            >
+              <NumberedArticlesWidget
+                titleOrder={4}
+                title="Similar Articles"
+                placeholderHeight={140}
+                icon={<IconNews />}
+                color="blue"
+                placeholderTitle="Hmmm!"
+                placeholderDescription="No similar articles yet 🤔"
+                theme={theme}
+                articles={relatedArticles ?? []}
+              />
+            </Navbar.Section>
+          </Navbar>
+        </MediaQuery>
+      </Stack>
     </AppWrapper>
   );
 };

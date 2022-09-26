@@ -13,10 +13,11 @@ import {
   ActionIcon,
   useMantineColorScheme,
   Aside,
+  ThemeIcon,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { IconBookmark } from "@tabler/icons";
+import { IconBookmark, IconMessageCircle2 } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import { ShowUnauthorizedModal } from "../../../utils/helpers";
 import { AfridiDevAuthor } from "../../author/widgets/square-horizontal-author";
@@ -192,6 +193,19 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
                 size="xl"
               >
                 <Text size="xl">👏</Text>
+              </ActionIcon>
+            </Tooltip>
+
+            <Tooltip label="Comment">
+              <ActionIcon
+                component="a"
+                href="#comments"
+                size="xl"
+                radius="xl"
+                variant="subtle"
+                color="blue"
+              >
+                <IconMessageCircle2 />
               </ActionIcon>
             </Tooltip>
           </Group>

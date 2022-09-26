@@ -36,7 +36,7 @@ export interface MarkDownEditorProps {
   saveData: Function;
   autoFocus: boolean;
   previewStyle: "tab" | "vertical";
-  toolbarItems: boolean;
+  toolbarItems: "full" | "basic" | false;
   placeholder?: string;
   plugins: boolean;
   className?: string;
@@ -74,7 +74,12 @@ export const TextEditor: React.FC<MarkDownEditorProps> = React.memo(
           theme={colorScheme == "dark" ? "dark" : "default"}
           hideModeSwitch
           toolbarItems={
-            toolbarItems == true
+            toolbarItems == "basic"
+              ? [
+                  ["heading", "bold", "italic", "strike"],
+                  ["image", "link"],
+                ]
+              : toolbarItems == "full"
               ? [
                   ["heading", "bold", "italic", "strike"],
                   ["hr", "quote"],

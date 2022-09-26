@@ -15,7 +15,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
-import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
+import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
 import AppWrapper from "../../../components/global/wrapper";
 import ArticleComposeSidebar from "../../../components/studio/publish/article/compose/article-compose-sidebar";
 
@@ -75,7 +75,7 @@ const ArticleComposer = () => {
               description="Write your content here"
               required
             >
-              <MarkDownEditor
+              <AfridiDevEditor
                 value=""
                 saveData={save}
                 autoFocus={false}
@@ -83,7 +83,7 @@ const ArticleComposer = () => {
                 plugins
                 previewStyle={"tab"}
                 height="800px"
-                toolbarItems
+                toolbarItems="full"
               />
             </Input.Wrapper>
           </Grid.Col>

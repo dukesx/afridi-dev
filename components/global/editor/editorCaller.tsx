@@ -6,7 +6,7 @@ import { MarkDownEditorProps } from "./editor";
 /**
  * @see {@link MarkDownEditorProps}
  */
-export const MarkDownEditor = ({
+export const AfridiDevEditor = ({
   value,
   height,
   saveData,

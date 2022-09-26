@@ -13,7 +13,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import React, { useEffect, useState } from "react";
-import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
+import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
 import AppWrapper from "../../../components/global/wrapper";
 import { openModal } from "@mantine/modals";
 import ArticleEditSidebar from "../../../components/studio/publish/article/edit/article-edit-sidebar";
@@ -100,7 +100,7 @@ const EditArticle = ({ user, data }) => {
               description="Write your content here"
               required
             >
-              <MarkDownEditor
+              <AfridiDevEditor
                 value={data.body}
                 saveData={save}
                 autoFocus={false}
@@ -108,7 +108,7 @@ const EditArticle = ({ user, data }) => {
                 plugins
                 previewStyle={"tab"}
                 height="800px"
-                toolbarItems
+                toolbarItems="full"
               />
             </Input.Wrapper>
           </Grid.Col>

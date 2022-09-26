@@ -101,7 +101,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
       zIndex={1000}
       styles={{
         root: {
-          zIndex: 1000,
+          zIndex: 200,
         },
       }}
       height={70}

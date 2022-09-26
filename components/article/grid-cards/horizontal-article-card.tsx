@@ -231,7 +231,7 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
               </Fragment>
             ) : null}
 
-            {data.article_views ? (
+            {data.views ? (
               <Fragment>
                 <Divider
                   className="h-[14px] align-middle my-auto"
@@ -245,7 +245,7 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                   </ThemeIcon>
                   <Text size="xs">
                     {Intl.NumberFormat("en", { notation: "compact" }).format(
-                      data.article_views.length
+                      data.views
                     )}
                   </Text>
                 </Group>
