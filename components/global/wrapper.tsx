@@ -2,6 +2,7 @@
 import {
   AppShell,
   Container,
+  createStyles,
   useMantineTheme,
   type MantineNumberSize,
 } from "@mantine/core";
@@ -72,6 +73,15 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       getUserProps();
     }
   }, [session]);
+
+  const useStyles = createStyles((theme) => ({
+    container: {
+      paddingLeft: noPadding ? 0 : theme.spacing.xs,
+      paddingRight: noPadding ? 0 : theme.spacing.xs,
+    },
+  }));
+
+  const { classes } = useStyles();
   return (
     <AppShell
       navbar={
@@ -95,10 +105,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       }}
     >
       <AppLoader theme={theme} loading={appLoading} />
-      <Container
-        className={(noPadding ? "px-0 mx-0" : "px-0 xs:px-5 ") + ""}
-        size={size ?? "xl"}
-      >
+      <Container className={classes.container} size={size ?? "xl"}>
         {children}
       </Container>
     </AppShell>

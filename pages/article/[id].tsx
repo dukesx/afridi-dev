@@ -39,8 +39,6 @@ import LazyLoad from "react-lazy-load";
 const styles = createStyles((theme, _params, getRef) => ({
   mainContent: {
     width: "100%",
-    marginLeft: theme.spacing.sm,
-    paddingRight: theme.spacing.xs,
     [`@media (min-width: ${theme.breakpoints.md}px)`]: {
       // width: "calc(100% - 300px)",
     },
@@ -166,7 +164,7 @@ const Article = ({ article, tags }) => {
 
   return (
     <AppWrapper activeHeaderKey="" size="xl">
-      <Container className="px-0 sm:px-5" size="lg">
+      <Container size="lg">
         <Stack spacing="xs" className={classes.mainContent}>
           <Skeleton
             className="w-full rounded-none sm:rounded-lg mx-auto h-full sm:h-full lg:h-[550px] xl:max-h-[600px] sm:max-h-[600px]"
