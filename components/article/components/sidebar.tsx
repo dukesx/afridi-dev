@@ -236,7 +236,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
             >
               {data ? (
                 <AfridiImage
-                  fillImage
+                  loading="lazy"
                   height={63}
                   width={63}
                   path={data ? data.authors.dp : null}
@@ -299,7 +299,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
                         >
                           {data ? (
                             <AfridiImage
-                              fillImage
+                              loading="lazy"
                               height={63}
                               width={63}
                               path={mapped.authors.dp}

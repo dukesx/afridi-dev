@@ -70,7 +70,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
       }}
     >
       <Image
-        priority={priority ?? false}
+        priority={priority ? true : false}
         className={
           (imageClassName ? imageClassName : "") +
           " object-cover w-full rounded-sm"
