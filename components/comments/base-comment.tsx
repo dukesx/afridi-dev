@@ -80,7 +80,7 @@ const BaseComment = ({
   const { colorScheme } = useMantineColorScheme();
 
   return (
-    <Stack spacing={0} my="xl">
+    <Stack spacing={0} mt="xs" mb={30}>
       <Card p={0} radius="md" className="bg-transparent min-h-[170px]">
         <Stack align="start">
           <Group spacing={0} className="w-full" position="apart">
@@ -140,6 +140,7 @@ const BaseComment = ({
                 </Tooltip>
               </Stack>
             </Group>
+
             <Menu width={185}>
               <Menu.Target>
                 <ActionIcon radius="xl">
@@ -150,7 +151,11 @@ const BaseComment = ({
               <Menu.Dropdown>
                 <Menu.Item
                   onClick={() => {
-                    setReportModal(true);
+                    if (session && session.user) {
+                      setReportModal(true);
+                    } else {
+                      ShowUnauthorizedModal("Uh oh!", "You must be logged in");
+                    }
                   }}
                   icon={<IconMessageReport strokeWidth={1.4} />}
                   color="red"
@@ -271,12 +276,16 @@ const BaseComment = ({
               className="font-medium"
               color="gray"
               onClick={() => {
-                setCommentId({
-                  id: comment.id,
-                  author: comment.authors,
-                  type: "reply",
-                });
-                openCommentEditor(true);
+                if (session && session.user) {
+                  setCommentId({
+                    id: comment.id,
+                    author: comment.authors,
+                    type: "reply",
+                  });
+                  openCommentEditor(true);
+                } else {
+                  ShowUnauthorizedModal("Uh oh!", "You must be logged in");
+                }
               }}
             >
               Reply

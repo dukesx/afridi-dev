@@ -99,7 +99,14 @@ const Article = ({ article, tags }) => {
        )
       `
       )
-      .eq("article_id", article.id);
+      .eq("article_id", article.id)
+      .order("created_at", {
+        ascending: false,
+      })
+      .order("created_at", {
+        ascending: false,
+        foreignTable: "replies",
+      });
 
     setComments(data);
   };
@@ -260,21 +267,22 @@ const Article = ({ article, tags }) => {
             <Title id="comments" order={2}>
               Comments
             </Title>
-
-            <Button
-              onClick={() => {
-                setCommentId({
-                  type: "comment",
-                });
-                setEditorDrawer(true);
-              }}
-              variant="light"
-              size="xs"
-              radius="xl"
-              color="blue"
-            >
-              Write a comment
-            </Button>
+            {session && session.user ? (
+              <Button
+                onClick={() => {
+                  setCommentId({
+                    type: "comment",
+                  });
+                  setEditorDrawer(true);
+                }}
+                variant="light"
+                size="xs"
+                radius="xl"
+                color="blue"
+              >
+                Write a comment
+              </Button>
+            ) : null}
           </Group>
           <LazyLoad>
             <ArticleComments

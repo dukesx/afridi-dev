@@ -60,9 +60,7 @@ export const ShowUnauthorizedModal = (title?: any, description?: any) => {
           {title ? title : "Ooops - You Can't perform this action"}
         </Text>
         <Text size="sm" color="dimmed">
-          {description
-            ? description
-            : "You need to be signed in to follow tags"}
+          {description ? description : "You need to be signed in to continue"}
         </Text>
         <Button
           mt="xs"
