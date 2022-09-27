@@ -299,8 +299,6 @@ const ArticleComposeSidebar = ({
             const returned = await fetcher.json();
 
             if (returned && returned.revalidated) {
-              setLoading(false);
-              form.reset();
               setCover(null);
               router.push("/article/" + articleData[0].id);
             }

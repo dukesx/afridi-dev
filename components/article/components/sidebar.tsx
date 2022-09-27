@@ -234,7 +234,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
               radius="xl"
               color="blue"
             >
-              {data ? (
+              {data && data.authors.dp ? (
                 <AfridiImage
                   loading="lazy"
                   height={63}
@@ -264,7 +264,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
             </Text>
           </Stack>
         </Group>
-        <div className="hidden sm:block">
+        <div className="">
           {data &&
           data.co_authors_articles &&
           data.co_authors_articles.length > 0 ? (
@@ -281,7 +281,13 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
           <Grid>
             {data
               ? data.co_authors_articles.map((mapped, index) => (
-                  <Grid.Col my="sm" span={12} xs={6} key={"almac" + index}>
+                  <Grid.Col
+                    my="sm"
+                    span={12}
+                    xs={6}
+                    md={4}
+                    key={"almac" + index}
+                  >
                     <Stack align="initial" ml="xs" spacing={10}>
                       <Tooltip
                         mt="xl"
@@ -297,7 +303,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
                           radius="xl"
                           color="blue"
                         >
-                          {data ? (
+                          {mapped && mapped.authors.dp ? (
                             <AfridiImage
                               loading="lazy"
                               height={63}
@@ -311,6 +317,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
                       </Tooltip>
 
                       <Text
+                        className="text-left truncate"
                         component={NextLink}
                         href={mapped && `/author/${mapped.authors.id}`}
                         weight={700}

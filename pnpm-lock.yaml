@@ -48,7 +48,7 @@ specifiers:
   next: ^12.3.1
   next-remove-imports: ^1.0.6
   next-seo: ^5.5.0
-  next-sitemap: ^3.1.11
+  next-sitemap: ^3.1.23
   npm: ^8.19.2
   postcss: ^8.4.14
   postcss-nesting: ^10.1.10
@@ -113,7 +113,7 @@ dependencies:
   next: 12.3.1_ckhwt5v7fywslkplh6p4u2aony
   next-remove-imports: 1.0.6
   next-seo: 5.5.0_azq6kxkn3od7qdylwkyksrwopy
-  next-sitemap: 3.1.11_3k5vmi4j6sdban7pt73cm6gfhu
+  next-sitemap: 3.1.23_3k5vmi4j6sdban7pt73cm6gfhu
   npm: 8.19.2
   postcss-nesting: 10.1.10_postcss@8.4.14
   prismjs: 1.28.0
@@ -6306,8 +6306,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /next-sitemap/3.1.11_3k5vmi4j6sdban7pt73cm6gfhu:
-    resolution: {integrity: sha512-qHq/nVzqEL3Sd5N+1ZnqoY2xN4BSmgEkIlvCjFOtMMIyl8Tr/xmVZgVau/8aZsDtxoXPKG/NzdonZssvpK4Jdw==}
+  /next-sitemap/3.1.23_3k5vmi4j6sdban7pt73cm6gfhu:
+    resolution: {integrity: sha512-szQ5uvxn4/7P01U/rvzEccOcYk0Nm+kI3BGzHheREV+HDcj+IilrhXCuNqv4dBWy49eqsgCmjHuEDINx3/teMQ==}
     engines: {node: '>=14.18'}
     hasBin: true
     peerDependencies:

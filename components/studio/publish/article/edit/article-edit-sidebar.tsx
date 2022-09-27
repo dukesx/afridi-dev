@@ -253,7 +253,7 @@ const ArticleEditSidebar = ({
                     });
                 }
               });
-
+              console.log(val.coAuthors);
               if (val.coAuthors.length > 0) {
                 await Promise.all(
                   val.coAuthors.map(async (mapped) => {
@@ -262,7 +262,7 @@ const ArticleEditSidebar = ({
                         .from("co_authors_articles")
                         .insert({
                           article_id: articleData[0].id,
-                          author_id: mapped,
+                          author_id: mapped.id ? mapped.id : mapped,
                         });
                     }
                   })
@@ -287,8 +287,6 @@ const ArticleEditSidebar = ({
               const returned = await fetcher.json();
 
               if (returned && returned.revalidated) {
-                setLoading(false);
-                form.reset();
                 setCover(null);
                 router.push("/article/" + articleData[0].id);
               }
