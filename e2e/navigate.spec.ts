@@ -11,7 +11,7 @@ test("Navigate Globally", async ({ page }) => {
   // Click text=Creator Studio
   await page.locator("text=Creator Studio").click();
   await expect(page).toHaveURL(
-    process.env.PLAYWRIGHT_TEST_BASE_URL + "get-started"
+    `${process.env.PLAYWRIGHT_TEST_BASE_URL}/get-started`
   );
 
   // Click text=Blog
@@ -21,7 +21,7 @@ test("Navigate Globally", async ({ page }) => {
   // Click nav >> text=posthog
   await page.locator("nav >> text=posthog").click();
   await expect(page).toHaveURL(
-    process.env.PLAYWRIGHT_TEST_BASE_URL + "tags/posthog"
+    `${process.env.PLAYWRIGHT_TEST_BASE_URL}/tags/posthog`
   );
 
   // Click button:has-text("Go back")
@@ -31,8 +31,7 @@ test("Navigate Globally", async ({ page }) => {
   // Click text=Muhammad Afzaal Afridi
   await page.locator("text=Muhammad Afzaal Afridi").click();
   await expect(page).toHaveURL(
-    process.env.PLAYWRIGHT_TEST_BASE_URL +
-      "author/49d746ab-60bf-4b1d-aaab-7524d40bd402"
+    `${process.env.PLAYWRIGHT_TEST_BASE_URL}/author/49d746ab-60bf-4b1d-aaab-7524d40bd402`
   );
 
   // Click text=Home
@@ -44,8 +43,8 @@ test("Navigate Globally", async ({ page }) => {
     .locator("text=Posthog: The Next Step in Open Source Analytics")
     .click();
   await expect(page).toHaveURL(
-    process.env.PLAYWRIGHT_TEST_BASE_URL +
-      "article/44b4c9bb-e9f8-4513-8a98-2ebf7f43b87b"
+    `${process.env.PLAYWRIGHT_TEST_BASE_URL}
+      /article/44b4c9bb-e9f8-4513-8a98-2ebf7f43b87b`
   );
 
   // Click text=Home
