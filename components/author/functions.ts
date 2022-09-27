@@ -227,12 +227,14 @@ export const getSimilarAuthors = async (
       //@ts-ignore
       mapped.tags.map((mapped2) => {
         mapped2.authors.map((mapped3) => {
-          var newArr = authorsArray.filter(
-            (mapped4) => mapped4.id == mapped3.id
-          );
-          if (newArr.length > 0) {
-          } else {
-            authorsArray.push(mapped3);
+          if (mapped3.id !== id) {
+            var newArr = authorsArray.filter(
+              (mapped4) => mapped4.id == mapped3.id
+            );
+            if (newArr.length > 0) {
+            } else {
+              authorsArray.push(mapped3);
+            }
           }
         });
       });
