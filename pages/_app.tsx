@@ -17,6 +17,7 @@ import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import { DefaultSeo, SocialProfileJsonLd } from "next-seo";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -89,6 +90,49 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                 //@ts-ignore
                 initialSession={pageProps && pageProps.initialSession}
               >
+                <DefaultSeo
+                  title="Welcome to Afridi.dev!"
+                  description="The DEV's blog"
+                  canonical="https://afridi.dev"
+                  openGraph={{
+                    url: "https://afridi.dev",
+                    title: "Welcome to Afridi.dev!",
+                    description: "The DEV's blog",
+                    images: [
+                      {
+                        url: "https://www.example.ie/og-image-01.jpg",
+                        width: 800,
+                        height: 600,
+                        alt: "Og Image Alt",
+                        type: "image/jpeg",
+                      },
+                      {
+                        url: "https://www.example.ie/og-image-02.jpg",
+                        width: 900,
+                        height: 800,
+                        alt: "Og Image Alt Second",
+                        type: "image/jpeg",
+                      },
+                      { url: "https://www.example.ie/og-image-03.jpg" },
+                      { url: "https://www.example.ie/og-image-04.jpg" },
+                    ],
+                    site_name: "Afridi.dev",
+                  }}
+                  twitter={{
+                    handle: "@afridi.dev",
+                    site: "@site",
+                    cardType: "summary_large_image",
+                  }}
+                />
+                <SocialProfileJsonLd
+                  type="Organization"
+                  name="Afridi.dev"
+                  url="https://afridi.dev"
+                  sameAs={[
+                    "https://www.facebook.com/afridi-dev",
+                    "http://www.twitter.com/afridi-dev",
+                  ]}
+                />
                 <Component {...pageProps} />
               </SessionContextProvider>
             </ModalsProvider>

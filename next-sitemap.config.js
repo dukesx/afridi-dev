@@ -5,7 +5,7 @@ module.exports = {
   sitemapSize: 7000,
   robotsTxtOptions: {
     additionalSitemaps: [
-      "https://example.com/server-sitemap.xml", // <==== Add here
+      "https://afridi.dev/server-sitemap.xml", // <==== Add here
     ],
   },
 };

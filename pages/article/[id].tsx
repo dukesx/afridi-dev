@@ -32,6 +32,7 @@ import ArticleComments from "../../components/article/components/comments/commen
 import ArticleCommentEditorDrawer from "../../components/article/components/comments/editor-drawer";
 import { useScrollIntoView } from "@mantine/hooks";
 import LazyLoad from "react-lazy-load";
+import { ArticleJsonLd, BreadcrumbJsonLd, NextSeo } from "next-seo";
 
 //
 //
@@ -164,6 +165,69 @@ const Article = ({ article, tags }) => {
 
   return (
     <AppWrapper activeHeaderKey="" size="xl">
+      <NextSeo
+        openGraph={{
+          title: article.title,
+          description: article.description,
+          url: `https://afridi.dev/article/${article.id}`,
+          type: "article",
+          article: {
+            publishedTime: article.created_at,
+            modifiedTime: article.updated_at,
+            authors: [
+              `https://afridi.dev/author/${article.authors.id}`,
+              ...article.co_authors_articles.map(
+                (mapped) => `https://afridi.dev/author/${mapped.authors.id}`
+              ),
+            ],
+            tags: [...article.tags.map((mapped) => mapped.title)],
+          },
+          images: [
+            {
+              url: `https://ik.imagekit.io/afrididev/tr:w-400/${article.cover}`,
+              width: 400,
+              height: 400,
+              alt: "Cover of article",
+            },
+          ],
+        }}
+      />
+      <BreadcrumbJsonLd
+        itemListElements={[
+          {
+            position: 1,
+            name: "Home",
+            item: "https://afridi.dev",
+          },
+          {
+            position: 2,
+            name: article.title,
+            item: `https://afridi.dev/article/${article.id}`,
+          },
+        ]}
+      />
+      <ArticleJsonLd
+        url={`https://afridi.dev/article/${article.id}`}
+        title={article.title}
+        description={article.description}
+        images={[`https://ik.imagekit.io/afrididev/tr:w-400/${article.cover}`]}
+        datePublished={article.created_at}
+        dateModified={article.updated_at}
+        authorName={[
+          {
+            name: article.authors.firstName + " " + article.authors.lastName,
+            url: `https://afridi.dev/author/${article.authors.id}`,
+          },
+          ...article.co_authors_articles.map((mapped) => {
+            return {
+              name: mapped.authors.firstName + " " + mapped.authors.lastName,
+              url: `https://afridi.dev/author/${mapped.authors.id}`,
+            };
+          }),
+        ]}
+        publisherName="Afridi.dev"
+        publisherLogo="https://www.example.com/photos/logo.jpg"
+      />
       <Container size="lg">
         <Stack spacing="xs" className={classes.mainContent}>
           <Skeleton
@@ -355,6 +419,7 @@ export const getStaticProps = async (ctx) => {
         title,
         description,
         cover,
+        updated_at,
         body,
         editors_pick,
         author_id,
