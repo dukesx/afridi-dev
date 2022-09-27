@@ -43,8 +43,7 @@ test("Navigate Globally", async ({ page }) => {
     .locator("text=Posthog: The Next Step in Open Source Analytics")
     .click();
   await expect(page).toHaveURL(
-    `${process.env.PLAYWRIGHT_TEST_BASE_URL}
-      /article/44b4c9bb-e9f8-4513-8a98-2ebf7f43b87b`
+    `${process.env.PLAYWRIGHT_TEST_BASE_URL}/article/44b4c9bb-e9f8-4513-8a98-2ebf7f43b87b`
   );
 
   // Click text=Home
