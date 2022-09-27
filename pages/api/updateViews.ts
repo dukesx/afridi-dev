@@ -5,7 +5,6 @@ import { createClient } from "@supabase/supabase-js";
 
 export default withApiAuth(async function ProtectedRoute(req, res) {
   const { views, id } = req.body;
-  console.log(views);
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.SUPABASE_SERVICE_ROLE_KEY

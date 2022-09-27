@@ -65,8 +65,6 @@ const ArticleComposeSidebar = ({
   const [coAuthorsLoading, setCoAuthorsLoading] = useState(false);
   const [coAuthors, setCoAuthors] = useState([]);
 
-  console.log(editorVal);
-
   const form = useForm({
     initialValues: {
       tags: [],

@@ -240,7 +240,7 @@ const Article = ({ article, tags }) => {
         <Aside
           hiddenBreakpoint="xs"
           hidden
-          height={600}
+          height={"auto"}
           p="md"
           zIndex={50}
           styles={{
@@ -316,7 +316,7 @@ const Article = ({ article, tags }) => {
           <Navbar
             hiddenBreakpoint="md"
             hidden={true}
-            height={600}
+            height={"auto"}
             p="xs"
             width={{ sm: 0, md: 250, lg: 350 }}
           >

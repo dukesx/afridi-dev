@@ -152,7 +152,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
           <Navbar
             hiddenBreakpoint="xs"
             hidden
-            height={600}
+            height={"auto"}
             p="xs"
             width={{ xs: 200, sm: 300, md: 300, lg: 300 }}
           >

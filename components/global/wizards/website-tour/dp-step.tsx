@@ -56,7 +56,6 @@ const DPStep = ({ step, setStep, session, client }: WelcomeWizardStepProps) => {
       <form
         onSubmit={form.onSubmit(async (val) => {
           if (dp) {
-            console.log(dp);
             form.setFieldValue("dp", dp);
           }
           setStep6Loading(true);

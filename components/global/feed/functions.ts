@@ -58,9 +58,6 @@ export const getFeedArticles = async ({
           ),
           appreciations (
             id
-          ),
-          article_views (
-            id
           )
          `,
         { count: "exact" }
