@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Avatar,
   Button,
   Card,
   Center,
@@ -24,10 +23,10 @@ import { countries } from "../../../../data/static/countries";
 import "country-flag-icons/3x2/flags.css";
 import { useEffect } from "react";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
-import { MarkDownEditor } from "../../../../components/global/editor/editorCaller";
+import { AfridiDevEditor } from "../../../../components/global/editor/editorCaller";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();
@@ -349,8 +348,8 @@ const UserSettingsPage = () => {
                       required
                       error={form2.errors.about}
                     >
-                      <MarkDownEditor
-                        toolbarItems
+                      <AfridiDevEditor
+                        toolbarItems="basic"
                         autoFocus={false}
                         value={form2.values.about}
                         height="290px"

@@ -5,9 +5,6 @@ import {
   Button,
   Card,
   Center,
-  Code,
-  CopyButton,
-  createStyles,
   Divider,
   Grid,
   Group,
@@ -16,7 +13,6 @@ import {
   Stack,
   Tabs,
   Text,
-  ThemeIcon,
   Title,
   Tooltip,
   useMantineColorScheme,
@@ -29,27 +25,21 @@ import {
   IconArrowRight,
   IconBrandGithub,
   IconCheck,
-  IconCopy,
-  IconExternalLink,
   IconListDetails,
-  IconPhoto,
   IconStar,
-  IconTrash,
   IconUpload,
   IconUserCircle,
   IconX,
 } from "@tabler/icons";
 import React, { Fragment, Suspense, useEffect, useRef, useState } from "react";
 import "country-flag-icons/3x2/flags.css";
-import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import ImageUploader, {
   ImageUploaderType,
 } from "../../../components/global/image_uploader";
-import { MarkDownEditor } from "../../../components/global/editor/editorCaller";
 import MarkDownRenderer from "../../../components/global/markdown-renderer";
-import { openConfirmModal } from "@mantine/modals";
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { parseISO } from "date-fns";
 import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
 import { supabase } from "../../../utils/supabaseClient";
@@ -65,6 +55,7 @@ import HorizontalGridCardSkeleton from "../../../components/global/skeletons/gri
 import SquareHorizontalAuthorWidget from "../../../components/author/widgets/square-horizontal-author";
 import AuthorFeedRenderer from "../../../components/author/components/author-feed-renderer";
 import ExclusivePlaceholder from "../../../components/author/components/exclusive-placeholder";
+import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -285,7 +276,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                     {session && session.user.id == id ? (
                       <Fragment>
                         <Input.Wrapper className="w-full" label="">
-                          <MarkDownEditor
+                          <AfridiDevEditor
                             toolbarItems={false}
                             autoFocus={false}
                             value={""}

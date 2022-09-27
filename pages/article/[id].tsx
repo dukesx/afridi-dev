@@ -279,8 +279,8 @@ const Article = ({ article, tags }) => {
           <LazyLoad>
             <ArticleComments
               getComments={getComments}
-              coAuthors={article.co_authors_articles}
-              author_id={article.author_id}
+              coAuthors={article && article.co_authors_articles}
+              author_id={article && article.author_id}
               openCommentEditor={setEditorDrawer}
               comments={comments ?? []}
               setCommentId={setCommentId}
@@ -290,8 +290,8 @@ const Article = ({ article, tags }) => {
         </Stack>
 
         <ArticleCommentEditorDrawer
-          article_id={article.id}
-          article_title={article.title}
+          article_id={article && article.id}
+          article_title={article && article.title}
           commentId={commentId}
           editorDrawer={editorDrawer}
           setEditorDrawer={setEditorDrawer}
