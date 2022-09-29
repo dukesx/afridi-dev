@@ -43,7 +43,7 @@ const HorizontalAuthorGridCard = ({
               size="sm"
               weight={700}
             >
-              {author.firstName + " " + author.lastName}
+              {author.full_name}
             </Text>
             <Group>
               <Text className="capitalize" size="xs" color="dimmed">

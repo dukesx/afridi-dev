@@ -33,15 +33,12 @@ const UserSettingsPage = () => {
   const mobile = useMediaQuery("(max-width: 500px)", false);
   const form1 = useForm({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      full_name: "",
       location: "pakistan",
     },
 
     validate: {
-      firstName: (value) =>
-        value.length < 2 ? "Name cannot be less than 3 characters" : null,
-      lastName: (value) =>
+      full_name: (value) =>
         value.length < 2 ? "Name cannot be less than 3 characters" : null,
       location: (value) =>
         value.length <= 0 ? "Location cannot be empty" : null,
@@ -107,16 +104,14 @@ const UserSettingsPage = () => {
       .from("authors")
       .select(
         `
-          firstName,
-          lastName,
+          full_name,
           location
           `
       )
       .eq("id", session.user.id);
     if (!error) {
       setGeneralLoading(false);
-      form1.setFieldValue("firstName", data[0].firstName ?? "");
-      form1.setFieldValue("lastName", data[0].lastName ?? "");
+      form1.setFieldValue("full_name", data[0].full_name ?? "");
       form1.setFieldValue("location", data[0].location ?? "pakistan");
     }
   };
@@ -228,13 +223,11 @@ const UserSettingsPage = () => {
                     const { error, data } = await supabaseClient
                       .from("authors")
                       .update({
-                        firstName: val.firstName,
-                        lastName: val.lastName,
+                        full_name: val.full_name,
                         location: val.location,
                       })
                       .eq("id", session.user.id).select(`
-                      firstName,
-                      lastName,
+                      full_name,
                       location
                       `);
 
@@ -261,15 +254,7 @@ const UserSettingsPage = () => {
                     required
                     label="First Name"
                     placeholder="Marc"
-                    {...form1.getInputProps("firstName")}
-                  />
-                  <TextInput
-                    mt="xl"
-                    required
-                    label="Last Name"
-                    placeholder="Webb"
-                    {...form1.getInputProps("lastName")}
-                    mb="xl"
+                    {...form1.getInputProps("full_name")}
                   />
 
                   <Select

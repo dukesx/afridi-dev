@@ -76,8 +76,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
       .from("authors")
       .select(
         `
-      firstName,
-      lastName,
+      full_name,
       role,
       dp
       `
@@ -416,7 +415,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                                 weight={700}
                                 size="sm"
                               >
-                                {userData.firstName + " " + userData.lastName}
+                                {userData.full_name}
                               </Text>
                             ) : null}
 
@@ -667,7 +666,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                                 weight={700}
                                 size="sm"
                               >
-                                {userData.firstName + " " + userData.lastName}
+                                {userData.full_name}
                               </Text>
                               <Text
                                 color="dimmed"

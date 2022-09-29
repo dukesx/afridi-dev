@@ -39,21 +39,19 @@ export const getFeedArticles = async ({
                   views,
                   authors!articles_author_id_fkey (
                     dp,
-                    firstName,
-                    lastName
+                    full_name
                   ),
                   co_authors_articles (
                     authors (
                       dp,
-                      firstName,
-                      lastName
+                      full_name
                     )
                   ),
          tags!inner (
           title,
           authors!inner (
             id,
-            firstName
+            full_name
           )
           ),
           appreciations (
@@ -114,14 +112,12 @@ export const getFeedArticles = async ({
                   editors_pick,
                   authors!articles_author_id_fkey (
                     dp,
-                    firstName,
-                    lastName
+                    full_name
                   ),
                   co_authors_articles (
                     authors (
                       dp,
-                      firstName,
-                      lastName
+                      full_name
                     )
                   ),
                 appreciations (
@@ -189,14 +185,12 @@ export const getTrendingArticles = async ({ setData }: FeedFunctionProps) => {
                   cover,
                   authors!articles_author_id_fkey (
                     dp,
-                    firstName,
-                    lastName
+                    full_name
                   ),
                   co_authors_articles (
                     authors (
                       dp,
-                      firstName,
-                      lastName
+                      full_name
                     )
                   ),
 
@@ -259,14 +253,12 @@ export const getPopularArticles = async ({
                   cover,
                   authors!articles_author_id_fkey (
                     dp,
-                    firstName,
-                    lastName
+                    full_name
                   ),
                   co_authors_articles (
                     authors (
                       dp,
-                      firstName,
-                      lastName
+                      full_name
                     )
                   ),
                   tags!inner (

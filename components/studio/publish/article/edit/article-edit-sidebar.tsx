@@ -127,14 +127,13 @@ const ArticleEditSidebar = ({
 
   interface CoAuthorsItemProps extends React.ComponentPropsWithoutRef<"div"> {
     dp: string;
-    firstName: string;
-    lastName: string;
+    full_name: string;
   }
 
   const CoAuthorCustomSelectComponent = forwardRef<
     HTMLDivElement,
     CoAuthorsItemProps
-  >(({ dp, firstName, lastName, ...others }: CoAuthorsItemProps, ref) => (
+  >(({ dp, full_name, ...others }: CoAuthorsItemProps, ref) => (
     <div ref={ref} {...others}>
       <Group spacing="xs" className="w-full mr-4" noWrap>
         <Avatar radius="xl" className="rounded-full">
@@ -142,7 +141,7 @@ const ArticleEditSidebar = ({
         </Avatar>
 
         <Stack>
-          <Text>{firstName + " " + lastName} </Text>
+          <Text>{full_name} </Text>
         </Stack>
       </Group>
     </div>
@@ -337,6 +336,7 @@ const ArticleEditSidebar = ({
         description="Update Collaborators"
       >
         <MultiSelect
+          placeholder="Search and Collaborate with Others"
           defaultValue={props.coAuthors.map((mapped) => {
             return mapped.value;
           })}
@@ -348,10 +348,7 @@ const ArticleEditSidebar = ({
           itemComponent={CoAuthorCustomSelectComponent}
           filter={(value, selected, item) =>
             !selected &&
-            (item.firstName
-              .toLowerCase()
-              .includes(value.toLowerCase().trim()) ||
-              item.lastName.toLowerCase().includes(value.toLowerCase().trim()))
+            item.full_name.toLowerCase().includes(value.toLowerCase().trim())
           }
           data={coAuthors.length > 0 ? coAuthors : props.coAuthors}
           onSearchChange={async (query) => {
@@ -360,14 +357,13 @@ const ArticleEditSidebar = ({
               .from("authors")
               .select(
                 `
-              firstName,
-              lastName,
+              full_name,
               id,
               dp
               `,
                 { count: "exact" }
               )
-              .ilike("firstName", `%${query}%`);
+              .ilike("full_name", `%${query}%`);
 
             if (data && data.length > 0) {
               if (count <= 0) {

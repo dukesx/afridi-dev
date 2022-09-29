@@ -66,11 +66,7 @@ const AuthorFeedRenderer = ({
           </Avatar>
           <Stack spacing={0}>
             <Text size={13} weight={600}>
-              {data ? (
-                data.firstName + " " + data.lastName
-              ) : (
-                <Skeleton height={10} width={100} />
-              )}
+              {data ? data.full_name : <Skeleton height={10} width={100} />}
             </Text>
             <Text className="capitalize" color="dimmed" size={10}>
               {" "}

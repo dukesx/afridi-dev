@@ -191,7 +191,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                 ) : (
                   <Group>
                     <Title className="text-sm sm:text-xl" order={4}>
-                      {data["firstName"] + " " + data["lastName"]}
+                      {data["full_name"]}
                     </Title>
 
                     <Tooltip
@@ -629,8 +629,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     .select(
       `
       id,
-      firstName,
-      lastName,
+      full_name,
       location,
       github,
       dp,
@@ -646,8 +645,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
         co_authors_articles (
           authors (
             dp,
-            firstName,
-            lastName
+            full_name
           )
         )
       ),
@@ -719,8 +717,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 
   var user = {
     id: userData[0].id,
-    firstName: userData[0].firstName,
-    lastName: userData[0].lastName,
+    full_name: userData[0].full_name,
     github: userData[0].github,
     location: userData[0].location,
     bio: userData[0].bio,

@@ -17,15 +17,12 @@ const DemographicsStep = ({
   const [step2Loading, setStep2Loading] = useState(false);
   const form = useForm({
     initialValues: {
-      firstName: "",
-      lastName: "",
+      full_name: "",
       location: "",
     },
 
     validate: {
-      firstName: (val) =>
-        val.length <= 0 ? "First Name cannot be empty" : null,
-      lastName: (val) => (val.length <= 0 ? "Last Name cannot be empty" : null),
+      full_name: (val) => (val.length <= 0 ? "Name cannot be empty!" : null),
     },
   });
 
@@ -73,8 +70,7 @@ const DemographicsStep = ({
           const { error } = await client
             .from("authors")
             .update({
-              firstName: val.firstName,
-              lastName: val.lastName,
+              full_name: val.full_name,
               location: val.location,
             })
             .eq("id", session.user.id);
@@ -94,19 +90,8 @@ const DemographicsStep = ({
           }}
           required
           my="sm"
-          label="First Name"
-          {...form.getInputProps("firstName")}
-        />
-        <TextInput
-          styles={{
-            label: {
-              fontSize: theme.fontSizes.sm,
-            },
-          }}
-          required
-          mt="md"
-          label="Last Name"
-          {...form.getInputProps("lastName")}
+          label="Full Name"
+          {...form.getInputProps("full_name")}
         />
 
         <Select

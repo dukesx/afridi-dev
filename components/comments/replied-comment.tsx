@@ -72,7 +72,7 @@ const RepliedComment = ({
                   size="sm"
                   weight={500}
                 >
-                  {comment.authors.firstName + " " + comment.authors.lastName}
+                  {comment.authors.full_name}
                 </Text>
                 <Badge size="xs">
                   {comment.authors.id == article_author_id

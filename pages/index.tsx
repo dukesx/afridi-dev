@@ -45,9 +45,8 @@ const LandingPage = ({ feedData, feedDataCount }) => {
         `
       id,
       dp,
-      firstName,
+      full_name,
       content_count,
-      lastName,
       location
     `
       )
@@ -308,14 +307,12 @@ export const getStaticProps = async (ctx) => {
                   editors_pick,
                   authors!articles_author_id_fkey (
                     dp,
-                    firstName,
-                    lastName
+                    full_name
                   ),
                   co_authors_articles (
                     authors (
                       dp,
-                      firstName,
-                      lastName
+                      full_name
                     )
                   ),
                 appreciations (

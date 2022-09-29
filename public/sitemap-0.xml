@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url><loc>http://localhost:3000</loc><lastmod>2022-09-29T07:02:32.450Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/about</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/about/acknowledgements</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/about/dev</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/about/roadmap</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/about/vision</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/authors</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/creator-studio</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/creator-studio/my-articles</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/creator-studio/publish</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/creator-studio/publish/article</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/dazzle-me</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/get-started</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/legal/privacy-policy</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/legal/terms</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/server-sitemap.xml</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/unauthorized</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/article/44b4c9bb-e9f8-4513-8a98-2ebf7f43b87b</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/ts</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/trending</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/whatsapp</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/kotlin</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/react</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/angular</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/javascript</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/typescript</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/android</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/go</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/analytics</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/posthog</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/google analytics</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/data-model</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/tags/editors-pick</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>http://localhost:3000/author/49d746ab-60bf-4b1d-aaab-7524d40bd402</loc><lastmod>2022-09-29T07:02:32.451Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+</urlset>

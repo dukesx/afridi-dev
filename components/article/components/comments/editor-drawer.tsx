@@ -55,7 +55,7 @@ const ArticleCommentEditorDrawer = ({
           <Text size="sm">
             Replying to{" "}
             <b className="">
-              {commentId.author.firstName + " " + commentId.author.lastName}
+              {commentId.author.full_name}
             </b>
           </Text>
         ) : (

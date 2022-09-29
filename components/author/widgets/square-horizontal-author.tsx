@@ -30,9 +30,8 @@ interface SquareHorizontalWidgetProps {
 }
 
 export interface AfridiDevAuthor {
-  firstName: string;
+  full_name: string | string[];
   id: string;
-  lastName: string;
   dp: string;
   cover?: string;
   location: string;

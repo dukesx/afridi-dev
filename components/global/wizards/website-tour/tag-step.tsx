@@ -7,6 +7,9 @@ import {
   Stack,
   Text,
   Loader,
+  Chip,
+  useMantineTheme,
+  Input,
 } from "@mantine/core";
 import { getFloatingPosition } from "@mantine/core/lib/Floating";
 import { useForm } from "@mantine/form";
@@ -45,7 +48,8 @@ const TagPickingStep = ({
   });
 
   const [tags, setTags] = useState([]);
-
+  const [newTags, setNewTags] = useState([]);
+  const theme = useMantineTheme();
   const getTags = async () => {
     setTagsLoading(true);
     const { error, data } = await client
@@ -53,10 +57,15 @@ const TagPickingStep = ({
       .select(
         `
       id,
-      title
+      title,
+      color
       `
       )
-      .limit(100);
+      .limit(40)
+      .order("content_count", {
+        ascending: false,
+      })
+      .gt("content_count", 0);
     var tagsArray = [];
     //
     //
@@ -64,6 +73,7 @@ const TagPickingStep = ({
       tagsArray.push({
         label: mapped.title,
         value: mapped.id,
+        color: mapped.color,
       })
     );
 
@@ -81,7 +91,7 @@ const TagPickingStep = ({
       <Text className="text-center" weight={500} size={40}>
         Better Feeds w/ Tags ⚡
       </Text>
-      <Text mb={30} size="sm" color="dimmed">
+      <Text className="mx-auto" mb={30} size="sm" color="dimmed">
         Follow some tags to get better recommended articles in your feed.
       </Text>
       <form
@@ -100,7 +110,65 @@ const TagPickingStep = ({
           setStep(3);
         })}
       >
-        <MultiSelect
+        <Input.Wrapper
+          styles={{
+            error: {
+              marginTop: theme.spacing.sm,
+              fontWeight: 500,
+            },
+          }}
+          required
+          error={form2.errors.tags}
+        >
+          {tags && !tagsLoading && (
+            <Chip.Group
+              className=""
+              color="blue"
+              value={newTags}
+              onChange={(val) => {
+                setNewTags(val);
+                form2.setFieldValue("tags", val);
+              }}
+              spacing="sm"
+              multiple
+              style={{
+                border: form2.errors.tags
+                  ? `2px solid ${theme.fn.themeColor("red")}`
+                  : null,
+                padding: form2.errors.tags ? theme.spacing.sm : null,
+              }}
+            >
+              {tags.map((mapped) => {
+                return (
+                  <Chip
+                    variant="filled"
+                    className="capitalize font-medium"
+                    color={mapped.color ?? "gray"}
+                    value={mapped.value}
+                    key={mapped.value}
+                    // styles={{
+                    //   label: {
+                    //     color: theme.white,
+                    //     backgroundColor: mapped.color
+                    //       ? `${theme.fn.themeColor(
+                    //           mapped.color ?? theme.colors.gray
+                    //         )} !important`
+                    //       : `${theme.fn.themeColor("gray")} !important`,
+                    //   },
+                    //   checkIcon: {
+                    //     fill: theme.white,
+                    //     color: theme.white,
+                    //   },
+                    // }}
+                  >
+                    {mapped.label}
+                  </Chip>
+                );
+              })}
+            </Chip.Group>
+          )}
+        </Input.Wrapper>
+        {/* <MultiSelect
           rightSection={tagsLoading ? <Loader size="xs" /> : null}
           mt="md"
           mb="md"
@@ -131,7 +199,7 @@ const TagPickingStep = ({
           maxDropdownHeight={160}
           onChange={(value) => form2.setFieldValue("tags", value)}
           error={form2.errors.tags}
-        />
+        /> */}
 
         <Group className="w-full" position="center" mt={50}>
           <Button

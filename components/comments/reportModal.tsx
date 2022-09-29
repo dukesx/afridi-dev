@@ -50,7 +50,7 @@ const CommentReportModal = ({
         <Text className="capitalize" size="sm">
           Report{" "}
           <b className="font-semibold underline decoration-red-500 decoration-2">
-            {comment.authors.firstName + " " + comment.authors.lastName}
+            {comment.authors.full_name}
             &apos;s
           </b>{" "}
           Comment

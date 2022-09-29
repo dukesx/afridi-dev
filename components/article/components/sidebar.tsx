@@ -220,11 +220,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
         <Group className="w-full" noWrap>
           <Tooltip
             mt="xl"
-            label={
-              data
-                ? data.authors.firstName + " " + data.authors.lastName
-                : "loading author"
-            }
+            label={data ? data.authors.full_name : "loading author"}
           >
             <Avatar
               size={60}
@@ -255,9 +251,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
               weight={700}
               size="xs"
             >
-              {data
-                ? data.authors.firstName + " " + data.authors.lastName
-                : null}
+              {data ? data.authors.full_name : null}
             </Text>
             <Text size="xs" color="dimmed">
               Main Lead Author
@@ -289,12 +283,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
                     key={"almac" + index}
                   >
                     <Stack align="initial" ml="xs" spacing={10}>
-                      <Tooltip
-                        mt="xl"
-                        label={
-                          mapped.authors.firstName + " " + data.authors.lastName
-                        }
-                      >
+                      <Tooltip mt="xl" label={mapped.authors.full_name}>
                         <Avatar
                           size={50}
                           className="rounded-full"
@@ -323,9 +312,7 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
                         weight={700}
                         size="xs"
                       >
-                        {mapped.authors.firstName +
-                          " " +
-                          mapped.authors.lastName}
+                        {mapped.authors.full_name}
                       </Text>
                     </Stack>
                   </Grid.Col>

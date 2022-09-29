@@ -179,8 +179,7 @@ export const getServerSideProps = withPageAuth({
         co_authors_articles (
           authors (
             id,
-            firstName,
-            lastName,
+            full_name,
             dp
           )
         )

@@ -18,8 +18,7 @@ export const getData = async (
     .select(
       `
       id,
-:      firstName,
-      lastName,
+:     full_name,
       location,
       github,
       dp,
@@ -35,8 +34,7 @@ export const getData = async (
         co_authors_articles (
           authors (
             dp,
-            firstName,
-            lastName
+            full_name
           )
         )
       ),
@@ -132,15 +130,13 @@ export const getThumbsUpArticles = async (setThumbsUp, supabaseClient) => {
         body,
         authors (
             id,
-            firstName,
-            lastName,
+            full_name,
             dp
         ),
         co_authors_articles (
         authors (
             id,
-            firstName,
-            lastName,
+            full_name,
             dp
         )
         ),
@@ -172,15 +168,13 @@ export const getHotArticles = async (setHot, supabaseClient) => {
         body,
         authors (
             id,
-            firstName,
-            lastName,
+            full_name
             dp
         ),
         co_authors_articles (
         authors (
             id,
-            firstName,
-            lastName,
+            full_name,
             dp
         )
         ),
@@ -209,8 +203,7 @@ export const getSimilarAuthors = async (
       tags (
         authors (
           id,
-          firstName,
-          lastName,
+          full_name,
           location,
           dp
         )
