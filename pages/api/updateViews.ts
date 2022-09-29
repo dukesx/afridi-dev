@@ -3,7 +3,7 @@
 import { withApiAuth } from "@supabase/auth-helpers-nextjs";
 import { createClient } from "@supabase/supabase-js";
 
-export default withApiAuth(async function ProtectedRoute(req, res) {
+export default async function ProtectedRoute(req, res) {
   const { views, id } = req.body;
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -28,4 +28,4 @@ export default withApiAuth(async function ProtectedRoute(req, res) {
       success: true,
     });
   }
-});
+}

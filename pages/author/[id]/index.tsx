@@ -56,6 +56,7 @@ import SquareHorizontalAuthorWidget from "../../../components/author/widgets/squ
 import AuthorFeedRenderer from "../../../components/author/components/author-feed-renderer";
 import ExclusivePlaceholder from "../../../components/author/components/exclusive-placeholder";
 import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
+import { NextSeo } from "next-seo";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -93,6 +94,64 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
 
   return (
     <AppWrapper activeHeaderKey="" size="lg">
+      {user && feedData ? (
+        <Fragment>
+          <NextSeo
+            title={`${user.full_name ?? "Random User"}'s Profile`}
+            description={`Welcome to ${
+              user.full_name ?? "Random User"
+            }'s Profile on Afridi.dev`}
+            canonical={`https://afridi.dev/author/${user.id}`}
+            openGraph={{
+              url: `https://afridi.dev/author/${user.id}`,
+              title: `${user.full_name}'s Profile`,
+              description: `Welcome to ${
+                user.full_name ?? "Random User"
+              }'s Profile on Afridi.dev`,
+              images: [
+                {
+                  url: `https://ik.imagekit.io/afrididotdev/tr:w-400${dpo}`,
+                  width: 400,
+                  height: 400,
+                  alt: `${user.full_name ?? "Random User"}'s Display Picture`,
+                  type: "image/jpeg",
+                },
+                {
+                  url: `https://ik.imagekit.io/afrididotdev/tr:w-400${covera}`,
+                  width: 900,
+                  height: 800,
+                  alt: `${user.full_name ?? "Random User"}'s Cover Photo`,
+                  type: "image/jpeg",
+                },
+              ],
+              site_name: "Afridi.dev",
+              type: "profile",
+              profile: {
+                firstName: user.full_name.split(" ")[0],
+                lastName:
+                  user.full_name.split(" ").length > 2
+                    ? user.full_name.split(" ")[
+                        user.full_name.split(" ").length - 2
+                      ] +
+                      " " +
+                      user.full_name.split(" ")[
+                        user.full_name.split(" ").length - 1
+                      ]
+                    : user.full_name.split(" ")[
+                        user.full_name.split(" ").length - 1
+                      ],
+                username: user.username ?? user.id,
+                gender: user.gender,
+              },
+            }}
+            twitter={{
+              handle: "@afrididotdev",
+              site: "@afrididotdev",
+              cardType: "summary_large_image",
+            }}
+          />
+        </Fragment>
+      ) : null}
       <Card
         px={0}
         style={{
@@ -633,6 +692,8 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
       location,
       github,
       dp,
+      username,
+      gender,
       bio,
       cover,
       articles!articles_author_id_fkey (
@@ -721,6 +782,8 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
     github: userData[0].github,
     location: userData[0].location,
     bio: userData[0].bio,
+    gender: userData[0].gender,
+    username: userData[0].username,
   };
 
   return {

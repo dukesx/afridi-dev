@@ -92,6 +92,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
       )
       .eq("id", session.user.id);
     var bookmarksArray = [];
+
     //@ts-ignore
     data[0].bookmarks.map((mapped) => bookmarksArray.push(mapped.article_id));
     //@ts-ignore

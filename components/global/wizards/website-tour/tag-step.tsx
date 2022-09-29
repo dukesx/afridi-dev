@@ -15,7 +15,7 @@ import { getFloatingPosition } from "@mantine/core/lib/Floating";
 import { useForm } from "@mantine/form";
 import { type User } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { type Session } from "@supabase/supabase-js";
+import { SupabaseClient, type Session } from "@supabase/supabase-js";
 import { IconArrowLeft } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import { forbidden_tags } from "../../../../data/static/forbidden_tags";
@@ -25,7 +25,7 @@ export interface WelcomeWizardStepProps {
   step: number;
   user?: User;
   theme?: MantineTheme;
-  client?: any;
+  client?: SupabaseClient;
   session?: Session;
 }
 
