@@ -38,6 +38,7 @@ import AfridiImage from "../../../../global/afridi-image";
 import AfridiImageUploader, {
   ImageUploaderType,
 } from "../../../../global/image_uploader";
+import slugify from "slugify";
 
 //
 
@@ -241,18 +242,16 @@ const ArticleEditSidebar = ({
                   const { data: insertedTagData } = await supabaseClient
                     .from("tags")
                     .insert({
-                      title: mapped,
+                      title: slugify(mapped),
                     })
                     .select();
                   const { error: tag2Error, data: tag2Data } =
                     await supabaseClient.from("articles_tags").insert({
-                      title: mapped.title,
                       tag_id: insertedTagData[0].id,
                       article_id: articleData[0].id,
                     });
                 }
               });
-              console.log(val.coAuthors);
               if (val.coAuthors.length > 0) {
                 await Promise.all(
                   val.coAuthors.map(async (mapped) => {
@@ -393,7 +392,6 @@ const ArticleEditSidebar = ({
           }}
           maxDropdownHeight={160}
           onChange={(value) => form.setFieldValue("coAuthors", value)}
-          error={form.errors.coAuthors}
         />
       </Input.Wrapper>
 
