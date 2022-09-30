@@ -147,22 +147,6 @@ const LandingPage = ({ feedData, feedDataCount }) => {
           title: "Welcome to Afridi.dev!",
           description: "The DEV's blog",
           site_name: "Afridi.dev",
-          images: [
-            {
-              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
-              width: 800,
-              height: 800,
-              alt: "Afridi.DEV Cover Image - Light",
-              type: "image/jpeg",
-            },
-            {
-              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-dark.png",
-              width: 800,
-              height: 800,
-              alt: "Afridi.DEV Cover Image - Dark",
-              type: "image/jpeg",
-            },
-          ],
         }}
         twitter={{
           handle: "@afridi.dev",
