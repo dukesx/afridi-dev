@@ -10,6 +10,7 @@ import StudioWrapper from "../../components/studio/studio-wrapper";
 import { openConfirmModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { IconX } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 
 const CreatorsStudio = ({ authored }) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
@@ -90,6 +91,8 @@ const CreatorsStudio = ({ authored }) => {
       subPath="My Articles"
       loading={loading}
     >
+      <NextSeo nofollow noindex />
+
       <DataTable
         className="w-full"
         minHeight={400}

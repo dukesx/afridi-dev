@@ -14,6 +14,7 @@ import {
 import { useMediaQuery } from "@mantine/hooks";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import { NextSeo } from "next-seo";
 import React, { useEffect, useState } from "react";
 import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
 import AppWrapper from "../../../components/global/wrapper";
@@ -43,6 +44,8 @@ const ArticleComposer = () => {
 
   return media == false ? (
     <AppWrapper noPadding activeHeaderKey="" size={1400}>
+      <NextSeo nofollow noindex />
+
       <Center className="h-[600px]">
         <Stack align="center">
           <Title order={1} weight={700}>

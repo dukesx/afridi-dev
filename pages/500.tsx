@@ -5,12 +5,15 @@ import { Button, Stack, useMantineColorScheme } from "@mantine/core";
 import { useRouter } from "next/router";
 import { IconArrowLeft } from "@tabler/icons";
 import AppWrapper from "../components/global/wrapper";
+import { NextSeo } from "next-seo";
 
 const Custom500 = () => {
   const { colorScheme } = useMantineColorScheme();
   const router = useRouter();
   return (
     <AppWrapper activeHeaderKey="">
+      <NextSeo nofollow noindex />
+
       <Stack align="center">
         <Image
           src={colorScheme == "dark" ? Dark500Image : Light500Image}

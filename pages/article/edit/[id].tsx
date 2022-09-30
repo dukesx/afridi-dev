@@ -18,6 +18,7 @@ import AppWrapper from "../../../components/global/wrapper";
 import { openModal } from "@mantine/modals";
 import ArticleEditSidebar from "../../../components/studio/publish/article/edit/article-edit-sidebar";
 import EditorTourModal from "../../../components/global/editor/tour-modal";
+import { NextSeo } from "next-seo";
 
 const EditArticle = ({ user, data }) => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
@@ -81,6 +82,8 @@ const EditArticle = ({ user, data }) => {
 
   return (
     <AppWrapper noPadding activeHeaderKey="" size={1400}>
+      <NextSeo nofollow noindex />
+
       <div className="relative ml-0 sm:ml-5">
         <LoadingOverlay
           loader={

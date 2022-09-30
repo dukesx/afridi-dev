@@ -24,6 +24,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
+import { NextSeo } from "next-seo";
 
 const CreatorsStudio = ({ authored }) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
@@ -181,6 +182,8 @@ const CreatorsStudio = ({ authored }) => {
       subPath="analytics"
       loading={loading}
     >
+      <NextSeo nofollow noindex />
+
       <Fragment>
         <Stack mb={50} align="center" spacing={0}>
           <ThemeIcon

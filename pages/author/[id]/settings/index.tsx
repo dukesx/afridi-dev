@@ -27,6 +27,7 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
 import { AfridiDevEditor } from "../../../../components/global/editor/editorCaller";
+import { NextSeo } from "next-seo";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();
@@ -156,6 +157,8 @@ const UserSettingsPage = () => {
 
   return (
     <AppWrapper activeHeaderKey="" size="lg">
+      <NextSeo nofollow noindex />
+
       <Center>
         <Card className="px-2 xs:p-5 w-full mt-5 sm:mt-[50px] border border-solid border-gray-200/80 dark:border-0">
           <Tabs

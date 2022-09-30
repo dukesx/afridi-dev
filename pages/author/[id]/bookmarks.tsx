@@ -15,6 +15,7 @@ import {
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { IconBookmarks, IconX } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import HorizontalGridCard, {
   CardStyle,
@@ -61,6 +62,7 @@ const Bookmarks = ({ user }) => {
 
   return (
     <AppWrapper size="md" activeHeaderKey="">
+      <NextSeo nofollow noindex />
       <Card mt="xl" className="mx-auto">
         <Stack>
           <ThemeIcon
