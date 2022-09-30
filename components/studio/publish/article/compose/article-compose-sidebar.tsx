@@ -288,7 +288,7 @@ const ArticleComposeSidebar = ({
               },
               body: JSON.stringify({
                 paths: [
-                  `/article/ + ${articleData[0].id}`,
+                  `/article/${articleData[0].id}`,
                   `/author/${articleData[0].author_id}`,
                   `/`,
                 ],
