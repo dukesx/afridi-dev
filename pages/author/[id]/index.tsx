@@ -797,7 +797,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 };
 
 export const getStaticPaths = async () => {
-  const { data, error } = await supabase.from("authors").select("id");
+  const { data, error } = await supabase.from("authors").select("id").limit(10);
 
   var ids = [];
 

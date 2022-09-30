@@ -503,7 +503,10 @@ export const getStaticProps = async (ctx) => {
 };
 
 export const getStaticPaths = async () => {
-  const { data, error } = await supabase.from("articles").select("id");
+  const { data, error } = await supabase
+    .from("articles")
+    .select("id")
+    .limit(10);
 
   var ids = [];
 

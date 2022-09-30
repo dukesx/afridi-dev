@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && pnpm run postbuild",
+    "build": "next build && pnpm run sitemap",
     "start": "next start",
     "lint": "next lint",
     "test:ci": "jest --ci",
     "test:e2e": "playwright test",
     "test": "jest --watch",
     "release": "release-it",
-    "postbuild": "next-sitemap"
+    "sitemap": "next-sitemap"
   },
   "repository": {
     "type": "git",

@@ -425,7 +425,7 @@ export const getStaticProps = async (ctx) => {
 };
 
 export const getStaticPaths = async () => {
-  const { data, error } = await supabase.from("tags").select("title");
+  const { data, error } = await supabase.from("tags").select("title").limit(10);
 
   var ids = [];
 
