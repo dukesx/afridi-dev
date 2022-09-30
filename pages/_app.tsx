@@ -95,6 +95,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                   description="The DEV's blog"
                   canonical="https://afridi.dev"
                   openGraph={{
+                    type: "website",
                     url: "https://afridi.dev",
                     title: "Welcome to Afridi.dev!",
                     description: "The DEV's blog",
