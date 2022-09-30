@@ -133,19 +133,20 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
   useEffect(() => {
     if (isLoading == false) {
       setFeedLoading(true);
-      if (session) {
-        getUserBookmarks();
-        getFeed();
-      } else {
-        if (key == "feed") {
-          setFeedData(prefetchedFeedData);
-          setArticleCount(feedDataCount);
-          setFeedLoading(false);
-        } else {
-          setFeedLoading(true);
-          getFeed();
-        }
-      }
+      // if (session) {
+      //   getUserBookmarks();
+      //   getFeed();
+      // } else {
+      //   if (key == "feed") {
+      //     setFeedData(prefetchedFeedData);
+      //     setArticleCount(feedDataCount);
+      //     setFeedLoading(false);
+      //   } else {
+      //     setFeedLoading(true);
+      //     getFeed();
+      //   }
+      // }
+      getFeed();
     }
   }, [key, isLoading]);
 

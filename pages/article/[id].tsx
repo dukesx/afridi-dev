@@ -185,7 +185,7 @@ const Article = ({ article, tags }) => {
               },
               images: [
                 {
-                  url: `https://ik.imagekit.io/afrididev/tr:w-400/${
+                  url: `https://ik.imagekit.io/afrididotdev/tr:w-400${
                     article.cover ?? ""
                   }`,
                   width: 400,

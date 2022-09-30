@@ -31,6 +31,7 @@ import {
 import LandingSidebarItem from "../components/landing/sidebar/landing-sidebar-item";
 import CreatorStudioIcon from "../components/global/creator-studio-icon";
 import SquareHorizontalAuthorWidget from "../components/author/widgets/square-horizontal-author";
+import { NextSeo } from "next-seo";
 
 const LandingPage = ({ feedData, feedDataCount }) => {
   const theme = useMantineTheme();
@@ -137,6 +138,38 @@ const LandingPage = ({ feedData, feedDataCount }) => {
   const { classes } = largeCardClass();
   return (
     <Fragment>
+      <NextSeo
+        title="Welcome to Afridi.dev!"
+        description="The DEV's blog"
+        canonical="https://afridi.dev"
+        openGraph={{
+          url: "https://afridi.dev",
+          title: "Welcome to Afridi.dev!",
+          description: "The DEV's blog",
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-dark.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Dark",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@afridi.dev",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
       <AppWrapper activeHeaderKey="home" size={1600}>
         {/**
          *  Feed + Sidebar
@@ -290,78 +323,78 @@ const LandingPage = ({ feedData, feedDataCount }) => {
 
 export default LandingPage;
 
-export const getStaticProps = async (ctx) => {
-  const {
-    error,
-    data: feedData,
-    count: count,
-  } = await supabase
-    .from("articles")
-    .select(
-      `
-                  id,
-                  title,
-                  description,
-                  cover,
-                  views,
-                  editors_pick,
-                  authors!articles_author_id_fkey (
-                    dp,
-                    full_name
-                  ),
-                  co_authors_articles (
-                    authors (
-                      dp,
-                      full_name
-                    )
-                  ),
-                appreciations (
-                id
-                  ),
+// export const getStaticProps = async (ctx) => {
+//   const {
+//     error,
+//     data: feedData,
+//     count: count,
+//   } = await supabase
+//     .from("articles")
+//     .select(
+//       `
+//                   id,
+//                   title,
+//                   description,
+//                   cover,
+//                   views,
+//                   editors_pick,
+//                   authors!articles_author_id_fkey (
+//                     dp,
+//                     full_name
+//                   ),
+//                   co_authors_articles (
+//                     authors (
+//                       dp,
+//                       full_name
+//                     )
+//                   ),
+//                 appreciations (
+//                 id
+//                   ),
 
-            article_views (
-            id
-          )
-                `,
-      {
-        count: "exact",
-      }
-    )
-    .order("created_at", {
-      ascending: false,
-    })
-    .limit(5)
-    .order("created_at", {
-      ascending: false,
-    })
-    .range(0, 9);
+//             article_views (
+//             id
+//           )
+//                 `,
+//       {
+//         count: "exact",
+//       }
+//     )
+//     .order("created_at", {
+//       ascending: false,
+//     })
+//     .limit(5)
+//     .order("created_at", {
+//       ascending: false,
+//     })
+//     .range(0, 9);
 
-  var newFeedData = await Promise.all(
-    feedData &&
-      feedData.map(async (mapped) => {
-        var res = await fetch(
-          `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
-          {
-            headers: {
-              "content-type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-              cover: mapped.cover,
-            }),
-          }
-        );
+//   var newFeedData = await Promise.all(
+//     feedData &&
+//       feedData.map(async (mapped) => {
+//         var res = await fetch(
+//           `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-placeholder`,
+//           {
+//             headers: {
+//               "content-type": "application/json",
+//             },
+//             method: "POST",
+//             body: JSON.stringify({
+//               cover: mapped.cover,
+//             }),
+//           }
+//         );
 
-        var data = await res.json();
+//         var data = await res.json();
 
-        return { ...mapped, cover_base_64: data.placeholder };
-      })
-  );
+//         return { ...mapped, cover_base_64: data.placeholder };
+//       })
+//   );
 
-  return {
-    props: {
-      feedDataCount: count,
-      feedData: newFeedData,
-    },
-  };
-};
+//   return {
+//     props: {
+//       feedDataCount: count,
+//       feedData: newFeedData,
+//     },
+//   };
+// };
