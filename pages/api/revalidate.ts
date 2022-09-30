@@ -9,7 +9,9 @@ export default withApiAuth(async function ProtectedRoute(req, res) {
     // e.g. for "/blog/[slug]" this should be "/blog/post-1"
     if (paths) {
       await Promise.all(
-        paths.map(async (mapped) => await res.revalidate(mapped))
+        paths.map(async (mapped) => {
+          await res.revalidate(mapped);
+        })
       );
     } else {
       await res.revalidate(path);

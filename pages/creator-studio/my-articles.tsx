@@ -271,11 +271,7 @@ const CreatorsStudio = ({ authored }) => {
                                     accept: "application/json",
                                   },
                                   body: JSON.stringify({
-                                    paths: [
-                                      `/article/ + ${data[0].id}`,
-                                      `/author/${data[0].author_id}`,
-                                      `/`,
-                                    ],
+                                    paths: [`/author/${data[0].author_id}`],
                                   }),
                                 });
 
