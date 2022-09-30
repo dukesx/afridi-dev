@@ -100,6 +100,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
                     description: "The DEV's blog",
                     site_name: "Afridi.dev",
                   }}
+                  facebook={{
+                    appId: "1047539702585462",
+                  }}
                   twitter={{
                     handle: "@afrididotdev",
                     site: "https://afridi.dev",

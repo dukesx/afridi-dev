@@ -18,12 +18,45 @@ import {
   IconExternalLink,
   IconUserCircle,
 } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 import GetInvolvedInRFCComponent from "../../components/global/misc/get-involved-rfc";
 import AppWrapper from "../../components/global/wrapper";
 
 const Vision = () => {
   return (
     <AppWrapper size="md" activeHeaderKey="">
+      <NextSeo
+        title="Our Vision"
+        description="The Vision and Story Behind Afridi.dev"
+        canonical="https://afridi.dev/about/vision"
+        openGraph={{
+          url: "https://afridi.dev/about/vision",
+          title: "Our Vision",
+          description: "The Vision and Story Behind Afridi.dev",
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-dark.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Dark",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@afridi.dev",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
       <Stack pb="xl" className="w-full" mt="xl">
         <ThemeIcon
           className="rounded-full mx-auto"

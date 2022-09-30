@@ -5,11 +5,44 @@ import {
   TypographyStylesProvider,
 } from "@mantine/core";
 import { IconScale } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 import AppWrapper from "../../components/global/wrapper";
 
 const Terms = () => {
   return (
     <AppWrapper size="md" activeHeaderKey="">
+      <NextSeo
+        title="Terms & Conditions"
+        description="Legal Terms on Afridi.dev"
+        canonical="https://afridi.dev/legal/terms"
+        openGraph={{
+          url: "https://afridi.dev/legal/terms",
+          title: "Terms & Conditions",
+          description: "Legal Terms on Afridi.dev",
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-dark.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Dark",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@afridi.dev",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
       <Stack align="center" mt="xl">
         <ThemeIcon
           className="rounded-full mx-auto"

@@ -6,11 +6,44 @@ import {
   TypographyStylesProvider,
 } from "@mantine/core";
 import { IconScale } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 import AppWrapper from "../../components/global/wrapper";
 
 const PrivacyPolicy = () => {
   return (
     <AppWrapper size="md" activeHeaderKey="">
+      <NextSeo
+        title="Privacy Policy"
+        description="Privacy Policy on Afridi.dev"
+        canonical="https://afridi.dev/legal/privacy-policy"
+        openGraph={{
+          url: "https://afridi.dev/legal/privacy-policy",
+          title: "Privacy Policy",
+          description: "Privacy Policy on Afridi.dev",
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-dark.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Dark",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@afridi.dev",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
       <Stack align="center" mt="xl">
         <ThemeIcon
           className="rounded-full mx-auto"

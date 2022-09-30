@@ -14,11 +14,13 @@ import {
   IconChecklist,
   IconDice,
   IconHash,
+  IconMessageCircle2,
   IconStar,
   IconUserCircle,
   IconUsers,
   IconVersions,
 } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 import CreatorStudioIcon from "../../components/global/creator-studio-icon";
 import AppWrapper from "../../components/global/wrapper";
 
@@ -26,6 +28,38 @@ const RoadMap = () => {
   const theme = useMantineTheme();
   return (
     <AppWrapper size="md" activeHeaderKey="">
+      <NextSeo
+        title="Our Roadmap"
+        description="The Roadmap & Goals of Afridi.dev"
+        canonical="https://afridi.dev/about/roadmap"
+        openGraph={{
+          url: "https://afridi.dev/about/roadmap",
+          title: "Our Roadmap",
+          description: "The Roadmap & Goals of Afridi.dev",
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-dark.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Dark",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@afridi.dev",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
       <Stack pb="xl" className="w-full" mt="xl">
         <ThemeIcon
           className="rounded-full mx-auto"
@@ -111,6 +145,19 @@ const RoadMap = () => {
                 }
               >
                 Bookmarks System
+              </List.Item>
+              <List.Item
+                icon={
+                  <ThemeIcon radius="xl" variant="light" color="blue" size="sm">
+                    <IconMessageCircle2
+                      color={theme.colors.blue[4]}
+                      size={12}
+                      strokeWidth={2.6}
+                    />
+                  </ThemeIcon>
+                }
+              >
+                Comments System
               </List.Item>
               <List.Item
                 icon={

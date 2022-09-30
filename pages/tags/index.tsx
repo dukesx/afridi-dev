@@ -20,6 +20,7 @@ import {
   IconPencil,
   IconThumbUp,
 } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 import Image from "next/image";
 import { Fragment, Suspense, useEffect, useState } from "react";
 import EmptyPlaceholder from "../../components/global/placeholders/empty";
@@ -124,6 +125,31 @@ const TagsPage = ({ tagsArr }) => {
    */
   return (
     <AppWrapper size="lg" activeHeaderKey="tags">
+      <NextSeo
+        title="Tags"
+        description="Follow tags to see your favorite articles"
+        canonical="https://afridi.dev/tags"
+        openGraph={{
+          url: "https://afridi.dev/tags",
+          title: "Tags",
+          description: "Follow tags to see your favorite articles",
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-tags.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@afridi.dev",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
       <Card p="xl">
         <Group spacing="sm" position="center">
           <ThemeIcon
