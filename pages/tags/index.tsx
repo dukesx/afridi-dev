@@ -136,9 +136,9 @@ const TagsPage = ({ tagsArr }) => {
           site_name: "Afridi.dev",
           images: [
             {
-              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-tags.png",
-              width: 800,
-              height: 800,
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-og-tags.png",
+              width: 1200,
+              height: 630,
               alt: "Afridi.DEV Cover Image - Light",
               type: "image/jpeg",
             },

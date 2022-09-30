@@ -149,9 +149,9 @@ const LandingPage = ({ feedData, feedDataCount }) => {
           site_name: "Afridi.dev",
           images: [
             {
-              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-facebook-cover.png",
-              width: 1640,
-              height: 608,
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-1200/afridi-dev-og-image.png",
+              width: 1200,
+              height: 630,
               alt: "Afridi.DEV Cover Image - Light",
               type: "image/jpeg",
             },
