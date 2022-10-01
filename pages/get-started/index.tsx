@@ -15,15 +15,16 @@ import DiscordLogo from "../../public/discord.png";
 import GoogleLogo from "../../public/google.png";
 import GithubLogo from "../../public/github.svg";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import GitlabLogo from "../../public/gitlab.svg";
 
 const GetStarted = () => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
   const theme = useMantineTheme();
   return (
     <AppWrapper size="sm" activeHeaderKey="">
-      <Center className="mx-auto h-[500px]">
+      <Center className="mx-auto h-[550px]">
         <Card
-          className="max-w-[800px] h-[400px] w-full border-cyan-400"
+          className="max-w-[800px] h-[450px] w-full border-cyan-400"
           withBorder
         >
           <Title className="text-center" mt="xl" order={2}>
@@ -54,6 +55,28 @@ const GetStarted = () => {
               }
             >
               Sign in with Github
+            </Button>
+
+            <Button
+              className="shadow-md w-[200px] text-center mx-auto"
+              radius="xl"
+              variant="white"
+              onClick={async () => {
+                const { data, error } =
+                  await supabaseClient.auth.signInWithOAuth({
+                    provider: "gitlab",
+                  });
+              }}
+              leftIcon={
+                <Image
+                  src={GitlabLogo}
+                  height={29}
+                  width={29}
+                  alt="Login with Github"
+                />
+              }
+            >
+              Sign in with Gitlab
             </Button>
             <Button
               className="shadow-md w-[200px] text-center mx-auto"
