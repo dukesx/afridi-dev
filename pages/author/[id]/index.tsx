@@ -127,19 +127,24 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
               site_name: "Afridi.dev",
               type: "profile",
               profile: {
-                firstName: user.full_name.split(" ")[0],
+                firstName:
+                  user && user.full_name
+                    ? user.full_name.split(" ")[0]
+                    : "Random",
                 lastName:
-                  user.full_name.split(" ").length > 2
-                    ? user.full_name.split(" ")[
-                        user.full_name.split(" ").length - 2
-                      ] +
-                      " " +
-                      user.full_name.split(" ")[
-                        user.full_name.split(" ").length - 1
-                      ]
-                    : user.full_name.split(" ")[
-                        user.full_name.split(" ").length - 1
-                      ],
+                  user && user.full_name
+                    ? user.full_name.split(" ").length > 2
+                      ? user.full_name.split(" ")[
+                          user.full_name.split(" ").length - 2
+                        ] +
+                        " " +
+                        user.full_name.split(" ")[
+                          user.full_name.split(" ").length - 1
+                        ]
+                      : user.full_name.split(" ")[
+                          user.full_name.split(" ").length - 1
+                        ]
+                    : "User",
                 username: user.username ?? user.id,
                 gender: user.gender,
               },

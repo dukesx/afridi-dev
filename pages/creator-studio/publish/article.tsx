@@ -19,7 +19,6 @@ import React, { useEffect, useState } from "react";
 import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
 import AppWrapper from "../../../components/global/wrapper";
 import ArticleComposeSidebar from "../../../components/studio/publish/article/compose/article-compose-sidebar";
-
 const ArticleComposer = () => {
   //
   var ref: any = React.createRef();
@@ -28,6 +27,7 @@ const ArticleComposer = () => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
   const { colorScheme } = useMantineColorScheme();
   const [drawer, setDrawer] = useState(false);
+
   //
 
   //
@@ -41,7 +41,6 @@ const ArticleComposer = () => {
   //
 
   //
-
   return media == false ? (
     <AppWrapper noPadding activeHeaderKey="" size={1400}>
       <NextSeo nofollow noindex />
