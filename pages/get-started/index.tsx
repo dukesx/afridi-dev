@@ -47,6 +47,7 @@ const GetStarted = () => {
               }}
               leftIcon={
                 <Image
+                  priority
                   src={GithubLogo}
                   height={22}
                   width={22}
@@ -69,6 +70,7 @@ const GetStarted = () => {
               }}
               leftIcon={
                 <Image
+                  priority
                   src={GitlabLogo}
                   height={29}
                   width={29}
@@ -84,6 +86,7 @@ const GetStarted = () => {
               variant="white"
               leftIcon={
                 <Image
+                  priority
                   src={GoogleLogo}
                   height={23}
                   width={23}
@@ -112,6 +115,7 @@ const GetStarted = () => {
               }}
               leftIcon={
                 <Image
+                  priority
                   src={DiscordLogo}
                   height={25}
                   width={25}
@@ -134,6 +138,7 @@ const GetStarted = () => {
               variant="white"
               leftIcon={
                 <Image
+                  priority
                   src={SlackLogo}
                   height={20}
                   width={20}
