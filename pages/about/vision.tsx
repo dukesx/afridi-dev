@@ -26,7 +26,7 @@ const Vision = () => {
   return (
     <AppWrapper size="md" activeHeaderKey="">
       <NextSeo
-        title="Our Vision"
+        title="Our Vision | Afridi.dev"
         description="The Vision and Story Behind Afridi.dev"
         canonical="https://afridi.dev/about/vision"
         openGraph={{
@@ -36,17 +36,17 @@ const Vision = () => {
           site_name: "Afridi.dev",
           images: [
             {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-og-about-vision.png",
+              width: 1200,
+              height: 630,
+              alt: "About Vision - Afridi.dev",
+              type: "image/jpeg",
+            },
+            {
               url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
               width: 800,
               height: 800,
               alt: "Afridi.DEV Cover Image - Light",
-              type: "image/jpeg",
-            },
-            {
-              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-dark.png",
-              width: 800,
-              height: 800,
-              alt: "Afridi.DEV Cover Image - Dark",
               type: "image/jpeg",
             },
           ],

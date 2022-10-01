@@ -16,6 +16,7 @@ import {
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { IconArrowRight, IconArrowsShuffle, IconDice } from "@tabler/icons";
+import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import HorizontalGridCard, {
   CardStyle,
@@ -63,7 +64,6 @@ const DazzleMe = () => {
         .range(rand, rand)
         .single();
 
-
       setArticle(data);
       setLoading(false);
     }
@@ -80,6 +80,33 @@ const DazzleMe = () => {
   //
   return (
     <AppWrapper activeHeaderKey="dazzle-me">
+      <NextSeo
+        title="Dazzle Me | Afridi.dev"
+        description="Generate Random Articles, for the busy Devs"
+        canonical="https://afridi.dev/dazzle-me"
+        openGraph={{
+          url: "https://afridi.dev/dazzle-me",
+          title: "Dazzle Me | Afridi.dev",
+          description: "Generate Random Articles, for the busy Devs",
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-og-dazzle-me.png",
+              width: 1200,
+              height: 630,
+              alt: "Dazzle Me - Afridi.dev",
+              type: "image/jpeg",
+            },
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
+              width: 800,
+              height: 800,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+      />
       <Card className="h-screen" withBorder>
         <Center className="h-full w-full items-center justify-center flex flex-col">
           <Stack className="mb-[3%]" align="center" spacing={0}>

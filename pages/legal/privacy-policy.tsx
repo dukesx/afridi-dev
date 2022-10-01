@@ -13,7 +13,7 @@ const PrivacyPolicy = () => {
   return (
     <AppWrapper size="md" activeHeaderKey="">
       <NextSeo
-        title="Privacy Policy"
+        title="Privacy Policy | Afridi.dev"
         description="Privacy Policy on Afridi.dev"
         canonical="https://afridi.dev/legal/privacy-policy"
         openGraph={{

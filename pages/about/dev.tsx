@@ -8,7 +8,7 @@ const AboutDev = () => {
   return (
     <AppWrapper size="md" activeHeaderKey="">
       <NextSeo
-        title="About the DEV"
+        title="About the DEV | Afridi.dev"
         description="About the DEV behind Afridi.dev"
         canonical="https://afridi.dev/about/dev"
         openGraph={{
@@ -18,10 +18,10 @@ const AboutDev = () => {
           site_name: "Afridi.dev",
           images: [
             {
-              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-light.png",
-              width: 800,
-              height: 800,
-              alt: "Afridi.DEV Cover Image - Light",
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-og-about-dev.png",
+              width: 1200,
+              height: 630,
+              alt: "About DEV - Afridi.dev",
               type: "image/jpeg",
             },
             {

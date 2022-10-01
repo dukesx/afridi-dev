@@ -12,7 +12,7 @@ const Terms = () => {
   return (
     <AppWrapper size="md" activeHeaderKey="">
       <NextSeo
-        title="Terms & Conditions"
+        title="Terms & Conditions | Afridi.dev"
         description="Legal Terms on Afridi.dev"
         canonical="https://afridi.dev/legal/terms"
         openGraph={{

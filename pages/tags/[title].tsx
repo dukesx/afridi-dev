@@ -116,33 +116,6 @@ const ArticleTagPage = ({ taga, articles }) => {
 
   return taga == null ? (
     <AppWrapper size="sm" activeHeaderKey="">
-      {taga && (
-        <NextSeo
-          title={`[TAG]: ${taga.title}`}
-          description={`Follow to read more on ${taga.title} based articles `}
-          canonical={`https://afridi.dev/tags/${taga.title}`}
-          openGraph={{
-            url: `https://afridi.dev/tags/${taga.title}`,
-            title: `[TAG]: ${taga.title}`,
-            description: `Follow to read more on ${taga.title} based articles `,
-            site_name: "Afridi.dev",
-            images: [
-              {
-                url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-og-tags.png",
-                width: 1200,
-                height: 630,
-                alt: "Afridi.DEV Cover Image - Light",
-                type: "image/jpeg",
-              },
-            ],
-          }}
-          twitter={{
-            handle: "@afridi.dev",
-            site: "@site",
-            cardType: "summary_large_image",
-          }}
-        />
-      )}
       <Stack>
         <EmptyPlaceholder
           title="Sorry! no articles for this tag yet"
@@ -163,6 +136,31 @@ const ArticleTagPage = ({ taga, articles }) => {
     </AppWrapper>
   ) : (
     <AppWrapper size="lg" activeHeaderKey="tags">
+      <NextSeo
+        title={`[TAG]: ${taga.title}`}
+        description={`Follow to read more on ${taga.title} based articles `}
+        canonical={`https://afridi.dev/tags/${taga.title}`}
+        openGraph={{
+          url: `https://afridi.dev/tags/${taga.title}`,
+          title: `[TAG]: ${taga.title}`,
+          description: `Follow to read more on ${taga.title} based articles `,
+          site_name: "Afridi.dev",
+          images: [
+            {
+              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-og-tags.png",
+              width: 1200,
+              height: 630,
+              alt: "Afridi.DEV Cover Image - Light",
+              type: "image/jpeg",
+            },
+          ],
+        }}
+        twitter={{
+          handle: "@afridi.dev",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
       <Stack mt={50} align="center">
         <Avatar
           className="rounded-full block relative"
