@@ -249,7 +249,7 @@ const CreatorsStudio = ({ authored }) => {
                             `);
 
                             if (!error) {
-                              const { error: decreaseAuthorCount } =
+                              const { error: decreaseAuthorCountError } =
                                 await supabaseClient
                                   .from("authors")
                                   .update({
@@ -263,7 +263,7 @@ const CreatorsStudio = ({ authored }) => {
                                     data[0].authors.id
                                   );
 
-                              if (!decreaseAuthorCount) {
+                              if (!decreaseAuthorCountError) {
                                 const fetcher = await fetch("/api/revalidate", {
                                   method: "POST",
                                   headers: {
@@ -271,7 +271,10 @@ const CreatorsStudio = ({ authored }) => {
                                     accept: "application/json",
                                   },
                                   body: JSON.stringify({
-                                    paths: [`/author/${data[0].author_id}`],
+                                    paths: [
+                                      `/author/${data[0].author_id}`,
+                                      "/",
+                                    ],
                                   }),
                                 });
 

@@ -290,6 +290,7 @@ const ArticleComposeSidebar = ({
                 paths: [
                   `/article/${articleData[0].id}`,
                   `/author/${articleData[0].author_id}`,
+                  "/",
                 ],
               }),
             });

@@ -30,7 +30,7 @@ import {
 import Link from "next/link";
 import { Fragment } from "react";
 import { supabase } from "../../../utils/supabaseClient";
-import AfridiImage from "../../global/afridi-image";
+import AfridiImage, { AfridiImageProps } from "../../global/afridi-image";
 import { AfridiDevArticle } from "./large-article-card";
 
 export enum CardStyle {
@@ -51,6 +51,10 @@ interface HorizontalGridCardProps {
   withFooter?: boolean | false;
   titleClamp?: number;
   notLocal?: boolean;
+  coverProps?: {
+    priority?: boolean;
+    layout?: "fill" | "intrinsic" | "fixed" | "responsive";
+  };
 }
 
 const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
@@ -65,6 +69,7 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
   withFooter,
   appreciations,
   withCover,
+  coverProps,
 }) => {
   const awards = [
     {
@@ -98,6 +103,9 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
           style={{
             borderRadius: theme.radius.sm,
           }}
+          
+          {...coverProps}
+          
         />
       ) : null}
       <Stack

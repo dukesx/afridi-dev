@@ -62,7 +62,7 @@ export const getFeedArticles = async ({
       )
       .eq("tags.authors.id", user.id)
       .limit(10)
-      .order("created_at", {
+      .order("views", {
         ascending: false,
       })
       .range(data ? data.length : 0, data ? data.length + 9 : 9);
@@ -132,9 +132,6 @@ export const getFeedArticles = async ({
         ascending: false,
       })
       .limit(10)
-      .order("created_at", {
-        ascending: false,
-      })
       .range(data ? data.length : 0, data ? data.length + 9 : 9);
 
     //
