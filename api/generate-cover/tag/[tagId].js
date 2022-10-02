@@ -3,15 +3,24 @@
 // import puppeteer from "puppeteer";
 import { renderToString } from "react-dom/server";
 import createEmotionServer from "@emotion/server/create-instance";
-import DynamicTagTitleCover from "../../components/global/dynamic-covers/tag-title";
 import { MantineProvider } from "@mantine/core";
-import { appCache } from "../../utils/cache";
 import chromium from "chrome-aws-lambda";
+import DynamicTagTitleCover from "../../../components/global/dynamic-covers/tag-title";
+import { appCache } from "../../../utils/cache";
+import { supabase } from "../../../utils/supabaseClient";
 
 export default async function GenerateCustomCoverRoute(req, res) {
-  const { Node } = req.body;
+  const { tagId } = req.query;
+
+  const { error, data } = await supabase
+    .from("tags")
+    .select()
+    .eq("title", tagId);
 
   //Chrome
+  await chromium.font(
+    "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro&display=swap"
+  );
   const browser = await chromium.puppeteer.launch({
     args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
     defaultViewport: chromium.defaultViewport,
@@ -21,7 +30,7 @@ export default async function GenerateCustomCoverRoute(req, res) {
   });
 
   const page = await browser.newPage();
-  page.setViewport({ width: 1200, height: 630 });
+  page.setViewport({ width: 1200, height: 600, deviceScaleFactor: 2 });
 
   let element = (
     <MantineProvider
@@ -32,10 +41,15 @@ export default async function GenerateCustomCoverRoute(req, res) {
         fontFamilyMonospace: "Monaco, Courier, monospace",
         headings: { fontFamily: "Inter, sans-serif" },
         primaryColor: "cyan",
+        // colorScheme: "dark",
       }}
       emotionCache={appCache}
     >
-      <DynamicTagTitleCover />
+      <DynamicTagTitleCover
+        // colorScheme="dark"
+        title={data && data.length > 0 ? data[0].title : "Random"}
+        color={data && data.length > 0 ? data[0].color : "gray"}
+      />
     </MantineProvider>
   );
   const { extractCriticalToChunks, constructStyleTagsFromChunks } =
@@ -52,7 +66,6 @@ export default async function GenerateCustomCoverRoute(req, res) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>My site</title>
       ${styles}
   </head>
   <body>
@@ -63,7 +76,8 @@ export default async function GenerateCustomCoverRoute(req, res) {
   </html>
     `
   );
-  const screenShotBuffer = await page.screenshot();
+
+  const screenShotBuffer = await page.screenshot({ type: "webp" });
 
   res.writeHead(200, {
     "Content-Type": "image/png",
@@ -71,20 +85,4 @@ export default async function GenerateCustomCoverRoute(req, res) {
   });
 
   res.end(screenShotBuffer);
-
-  //   res.status(200).setHeader("Content-Type", "text/html").send(`<!DOCTYPE html>
-  // <html lang="en">
-  // <head>
-  //     <meta charset="UTF-8">
-  //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  //     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  //     <title>My site</title>
-  //     ${styles}
-  // </head>
-  // <body>
-  //     <div id="root">${html}</div>
-
-  //     <script src="./bundle.js"></script>
-  // </body>
-  // </html>`);
 }
