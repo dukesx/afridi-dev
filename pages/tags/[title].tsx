@@ -147,7 +147,7 @@ const ArticleTagPage = ({ taga, articles }) => {
           site_name: "Afridi.dev",
           images: [
             {
-              url: "https://ik.imagekit.io/afrididotdev/tr:w-800/afridi-dev-og-tags.png",
+              url: `https://https://afridi-dev-git-supabase-v2-upgrade-dukesx.vercel.app/generateCover/tag/${taga.title}`,
               width: 1200,
               height: 630,
               alt: "Afridi.DEV Cover Image - Light",

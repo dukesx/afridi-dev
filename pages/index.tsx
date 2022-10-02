@@ -7,11 +7,13 @@ import {
   Grid,
   Group,
   Loader,
+  MantineProvider,
   Navbar,
   ScrollArea,
   Stack,
   Text,
   ThemeIcon,
+  Title,
   useMantineTheme,
 } from "@mantine/core";
 import { forwardRef, Fragment, Suspense, useEffect, useState } from "react";
@@ -32,6 +34,9 @@ import LandingSidebarItem from "../components/landing/sidebar/landing-sidebar-it
 import CreatorStudioIcon from "../components/global/creator-studio-icon";
 import SquareHorizontalAuthorWidget from "../components/author/widgets/square-horizontal-author";
 import { NextSeo } from "next-seo";
+import ReactDomServer, { renderToString } from "react-dom/server";
+import DynamicTagTitleCover from "../components/global/dynamic-covers/tag-title";
+import { appCache } from "../utils/cache";
 
 const LandingPage = ({ feedData, feedDataCount }) => {
   const theme = useMantineTheme();
@@ -80,9 +85,23 @@ const LandingPage = ({ feedData, feedDataCount }) => {
     }
   };
 
+  const getCover = async () => {
+    var fetcher = await fetch("/api/getDynamicCover", {
+      method: "POST",
+      body: JSON.stringify({
+        node: "",
+      }),
+    });
+
+    var res = await fetcher.json();
+
+    console.log(res);
+  };
+
   useEffect(() => {
     fetchAuthors();
     fetchMostFollowedTags();
+    getCover();
   }, []);
 
   const largeCardClass = createStyles((theme, _params, getRef) => ({
