@@ -1,15 +1,12 @@
-//@ts-nocheck
-// import { NextApiRequest, NextApiResponse } from "next";
-// import puppeteer from "puppeteer";
 import { renderToString } from "react-dom/server";
 import createEmotionServer from "@emotion/server/create-instance";
 import { MantineProvider } from "@mantine/core";
 import chromium from "chrome-aws-lambda";
-import DynamicTagTitleCover from "../../../components/global/dynamic-covers/tag-title";
-import { appCache } from "../../../utils/cache";
-import { supabase } from "../../../utils/supabaseClient";
+import { supabase } from "../../../../utils/supabaseClient";
+import DynamicTagTitleCover from "../../../../components/global/dynamic-covers/tag-title";
+import { appCache } from "../../../../utils/cache";
 
-export default async function GenerateCustomCoverRoute(req, res) {
+export default async function generateTagCover(req, res) {
   const { tagId } = req.query;
 
   const { error, data } = await supabase
@@ -77,7 +74,7 @@ export default async function GenerateCustomCoverRoute(req, res) {
     `
   );
 
-  const screenShotBuffer = await page.screenshot({ type: "webp" });
+  const screenShotBuffer = await page.screenshot();
 
   res.writeHead(200, {
     "Content-Type": "image/png",
