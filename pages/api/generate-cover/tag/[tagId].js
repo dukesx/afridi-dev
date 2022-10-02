@@ -44,7 +44,7 @@ export default async function generateTagCover(req, res) {
   const styles = constructStyleTagsFromChunks(chunks);
 
   const fetcher = await fetch(
-    "http://localhost:4000/upload/image/generate-screenshot",
+    `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-screenshot`,
     {
       method: "POST",
       headers: {
