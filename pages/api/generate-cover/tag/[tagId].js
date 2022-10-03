@@ -64,8 +64,9 @@ export default async function generateTagCover(req, res) {
     if (result.buffer) {
       var screenShotBuffer = Buffer.from(result.buffer.data);
       res.writeHead(200, {
-        "Content-Type": "image/png",
+        "Content-Type": "image/webp",
         "Content-Length": Buffer.byteLength(screenShotBuffer),
+        "Cache-Control": "s-maxage=3600, stale-while-revalidate",
       });
 
       res.end(screenShotBuffer);
