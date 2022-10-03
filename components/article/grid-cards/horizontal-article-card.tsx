@@ -29,6 +29,7 @@ import {
 } from "@tabler/icons";
 import Link from "next/link";
 import { Fragment } from "react";
+import { ShowUnauthorizedModal } from "../../../utils/helpers";
 import { supabase } from "../../../utils/supabaseClient";
 import AfridiImage, { AfridiImageProps } from "../../global/afridi-image";
 import { AfridiDevArticle } from "./large-article-card";
@@ -180,30 +181,44 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                   />
                 </ActionIcon>
               </Tooltip>
-            ) : session && bookmarks ? (
-              <Tooltip label="bookmark this">
-                <ActionIcon
-                  onClick={async () => {
-                    const { error } = await supabase.from("bookmarks").insert({
-                      article_id: data.id,
-                      author_id: session.user.id,
-                    });
+            ) : (
+              <Fragment>
+                <Tooltip label="bookmark this">
+                  <ActionIcon
+                    onClick={async () => {
+                      if (session) {
+                        const { error } = await supabase
+                          .from("bookmarks")
+                          .insert({
+                            article_id: data.id,
+                            author_id: session.user.id,
+                          });
 
-                    if (!error) {
-                      var bookmarksArr = [...bookmarks];
-                      bookmarksArr.push(data.id);
-                      setBookmarks(bookmarksArr);
-                    }
-                  }}
-                  color="gray"
-                  size="md"
-                  variant="light"
-                  radius="xl"
-                >
-                  <IconBookmark fill={"transparent"} size={18} />
-                </ActionIcon>
-              </Tooltip>
-            ) : null}
+                        if (!error) {
+                          var bookmarksArr = [...bookmarks];
+                          bookmarksArr.push(data.id);
+                          setBookmarks(bookmarksArr);
+                        }
+                      } else {
+                        ShowUnauthorizedModal();
+                      }
+                    }}
+                    color="gray"
+                    size="md"
+                    variant="light"
+                    radius="xl"
+                  >
+                    <IconBookmark fill={"transparent"} size={18} />
+                  </ActionIcon>
+                </Tooltip>
+
+                <Divider
+                  className="h-[14px] align-middle my-auto"
+                  orientation="vertical"
+                  size={1}
+                />
+              </Fragment>
+            )}
             {appreciations &&
               appreciations.length > 0 &&
               bookmarks &&
@@ -240,17 +255,18 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
               </Tooltip>
             ) : null}
 
+            {data.read_time && appreciations && appreciations.length > 0 && (
+              <Divider
+                className="h-[14px] align-middle my-auto"
+                orientation="vertical"
+                size={1}
+              />
+            )}
+
             {data.read_time ? (
-              <Fragment>
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={1}
-                />
-                <Text color="dimmed" size="xs">
-                  {data.read_time} read
-                </Text>
-              </Fragment>
+              <Text color="dimmed" size="xs">
+                {data.read_time} read
+              </Text>
             ) : null}
           </Group>
         ) : null}

@@ -52,7 +52,7 @@ export const ShowErrorModal = (
 
 export const ShowUnauthorizedModal = (title?: any, description?: any) => {
   openModal({
-    title: "Unauthorised",
+    title: "Unauthorized",
     children: (
       <Stack spacing={4} align="center">
         <Image src={Unauthorized} height={200} width={200} alt="" />
