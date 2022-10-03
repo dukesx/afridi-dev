@@ -185,9 +185,7 @@ const Article = ({ article, tags }) => {
               },
               images: [
                 {
-                  url: `https://ik.imagekit.io/afrididotdev/tr:w-400${
-                    article.cover ?? ""
-                  }`,
+                  url: `https://afridi-dev-git-supabase-v2-upgrade-dukesx.vercel.app/api/generate-cover/article/${article.id}`,
                   width: 400,
                   height: 400,
                   alt: "Cover of article",

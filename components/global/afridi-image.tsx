@@ -43,8 +43,6 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
     },
   }));
 
-  const { classes } = AfridiImageClasses();
-  const { colorScheme } = useMantineColorScheme();
   return (
     // <div
     //   className={
@@ -72,12 +70,11 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
       <Image
         priority={priority ? true : false}
         className={
-          (imageClassName ? imageClassName : "") +
-          " object-cover w-full rounded-sm"
+          (imageClassName ? imageClassName : "") + " w-full rounded-sm"
         }
         alt="article's cover image"
         src={path && path.replaceAll("/", "")}
-        layout={fillImage ? "fill" : isResponsive ? "responsive" : "fixed"}
+        layout={fillImage ? "fill" : isResponsive ? "responsive" : "intrinsic"}
         width={fillImage ? false : width}
         height={fillImage ? false : height}
         quality={75}
@@ -87,6 +84,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         placeholder={cover_base_64 ? "blur" : "empty"}
         blurDataURL={cover_base_64 ?? null}
         onClick={onClick ?? null}
+        objectFit="cover"
         style={{
           ...style,
         }}

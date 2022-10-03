@@ -255,6 +255,19 @@ const ArticleComposeSidebar = ({
                     article_id: articleData[0].id,
                   });
               }
+
+              const fetcher = await fetch("/api/revalidate", {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                  accept: "application/json",
+                },
+                body: JSON.stringify({
+                  path: `/tags/${mapped}`,
+                }),
+              });
+
+              const returned = await fetcher.json();
             });
 
             const { error } = await supabaseClient
@@ -291,16 +304,15 @@ const ArticleComposeSidebar = ({
                   `/article/${articleData[0].id}`,
                   `/author/${articleData[0].author_id}`,
                   "/",
+                  "/tags",
                 ],
               }),
             });
 
             const returned = await fetcher.json();
 
-            if (returned && returned.revalidated) {
-              setCover(null);
-              router.push("/article/" + articleData[0].id);
-            }
+            setCover(null);
+            router.push("/article/" + articleData[0].id);
           }
         }
       })}

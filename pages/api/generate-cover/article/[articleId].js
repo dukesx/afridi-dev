@@ -1,20 +1,37 @@
 import { renderToString } from "react-dom/server";
 import createEmotionServer from "@emotion/server/create-instance";
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, ColorSchemeProvider } from "@mantine/core";
 import { supabase } from "../../../../utils/supabaseClient";
-import DynamicTagTitleCover from "../../../../components/global/dynamic-covers/tag-title";
+import DynamicArticleCover from "../../../../components/global/dynamic-covers/article";
 import { appCache } from "../../../../utils/cache";
 
 export default async function generateTagCover(req, res) {
-  const { tagId } = req.query;
+  const { articleId } = req.query;
 
   const { error, data } = await supabase
-    .from("tags")
-    .select()
-    .eq("title", tagId);
+    .from("articles")
+    .select(
+      `
+        title,
+        views,
+        description,
+        cover,
+         authors!articles_author_id_fkey (
+            full_name,
+            dp,
+            username
+        ),
+        tags (
+        title,
+        color
+        )
+        `
+    )
+    .eq("id", articleId);
 
   //Chrome
 
+  console.log(data);
   if (data && data.length > 0) {
     let element = (
       <MantineProvider
@@ -29,10 +46,20 @@ export default async function generateTagCover(req, res) {
         }}
         emotionCache={appCache}
       >
-        <DynamicTagTitleCover
+        <DynamicArticleCover
           colorScheme="light"
           title={data && data.length > 0 ? data[0].title : "Random"}
-          color={data && data.length > 0 ? data[0].color : "gray"}
+          author={{
+            full_name: data[0].authors.full_name,
+            cover: data[0].authors.dp,
+            username: data[0].authors.username,
+          }}
+          description={
+            data && data.length > 0 ? data[0].description : "No Description"
+          }
+          tags={data[0].tags}
+          views={data[0].views}
+          cover={data[0].cover}
         />
       </MantineProvider>
     );
@@ -45,7 +72,7 @@ export default async function generateTagCover(req, res) {
     const styles = constructStyleTagsFromChunks(chunks);
 
     const fetcher = await fetch(
-      `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-screenshot`,
+      `http://localhost:4000/upload/image/generate-screenshot`,
       {
         method: "POST",
         headers: {
