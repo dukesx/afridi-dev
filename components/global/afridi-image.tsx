@@ -74,7 +74,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         }
         alt="article's cover image"
         src={path && path.replaceAll("/", "")}
-        layout={fillImage ? "fill" : isResponsive ? "responsive" : "intrinsic"}
+        layout={fillImage ? "fill" : isResponsive ? "responsive" : "fixed"}
         width={fillImage ? false : width}
         height={fillImage ? false : height}
         quality={75}
