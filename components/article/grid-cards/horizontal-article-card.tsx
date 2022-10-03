@@ -146,47 +146,40 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
         {withFooter ? (
           <Group spacing="xs">
             {session && bookmarks && bookmarks.includes(data.id) ? (
-              <Fragment>
-                <Tooltip label="bookmarked">
-                  <ActionIcon
-                    onClick={async () => {
-                      const { error } = await supabase
-                        .from("bookmarks")
-                        .delete()
-                        .match({
-                          author_id: session.user.id,
-                          article_id: data.id,
-                        });
+              <Tooltip label="bookmarked">
+                <ActionIcon
+                  onClick={async () => {
+                    const { error } = await supabase
+                      .from("bookmarks")
+                      .delete()
+                      .match({
+                        author_id: session.user.id,
+                        article_id: data.id,
+                      });
 
-                      if (!error) {
-                        var bookmarksArr = [...bookmarks];
-                        var newBookmarks = bookmarksArr.filter(
-                          (mapped) => mapped !== data.id
-                        );
-                        setBookmarks(newBookmarks);
-                      }
-                    }}
-                    color="gray"
-                    size="md"
-                    variant="light"
-                    radius="xl"
-                  >
-                    <IconBookmark
-                      fill={
-                        colorScheme == "dark"
-                          ? theme.colors.gray[6]
-                          : theme.colors.gray[4]
-                      }
-                      size={18}
-                    />
-                  </ActionIcon>
-                </Tooltip>
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={2}
-                />
-              </Fragment>
+                    if (!error) {
+                      var bookmarksArr = [...bookmarks];
+                      var newBookmarks = bookmarksArr.filter(
+                        (mapped) => mapped !== data.id
+                      );
+                      setBookmarks(newBookmarks);
+                    }
+                  }}
+                  color="gray"
+                  size="md"
+                  variant="light"
+                  radius="xl"
+                >
+                  <IconBookmark
+                    fill={
+                      colorScheme == "dark"
+                        ? theme.colors.gray[6]
+                        : theme.colors.gray[4]
+                    }
+                    size={18}
+                  />
+                </ActionIcon>
+              </Tooltip>
             ) : session && bookmarks ? (
               <Tooltip label="bookmark this">
                 <ActionIcon
@@ -211,6 +204,16 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                 </ActionIcon>
               </Tooltip>
             ) : null}
+            {appreciations &&
+              appreciations.length > 0 &&
+              bookmarks &&
+              bookmarks.length > 0 && (
+                <Divider
+                  className="h-[14px] align-middle my-auto"
+                  orientation="vertical"
+                  size={1}
+                />
+              )}
 
             {appreciations && appreciations.length > 0 ? (
               <Tooltip
@@ -236,9 +239,23 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                 </Group>
               </Tooltip>
             ) : null}
+
+            {data.read_time ? (
+              <Fragment>
+                <Divider
+                  className="h-[14px] align-middle my-auto"
+                  orientation="vertical"
+                  size={1}
+                />
+                <Text color="dimmed" size="xs">
+                  {data.read_time} read
+                </Text>
+              </Fragment>
+            ) : null}
           </Group>
         ) : null}
       </Stack>
+
       {data.editors_pick ? (
         <Fragment>
           <Divider

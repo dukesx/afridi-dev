@@ -37,6 +37,7 @@ import { NextSeo } from "next-seo";
 import ReactDomServer, { renderToString } from "react-dom/server";
 import DynamicTagTitleCover from "../components/global/dynamic-covers/tag-title";
 import { appCache } from "../utils/cache";
+import { secondsToHms } from "../utils/helpers";
 
 const LandingPage = ({ feedData, feedDataCount }) => {
   const theme = useMantineTheme();
@@ -297,7 +298,14 @@ const LandingPage = ({ feedData, feedDataCount }) => {
             </Navbar.Section>
           </Navbar>
 
-          <Grid.Col span={12} sm={12} xs={12} md={12} lg={7}>
+          <Grid.Col
+            className="px-0 sm:px-[12px]"
+            span={12}
+            sm={12}
+            xs={12}
+            md={12}
+            lg={7}
+          >
             <div className="mx-0">
               <Suspense fallback={<FeedLoader />}>
                 <LandingFeed
@@ -360,6 +368,7 @@ export const getStaticProps = async (ctx) => {
       `
                   id,
                   title,
+                  read_time,
                   description,
                   cover,
                   editors_pick,

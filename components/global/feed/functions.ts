@@ -36,6 +36,7 @@ export const getFeedArticles = async ({
                   description,
                   cover,
                   editors_pick,
+                  read_time,
                   views,
                   authors!articles_author_id_fkey (
                     dp,
@@ -108,6 +109,7 @@ export const getFeedArticles = async ({
                   title,
                   views,
                   description,
+                  read_time,
                   cover,
                   editors_pick,
                   authors!articles_author_id_fkey (

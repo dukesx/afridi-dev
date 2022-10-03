@@ -23,6 +23,7 @@ export type AfridiDevArticle = {
   article_views?: Array<string>;
   views: number;
   authors: AfridiDevAuthor;
+  read_time?: string;
   tags?: Array<any>;
   co_authors_articles: [
     {

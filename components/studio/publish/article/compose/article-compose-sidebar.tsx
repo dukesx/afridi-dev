@@ -43,6 +43,7 @@ import AfridiImageUploader, {
   ImageUploaderType,
 } from "../../../../global/image_uploader";
 import slugify from "slugify";
+import { secondsToHms } from "../../../../../utils/helpers";
 //
 
 interface ArticleComposerSidebarProps {
@@ -183,6 +184,10 @@ const ArticleComposeSidebar = ({
               cover: val.cover,
               author_id: session.user.id,
               body: markdown,
+              read_time: secondsToHms(
+                (markdown.match(/(?!\")\b[a-zA-Z0-9]+\b(?!\")/g).length / 265) *
+                  60
+              ),
             })
             .select(
               `

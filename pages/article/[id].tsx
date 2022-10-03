@@ -15,10 +15,11 @@ import {
   Skeleton,
   Stack,
   Text,
+  ThemeIcon,
   Title,
   useMantineTheme,
 } from "@mantine/core";
-import { IconNews } from "@tabler/icons";
+import { IconClock, IconNews } from "@tabler/icons";
 import { Fragment, useEffect, useRef, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
@@ -162,7 +163,7 @@ const Article = ({ article, tags }) => {
   };
 
   return (
-    <AppWrapper activeHeaderKey="" size="xl">
+    <AppWrapper noPadding activeHeaderKey="" size="xl">
       {article ? (
         <Fragment>
           <NextSeo
@@ -235,7 +236,7 @@ const Article = ({ article, tags }) => {
           />
         </Fragment>
       ) : null}
-      <Container size="lg">
+      <Container className="px-0 sm:px-[12px]" size="lg">
         <Stack spacing="xs" className={classes.mainContent}>
           <Skeleton
             className="w-full rounded-none sm:rounded-lg mx-auto h-full sm:h-full lg:h-[550px] xl:max-h-[600px] sm:max-h-[600px]"
@@ -257,7 +258,7 @@ const Article = ({ article, tags }) => {
             ) : null}
           </Skeleton>
 
-          <Center className="xl:h-full xs:items-baseline xs:justify-start">
+          <Center className="xl:h-full xs:items-baseline xs:justify-start px-[16px] sm:px-0">
             <Stack className="my-auto w-full">
               <Title
                 mt="xl"
@@ -286,20 +287,22 @@ const Article = ({ article, tags }) => {
                 )}
               </Text>
 
-              <Group mt="sm">
-                {article &&
-                  article.tags.map((mapped) => (
-                    <Badge
-                      variant="dot"
-                      component={NextLink}
-                      href={`/tags/${mapped.title}`}
-                      className="capitalize font-semibold cursor-pointer"
-                      color={mapped.color ?? "gray"}
-                      key={mapped.color + mapped.title}
-                    >
-                      {mapped.title}
-                    </Badge>
-                  ))}
+              <Group mr="xs" position="apart" mt="sm">
+                <Group>
+                  {article &&
+                    article.tags.map((mapped) => (
+                      <Badge
+                        variant="dot"
+                        component={NextLink}
+                        href={`/tags/${mapped.title}`}
+                        className="capitalize font-semibold cursor-pointer"
+                        color={mapped.color ?? "gray"}
+                        key={mapped.color + mapped.title}
+                      >
+                        {mapped.title}
+                      </Badge>
+                    ))}
+                </Group>
               </Group>
             </Stack>
           </Center>
@@ -327,7 +330,7 @@ const Article = ({ article, tags }) => {
             />
           </Aside.Section>
         </Aside>
-        <Box mt={50} className={classes.mainContent}>
+        <Box mt={50} className={classes.mainContent + " px-[12px]"}>
           <MarkDownRenderer>{article && article.body}</MarkDownRenderer>
         </Box>
         <Divider />
@@ -425,6 +428,7 @@ export const getStaticProps = async (ctx) => {
         id,
         title,
         description,
+        read_time,
         cover,
         updated_at,
         body,
