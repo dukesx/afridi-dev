@@ -72,7 +72,7 @@ export default async function generateTagCover(req, res) {
     const styles = constructStyleTagsFromChunks(chunks);
 
     const fetcher = await fetch(
-      `http://localhost:4000/upload/image/generate-screenshot`,
+      `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/generate-screenshot`,
       {
         method: "POST",
         headers: {
@@ -91,7 +91,8 @@ export default async function generateTagCover(req, res) {
     if (result.buffer) {
       var screenShotBuffer = Buffer.from(result.buffer.data);
       res.writeHead(200, {
-        "Content-Type": "image/png",
+        "Content-Type": "image/webp",
+        "Cache-Control": "s-maxage=3600, stale-while-revalidate",
         "Content-Length": Buffer.byteLength(screenShotBuffer),
       });
 
