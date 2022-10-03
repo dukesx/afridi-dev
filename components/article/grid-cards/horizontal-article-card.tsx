@@ -147,40 +147,47 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
         {withFooter ? (
           <Group spacing="xs">
             {session && bookmarks && bookmarks.includes(data.id) ? (
-              <Tooltip label="bookmarked">
-                <ActionIcon
-                  onClick={async () => {
-                    const { error } = await supabase
-                      .from("bookmarks")
-                      .delete()
-                      .match({
-                        author_id: session.user.id,
-                        article_id: data.id,
-                      });
+              <Fragment>
+                <Tooltip label="bookmarked">
+                  <ActionIcon
+                    onClick={async () => {
+                      const { error } = await supabase
+                        .from("bookmarks")
+                        .delete()
+                        .match({
+                          author_id: session.user.id,
+                          article_id: data.id,
+                        });
 
-                    if (!error) {
-                      var bookmarksArr = [...bookmarks];
-                      var newBookmarks = bookmarksArr.filter(
-                        (mapped) => mapped !== data.id
-                      );
-                      setBookmarks(newBookmarks);
-                    }
-                  }}
-                  color="gray"
-                  size="md"
-                  variant="light"
-                  radius="xl"
-                >
-                  <IconBookmark
-                    fill={
-                      colorScheme == "dark"
-                        ? theme.colors.gray[6]
-                        : theme.colors.gray[4]
-                    }
-                    size={18}
-                  />
-                </ActionIcon>
-              </Tooltip>
+                      if (!error) {
+                        var bookmarksArr = [...bookmarks];
+                        var newBookmarks = bookmarksArr.filter(
+                          (mapped) => mapped !== data.id
+                        );
+                        setBookmarks(newBookmarks);
+                      }
+                    }}
+                    color="gray"
+                    size="md"
+                    variant="light"
+                    radius="xl"
+                  >
+                    <IconBookmark
+                      fill={
+                        colorScheme == "dark"
+                          ? theme.colors.gray[6]
+                          : theme.colors.gray[4]
+                      }
+                      size={18}
+                    />
+                  </ActionIcon>
+                </Tooltip>
+                <Divider
+                  className="h-[14px] align-middle my-auto"
+                  orientation="vertical"
+                  size={1}
+                />
+              </Fragment>
             ) : (
               <Fragment>
                 <Tooltip label="bookmark this">
@@ -219,16 +226,6 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                 />
               </Fragment>
             )}
-            {appreciations &&
-              appreciations.length > 0 &&
-              bookmarks &&
-              bookmarks.length > 0 && (
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={1}
-                />
-              )}
 
             {appreciations && appreciations.length > 0 ? (
               <Tooltip
