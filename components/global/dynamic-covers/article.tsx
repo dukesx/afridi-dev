@@ -67,6 +67,7 @@ const DynamicArticleCover = ({
               style={{
                 textTransform: "capitalize",
                 lineHeight: 1.3,
+                maxWidth: 620,
               }}
               color="blue"
               ml={50}
@@ -80,7 +81,7 @@ const DynamicArticleCover = ({
 
             <Text
               style={{
-                maxWidth: 670,
+                maxWidth: 620,
               }}
               color="dimmed"
               mr="auto"
@@ -92,9 +93,9 @@ const DynamicArticleCover = ({
             </Text>
           </Stack>
           <ThemeIcon
-            // radius="xl"
             className={classes.avatar}
             size={400}
+            mr={50}
             variant="light"
             style={{
               position: "relative",
