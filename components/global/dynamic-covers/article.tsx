@@ -51,7 +51,6 @@ const DynamicArticleCover = ({
         radius={0}
         style={{
           height: 600,
-          width: 1200,
           background: "transparent",
           backdropFilter: "blur(20px)",
         }}
