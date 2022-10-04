@@ -34,10 +34,6 @@ import LandingSidebarItem from "../components/landing/sidebar/landing-sidebar-it
 import CreatorStudioIcon from "../components/global/creator-studio-icon";
 import SquareHorizontalAuthorWidget from "../components/author/widgets/square-horizontal-author";
 import { NextSeo } from "next-seo";
-import ReactDomServer, { renderToString } from "react-dom/server";
-import DynamicTagTitleCover from "../components/global/dynamic-covers/tag-title";
-import { appCache } from "../utils/cache";
-import { secondsToHms } from "../utils/helpers";
 
 const LandingPage = ({ feedData, feedDataCount }) => {
   const theme = useMantineTheme();
