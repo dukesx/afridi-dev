@@ -2,28 +2,95 @@ import {
   Button,
   Card,
   Center,
+  Group,
+  List,
   Stack,
   Text,
+  ThemeIcon,
   Title,
+  useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
 
 import Image from "next/image";
 import AppWrapper from "../../components/global/wrapper";
-import SlackLogo from "../../public/slack.png";
-import DiscordLogo from "../../public/discord.png";
-import GoogleLogo from "../../public/google.png";
-import GithubLogo from "../../public/github.svg";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import GitlabLogo from "../../public/gitlab.svg";
-
+import { Auth, ThemeSupa } from "@supabase/auth-ui-react";
+import { IconCheck } from "@tabler/icons";
+import TeamWork from "../../public/team-work.svg";
+import { useMediaQuery } from "@mantine/hooks";
 const GetStarted = () => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
+  const { colorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
+  const mobile = useMediaQuery("(min-width: 550px", false);
   return (
-    <AppWrapper size="sm" activeHeaderKey="">
-      <Center className="mx-auto h-[550px]">
-        <Card
+    <AppWrapper size="md" activeHeaderKey="">
+      <Card mt="xl" className="w-full">
+        <Group className="w-full" p="sm" grow noWrap>
+          {mobile ? (
+            <Stack className="max-w-[450px] relative hidden xs:flex">
+              <Image priority alt="" width={300} height={300} src={TeamWork} />
+
+              <List
+                spacing="md"
+                icon={
+                  <IconCheck
+                    color={theme.colors.teal[5]}
+                    className="align-middle"
+                    size={18}
+                  />
+                }
+              >
+                <List.Item>Bookmarks & Read Later</List.Item>
+                <List.Item>Customised Feed</List.Item>
+                <List.Item>Comments</List.Item>
+                <List.Item>
+                  Synced Data Across Mobile, Tablets & Website
+                </List.Item>
+              </List>
+            </Stack>
+          ) : null}
+          <div className="w-full">
+            <Auth
+              supabaseClient={supabaseClient}
+              theme={colorScheme}
+              appearance={{
+                theme: ThemeSupa,
+                style: {
+                  message: {
+                    textAlign: "center",
+                  },
+                },
+                variables: {
+                  default: {
+                    radii: {
+                      borderRadiusButton: `${theme.radius.xl}px`,
+                      buttonBorderRadius: `${theme.radius.xl}px`,
+                      inputBorderRadius: `${theme.radius.xl}px`,
+                    },
+                    fonts: {
+                      bodyFontFamily: "Inter, sans-serif",
+                      buttonFontFamily: "Inter, sans-serif",
+                      inputFontFamily: "Inter, sans-serif",
+                      labelFontFamily: "Inter, sans-serif",
+                    },
+                    colors: {
+                      brand: theme.colors.cyan[6],
+                      brandAccent: theme.colors.cyan[8],
+                    },
+                  },
+                },
+              }}
+              providers={["github", "gitlab", "google", "slack", "discord"]}
+              socialLayout="horizontal"
+              // onlyThirdPartyProviders
+              dark={colorScheme == "dark" ? true : false}
+            />
+          </div>
+        </Group>
+      </Card>
+      {/* <Card
           className="max-w-[800px] h-[450px] w-full border-cyan-400"
           withBorder
         >
@@ -149,8 +216,7 @@ const GetStarted = () => {
               Sign in with Slack
             </Button>
           </Stack>
-        </Card>
-      </Center>
+        </Card> */}
     </AppWrapper>
   );
 };

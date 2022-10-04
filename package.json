@@ -60,6 +60,7 @@
     "@plaiceholder/next": "^2.5.0",
     "@supabase/auth-helpers-nextjs": "0.4.0-next.3",
     "@supabase/auth-helpers-react": "0.3.0-next.2",
+    "@supabase/auth-ui-react": "^0.2.1",
     "@supabase/supabase-js": "2.0.0-rc.10",
     "@tabler/icons": "^1.91.0",
     "@toast-ui/editor-plugin-code-syntax-highlight": "^3.1.0",

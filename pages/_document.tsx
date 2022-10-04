@@ -46,11 +46,7 @@ export default class _Document extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro&display=swap"
             rel="stylesheet"
           ></link>
-          <link
-            rel="icon"
-            type="image/x-icon"
-            href="https://ik.imagekit.io/afrididotdev/tr:w-100/favicon.ico"
-          />
+          <link rel="icon" type="image/x-icon" href="/favicons/favicon.ico" />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
