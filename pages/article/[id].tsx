@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Aside,
+  Avatar,
   Badge,
   Box,
   Button,
@@ -14,12 +15,21 @@ import {
   ScrollArea,
   Skeleton,
   Stack,
+  Tooltip,
   Text,
   ThemeIcon,
   Title,
   useMantineTheme,
+  ActionIcon,
+  useMantineColorScheme,
 } from "@mantine/core";
-import { IconClock, IconNews } from "@tabler/icons";
+import {
+  IconBookmark,
+  IconClock,
+  IconLink,
+  IconNews,
+  IconShare,
+} from "@tabler/icons";
 import { Fragment, useEffect, useRef, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
 import MarkDownRenderer from "../../components/global/markdown-renderer";
@@ -34,6 +44,8 @@ import ArticleCommentEditorDrawer from "../../components/article/components/comm
 import { useScrollIntoView } from "@mantine/hooks";
 import LazyLoad from "react-lazy-load";
 import { ArticleJsonLd, BreadcrumbJsonLd, NextSeo } from "next-seo";
+import { format } from "date-fns";
+import { ShowUnauthorizedModal } from "../../utils/helpers";
 
 //
 //
@@ -51,11 +63,16 @@ const Article = ({ article, tags }) => {
   const { classes } = styles();
   const [data, setData] = useState(article);
   const theme = useMantineTheme();
-  const { supabaseClient, session } = useSessionContext();
+  const { supabaseClient, session, isLoading } = useSessionContext();
   const [comments, setComments] = useState(null);
   const [editorDrawer, setEditorDrawer] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+  const { colorScheme } = useMantineColorScheme();
+  const [starred, setStarred] = useState(false);
+
   var ref = useRef<any>();
   const [commentId, setCommentId] = useState(null);
+
   const { scrollIntoView: scrollToComment, targetRef: targetComment } =
     useScrollIntoView<HTMLDivElement>({
       offset: 30,
@@ -109,9 +126,45 @@ const Article = ({ article, tags }) => {
     setComments(data);
   };
 
+  const getUserBookmarks = async () => {
+    const { data, error } = await supabaseClient
+      .from("authors")
+      .select(
+        `
+      bookmarks (
+        article_id
+      )
+    `
+      )
+      .eq("id", session.user.id);
+    var bookmarksArray = [];
+    //@ts-ignore
+    data[0].bookmarks.map((mapped) => bookmarksArray.push(mapped.article_id));
+    //@ts-ignore
+    setBookmarks(bookmarksArray);
+  };
+
+  const getUserStars = async () => {
+    const { error, data, count } = await supabaseClient
+      .from("appreciations")
+      .select("id", {
+        count: "exact",
+      })
+      .eq("reacted_article", article.id)
+      .eq("reacted_author", session.user.id);
+
+    if (count == 1) {
+      setStarred(true);
+    }
+  };
+
   useEffect(() => {
     getComments();
-  }, []);
+    if (session) {
+      getUserBookmarks();
+      getUserStars();
+    }
+  }, [isLoading]);
 
   const addViewCount = async () => {
     //
@@ -238,6 +291,137 @@ const Article = ({ article, tags }) => {
       ) : null}
       <Container className="px-0 sm:px-[12px]" size="lg">
         <Stack spacing="xs" className={classes.mainContent}>
+          {article && (
+            <Group pr="xs" className="xs:hidden" position="apart" noWrap>
+              <Group pl="xs" pb="xl" pt="xs" className="w-full" noWrap>
+                <Tooltip mt="xl" label={article.authors.full_name}>
+                  <Avatar
+                    size={60}
+                    className="rounded-full"
+                    component={NextLink}
+                    href={article ? `/author/${article.authors.id}` : ""}
+                    radius="xl"
+                    color="blue"
+                  >
+                    {article.authors.dp ? (
+                      <AfridiImage
+                        loading="lazy"
+                        height={70}
+                        width={70}
+                        path={article.authors.dp}
+                      />
+                    ) : (
+                      <Skeleton height={50} width={50} />
+                    )}
+                  </Avatar>
+                </Tooltip>
+                <Stack className="md:mr-auto sm:mr-0" spacing={2}>
+                  <Text
+                    component={NextLink}
+                    href={`/author/${article.authors.id}`}
+                    lineClamp={1}
+                    weight={700}
+                    size="sm"
+                  >
+                    {article.authors.full_name}
+                  </Text>
+                  <Group spacing={0}>
+                    <Text size="xs" color="dimmed">
+                      {format(new Date(article.created_at), "MMM dd")}
+                    </Text>
+                    <Divider className="w-[10px]" mx="xs" />
+                    <Text size="xs" color="dimmed">
+                      {article.read_time} read
+                    </Text>
+                  </Group>
+                </Stack>
+              </Group>
+
+              <Group spacing="sm" noWrap>
+                <Tooltip label="Share article">
+                  <ActionIcon
+                    onClick={async () => {
+                      const shareData = {
+                        title: `${article.title} | Afridi.dev`,
+                        text: article.description,
+                        url: `https://afridi.dev/article/${article.id}`,
+                      };
+                      await navigator.share(shareData);
+                    }}
+                    radius="xl"
+                    size="lg"
+                  >
+                    <IconShare size={22} />
+                  </ActionIcon>
+                </Tooltip>
+                {session && bookmarks && bookmarks.includes(article.id) ? (
+                  <Tooltip label="bookmarked">
+                    <ActionIcon
+                      onClick={async () => {
+                        const { error } = await supabaseClient
+                          .from("bookmarks")
+                          .delete()
+                          .match({
+                            author_id: session.user.id,
+                            article_id: article.id,
+                          });
+
+                        if (!error) {
+                          var bookmarksArr = [...bookmarks];
+                          var newBookmarks = bookmarksArr.filter(
+                            (mapped) => mapped !== article.id
+                          );
+                          setBookmarks(newBookmarks);
+                        }
+                      }}
+                      color="gray"
+                      size="lg"
+                      variant="light"
+                      radius="xl"
+                    >
+                      <IconBookmark
+                        fill={
+                          colorScheme == "dark"
+                            ? theme.colors.gray[6]
+                            : theme.colors.gray[4]
+                        }
+                        size={24}
+                      />
+                    </ActionIcon>
+                  </Tooltip>
+                ) : (
+                  <Tooltip label="bookmark this">
+                    <ActionIcon
+                      onClick={async () => {
+                        if (session && session.user) {
+                          const { error } = await supabaseClient
+                            .from("bookmarks")
+                            .insert({
+                              article_id: article.id,
+                              author_id: session.user.id,
+                            });
+
+                          if (!error) {
+                            var bookmarksArr = [...bookmarks];
+                            bookmarksArr.push(article.id);
+                            setBookmarks(bookmarksArr);
+                          }
+                        } else {
+                          ShowUnauthorizedModal();
+                        }
+                      }}
+                      color="gray"
+                      size="lg"
+                      radius="xl"
+                    >
+                      <IconBookmark fill={"transparent"} size={24} />
+                    </ActionIcon>
+                  </Tooltip>
+                )}
+              </Group>
+            </Group>
+          )}
+
           <Skeleton
             className="w-full rounded-none sm:rounded-lg mx-auto h-full sm:h-full lg:h-[550px] xl:max-h-[600px] sm:max-h-[600px]"
             visible={!data}
@@ -308,111 +492,119 @@ const Article = ({ article, tags }) => {
           </Center>
         </Stack>
       </Container>
-      <Stack>
-        <Aside
-          hiddenBreakpoint="xs"
-          hidden
-          height={"auto"}
-          p="md"
-          zIndex={50}
-          styles={{
-            root: {
-              zIndex: 50,
-            },
-          }}
-          width={{ xs: 220, sm: 300, md: 300, lg: 300 }}
-        >
-          <Aside.Section>
-            <ArticleRightSidebar
-              id={data && data.id}
-              data={data}
-              theme={theme}
-            />
-          </Aside.Section>
-        </Aside>
-        <Box mt={50} className={classes.mainContent + " px-[12px]"}>
-          <MarkDownRenderer>{article && article.body}</MarkDownRenderer>
-        </Box>
-        <Divider />
-        <Stack mt="xs" className="pb-10 pl-5">
-          <Group position="apart" spacing="xs" mb="sm">
-            <Title id="comments" order={2}>
-              Comments
-            </Title>
-            {session && session.user ? (
-              <Button
-                onClick={() => {
-                  setCommentId({
-                    type: "comment",
-                  });
-                  setEditorDrawer(true);
-                }}
-                variant="light"
-                size="xs"
-                radius="xl"
-                color="blue"
-              >
-                Write a comment
-              </Button>
-            ) : null}
-          </Group>
-          <LazyLoad>
-            <ArticleComments
-              getComments={getComments}
-              coAuthors={article && article.co_authors_articles}
-              author_id={article && article.author_id}
-              openCommentEditor={setEditorDrawer}
-              comments={comments ?? []}
-              setCommentId={setCommentId}
-            />
-          </LazyLoad>
-          <div ref={targetComment} />
-        </Stack>
-
-        <ArticleCommentEditorDrawer
-          article_id={article && article.id}
-          article_title={article && article.title}
-          commentId={commentId}
-          editorDrawer={editorDrawer}
-          setEditorDrawer={setEditorDrawer}
-          getComments={getComments}
-          getMarkdown={getMarkdown}
-          session={session}
-          setCommentEditorRef={setCommentEditorRef}
-          setCommentId={setCommentId}
-          supabaseClient={supabaseClient}
-          scrollToComment={scrollToComment}
-        />
-
-        <MediaQuery smallerThan="md" styles={{ display: "none" }}>
-          <Navbar
-            hiddenBreakpoint="md"
-            hidden={true}
+      {article && (
+        <Stack>
+          <Aside
+            hiddenBreakpoint="xs"
+            hidden
             height={"auto"}
-            p="xs"
-            width={{ sm: 0, md: 250, lg: 350 }}
+            p="md"
+            zIndex={50}
+            styles={{
+              root: {
+                zIndex: 50,
+              },
+            }}
+            width={{ xs: 220, sm: 300, md: 300, lg: 300 }}
           >
-            <Navbar.Section
-              mt="xl"
-              grow
-              className="h-[400px]"
-              component={ScrollArea}
-            >
-              <NumberedArticlesWidget
-                titleOrder={4}
-                title="Similar Articles"
-                placeholderHeight={140}
-                icon={<IconNews />}
-                color="blue"
-                placeholderTitle="Hmmm!"
-                placeholderDescription="No similar articles yet 🤔"
+            <Aside.Section>
+              <ArticleRightSidebar
+                title={article.title}
+                description={article.description}
+                id={data && data.id}
+                starred={starred}
+                setStarred={setStarred}
+                bookmarks={bookmarks}
+                setBookmarks={setBookmarks}
+                data={data}
                 theme={theme}
-                articles={relatedArticles ?? []}
               />
-            </Navbar.Section>
-          </Navbar>
-        </MediaQuery>
-      </Stack>
+            </Aside.Section>
+          </Aside>
+          <Box mt={50} className={classes.mainContent + " px-[12px]"}>
+            <MarkDownRenderer>{article && article.body}</MarkDownRenderer>
+          </Box>
+          <Divider />
+          <Stack mt="xs" className="pb-10 pl-5">
+            <Group position="apart" spacing="xs" mb="sm">
+              <Title id="comments" order={2}>
+                Comments
+              </Title>
+              {session && session.user ? (
+                <Button
+                  onClick={() => {
+                    setCommentId({
+                      type: "comment",
+                    });
+                    setEditorDrawer(true);
+                  }}
+                  variant="light"
+                  size="xs"
+                  radius="xl"
+                  color="blue"
+                >
+                  Write a comment
+                </Button>
+              ) : null}
+            </Group>
+            <LazyLoad>
+              <ArticleComments
+                getComments={getComments}
+                coAuthors={article && article.co_authors_articles}
+                author_id={article && article.author_id}
+                openCommentEditor={setEditorDrawer}
+                comments={comments ?? []}
+                setCommentId={setCommentId}
+              />
+            </LazyLoad>
+            <div ref={targetComment} />
+          </Stack>
+
+          <ArticleCommentEditorDrawer
+            article_id={article && article.id}
+            article_title={article && article.title}
+            commentId={commentId}
+            editorDrawer={editorDrawer}
+            setEditorDrawer={setEditorDrawer}
+            getComments={getComments}
+            getMarkdown={getMarkdown}
+            session={session}
+            setCommentEditorRef={setCommentEditorRef}
+            setCommentId={setCommentId}
+            supabaseClient={supabaseClient}
+            scrollToComment={scrollToComment}
+          />
+
+          <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+            <Navbar
+              hiddenBreakpoint="md"
+              hidden={true}
+              height={"auto"}
+              p="xs"
+              width={{ sm: 0, md: 250, lg: 350 }}
+            >
+              <Navbar.Section
+                mt="xl"
+                grow
+                className="h-[400px]"
+                component={ScrollArea}
+              >
+                <NumberedArticlesWidget
+                  titleOrder={4}
+                  title="Similar Articles"
+                  placeholderHeight={140}
+                  icon={<IconNews />}
+                  color="blue"
+                  placeholderTitle="Hmmm!"
+                  placeholderDescription="No similar articles yet 🤔"
+                  theme={theme}
+                  articles={relatedArticles ?? []}
+                />
+              </Navbar.Section>
+            </Navbar>
+          </MediaQuery>
+        </Stack>
+      )}
     </AppWrapper>
   );
 };
@@ -431,6 +623,7 @@ export const getStaticProps = async (ctx) => {
         read_time,
         cover,
         updated_at,
+        created_at,
         body,
         editors_pick,
         author_id,

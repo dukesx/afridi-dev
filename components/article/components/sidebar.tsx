@@ -17,7 +17,7 @@ import {
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { IconBookmark, IconMessageCircle2 } from "@tabler/icons";
+import { IconBookmark, IconMessageCircle2, IconShare } from "@tabler/icons";
 import { useEffect, useState } from "react";
 import { ShowUnauthorizedModal } from "../../../utils/helpers";
 import { AfridiDevAuthor } from "../../author/widgets/square-horizontal-author";
@@ -28,54 +28,30 @@ interface ArticleSidebarProps {
     authors: AfridiDevAuthor;
     co_authors_articles: [{ authors: AfridiDevAuthor }];
   };
+  bookmarks: Array<any>;
+  setBookmarks: Function;
+  starred: boolean;
+  setStarred: Function;
   theme: MantineTheme;
   id: string;
+  title: string;
+  description: string;
 }
 
-const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
+const ArticleRightSidebar = ({
+  data,
+  theme,
+  title,
+  description,
+  id,
+  bookmarks,
+  setBookmarks,
+  starred,
+  setStarred,
+}: ArticleSidebarProps) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
-  const [bookmarks, setBookmarks] = useState([]);
   const { colorScheme } = useMantineColorScheme();
-  const [starred, setStarred] = useState(false);
 
-  const getUserBookmarks = async () => {
-    const { data, error } = await supabaseClient
-      .from("authors")
-      .select(
-        `
-      bookmarks (
-        article_id
-      )
-    `
-      )
-      .eq("id", session.user.id);
-    var bookmarksArray = [];
-    //@ts-ignore
-    data[0].bookmarks.map((mapped) => bookmarksArray.push(mapped.article_id));
-    //@ts-ignore
-    setBookmarks(bookmarksArray);
-  };
-
-  const getUserStars = async () => {
-    const { error, data, count } = await supabaseClient
-      .from("appreciations")
-      .select("id", {
-        count: "exact",
-      })
-      .eq("reacted_article", id)
-      .eq("reacted_author", session.user.id);
-
-    if (count == 1) {
-      setStarred(true);
-    }
-  };
-
-  useEffect(() => {
-    if (session) {
-      getUserBookmarks();
-      getUserStars();
-    }
-  }, [isLoading]);
   return (
     <Aside.Section>
       <Card className="w-full overflow-hidden px-0 bg-transparent">
@@ -85,6 +61,24 @@ const ArticleRightSidebar = ({ data, theme, id }: ArticleSidebarProps) => {
           </Text>
           <Divider mb="md" className="w-full" />
           <Group spacing="lg">
+            <Tooltip label="Share article">
+              <ActionIcon
+                onClick={async () => {
+                  const shareData = {
+                    title: `${title} | Afridi.dev`,
+                    text: description,
+                    url: `https://afridi.dev/article/${id}`,
+                  };
+                  await navigator.share(shareData);
+                }}
+                radius="xl"
+                size="xl"
+                color="cyan"
+                variant="subtle"
+              >
+                <IconShare size={22} />
+              </ActionIcon>
+            </Tooltip>
             {session && bookmarks && bookmarks.includes(id) ? (
               <Tooltip label="bookmarked">
                 <ActionIcon
