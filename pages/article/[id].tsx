@@ -239,7 +239,7 @@ const Article = ({ article, tags }) => {
               },
               images: [
                 {
-                  url: `https://afridi-dev-git-supabase-v2-upgrade-dukesx.vercel.app/api/generate-cover/article/${article.id}`,
+                  url: `https://afridi.dev/api/generate-cover/article/${article.id}`,
                   width: 400,
                   height: 400,
                   alt: "Cover of article",
