@@ -16,6 +16,6 @@
     "jsx": "preserve",
     "checkJs": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/getDynamicCover.js", "pages/api/generate-cover/tag/[tagId].js"],
   "exclude": ["node_modules"]
 }

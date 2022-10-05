@@ -4,25 +4,28 @@ import Head from "next/head";
 import {
   ColorScheme,
   ColorSchemeProvider,
-  createEmotionCache,
   MantineProvider,
-  useMantineColorScheme,
 } from "@mantine/core";
-import { generalStore } from "../data/static/store";
-import { StoreProvider } from "easy-peasy";
 import { useColorScheme, useHotkeys, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import "../styles/app.css";
-import { IKContext } from "imagekitio-react";
+import "../styles/app.scss";
 import { RouterTransition } from "../components/global/router-transition";
 import { GetServerSidePropsContext } from "next";
-import { getCookie, setCookie } from "cookies-next";
+import { setCookie, getCookie } from "cookies-next";
+import { appCache } from "../utils/cache";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { NotificationsProvider } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
+import { DefaultSeo, SocialProfileJsonLd } from "next-seo";
+
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
 
   //States
   const [iteration, setIteration] = useState(0);
   const preferredColorScheme = useColorScheme();
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   const [newColorScheme, setNewColorScheme] = useLocalStorage<ColorScheme>({
     key: "afridi-dev-color-scheme",
     defaultValue: props.colorScheme ?? null,
@@ -30,16 +33,17 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   });
 
   const toggleColorScheme = (value?: ColorScheme) => {
-    if (document.body.classList.contains("dark")) {
-      document.body.classList.remove("dark");
-      document.body.classList.add("light");
-    } else {
-      document.body.classList.remove("light");
-      document.body.classList.add("dark");
-    }
     const nextColorScheme =
       value || (newColorScheme === "dark" ? "light" : "dark");
     setNewColorScheme(nextColorScheme);
+
+    if (nextColorScheme == "dark") {
+      document.body.classList.remove("light");
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+      document.body.classList.add("light");
+    }
     setCookie("afridi-dev-color-scheme", nextColorScheme, {
       maxAge: 60 * 60 * 24 * 30,
     });
@@ -55,8 +59,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       }
     }
   }, [preferredColorScheme]);
-
-  //Return @JSX
 
   return (
     <>
@@ -77,15 +79,50 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
             headings: { fontFamily: "Inter, sans-serif" },
             primaryColor: "cyan",
           }}
+          emotionCache={appCache}
         >
           <RouterTransition />
 
-          {/** @ts-ignore */}
-          <StoreProvider store={generalStore}>
-            <IKContext urlEndpoint="https://ik.imagekit.io/afrididotdev">
-              <Component {...pageProps} />
-            </IKContext>
-          </StoreProvider>
+          <NotificationsProvider position="top-right">
+            <ModalsProvider>
+              <SessionContextProvider
+                supabaseClient={supabaseClient}
+                //@ts-ignore
+                initialSession={pageProps && pageProps.initialSession}
+              >
+                <DefaultSeo
+                  title="Welcome to Afridi.dev!"
+                  description="The DEV's blog"
+                  canonical="https://afridi.dev"
+                  openGraph={{
+                    type: "website",
+                    url: "https://afridi.dev",
+                    title: "Welcome to Afridi.dev!",
+                    description: "The DEV's blog",
+                    site_name: "Afridi.dev",
+                  }}
+                  facebook={{
+                    appId: "1047539702585462",
+                  }}
+                  twitter={{
+                    handle: "@afrididotdev",
+                    site: "https://afridi.dev",
+                    cardType: "summary_large_image",
+                  }}
+                />
+                <SocialProfileJsonLd
+                  type="Organization"
+                  name="Afridi.dev"
+                  url="https://afridi.dev"
+                  sameAs={[
+                    "https://www.facebook.com/afridi-dev",
+                    "http://www.twitter.com/afridi-dev",
+                  ]}
+                />
+                <Component {...pageProps} />
+              </SessionContextProvider>
+            </ModalsProvider>
+          </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </>

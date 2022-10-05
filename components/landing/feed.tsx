@@ -1,225 +1,369 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
-  Avatar,
-  Title,
   Text,
-  Group,
   Stack,
   type MantineTheme,
-  LoadingOverlay,
-  Loader,
   Center,
   Button,
   Tooltip,
+  Tabs,
+  ThemeIcon,
+  Indicator,
+  useMantineColorScheme,
+  Loader,
 } from "@mantine/core";
 import {
   IconArrowRight,
   IconBolt,
-  IconBrandReactNative,
-  IconCode,
+  IconHandRock,
+  IconHash,
   IconHeart,
 } from "@tabler/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Fragment } from "react";
 import HorizontalGridCard, {
   CardStyle,
-} from "../global/grid-cards/horizontalGridCard";
-import { Fade } from "react-awesome-reveal";
-
+} from "../article/grid-cards/horizontal-article-card";
+import { useSessionContext } from "@supabase/auth-helpers-react";
+import HorizontalGridCardSkeleton from "../global/skeletons/grid-cards/horizontalGridCardSkeleton";
+import InfiniteScroll from "react-infinite-scroller";
+import {
+  getFeedArticles,
+  getPopularArticles,
+  getTrendingArticles,
+} from "../global/feed/functions";
+import EmptyPlaceholder from "../global/placeholders/empty";
+import { GeneralStore } from "../../data/static/store";
+import { AfridiDevArticle } from "../article/grid-cards/large-article-card";
+import FeedLoader from "../global/skeletons/feedLoader";
 interface LandingFeedProps {
   theme: MantineTheme;
+  prefetchedFeedData: Array<AfridiDevArticle>;
+  feedDataCount: number;
 }
 
-const LandingFeed: React.FC<LandingFeedProps> = ({ theme }) => {
-  const [key, setKey] = useState("trending");
-  const [loading, setLoading] = useState(false);
+const LandingFeed: React.FC<LandingFeedProps> = ({
+  theme,
+  prefetchedFeedData,
+  feedDataCount,
+}) => {
+  /**
+   *
+   *
+   *
+   *
+   */
+  const [key, setKey] = useState("feed");
+  const { isLoading, session, error, supabaseClient } = useSessionContext();
+  //
+  //
+  //
+  //
+
+  const [popularData, setPopularData] = useState([]);
+  const [trendingData, setTrendingData] = useState([]);
+  const [feedData, setFeedData] = useState<any>();
+  const [articleCount, setArticleCount] = useState(feedDataCount);
+  const [feedLoading, setFeedLoading] = useState(false);
+  const [userBookmarks, setUserBookmarks] = useState([]);
+  //
+  //
+  //
+  const { colorScheme } = useMantineColorScheme();
+
+  /**
+   *
+   *
+   *
+   *  Initial Article Load & Tab Change
+   *
+   *
+   */
+
+  const getUserBookmarks = async () => {
+    const { data, error } = await supabaseClient
+      .from("authors")
+      .select(
+        `
+      bookmarks (
+        article_id
+      )
+    `
+      )
+      .eq("id", session.user.id);
+    var bookmarksArray = [];
+
+    //@ts-ignore
+    data[0].bookmarks.map((mapped) => bookmarksArray.push(mapped.article_id));
+    //@ts-ignore
+    setUserBookmarks(bookmarksArray);
+  };
+
+  const getFeed = async () => {
+    switch (key) {
+      case "feed":
+        await getFeedArticles({
+          user: session && session.user,
+          data: feedData,
+          articleCount: articleCount,
+          setData: setFeedData,
+          setArticleCount: setArticleCount,
+        });
+        break;
+
+      case "trending":
+        await getTrendingArticles({
+          user: session && session.user,
+          data: trendingData,
+          setData: setTrendingData,
+        });
+        break;
+
+      case "popular":
+        await getPopularArticles({
+          user: session && session.user,
+          data: popularData,
+          setData: setPopularData,
+        });
+        break;
+    }
+    setFeedLoading(false);
+  };
+
+  useEffect(() => {
+    if (isLoading == false) {
+      if (session) {
+        getUserBookmarks();
+        getFeed();
+      } else {
+        if (key == "feed") {
+          setFeedData(prefetchedFeedData);
+          setArticleCount(feedDataCount);
+          setFeedLoading(false);
+        } else {
+          setFeedLoading(true);
+          getFeed();
+        }
+      }
+    }
+  }, [key, isLoading]);
+
+  /**
+   *
+   *
+   *
+   *
+   *
+   *
+   */
+
   return (
     <Fragment>
-      <Group position="apart">
-        {/**  @ts-ignore */}
-        <Fade>
-          {key == null ? (
-            <Title
-              key="your-feed"
-              className="text-[18px] xs:text-3xl p-0 xs:mt-0 xs:p-5 transition-all ease-in-out"
-            >
-              My Feed
-            </Title>
-          ) : key == "trending" ? (
-            <Title
-              key="trending"
-              className="text-[18px] xs:text-3xl p-0 xs:mt-0 xs:p-5 transition-all ease-in-out"
-            >
+      <Tabs value={key} onTabChange={setKey} color="blue" variant="default">
+        <Tabs.List grow position="center">
+          <Tabs.Tab
+            icon={
+              session && session.user ? (
+                <Indicator
+                  // offset={40}
+                  position="top-end"
+                  size={21}
+                  radius="xl"
+                  styles={{
+                    indicator: {
+                      padding: 0,
+                      border: 0,
+                      backgroundColor: "transparent",
+                    },
+                    root: {
+                      border: 0,
+                    },
+                  }}
+                  className="rounded-full"
+                  label={
+                    <Tooltip label="Filtered by tags you follow">
+                      <ThemeIcon
+                        variant="light"
+                        color="teal"
+                        radius="xl"
+                        size={30}
+                      >
+                        <IconHash strokeWidth={2} size={16} />
+                      </ThemeIcon>
+                    </Tooltip>
+                  }
+                >
+                  <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
+                    <IconHandRock
+                      fill={
+                        colorScheme == "dark"
+                          ? theme.colors.blue[5]
+                          : theme.colors.blue[2]
+                      }
+                      strokeWidth={1.5}
+                    />
+                  </ThemeIcon>
+                </Indicator>
+              ) : (
+                <ThemeIcon variant="light" color="blue" radius="xl" size="xl">
+                  <IconHandRock
+                    fill={
+                      colorScheme == "dark"
+                        ? theme.colors.blue[5]
+                        : theme.colors.blue[2]
+                    }
+                    strokeWidth={1.5}
+                  />
+                </ThemeIcon>
+              )
+            }
+            value="feed"
+          >
+            <Text ml="xs" size="sm" weight={500}>
+              Feed
+            </Text>
+          </Tabs.Tab>
+
+          <Tabs.Tab
+            icon={
+              <ThemeIcon variant="light" radius="xl" color="yellow" size="xl">
+                <IconBolt size={22} fill={theme.colors.yellow[4]} />
+              </ThemeIcon>
+            }
+            value="trending"
+          >
+            <Text ml="xs" size="sm" weight={500}>
               Trending
-            </Title>
-          ) : key == "popular" ? (
-            <Title
-              key="loved"
-              className="text-[18px] xs:text-3xl p-0 xs:mt-0 xs:p-5 transition-all ease-in-out"
-            >
+            </Text>
+          </Tabs.Tab>
+          <Tabs.Tab
+            icon={
+              <ThemeIcon variant="light" color="red" radius="xl" size="xl">
+                <IconHeart size={22} fill={theme.colors.red[6]} />
+              </ThemeIcon>
+            }
+            value="popular"
+          >
+            <Text ml="xs" size="sm" weight={500}>
               Popular
-            </Title>
-          ) : null}
-        </Fade>
-
-        <Group className="mr-1 xs:mr-10">
-          <Stack className="cursor-pointer" spacing="xs">
-            <Tooltip label="My Feed">
-              <Avatar
-                className={
-                  (key == null ? "shadow-xl shadow-yellow-600" : "") +
-                  " cursor-pointer"
-                }
-                radius="xl"
-                size="md"
-                color="yellow"
-                onClick={() => setKey(null)}
-              >
-                <Text size="xl">🤔</Text>
-              </Avatar>
-            </Tooltip>
-            {/* {key == null ? <Divider size="sm" color="yellow" /> : null} */}
-          </Stack>
-          <Stack
-            spacing="xs"
-            onClick={() => {
-              setKey("trending");
-              setLoading(true);
-            }}
-          >
-            <Tooltip label="Trending">
-              <Avatar
-                className={
-                  (key == "trending" ? "shadow-xl shadow-sky-600" : "") +
-                  " cursor-pointer"
-                }
-                radius="xl"
-                size="md"
-                color="blue"
-              >
-                <IconBolt
-                  className={key !== "trending" ? "fill-transparent" : ""}
-                  fill={key == "trending" ? theme.colors.blue[6] : null}
-                />
-              </Avatar>
-            </Tooltip>
-            {/* {key == "trending" ? (
-                      <Divider size="sm" color="blue" />
-                    ) : null} */}
-          </Stack>
-
-          <Stack
-            spacing="xs"
-            onClick={() => {
-              setKey("popular");
-              setLoading(true);
-            }}
-          >
-            <Tooltip label="Popular">
-              <Avatar
-                className={
-                  (key == "popular" ? "shadow-xl shadow-red-600" : "") +
-                  " cursor-pointer"
-                }
-                radius="xl"
-                size="md"
-                color="red"
-              >
-                <IconHeart
-                  className={key !== "popular" ? "fill-transparent" : ""}
-                  fill={key == "popular" ? theme.colors.red[6] : null}
-                />
-              </Avatar>
-            </Tooltip>
-
-            {/* {key == "loved" ? <Divider size="sm" color="red" /> : null} */}
-          </Stack>
-        </Group>
-      </Group>
-
-      <Stack spacing="xl" mt="xl" className="relative">
-        <LoadingOverlay
-          className="h-screen"
-          visible={loading}
-          loader={
-            <Stack align="center">
-              <Avatar
-                className="absolute top-[100px]"
-                size="lg"
-                color={
-                  key == "trending"
-                    ? "blue"
-                    : key == "popular"
-                    ? "red"
-                    : "yellow"
-                }
-                radius="xl"
-              >
-                {loading ? (
-                  key == "trending" ? (
-                    <IconBolt
-                      className="animate-bounce"
-                      fill={theme.colors.blue[6]}
-                    />
-                  ) : key == "popular" ? (
-                    <IconHeart
-                      className="animate-bounce"
-                      fill={theme.colors.red[6]}
-                    />
-                  ) : (
-                    <Text size="xl" className="animate-bounce text-2xl">
-                      🤔
-                    </Text>
-                  )
-                ) : null}
-              </Avatar>
-              <Text
-                className="absolute top-[170px] capitalize"
-                color={
-                  key == "trending"
-                    ? "blue"
-                    : key == "popular"
-                    ? "red"
-                    : "yellow"
-                }
-                weight={700}
-              >
-                Fetching {key ?? "Your Feed"} {"Articles"}
-              </Text>
-            </Stack>
-          }
-        />
-        <Center mt={50}>
-          <Stack>
-            <Text
-              className="text-center text-3xl"
-              weight={800}
-              color="dimmed"
-              size="xl"
-            >
-              Hmmmm...Empty
             </Text>
-            <Text size="md" color="dimmed">
-              Susbscribe to some topics in order to see articles here
-            </Text>
-            <Button
-              color="cyan"
-              rightIcon={<IconArrowRight size={theme.fontSizes.xl} />}
-            >
-              Go to Topics and Subscribe
-            </Button>
+          </Tabs.Tab>
+        </Tabs.List>
+
+        <Tabs.Panel value="feed">
+          <Stack className="relative" pt="xs" mt="xl">
+            {feedLoading == false ? (
+              feedData && feedData.length > 0 ? (
+                <InfiniteScroll
+                  threshold={50}
+                  pageStart={0}
+                  loadMore={getFeed}
+                  hasMore={
+                    feedData && feedData.length < articleCount ? true : false
+                  }
+                  loader={
+                    <Center key="something-list-loader">
+                      <Stack align="center">
+                        <Loader variant="bars" color="blue" />
+                        <Text className="text-center">
+                          Loading More Articles
+                        </Text>
+                      </Stack>
+                    </Center>
+                  }
+                >
+                  <Stack
+                    key="something-list"
+                    spacing="xl"
+                    mb="xl"
+                    align="center"
+                  >
+                    {feedData.map((mapped, index) => (
+                      <HorizontalGridCard
+                        appreciations={mapped.appreciations}
+                        setBookmarks={setUserBookmarks}
+                        bookmarks={userBookmarks}
+                        key={"aloba" + index}
+                        data={mapped}
+                        style={CardStyle.FEED}
+                        theme={theme}
+                        withCover
+                        withFooter
+                      />
+                    ))}
+                  </Stack>
+                </InfiniteScroll>
+              ) : feedData && feedData.length == 0 ? (
+                <Center mt={50}>
+                  <EmptyPlaceholder
+                    height={140}
+                    title="Hmmm.... Seems empty"
+                    description="Subscribe some tags to see articles here"
+                  />
+                </Center>
+              ) : (
+                <FeedLoader />
+              )
+            ) : (
+              <FeedLoader />
+            )}
           </Stack>
-        </Center>
-        {/* <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} />
-        <HorizontalGridCard style={CardStyle.FEED} theme={theme} /> */}
-      </Stack>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="trending">
+          <Stack pt="xs" mt="xl">
+            {feedLoading == false ? (
+              trendingData && trendingData.length > 0 ? (
+                <Stack spacing="xl" mb="xl" align="center">
+                  {trendingData.map((mapped, index) => (
+                    <HorizontalGridCard
+                      withCover
+                      setBookmarks={setUserBookmarks}
+                      bookmarks={userBookmarks}
+                      key={"aloban" + index}
+                      data={mapped}
+                      style={CardStyle.FEED}
+                      theme={theme}
+                    />
+                  ))}
+                </Stack>
+              ) : (
+                <Center mt={50}>
+                  <EmptyPlaceholder height={140} />
+                </Center>
+              )
+            ) : (
+              <FeedLoader />
+            )}
+          </Stack>
+        </Tabs.Panel>
+
+        <Tabs.Panel value="popular">
+          <Stack pt="xs" mt="xl">
+            {!feedLoading ? (
+              popularData.length > 0 ? (
+                <Stack spacing="xl" mb="xl" align="center">
+                  {popularData.map((mapped, index) => (
+                    <HorizontalGridCard
+                      withCover
+                      setBookmarks={setUserBookmarks}
+                      bookmarks={userBookmarks}
+                      key={"alobis" + index}
+                      data={mapped}
+                      style={CardStyle.FEED}
+                      theme={theme}
+                    />
+                  ))}
+                </Stack>
+              ) : (
+                <EmptyPlaceholder height={140} />
+              )
+            ) : (
+              <FeedLoader />
+            )}
+          </Stack>
+        </Tabs.Panel>
+      </Tabs>
     </Fragment>
   );
 };

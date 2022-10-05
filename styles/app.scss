@@ -1,0 +1,9 @@
+/* @tailwind base; */
+// .ProseMirror {
+//   @apply min-h-[400px] p-5;
+// }
+html {
+  scroll-behavior: smooth;
+}
+@tailwind components;
+@tailwind utilities;
