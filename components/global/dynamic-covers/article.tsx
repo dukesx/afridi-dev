@@ -102,7 +102,8 @@ const DynamicArticleCover = ({
             }}
           >
             <AfridiImage
-              fillImage
+              width={400}
+              height={400}
               priority
               path={cover}
               style={{
@@ -122,7 +123,7 @@ const DynamicArticleCover = ({
               borderRadius: "50%",
             }}
           >
-            <AfridiImage fillImage priority path={author.cover} />
+            <AfridiImage height={50} width={50} priority path={author.cover} />
           </Avatar>
           <Stack spacing={3}>
             <Text
