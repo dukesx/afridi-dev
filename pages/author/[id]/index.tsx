@@ -43,20 +43,19 @@ import { parseISO } from "date-fns";
 import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
 import { supabase } from "../../../utils/supabaseClient";
-import { AfridiDevArticle } from "../../../components/article/grid-cards/large-article-card";
 import { type GetStaticPropsContext } from "next";
+import { NextSeo } from "next-seo";
 import {
   AuthorStatusFeed,
   getData,
   getSimilarAuthors,
 } from "../../../components/author/functions";
 import AuthorProfileHeader from "../../../components/author/components/header";
-import HorizontalGridCardSkeleton from "../../../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
-import SquareHorizontalAuthorWidget from "../../../components/author/widgets/square-horizontal-author";
-import AuthorFeedRenderer from "../../../components/author/components/author-feed-renderer";
-import ExclusivePlaceholder from "../../../components/author/components/exclusive-placeholder";
 import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
-import { NextSeo } from "next-seo";
+import AuthorFeedRenderer from "../../../components/author/components/author-feed-renderer";
+import SquareHorizontalAuthorWidget from "../../../components/author/widgets/square-horizontal-author";
+import HorizontalGridCardSkeleton from "../../../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
+import ExclusivePlaceholder from "../../../components/author/components/exclusive-placeholder";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -109,6 +108,13 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                 user.full_name ?? "Random User"
               }'s Profile on Afridi.dev`,
               images: [
+                {
+                  url: `https://afridi.dev/api/generate-cover/author/${user.id}`,
+                  width: 400,
+                  height: 400,
+                  alt: `${user.full_name ?? "Random User"}'s Dynamic Picture`,
+                  type: "image/jpeg",
+                },
                 {
                   url: `https://ik.imagekit.io/afrididotdev/tr:w-400${dpo}`,
                   width: 400,
