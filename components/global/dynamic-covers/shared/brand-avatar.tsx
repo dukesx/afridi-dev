@@ -4,7 +4,7 @@ import { sharedStyles } from "./shared-styles";
 interface BrandAvatarProps {
   size?: "xl" | "sm" | "xs";
   brand: "small" | "default";
-  theme: ColorScheme;
+  theme?: ColorScheme;
   bottom?: number;
 }
 
