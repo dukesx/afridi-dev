@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import {
   Button,
   Drawer,
@@ -5,10 +7,11 @@ import {
   LoadingOverlay,
   Stack,
   Text,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useScrollIntoView } from "@mantine/hooks";
 import { Session, SupabaseClient } from "@supabase/supabase-js";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AfridiDevEditor } from "../../../global/editor/editorCaller";
 
 interface ArticleCommentEditorDrawerProps {
@@ -41,6 +44,43 @@ const ArticleCommentEditorDrawer = ({
   getComments,
 }: ArticleCommentEditorDrawerProps) => {
   const [sendingReply, setSendingReply] = useState(false);
+  const { colorScheme } = useMantineColorScheme();
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const commentCaptchaRef = useRef(null);
+  const [comment, setComment] = useState(null);
+
+  useEffect(() => {
+    if (captchaToken) {
+      validResult();
+    }
+  }, [captchaToken]);
+
+  const validResult = async () => {
+    if (commentId && commentId.type == "reply") {
+      const { error: AddReplyError, data } = await supabaseClient
+        .from("replies")
+        .insert({
+          comment_id: commentId.id,
+          author_id: session.user.id,
+          body: comment,
+        });
+    } else {
+      const { error: AddCommentError, data } = await supabaseClient
+        .from("comments")
+        .insert({
+          article_id: article_id,
+          author_id: session.user.id,
+          body: comment,
+        });
+    }
+    setSendingReply(false);
+    setEditorDrawer(false);
+    getComments();
+    if (commentId.type !== "reply") {
+      scrollToComment();
+    }
+  };
+
   return (
     <Drawer
       position="bottom"
@@ -53,10 +93,7 @@ const ArticleCommentEditorDrawer = ({
       title={
         commentId && commentId.type !== "comment" ? (
           <Text size="sm">
-            Replying to{" "}
-            <b className="">
-              {commentId.author.full_name}
-            </b>
+            Replying to <b className="">{commentId.author.full_name}</b>
           </Text>
         ) : (
           <Text size="sm">
@@ -94,35 +131,22 @@ const ArticleCommentEditorDrawer = ({
         plugins={false}
       />
 
+      <HCaptcha
+        size="invisible"
+        ref={commentCaptchaRef}
+        theme={colorScheme == "dark" ? "dark" : "light"}
+        sitekey="b2d3efbe-b36a-43f7-bcfd-785299a19a06"
+        onVerify={(token, ekey) => setCaptchaToken(token)}
+      />
+
       <Button
         fullWidth
         mt="xl"
         onClick={async () => {
           setSendingReply(true);
           var mark = getMarkdown();
-          if (commentId && commentId.type == "reply") {
-            const { error: AddReplyError, data } = await supabaseClient
-              .from("replies")
-              .insert({
-                comment_id: commentId.id,
-                author_id: session.user.id,
-                body: mark,
-              });
-          } else {
-            const { error: AddCommentError, data } = await supabaseClient
-              .from("comments")
-              .insert({
-                article_id: article_id,
-                author_id: session.user.id,
-                body: mark,
-              });
-          }
-          setSendingReply(false);
-          setEditorDrawer(false);
-          getComments();
-          if (commentId.type !== "reply") {
-            scrollToComment();
-          }
+          setComment(mark);
+          commentCaptchaRef.current?.execute();
         }}
         variant="light"
         color="blue"
