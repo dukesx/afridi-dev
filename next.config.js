@@ -1,6 +1,6 @@
-const { withPlaiceholder } = require("@plaiceholder/next");
+// const { withPlaiceholder } = require("@plaiceholder/next");
 
-module.exports = withPlaiceholder({
+module.exports = {
   reactStrictMode: false,
   swcMinify: true,
-});
+};
