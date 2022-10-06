@@ -126,7 +126,7 @@ const GetStarted = () => {
             <Group
               className="w-full"
               mt="xl"
-              mb={50}
+              mb={40}
               align="center"
               position="center"
             >
