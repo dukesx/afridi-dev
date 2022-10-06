@@ -5,6 +5,7 @@ import {
   Center,
   Group,
   Input,
+  PasswordInput,
   Select,
   Skeleton,
   Stack,
@@ -15,7 +16,14 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { IconCheck, IconSettings, IconUserCircle, IconX } from "@tabler/icons";
+import {
+  IconCheck,
+  IconEyeCheck,
+  IconEyeOff,
+  IconSettings,
+  IconUserCircle,
+  IconX,
+} from "@tabler/icons";
 import AppWrapper from "../../../../components/global/wrapper";
 import { useForm } from "@mantine/form";
 import { forwardRef, Fragment, useState } from "react";
@@ -36,6 +44,8 @@ const UserSettingsPage = () => {
     initialValues: {
       full_name: "",
       location: "pakistan",
+      password: "",
+      repeatPassword: "",
     },
 
     validate: {
@@ -43,6 +53,22 @@ const UserSettingsPage = () => {
         value.length < 2 ? "Name cannot be less than 3 characters" : null,
       location: (value) =>
         value.length <= 0 ? "Location cannot be empty" : null,
+      password: (val) =>
+        provider == "email"
+          ? /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/g.test(
+              val
+            ) == false
+            ? "Password is not strong enough"
+            : null
+          : null,
+      repeatPassword: (val) => {
+        if (val !== form1.values.password) {
+          console.log("yes");
+          return "Passwords donot match";
+        } else {
+          return null;
+        }
+      },
     },
   });
 
@@ -71,6 +97,8 @@ const UserSettingsPage = () => {
   const [generalLoading, setGeneralLoading] = useState(true);
   const [aboutLoading, setAboutLoading] = useState(true);
   const { isLoading, session, error, supabaseClient } = useSessionContext();
+  const [provider, setProvider] = useState();
+  const [reveal, setReveal] = useState(false);
   interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
     image: string;
     label: string;
@@ -106,7 +134,8 @@ const UserSettingsPage = () => {
       .select(
         `
           full_name,
-          location
+          location,
+          provider
           `
       )
       .eq("id", session.user.id);
@@ -114,6 +143,7 @@ const UserSettingsPage = () => {
       setGeneralLoading(false);
       form1.setFieldValue("full_name", data[0].full_name ?? "");
       form1.setFieldValue("location", data[0].location ?? "pakistan");
+      setProvider(data[0].provider.provider);
     }
   };
 
@@ -123,8 +153,7 @@ const UserSettingsPage = () => {
       .select(
         `
       bio,
-      github
-      `
+      github      `
       )
       .eq("id", session.user.id);
     if (!error) {
@@ -139,7 +168,7 @@ const UserSettingsPage = () => {
   };
 
   useEffect(() => {
-    if (session.user) {
+    if (session && session.user) {
       switch (activeTab) {
         case "general":
           getGeneralData();
@@ -193,7 +222,7 @@ const UserSettingsPage = () => {
               pl={mobile ? 0 : "xl"}
               pt={mobile ? "xl" : "xs"}
             >
-              <Title order={4} mb={40} mt="xs">
+              <Title order={4} mb={30} mt="xs">
                 General Settings
               </Title>
               {generalLoading ? (
@@ -233,7 +262,12 @@ const UserSettingsPage = () => {
                       full_name,
                       location
                       `);
-
+                    if (provider == "email") {
+                      const { error: updatePasswordError } =
+                        await supabaseClient.auth.updateUser({
+                          password: val.password,
+                        });
+                    }
                     if (data) {
                       showNotification({
                         message: "Your changes have been saved successfully",
@@ -255,12 +289,35 @@ const UserSettingsPage = () => {
                 >
                   <TextInput
                     required
-                    label="First Name"
+                    label="Full Name"
                     placeholder="Marc"
                     {...form1.getInputProps("full_name")}
                   />
 
+                  {provider && provider == "email" ? (
+                    <Fragment>
+                      <PasswordInput
+                        mt="md"
+                        required
+                        defaultValue=""
+                        label="Password"
+                        placeholder="New Passowrd"
+                        {...form1.getInputProps("password")}
+                      />
+
+                      <PasswordInput
+                        mt="md"
+                        required
+                        defaultValue=""
+                        label="Repeat Password"
+                        placeholder="Confirm New Password"
+                        {...form1.getInputProps("repeatPassword")}
+                      />
+                    </Fragment>
+                  ) : null}
+
                   <Select
+                    my="md"
                     required
                     label="Country of Origin"
                     placeholder="My country is..."
@@ -274,11 +331,11 @@ const UserSettingsPage = () => {
                         .toLowerCase()
                         .includes(value.toLowerCase().trim())
                     }
-                    mb={50}
+                    mb={40}
                     {...form1.getInputProps("location")}
                   />
 
-                  <Button type="submit" fullWidth mt="xl">
+                  <Button mb={30} type="submit" fullWidth mt="xs">
                     Save Changes
                   </Button>
                 </form>

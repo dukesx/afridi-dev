@@ -8,6 +8,7 @@ specifiers:
   '@emotion/cache': ^11.10.3
   '@emotion/react': ^11.9.3
   '@emotion/server': ^11.4.0
+  '@hcaptcha/react-hcaptcha': ^1.4.4
   '@mantine/carousel': ^5.2.3
   '@mantine/core': ^5.2.3
   '@mantine/dates': ^5.2.3
@@ -25,7 +26,6 @@ specifiers:
   '@playwright/test': ^1.26.0
   '@supabase/auth-helpers-nextjs': 0.4.0-next.3
   '@supabase/auth-helpers-react': 0.3.0-next.2
-  '@supabase/auth-ui-react': ^0.2.1
   '@supabase/supabase-js': 2.0.0-rc.10
   '@tabler/icons': ^1.91.0
   '@testing-library/jest-dom': ^5.16.4
@@ -85,6 +85,7 @@ dependencies:
   '@emotion/cache': 11.10.3
   '@emotion/react': 11.9.3_jzfvqlullkoqjal5ksipb4dg6y
   '@emotion/server': 11.4.0
+  '@hcaptcha/react-hcaptcha': 1.4.4_biqbaboplfbrettd7655fr4n2y
   '@mantine/carousel': 5.2.3_ez4nfxtmjeq2ymfxpfhqj2wume
   '@mantine/core': 5.2.3_geuf2jejbvy5nbl5qeo32tfoou
   '@mantine/dates': 5.2.3_nn35yi2swetbkgp34gn6d2w2f4
@@ -101,7 +102,6 @@ dependencies:
   '@plaiceholder/next': 2.5.0_next@12.3.1+sharp@0.31.0
   '@supabase/auth-helpers-nextjs': 0.4.0-next.3
   '@supabase/auth-helpers-react': 0.3.0-next.2
-  '@supabase/auth-ui-react': 0.2.1_biqbaboplfbrettd7655fr4n2y
   '@supabase/supabase-js': 2.0.0-rc.10
   '@tabler/icons': 1.91.0_biqbaboplfbrettd7655fr4n2y
   '@toast-ui/editor-plugin-code-syntax-highlight': 3.1.0
@@ -708,6 +708,17 @@ packages:
       use-isomorphic-layout-effect: 1.1.2_ug65io7jkbhmo4fihdmbrh3ina
     transitivePeerDependencies:
       - '@types/react'
+    dev: false
+
+  /@hcaptcha/react-hcaptcha/1.4.4_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-Aen217LDnf5ywbPSwBG5CsoqBLIHIAS9lhj3zQjXJuO13doQ6/ubkCWNuY8jmwYLefoFt3V3MrZmCdKDaFoTuQ==}
+    peerDependencies:
+      react: '>= 16.3.0'
+      react-dom: '>= 16.3.0'
+    dependencies:
+      '@babel/runtime': 7.18.9
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@humanwhocodes/config-array/0.10.4:
@@ -1657,18 +1668,6 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
-  /@stitches/core/1.2.8:
-    resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
-    dev: false
-
-  /@stitches/react/1.2.8_react@18.2.0:
-    resolution: {integrity: sha512-9g9dWI4gsSVe8bNLlb+lMkBYsnIKCZTmvqvDG+Avnn69XfmHZKiaMrx7cgTaddq7aTPPmXiTsbFcUy0xgI4+wA==}
-    peerDependencies:
-      react: '>= 16.3.0'
-    dependencies:
-      react: 18.2.0
-    dev: false
-
   /@supabase/auth-helpers-nextjs/0.4.0-next.3:
     resolution: {integrity: sha512-WfYHNTPK3SNfotaYXNxrrn39nmKrbyt0yzp+sAr+VA1PEpNQKutilIqvGSFDq+6laaYUVtMSLsoAcuTPI62WYQ==}
     dependencies:
@@ -1685,22 +1684,6 @@ packages:
     resolution: {integrity: sha512-e+u5EuMgQoLVP4cHXdv22V4L7seSKObZVCtkkBT+eqOuHVuJlc/VDM7PYoJVX57gZoUl1Gi1TuZ+ZO70CYgG6A==}
     dependencies:
       cookie: 0.5.0
-    dev: false
-
-  /@supabase/auth-ui-react/0.2.1_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-Ch39R/aQekjH/C4v4/VxtYn4tWVBrRvXco9Wffw1vfWiyudod64PG/TSmQE1+xJjw0USJSWWx0R3WqEVGqa7gw==}
-    peerDependencies:
-      react: ^16.13.1 || ^17.0.1 || ^18.0.0
-      react-dom: ^16.13.1 || ^17.0.1 || ^18.0.0
-    dependencies:
-      '@stitches/core': 1.2.8
-      '@stitches/react': 1.2.8_react@18.2.0
-      lodash: 4.17.21
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    optionalDependencies:
-      fsevents: 2.3.2
     dev: false
 
   /@supabase/functions-js/2.0.0-rc.1:
