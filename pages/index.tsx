@@ -82,23 +82,9 @@ const LandingPage = ({ feedData, feedDataCount }) => {
     }
   };
 
-  const getCover = async () => {
-    var fetcher = await fetch("/api/getDynamicCover", {
-      method: "POST",
-      body: JSON.stringify({
-        node: "",
-      }),
-    });
-
-    var res = await fetcher.json();
-
-    console.log(res);
-  };
-
   useEffect(() => {
     fetchAuthors();
     fetchMostFollowedTags();
-    getCover();
   }, []);
 
   const largeCardClass = createStyles((theme, _params, getRef) => ({
