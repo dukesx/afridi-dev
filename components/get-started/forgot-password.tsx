@@ -95,7 +95,7 @@ const ForgotPasswordTab = ({
         size="invisible"
         ref={forgottenCaptchaRef}
         theme={colorScheme == "dark" ? "dark" : "light"}
-        sitekey="b2d3efbe-b36a-43f7-bcfd-785299a19a06"
+        sitekey={process.env.NEXT_PUBLIC_CAPTCHA_KEY}
         onVerify={(token, ekey) => setForgottenToken(token)}
       />
 
