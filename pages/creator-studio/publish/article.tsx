@@ -84,7 +84,7 @@ const ArticleComposer = () => {
                 className="mt-5 h-full min-h-[400px]"
                 plugins
                 previewStyle={"tab"}
-                height="800px"
+                height="500px"
                 toolbarItems="full"
               />
             </Input.Wrapper>

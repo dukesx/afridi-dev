@@ -126,7 +126,7 @@ const GetStarted = () => {
             <Group
               className="w-full"
               mt="xl"
-              mb={50}
+              mb={40}
               align="center"
               position="center"
             >
@@ -297,7 +297,7 @@ const GetStarted = () => {
                     size="invisible"
                     ref={signinCaptchaRef}
                     theme={colorScheme == "dark" ? "dark" : "light"}
-                    sitekey="b2d3efbe-b36a-43f7-bcfd-785299a19a06"
+                    sitekey={process.env.NEXT_PUBLIC_CAPTCHA_KEY}
                     onVerify={(token, ekey) => setSigninToken(token)}
                   />
                   <Button
