@@ -16,6 +16,7 @@ import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { NextSeo } from "next-seo";
 import React, { useEffect, useState } from "react";
+import TextEditor from "../../../components/global/editor/editor";
 import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
 import AppWrapper from "../../../components/global/wrapper";
 import ArticleComposeSidebar from "../../../components/studio/publish/article/compose/article-compose-sidebar";
@@ -77,7 +78,7 @@ const ArticleComposer = () => {
               description="Write your content here"
               required
             >
-              <AfridiDevEditor
+              {/* <AfridiDevEditor
                 value=""
                 saveData={save}
                 autoFocus={false}
@@ -86,7 +87,8 @@ const ArticleComposer = () => {
                 previewStyle={"tab"}
                 height="500px"
                 toolbarItems="full"
-              />
+              /> */}
+              <TextEditor />
             </Input.Wrapper>
           </Grid.Col>
 

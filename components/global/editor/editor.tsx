@@ -1,21 +1,86 @@
 /* eslint-disable react/display-name */
-// @ts-nocheck
 
-import "@toast-ui/editor/dist/toastui-editor.css";
-import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
-import { Editor } from "@toast-ui/react-editor";
-import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js";
 import {
+  useEditor,
+  EditorContent,
+  FloatingMenu,
+  BubbleMenu,
+} from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+// import "@toast-ui/editor/dist/toastui-editor.css";
+// import "@toast-ui/editor/dist/theme/toastui-editor-dark.css";
+// import { Editor } from "@toast-ui/react-editor";
+// import codeSyntaxHighlight from "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js";
+import {
+  ActionIcon,
   Button,
+  Card,
+  Divider,
+  Group,
   Loader,
   LoadingOverlay,
-  Overlay,
+  Menu,
   Stack,
   Text,
+  ThemeIcon,
+  Title,
+  Tooltip,
   useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
+import EmojiPicker, {
+  EmojiStyle,
+  SkinTones,
+  SuggestionMode,
+  Theme,
+} from "emoji-picker-react";
 import React, { useState } from "react";
-// import Editor from "rich-markdown-editor";
+import {
+  IconArrowBack,
+  IconArrowForward,
+  IconArrowLeft,
+  IconBold,
+  IconFountain,
+  IconH1,
+  IconH2,
+  IconH3,
+  IconH4,
+  IconH5,
+  IconH6,
+  IconHeading,
+  IconItalic,
+  IconLetterP,
+  IconLetterT,
+  IconList,
+  IconListNumbers,
+  IconMarkdown,
+  IconMoodSmile,
+  IconPhoto,
+  IconPhotoUp,
+  IconSeparatorHorizontal,
+  IconStrikethrough,
+  IconUnderline,
+  IconUpload,
+  IconX,
+} from "@tabler/icons";
+import CharacterCount from "@tiptap/extension-character-count";
+import Underline from "@tiptap/extension-underline";
+import FontFamily from "@tiptap/extension-font-family";
+import TextStyle from "@tiptap/extension-text-style";
+import AfridiDevEditorDivider from "./plugins/afridi-dev-editor-divider";
+import AfridiDevEditorLoader from "./plugins/afridi-dev-editor-loader";
+import { Dropzone } from "@mantine/dropzone";
+import { useSessionContext } from "@supabase/auth-helpers-react";
+import AfridiDevEditorImage from "./plugins/afridi-dev-editor-image";
+import AfridiDevEditorUndo from "./menu/undo";
+import AfridiDevEditorImageUpload from "./menu/image-upload";
+import AfridiDevEditorEmojiSelector from "./menu/emoji-selector";
+import AfridiDevEditorHorizontalLine from "./menu/horizontal-line";
+import AfridiDevEditorOrderedList from "./menu/ordered-list";
+import AfridiDevEditorBulletList from "./menu/bullet-list";
+import AfridiDevEditorHeadersSize from "./menu/headers-size";
+import AfridiDevEditorFontFamily from "./menu/font-family";
 
 /**
  * @property {String} value
@@ -42,96 +107,243 @@ export interface MarkDownEditorProps {
   className?: string;
 }
 
-export const TextEditor: React.FC<MarkDownEditorProps> = React.memo(
-  ({
-    value,
-    height,
-    saveData,
-    autoFocus,
-    previewStyle,
-    toolbarItems,
-    placeholder,
-    plugins,
-    className,
-  }) => {
-    var editorRef: any = React.createRef();
-    const { colorScheme } = useMantineColorScheme();
-    const [visible, setVisible] = useState(false);
-    return (
-      <div className={className + " relative"}>
-        <LoadingOverlay
-          loader={
-            <Stack className="h-[400px]" align="center">
-              <Loader variant="bars" color="blue" />
-              <Text weight={600}>Uploading Image</Text>
-            </Stack>
-          }
-          visible={visible}
-          overlayBlur={2}
+export const TextEditor = React.memo(() => {
+  var editorRef: any = React.createRef();
+  const { colorScheme } = useMantineColorScheme();
+  const [loadingSpinner, setLoadingSpinner] = useState(false);
+  const theme = useMantineTheme();
+  const { session } = useSessionContext();
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      CharacterCount,
+      Underline,
+      FontFamily,
+      TextStyle,
+      AfridiDevEditorDivider,
+      AfridiDevEditorLoader,
+      AfridiDevEditorImage,
+    ],
+    content: "<p>Hello World! 🌎️</p>",
+    autofocus: true,
+    enablePasteRules: true,
+    onFocus: ({ editor }) => {
+      return editor.commands.focus("end");
+    },
+  });
+
+  const getContent = () => {
+    console.log(editor.getJSON());
+  };
+  return (
+    <Stack spacing={0} className={"h-[400px]"}>
+      <LoadingOverlay
+        loader={
+          <Stack className="h-[400px]" align="center">
+            <Loader variant="bars" color="blue" />
+            <Text weight={600}>Uploading Image</Text>
+          </Stack>
+        }
+        visible={loadingSpinner}
+        overlayBlur={2}
+      />
+      <Group
+        py={5}
+        style={{
+          background:
+            colorScheme == "dark" ? theme.colors.dark[6] : theme.white,
+        }}
+        className="sticky w-full top-0 z-[1000]"
+        spacing="xs"
+        mt="xl"
+        px="md"
+      >
+        <AfridiDevEditorUndo
+          theme={theme}
+          colorScheme={colorScheme}
+          editor={editor}
         />
-        <Editor
-          initialValue={value}
-          theme={colorScheme == "dark" ? "dark" : "default"}
-          hideModeSwitch
-          toolbarItems={
-            toolbarItems == "basic"
-              ? [
-                  ["heading", "bold", "italic", "strike"],
-                  ["image", "link"],
-                ]
-              : toolbarItems == "full"
-              ? [
-                  ["heading", "bold", "italic", "strike"],
-                  ["hr", "quote"],
-                  ["ul", "ol", "task", "indent", "outdent"],
-                  ["table", "image", "link"],
-                  ["code", "codeblock"],
-                ]
-              : null
-          }
-          // minheight={height ? height : "100px"}
-          minHeight={height ?? "400px"}
-          height={height ?? "400px"}
-          placeholder={
-            placeholder ?? "Write something awesome with GFM Supported Markdown"
-          }
-          plugins={plugins ? [codeSyntaxHighlight] : []}
-          ref={editorRef}
-          previewStyle={previewStyle}
-          onLoad={async (editor) => {
-            saveData(editorRef);
-            if (plugins) {
-              //@ts-ignore
-              await import("prismjs/themes/prism.css");
-              await import(
-                "@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css"
-              );
-            }
+
+        <AfridiDevEditorFontFamily
+          theme={theme}
+          colorScheme={colorScheme}
+          editor={editor}
+        />
+
+        <AfridiDevEditorHeadersSize
+          theme={theme}
+          colorScheme={colorScheme}
+          editor={editor}
+        />
+
+        <AfridiDevEditorBulletList
+          theme={theme}
+          colorScheme={colorScheme}
+          editor={editor}
+        />
+
+        <AfridiDevEditorOrderedList
+          theme={theme}
+          colorScheme={colorScheme}
+          editor={editor}
+        />
+
+        <Divider
+          orientation="vertical"
+          className="h-[18px] align-middle mt-2"
+        />
+
+        <AfridiDevEditorHorizontalLine
+          theme={theme}
+          colorScheme={colorScheme}
+          editor={editor}
+        />
+
+        {/**
+         *
+         *
+         *  Emoji Selector
+         *
+         */}
+        <AfridiDevEditorEmojiSelector
+          editor={editor}
+          theme={theme}
+          colorScheme={colorScheme}
+        />
+        <AfridiDevEditorImageUpload
+          theme={theme}
+          editor={editor}
+          colorScheme={colorScheme}
+        />
+      </Group>
+      {editor && (
+        <BubbleMenu
+          editor={editor}
+          className="ml-14"
+          tippyOptions={{
+            arrow: true,
+            interactive: true,
+            duration: 100,
+            // showOnCreate: true,
           }}
-          autofocus={autoFocus ?? true}
-          hooks={{
-            addImageBlobHook: (blob, callback) => {
-              setVisible(true);
-              var form = new FormData();
-              form.append("file", blob);
-              fetch(
-                `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/form`,
-                {
-                  method: "POST",
-                  body: form,
+        >
+          <Card className="shadow-xl" p={0} py={1} px={4} radius="xl">
+            <Group spacing="xs">
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                className="rounded-full px-1.5 py-0"
+                onClick={() =>
+                  editor.chain().focus().toggleHeading({ level: 1 }).run()
                 }
-              ).then((res) =>
-                res.json().then((res) => {
-                  setVisible(false);
-                  callback(res.file.url.replace("tr:n-400x", "tr:w-400,h-400"));
-                })
-              );
-            },
-          }}
-        />
-      </div>
-    );
-  }
-);
+                radius="xl"
+                size="lg"
+              >
+                <IconH1
+                  color={
+                    colorScheme == "dark"
+                      ? theme.colors.gray[4]
+                      : theme.colors.gray[8]
+                  }
+                  size={18}
+                />
+              </ActionIcon>
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                className="rounded-full px-1.5 py-0"
+                onClick={() =>
+                  editor.chain().focus().toggleHeading({ level: 2 }).run()
+                }
+                radius="xl"
+                size="lg"
+              >
+                <IconH2
+                  color={
+                    colorScheme == "dark"
+                      ? theme.colors.gray[4]
+                      : theme.colors.gray[8]
+                  }
+                  size={18}
+                />
+              </ActionIcon>
+
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                className="rounded-full px-1.5 py-0"
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                radius="xl"
+                size="lg"
+              >
+                <IconBold
+                  color={
+                    colorScheme == "dark"
+                      ? theme.colors.gray[4]
+                      : theme.colors.gray[8]
+                  }
+                  size={18}
+                />
+              </ActionIcon>
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                className="rounded-full px-1.5 py-0"
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+                radius="xl"
+                size="lg"
+              >
+                <IconItalic
+                  color={
+                    colorScheme == "dark"
+                      ? theme.colors.gray[4]
+                      : theme.colors.gray[8]
+                  }
+                  size={18}
+                />
+              </ActionIcon>
+              <ActionIcon
+                variant="subtle"
+                color="gray"
+                className="rounded-full px-1.5 py-0"
+                onClick={() => editor.chain().focus().setUnderline().run()}
+                radius="xl"
+                size="lg"
+              >
+                <IconUnderline
+                  color={
+                    colorScheme == "dark"
+                      ? theme.colors.gray[4]
+                      : theme.colors.gray[8]
+                  }
+                  size={18}
+                />
+              </ActionIcon>
+            </Group>
+          </Card>
+        </BubbleMenu>
+      )}
+      <EditorContent height={500} editor={editor} />
+      <Group className="ml-auto">
+        <Group spacing={5}>
+          <Text color="dimmed" size="sm" className="character-count">
+            Supports
+          </Text>
+          <IconMarkdown color={theme.colors.gray[5]} strokeWidth={1.5} />
+        </Group>
+
+        <Divider className="w-[20px]" />
+        <Text color="dimmed" size="sm" className="character-count">
+          {editor && editor.storage.characterCount.characters()} characters
+        </Text>
+        <Divider className="w-[20px]" />
+        <Text color="dimmed" size="sm" className="character-count">
+          {editor && editor.storage.characterCount.words()} words
+        </Text>
+      </Group>
+    </Stack>
+  );
+});
 
 export default TextEditor;

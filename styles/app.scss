@@ -5,5 +5,17 @@
 html {
   scroll-behavior: smooth;
 }
+
+.epr-header-overlay {
+  display: none !important;
+}
+
+.epr-hidden-on-search {
+  display: none !important;
+}
+
+.ProseMirror {
+  @apply p-0 pl-3 outline-none;
+}
 @tailwind components;
 @tailwind utilities;

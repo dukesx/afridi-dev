@@ -18,7 +18,7 @@ export const AfridiDevEditor = ({
   className,
 }: MarkDownEditorProps) => {
   const MarkDownEditor = dynamic(() => import("./editor"), {
-    ssr: false,
+    ssr: true,
     loading: () => (
       <Stack
         style={{
