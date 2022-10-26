@@ -46,6 +46,7 @@ import LazyLoad from "react-lazy-load";
 import { ArticleJsonLd, BreadcrumbJsonLd, NextSeo } from "next-seo";
 import { format } from "date-fns";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
+import AfridiDevEditorRenderer from "../../components/global/editor/renderer/editor-data-renderer";
 
 //
 //
@@ -240,8 +241,8 @@ const Article = ({ article, tags }) => {
               images: [
                 {
                   url: `https://afridi.dev/api/generate-cover/article/${article.id}`,
-                  width: 400,
-                  height: 400,
+                  width: 1280,
+                  height: 630,
                   alt: "Cover of article",
                 },
               ],
@@ -522,7 +523,9 @@ const Article = ({ article, tags }) => {
             </Aside.Section>
           </Aside>
           <Box mt={50} className={classes.mainContent + " px-[12px]"}>
-            <MarkDownRenderer>{article && article.body}</MarkDownRenderer>
+            <AfridiDevEditorRenderer
+              data={article && JSON.parse(article.body)}
+            />
           </Box>
           <Divider />
           <Stack mt="xs" className="pb-10 pl-5">

@@ -180,6 +180,34 @@ const CreatorsStudio = ({ authored }) => {
                         onConfirm: async () => {
                           setTableLoading(true);
 
+                          const { data: comments } = await supabaseClient
+                            .from("comments")
+                            .select()
+                            .match({
+                              article_id: id,
+                            });
+
+                          await Promise.all(
+                            comments &&
+                              comments.map(async (mapped) => {
+                                const { error: deleteRepliesError } =
+                                  await supabaseClient
+                                    .from("replies")
+                                    .delete()
+                                    .match({
+                                      comment_id: mapped.id,
+                                    });
+                              })
+                          );
+
+                          const { error: deleteCommentsError } =
+                            await supabaseClient
+                              .from("comments")
+                              .delete()
+                              .match({
+                                article_id: id,
+                              });
+
                           const { error: deleteTagsError } =
                             await supabaseClient
                               .from("articles_tags")

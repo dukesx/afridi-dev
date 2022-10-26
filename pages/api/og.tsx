@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable import/no-anonymous-default-export */
+//@ts-nocheck
 import { MantineProvider, Text } from "@mantine/core";
 import { IconDashboard, IconEye, IconNews } from "@tabler/icons";
 import { ImageResponse } from "@vercel/og";

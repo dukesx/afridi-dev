@@ -35,7 +35,7 @@ const StudioWrapper = ({
 }: StudioWrapperProps) => {
   const theme = useMantineTheme();
   const isMobile = useMediaQuery("(max-width: 500px)", true, {
-    getInitialValueInEffect: false,
+    getInitialValueInEffect: true,
   });
   return (
     <AppWrapper

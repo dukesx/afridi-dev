@@ -1,27 +1,25 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
-import { IconListNumbers } from "@tabler/icons";
+import { IconUnderline } from "@tabler/icons";
 import { AfridiDevEditorMenuProps } from "./image-upload";
 
-const AfridiDevEditorOrderedList = ({
-  editor,
+const AfridiDevEditorUnderline = ({
   colorScheme,
+  editor,
   theme,
 }: AfridiDevEditorMenuProps) => {
   return (
-    <Tooltip label="Ordered List">
+    <Tooltip label="Underline">
       <ActionIcon
-        variant={editor.isActive("orderedList") ? "filled" : "subtle"}
-        color={editor.isActive("orderedList") ? "blue" : "gray"}
+        variant={editor.isActive("underline") ? "filled" : "subtle"}
+        color={editor.isActive("underline") ? "blue" : "gray"}
         className="rounded-full px-1.5 py-0"
-        onClick={() => {
-          editor.chain().focus().toggleOrderedList().run();
-        }}
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
         radius="xl"
-        size={"lg"}
+        size="lg"
       >
-        <IconListNumbers
+        <IconUnderline
           color={
-            editor.isActive("orderedList")
+            editor.isActive("underline")
               ? theme.white
               : colorScheme == "dark"
               ? theme.colors.gray[4]
@@ -34,4 +32,4 @@ const AfridiDevEditorOrderedList = ({
   );
 };
 
-export default AfridiDevEditorOrderedList;
+export default AfridiDevEditorUnderline;

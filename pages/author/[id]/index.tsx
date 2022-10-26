@@ -51,7 +51,7 @@ import {
   getSimilarAuthors,
 } from "../../../components/author/functions";
 import AuthorProfileHeader from "../../../components/author/components/header";
-import { AfridiDevEditor } from "../../../components/global/editor/editorCaller";
+import AfridiDevEditor from "../../../components/global/editor/editor";
 import AuthorFeedRenderer from "../../../components/author/components/author-feed-renderer";
 import SquareHorizontalAuthorWidget from "../../../components/author/widgets/square-horizontal-author";
 import HorizontalGridCardSkeleton from "../../../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
@@ -73,6 +73,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const [thumbsUp, setThumbsUp] = useState(null);
   const { session, supabaseClient } = useSessionContext();
   const [similarAuthors, setSimilarAuthors] = useState(null);
+  const [val, setVal] = useState(null);
 
   var ref: any = React.createRef();
 
@@ -346,16 +347,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                     {session && session.user.id == id ? (
                       <Fragment>
                         <Input.Wrapper className="w-full" label="">
-                          <AfridiDevEditor
-                            toolbarItems={false}
-                            autoFocus={false}
-                            value={""}
-                            placeholder="Write your status text here 👍‍ (GFM Supported)"
-                            height="150px"
-                            plugins={false}
-                            saveData={save}
-                            previewStyle="tab"
-                          />
+                          <AfridiDevEditor value={val} setValue={setVal} />
                           <Button
                             variant="light"
                             className="float-right"

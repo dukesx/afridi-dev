@@ -1,27 +1,25 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
-import { IconListNumbers } from "@tabler/icons";
+import { IconCode, IconList } from "@tabler/icons";
 import { AfridiDevEditorMenuProps } from "./image-upload";
 
-const AfridiDevEditorOrderedList = ({
+const AfridiDevEditorCode = ({
   editor,
   colorScheme,
   theme,
 }: AfridiDevEditorMenuProps) => {
   return (
-    <Tooltip label="Ordered List">
+    <Tooltip label="Convert to Code">
       <ActionIcon
-        variant={editor.isActive("orderedList") ? "filled" : "subtle"}
-        color={editor.isActive("orderedList") ? "blue" : "gray"}
+        variant={editor.isActive("code") ? "filled" : "subtle"}
+        color={editor.isActive("code") ? "blue" : "gray"}
         className="rounded-full px-1.5 py-0"
-        onClick={() => {
-          editor.chain().focus().toggleOrderedList().run();
-        }}
+        onClick={() => editor.chain().focus().toggleCode().run()}
         radius="xl"
         size={"lg"}
       >
-        <IconListNumbers
+        <IconCode
           color={
-            editor.isActive("orderedList")
+            editor.isActive("code")
               ? theme.white
               : colorScheme == "dark"
               ? theme.colors.gray[4]
@@ -34,4 +32,4 @@ const AfridiDevEditorOrderedList = ({
   );
 };
 
-export default AfridiDevEditorOrderedList;
+export default AfridiDevEditorCode;

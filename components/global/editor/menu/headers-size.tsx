@@ -1,4 +1,4 @@
-import { ActionIcon, Group, Menu } from "@mantine/core";
+import { ActionIcon, Group, Menu, Tooltip } from "@mantine/core";
 import {
   IconH1,
   IconH2,
@@ -19,35 +19,29 @@ const AfridiDevEditorHeadersSize = ({
   return (
     <Menu>
       <Menu.Target>
-        <ActionIcon
-          variant="subtle"
-          color="gray"
-          className="rounded-full px-1.5 py-0"
-          radius="xl"
-          size="lg"
-        >
-          <IconHeading
-            color={
-              colorScheme == "dark"
-                ? theme.colors.gray[4]
-                : theme.colors.gray[8]
-            }
-            size={18}
-          />
-        </ActionIcon>
-      </Menu.Target>
-      <Menu.Dropdown className="ml-10">
-        <Group spacing={6} className="w-full" noWrap>
-          <Menu.Item onClick={() => editor.chain().setParagraph().run()}>
-            <IconLetterP
+        <Tooltip label="Header Size">
+          <ActionIcon
+            variant={editor.isActive("heading") ? "filled" : "subtle"}
+            color={editor.isActive("heading") ? "blue" : "gray"}
+            className="rounded-full px-1.5 py-0"
+            radius="xl"
+            size="lg"
+          >
+            <IconHeading
               color={
-                colorScheme == "dark"
+                editor.isActive("heading")
+                  ? theme.white
+                  : colorScheme == "dark"
                   ? theme.colors.gray[4]
                   : theme.colors.gray[8]
               }
-              size={20}
+              size={18}
             />
-          </Menu.Item>
+          </ActionIcon>
+        </Tooltip>
+      </Menu.Target>
+      <Menu.Dropdown className="ml-10">
+        <Group spacing={6} className="w-full" noWrap>
           <Menu.Item
             onClick={() => editor.chain().toggleHeading({ level: 1 }).run()}
           >

@@ -6,6 +6,7 @@ import {
   Stack,
   Text,
   ThemeIcon,
+  Tooltip,
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
@@ -36,40 +37,50 @@ const AfridiDevEditorImageUpload = ({
       closeOnItemClick
     >
       <Menu.Target>
-        <ActionIcon
-          onClick={() => setImageUploadMenuOpened(true)}
-          variant="subtle"
-          color="gray"
-          className="rounded-full px-1.5 py-0"
-          radius="xl"
-          size="lg"
-        >
-          <IconPhotoUp
-            color={
-              colorScheme == "dark"
-                ? theme.colors.gray[4]
-                : theme.colors.gray[8]
-            }
-            size={24}
-          />
-        </ActionIcon>
+        <Tooltip label="Upload Image">
+          <ActionIcon
+            onClick={() => setImageUploadMenuOpened(true)}
+            variant="subtle"
+            color="gray"
+            className="rounded-full px-1.5 py-0"
+            radius="xl"
+            size="lg"
+          >
+            <IconPhotoUp
+              color={
+                colorScheme == "dark"
+                  ? theme.colors.gray[4]
+                  : theme.colors.gray[8]
+              }
+              size={24}
+            />
+          </ActionIcon>
+        </Tooltip>
       </Menu.Target>
       <Menu.Dropdown>
         <Dropzone
           className="w-[300px]"
           onDrop={async (files) => {
             setImageUploadMenuOpened(false);
-
-            editor
-              .chain()
-              .insertContent({
-                type: "afridi-dev-editor-loader",
-                attrs: {
-                  title: "Uploading Image....",
-                },
-              })
-              .run();
-            editor.commands.blur();
+            const reader = new FileReader();
+            var fileer = reader.readAsDataURL(files[0]);
+            reader.addEventListener(
+              "load",
+              () => {
+                editor
+                  .chain()
+                  .insertContent({
+                    type: "afridi-dev-editor-loader",
+                    attrs: {
+                      title: "Uploading Image....",
+                      image: reader.result,
+                    },
+                  })
+                  .run();
+                editor.commands.blur();
+              },
+              false
+            );
 
             const form = new FormData();
             form.append("file", files[0]);
@@ -92,7 +103,7 @@ const AfridiDevEditorImageUpload = ({
                     type: "afridi-dev-editor-image",
                     attrs: {
                       src:
-                        "https://ik.imagekit.io/afrididotdev/tr:w-900/" +
+                        "https://ik.imagekit.io/afrididotdev/tr:w-900" +
                         result.file.url.split("tr:n-400x")[1],
                     },
                   })

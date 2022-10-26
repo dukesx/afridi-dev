@@ -1,31 +1,25 @@
 import { ActionIcon, Tooltip } from "@mantine/core";
-import { IconSeparator, IconSeparatorHorizontal } from "@tabler/icons";
+import { IconHighlight } from "@tabler/icons";
 import { AfridiDevEditorMenuProps } from "./image-upload";
 
-const AfridiDevEditorHorizontalLine = ({
-  editor,
+const AfridiDevEditorHighlight = ({
   colorScheme,
+  editor,
   theme,
 }: AfridiDevEditorMenuProps) => {
   return (
-    <Tooltip label="Insert Horizontal Line">
+    <Tooltip label="Highlight text">
       <ActionIcon
         variant="subtle"
         color="gray"
         className="rounded-full px-1.5 py-0"
         onClick={() => {
-          editor
-            .chain()
-            .focus()
-            .insertContent({ type: "afridi-dev-editor-divider" })
-            .run();
-
-          editor.commands.enter();
+          editor.chain().focus().toggleHighlight({ color: "#FFD43B" }).run();
         }}
         radius="xl"
         size="lg"
       >
-        <IconSeparator
+        <IconHighlight
           color={
             colorScheme == "dark" ? theme.colors.gray[4] : theme.colors.gray[8]
           }
@@ -36,4 +30,4 @@ const AfridiDevEditorHorizontalLine = ({
   );
 };
 
-export default AfridiDevEditorHorizontalLine;
+export default AfridiDevEditorHighlight;

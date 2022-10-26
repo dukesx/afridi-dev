@@ -182,11 +182,6 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                     />
                   </ActionIcon>
                 </Tooltip>
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={1}
-                />
               </Fragment>
             ) : (
               <Fragment>
@@ -218,14 +213,16 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                     <IconBookmark fill={"transparent"} size={18} />
                   </ActionIcon>
                 </Tooltip>
-
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={1}
-                />
               </Fragment>
             )}
+
+            {appreciations && appreciations.length > 0 ? (
+              <Divider
+                className="h-[14px] align-middle my-auto"
+                orientation="vertical"
+                size={1}
+              />
+            ) : null}
 
             {appreciations && appreciations.length > 0 ? (
               <Tooltip

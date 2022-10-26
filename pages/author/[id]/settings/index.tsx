@@ -34,12 +34,13 @@ import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
-import { AfridiDevEditor } from "../../../../components/global/editor/editorCaller";
+import AfridiDevEditor from "../../../../components/global/editor/editor";
 import { NextSeo } from "next-seo";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();
   const mobile = useMediaQuery("(max-width: 500px)", false);
+  const [val, setVal] = useState(null);
   const form1 = useForm({
     initialValues: {
       full_name: "",
@@ -63,7 +64,6 @@ const UserSettingsPage = () => {
           : null,
       repeatPassword: (val) => {
         if (val !== form1.values.password) {
-          console.log("yes");
           return "Passwords donot match";
         } else {
           return null;
@@ -393,15 +393,7 @@ const UserSettingsPage = () => {
                       required
                       error={form2.errors.about}
                     >
-                      <AfridiDevEditor
-                        toolbarItems="basic"
-                        autoFocus={false}
-                        value={form2.values.about}
-                        height="290px"
-                        saveData={save}
-                        previewStyle="tab"
-                        plugins
-                      />
+                      <AfridiDevEditor value={val} setValue={setVal} />
                     </Input.Wrapper>
 
                     <TextInput
