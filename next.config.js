@@ -1,7 +1,10 @@
 /**
  * @type {import('next').NextConfig}
  */
-
-module.exports = {
-  largePageDataBytes: 200,
+const nextConfig = {
+  experimental: {
+    runtime: "nodejs",
+  },
 };
+
+export default nextConfig;
