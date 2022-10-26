@@ -4,6 +4,7 @@
 const nextConfig = {
   experimental: {
     runtime: "nodejs",
+    largePageDataBytes: 256 * 1000,
   },
 };
 
