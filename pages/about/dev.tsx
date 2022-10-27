@@ -1,9 +1,17 @@
-import { Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import {
+  Stack,
+  Text,
+  ThemeIcon,
+  Title,
+  TypographyStylesProvider,
+} from "@mantine/core";
 import { IconUserCircle } from "@tabler/icons";
 import { NextSeo } from "next-seo";
 import AppWrapper from "../../components/global/wrapper";
+import { supabase } from "../../utils/supabaseClient";
 
-const AboutDev = () => {
+const AboutDev = ({ bio }) => {
+  console.log(bio);
   return (
     <AppWrapper size="md" activeHeaderKey="">
       <NextSeo
@@ -51,8 +59,28 @@ const AboutDev = () => {
           About The Dev
         </Title>
       </Stack>
+
+      <TypographyStylesProvider>
+        <div dangerouslySetInnerHTML={{ __html: bio ?? "" }} />
+      </TypographyStylesProvider>
     </AppWrapper>
   );
 };
 
 export default AboutDev;
+
+export const getStaticProps = async () => {
+  const { data, error } = await supabase
+    .from("authors")
+    .select("bio")
+    .eq("id", "49d746ab-60bf-4b1d-aaab-7524d40bd402");
+
+  console.log(data);
+  console.log(error);
+
+  return {
+    props: {
+      bio: data[0].bio ?? "",
+    },
+  };
+};

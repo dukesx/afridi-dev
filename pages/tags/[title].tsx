@@ -357,6 +357,8 @@ const ArticleTagPage = ({ taga, articles }) => {
           <Stack pb="xl" mt={50} spacing="xl">
             {data.map((mapped, index) => (
               <HorizontalGridCard
+                withNumber
+                number={index}
                 coverClassName="rounded-lg"
                 theme={theme}
                 data={mapped}

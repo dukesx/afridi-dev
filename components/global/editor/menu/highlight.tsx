@@ -10,8 +10,8 @@ const AfridiDevEditorHighlight = ({
   return (
     <Tooltip label="Highlight text">
       <ActionIcon
-        variant="subtle"
-        color="gray"
+        variant={editor.isActive("highlight") ? "filled" : "subtle"}
+        color={editor.isActive("highlight") ? "yellow.4" : "gray"}
         className="rounded-full px-1.5 py-0"
         onClick={() => {
           editor.chain().focus().toggleHighlight({ color: "#FFD43B" }).run();
@@ -21,7 +21,11 @@ const AfridiDevEditorHighlight = ({
       >
         <IconHighlight
           color={
-            colorScheme == "dark" ? theme.colors.gray[4] : theme.colors.gray[8]
+            editor.isActive("highlight")
+              ? theme.colors.gray[8]
+              : colorScheme == "dark"
+              ? theme.colors.gray[4]
+              : theme.colors.gray[8]
           }
           size={18}
         />

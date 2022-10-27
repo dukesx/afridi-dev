@@ -17,13 +17,10 @@ import {
   IconBrandWhatsapp,
   IconCode,
   IconHash,
-  IconPencil,
   IconThumbUp,
 } from "@tabler/icons";
 import { NextSeo } from "next-seo";
-import Image from "next/image";
 import { Fragment, Suspense, useEffect, useState } from "react";
-import EmptyPlaceholder from "../../components/global/placeholders/empty";
 import TagComponent from "../../components/global/tags/tagComponent";
 import AppWrapper from "../../components/global/wrapper";
 import { supabase } from "../../utils/supabaseClient";

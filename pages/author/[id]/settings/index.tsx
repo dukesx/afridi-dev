@@ -368,7 +368,20 @@ const UserSettingsPage = () => {
                           github: val.githubProfile,
                         })
                         .eq("id", session.user.id);
-                      if (!error) {
+                        const fetcher = await fetch("/api/revalidate", {
+                          method: "POST",
+                          headers: {
+                            accept: "application/json",
+                            "content-type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            paths: ["/about/dev", `/author/${session.user.id}`],
+                          }),
+                        });
+
+                        const res = await fetcher.json();
+
+                      if (!error && res.revalidated) {
                         showNotification({
                           message: "Your changes have been saved successfully",
                           title: "Saved Successfully",

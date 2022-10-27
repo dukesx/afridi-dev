@@ -56,6 +56,8 @@ interface HorizontalGridCardProps {
     priority?: boolean;
     layout?: "fill" | "intrinsic" | "fixed" | "responsive";
   };
+  withNumber?: boolean;
+  number?: number;
 }
 
 const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
@@ -71,6 +73,8 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
   appreciations,
   withCover,
   coverProps,
+  number,
+  withNumber,
 }) => {
   const awards = [
     {
@@ -107,6 +111,14 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
           {...coverProps}
         />
       ) : null}
+      {withNumber && (
+        <Fragment>
+          <Text size={30} weight={700} color="gray.3">
+            {number + 1}
+          </Text>
+          <Divider mx="sm" size="sm" className="w-[20px]" />
+        </Fragment>
+      )}
       <Stack
         spacing="xs"
         className={
