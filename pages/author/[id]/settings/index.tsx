@@ -392,8 +392,8 @@ const UserSettingsPage = () => {
                     >
                       <AfridiDevEditor
                         basic
-                        noToolbar
                         html
+                        noToolbar
                         value={editorVal}
                         setValue={setEditorVal}
                       />

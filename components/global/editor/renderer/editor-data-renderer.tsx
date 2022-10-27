@@ -16,7 +16,7 @@ import EditorRendererParagraph from "./blocks/paragraph";
 import EditorRendererListItem from "./blocks/list";
 import EditorRendererEmbeds from "./blocks/embeds";
 import dracula from "prism-react-renderer/themes/dracula";
-import vsLight from "prism-react-renderer/themes/github";
+import github from "prism-react-renderer/themes/github";
 import { Gif } from "@giphy/react-components";
 
 // import duotoneLight from "prism-react-renderer/themes/duotoneLight";
@@ -189,7 +189,7 @@ const AfridiDevEditorRenderer = ({
               <Prism
                 my="xl"
                 getPrismTheme={(_theme, colorScheme) =>
-                  colorScheme == "dark" ? dracula : vsLight
+                  colorScheme == "dark" ? dracula : github
                 }
                 withLineNumbers
                 key={nanoid()}

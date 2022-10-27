@@ -83,10 +83,10 @@ const EditorRendererParagraph = ({ data }) => {
                     </Stack>
                   </Group>
                   {mapped.attrs.bio ? (
-                    <Text size="xs" lineClamp={3}>
+                    <Text className="leading-normal" size="xs" lineClamp={3}>
                       <TypographyStylesProvider mt="sm">
                         <div
-                          className="!text-xs"
+                          className="!text-xs leading-normal"
                           dangerouslySetInnerHTML={{
                             __html: mapped.attrs.bio,
                           }}
