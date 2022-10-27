@@ -10,7 +10,6 @@ export default forwardRef((props: any, ref) => {
     <Card py={8} withBorder>
       <Stack className="bg-transparent">
         {props.items.map((mapped) => {
-          console.log(mapped);
           return (
             <Stack
               spacing={1}

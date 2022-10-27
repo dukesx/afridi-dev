@@ -29,7 +29,6 @@ interface AfridiDevEditorRendererProps {
 }
 
 const AfridiDevEditorRenderer = ({ data }: AfridiDevEditorRendererProps) => {
-  console.log(data);
   return (
     <Fragment>
       {data.content &&
