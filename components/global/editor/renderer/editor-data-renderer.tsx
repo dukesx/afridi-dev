@@ -22,17 +22,15 @@ import { Gif } from "@giphy/react-components";
 // import duotoneLight from "prism-react-renderer/themes/duotoneLight";
 
 interface AfridiDevEditorRendererProps {
-  data: {
-    type: string;
-    content: Array<any>;
-  };
+  data: any;
 }
 
 const AfridiDevEditorRenderer = ({ data }: AfridiDevEditorRendererProps) => {
+  var newData = data && JSON.parse(data);
   return (
     <Fragment>
-      {data.content &&
-        data.content.map((data2) => {
+      {newData.content &&
+        newData.content.map((data2) => {
           if (data2.type == "heading" && data2.content) {
             return (
               <Title py="xs" key={nanoid()} order={data2.attrs.level}>

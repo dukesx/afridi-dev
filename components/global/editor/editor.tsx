@@ -69,22 +69,18 @@ import { AfridiDevEditorOutput } from "../../../pages/creator-studio/publish/art
 import Mention from "@tiptap/extension-mention";
 import tippy from "tippy.js";
 import AfridiDevEditorMentionsDropdown from "./plugins/afridi-dev-editor-mentions-dropdown";
-import { Router } from "next/router";
 import AfridiDevEditorGiphySelector from "./menu/giphy";
 import AfridiDevEditorGiphy from "./plugins/afridi-dev-editor-giphy";
+import Placeholder from "@tiptap/extension-placeholder";
+import Image from "@tiptap/extension-image";
 
 /**
- * @property {String} value
- * @property {Function} saveData
- * @example
- * //returns Editor Ref to Parent createRef()
- * // To Call ref.current.getInstance().getMarkdown()
- * const save = (data) => {
- *  ref = data;
- * };
-  @property {String} height - in px
-  @property {Boolean} autoFocus
-  @property {EditorPreviewStyle} previewStyle in Enum
+ *  @property {String}   value
+ *  @property {Function} setValue
+ *  @property {String}   height - in integer
+ *  @property {Boolean}  html
+ *  @property {Boolean}  noToolbar
+ *  @property {Booelan}  basic
  */
 export interface AfridiDevEditorProps {
   setValue: Function;
@@ -93,6 +89,8 @@ export interface AfridiDevEditorProps {
   basic?: boolean;
   isScrollable?: boolean | false;
   height?: number;
+  html?: boolean;
+  noToolbar?: boolean;
 }
 
 export const TextEditor = ({
@@ -101,6 +99,9 @@ export const TextEditor = ({
   basic,
   isScrollable,
   height,
+  placeholder,
+  noToolbar,
+  html,
 }: AfridiDevEditorProps) => {
   var editorRef: any = React.createRef();
   const { colorScheme } = useMantineColorScheme();
@@ -139,6 +140,20 @@ export const TextEditor = ({
           },
         },
 
+        bio: {
+          default: null,
+          parseHTML: (element) => element.getAttribute("data-label"),
+          renderHTML: (attributes) => {
+            if (!attributes.bio) {
+              return {};
+            }
+
+            return {
+              "data-label": attributes.bio,
+            };
+          },
+        },
+
         avatar: {
           default: null,
           parseHTML: (element) => element.getAttribute("data-id"),
@@ -170,6 +185,12 @@ export const TextEditor = ({
     },
   });
 
+  useEffect(() => {
+    if (!value && editor) {
+      editor.commands.clearContent();
+    }
+  }, [value]);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ codeBlock: false }),
@@ -177,6 +198,7 @@ export const TextEditor = ({
       Underline,
       FontFamily,
       TextStyle,
+      Image,
       AfridiDevEditorDivider,
       AfridiDevEditorLoader,
       AfridiDevEditorImage,
@@ -214,7 +236,8 @@ export const TextEditor = ({
               username,
               full_name,
               email,
-              dp
+              dp,
+              bio
               `
               )
               .ilike("full_name", `%${query}%`);
@@ -277,18 +300,27 @@ export const TextEditor = ({
         },
       }),
       AfridiDevEditorGiphy,
+      Placeholder.configure({
+        placeholder: placeholder ?? "Let's write something awsum!",
+      }),
     ],
-    content:
-      value ??
-      "<p><span data-comment='hi'>Hmmmm... </span> let's start typing....</p>",
-    autofocus: true,
+    content: value ? value.data : "",
+    autofocus: false,
     enablePasteRules: true,
     onUpdate: ({ editor }) => {
-      const json = editor.getJSON();
-      setValue({
-        data: json,
-        words: editor.storage.characterCount.words(),
-      });
+      if (html) {
+        const html = editor.getHTML();
+        setValue({
+          data: html,
+          words: editor.storage.characterCount.words(),
+        });
+      } else {
+        const json = editor.getJSON();
+        setValue({
+          data: json,
+          words: editor.storage.characterCount.words(),
+        });
+      }
     },
   });
 
@@ -308,7 +340,7 @@ export const TextEditor = ({
         visible={loadingSpinner}
         overlayBlur={2}
       />
-      {editor && (
+      {editor && noToolbar == false ? (
         <Group
           py={5}
           style={{
@@ -431,7 +463,7 @@ export const TextEditor = ({
             colorScheme={colorScheme}
           />
         </Group>
-      )}
+      ) : null}
       {editor && (
         <BubbleMenu
           editor={editor}
@@ -545,6 +577,7 @@ export const TextEditor = ({
       )}
       <Paper
         component={isScrollable ? ScrollArea : "div"}
+        className="bg-transparent"
         style={{
           height: height ?? "100%",
         }}

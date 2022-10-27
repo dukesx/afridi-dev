@@ -77,5 +77,14 @@ pre code.hljs {
   margin-top: 10px;
 }
 
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-family: "Inter", sans-serif;
+}
+
 @tailwind components;
 @tailwind utilities;

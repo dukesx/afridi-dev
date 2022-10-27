@@ -19,6 +19,7 @@ export default forwardRef((props: any, ref) => {
                   label: mapped.full_name,
                   avatar: mapped.dp,
                   username: mapped.username,
+                  bio: mapped.bio,
                 });
               }}
             >

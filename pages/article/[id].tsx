@@ -32,7 +32,6 @@ import {
 } from "@tabler/icons";
 import { Fragment, useEffect, useRef, useState } from "react";
 import AfridiImage from "../../components/global/afridi-image";
-import MarkDownRenderer from "../../components/global/markdown-renderer";
 import AppWrapper from "../../components/global/wrapper";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "../../utils/supabaseClient";
@@ -211,10 +210,6 @@ const Article = ({ article, tags }) => {
         }
       });
     });
-
-  const getMarkdown = () => {
-    return ref.current.getInstance().getMarkdown() as string;
-  };
 
   return (
     <AppWrapper noPadding activeHeaderKey="" size="xl">
@@ -523,9 +518,7 @@ const Article = ({ article, tags }) => {
             </Aside.Section>
           </Aside>
           <Box mt={50} className={classes.mainContent + " px-[12px]"}>
-            <AfridiDevEditorRenderer
-              data={article && JSON.parse(article.body)}
-            />
+            <AfridiDevEditorRenderer data={article && article.body} />
           </Box>
           <Divider />
           <Stack mt="xs" className="pb-10 pl-5">
@@ -570,7 +563,6 @@ const Article = ({ article, tags }) => {
             editorDrawer={editorDrawer}
             setEditorDrawer={setEditorDrawer}
             getComments={getComments}
-            getMarkdown={getMarkdown}
             session={session}
             setCommentEditorRef={setCommentEditorRef}
             setCommentId={setCommentId}

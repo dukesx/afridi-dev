@@ -18,7 +18,7 @@ import { Session, SupabaseClient } from "@supabase/supabase-js";
 import { IconCheck, IconExternalLink, IconTrash } from "@tabler/icons";
 import { formatDistanceToNow } from "date-fns";
 import AfridiImage from "../../global/afridi-image";
-import MarkDownRenderer from "../../global/markdown-renderer";
+import AfridiDevEditorRenderer from "../../global/editor/renderer/editor-data-renderer";
 import { getData } from "../functions";
 
 interface AuthorFeedRendererProps {
@@ -136,7 +136,7 @@ const AuthorFeedRenderer = ({
                         icon: <IconCheck />,
                       });
                       setFeed(null);
-                      getData(supabaseClient, id);
+                      getData(supabaseClient, id, setFeed);
                     }
                   }
                 },
@@ -163,7 +163,7 @@ const AuthorFeedRenderer = ({
         ) : null}
       </Group>
       {mapped.type == "status" ? (
-        <MarkDownRenderer className="mb-5">{mapped.data.body}</MarkDownRenderer>
+        <AfridiDevEditorRenderer data={mapped.data && mapped.data.body} />
       ) : (
         <Stack>
           <Text size="sm">{mapped.data.description}</Text>

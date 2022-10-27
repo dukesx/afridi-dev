@@ -15,6 +15,7 @@ import {
   Text,
   Title,
   Tooltip,
+  TypographyStylesProvider,
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
@@ -38,7 +39,6 @@ import { showNotification } from "@mantine/notifications";
 import ImageUploader, {
   ImageUploaderType,
 } from "../../../components/global/image_uploader";
-import MarkDownRenderer from "../../../components/global/markdown-renderer";
 import { parseISO } from "date-fns";
 import { compareDesc } from "date-fns";
 import AfridiImage from "../../../components/global/afridi-image";
@@ -56,6 +56,8 @@ import AuthorFeedRenderer from "../../../components/author/components/author-fee
 import SquareHorizontalAuthorWidget from "../../../components/author/widgets/square-horizontal-author";
 import HorizontalGridCardSkeleton from "../../../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import ExclusivePlaceholder from "../../../components/author/components/exclusive-placeholder";
+import { AfridiDevEditorOutput } from "../../creator-studio/publish/article";
+import AfridiDevEditorRenderer from "../../../components/global/editor/renderer/editor-data-renderer";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const router = useRouter();
@@ -73,7 +75,7 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
   const [thumbsUp, setThumbsUp] = useState(null);
   const { session, supabaseClient } = useSessionContext();
   const [similarAuthors, setSimilarAuthors] = useState(null);
-  const [val, setVal] = useState(null);
+  const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>(null);
 
   var ref: any = React.createRef();
 
@@ -343,11 +345,15 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
             <Tabs.Panel value="feed" pt="xs" className="px-3">
               <Grid>
                 <Grid.Col span={12} sm={12} md={7}>
-                  <Stack className="py-5 px-0 sm:pt-10 sm:pr-10" spacing="xl">
+                  <Stack className="py-0 px-0 sm:pt-0 sm:pr-10" spacing="xl">
                     {session && session.user.id == id ? (
                       <Fragment>
                         <Input.Wrapper className="w-full" label="">
-                          <AfridiDevEditor value={val} setValue={setVal} />
+                          <AfridiDevEditor
+                            basic
+                            value={editorVal}
+                            setValue={setEditorVal}
+                          />
                           <Button
                             variant="light"
                             className="float-right"
@@ -355,15 +361,12 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                             fullWidth
                             loading={submittingStatus}
                             onClick={async () => {
-                              var markdown = ref.current
-                                .getInstance()
-                                .getMarkdown();
                               setSubmittingStatus(true);
 
                               const { error } = await supabaseClient
                                 .from("status_feed")
                                 .insert({
-                                  body: markdown,
+                                  body: editorVal.data,
                                   author_id: user.id,
                                 });
 
@@ -387,7 +390,8 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                 });
 
                                 const result = await fetcher.json();
-                                if (result && result.revalidate) {
+                                if (result && result.revalidated) {
+                                  console.log("yes");
                                   showNotification({
                                     title: "Success",
                                     message: "Status submitted",
@@ -395,7 +399,8 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                                     icon: <IconCheck />,
                                   });
                                   setFeed(null);
-                                  getData(supabaseClient, id);
+                                  setEditorVal(null);
+                                  getData(supabaseClient, id, setFeed);
                                 }
                               }
 
@@ -632,7 +637,13 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
                       <Title mt="xl" mb={0} order={3}>
                         About me
                       </Title>
-                      <MarkDownRenderer>{data.bio}</MarkDownRenderer>
+                      <TypographyStylesProvider>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: data && data.bio,
+                          }}
+                        />
+                      </TypographyStylesProvider>
                     </Stack>
                   ) : (
                     <Center className="h-[300px]">

@@ -23,7 +23,6 @@ interface ArticleCommentEditorDrawerProps {
   article_id: string;
   setCommentEditorRef: Function;
   article_title: string;
-  getMarkdown: Function;
   supabaseClient: SupabaseClient;
   session: Session;
   getComments: Function;

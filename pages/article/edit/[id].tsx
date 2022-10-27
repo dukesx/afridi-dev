@@ -40,7 +40,7 @@ const EditArticle = ({ user, data }) => {
   var ref: any = React.createRef();
   const [loading, setLoading] = useState(false);
   const { colorScheme } = useMantineColorScheme();
-  const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>();
+  const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>(null);
   const [cover, setCover] = useState(data.cover);
   const router = useRouter();
   const [tags, setTags] = useState([]);
@@ -424,7 +424,7 @@ const EditArticle = ({ user, data }) => {
                 required
               >
                 <AfridiDevEditor
-                  value={editorVal ?? JSON.parse(data.body)}
+                  value={editorVal ?? { data: JSON.parse(data.body), words: 0 }}
                   setValue={setEditorVal}
                 />
               </Input.Wrapper>

@@ -20,7 +20,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import { useState } from "react";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
 import AfridiImage from "../global/afridi-image";
-import MarkDownRenderer from "../global/markdown-renderer";
+import AfridiDevEditorRenderer from "../global/editor/renderer/editor-data-renderer";
 import { AfridiDevComment, CommentProps } from "./base-comment";
 import CommentReportModal from "./reportModal";
 
@@ -181,9 +181,7 @@ const RepliedComment = ({
             </Menu.Dropdown>
           </Menu>
         </Group>
-        <MarkDownRenderer className="ml-3" commentMode>
-          {comment.body ?? body}
-        </MarkDownRenderer>
+        <AfridiDevEditorRenderer data={comment.body ?? body} />
       </Stack>
       <Divider
         label="finito"

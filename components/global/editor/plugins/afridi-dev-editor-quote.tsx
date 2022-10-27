@@ -14,7 +14,6 @@ import {
   NodeViewWrapper,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
-import { Theme } from "emoji-picker-react";
 
 export default Node.create({
   name: "afridi-dev-editor-blockquote",

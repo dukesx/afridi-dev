@@ -38,7 +38,6 @@ import { supabase } from "../../utils/supabaseClient";
 import { AfridiDevAuthor } from "../author/widgets/square-horizontal-author";
 import AfridiImage from "../global/afridi-image";
 import AfridiDevEditorRenderer from "../global/editor/renderer/editor-data-renderer";
-import MarkDownRenderer from "../global/markdown-renderer";
 import RepliedComment from "./replied-comment";
 import CommentReportModal from "./reportModal";
 

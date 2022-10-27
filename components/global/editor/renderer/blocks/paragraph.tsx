@@ -10,13 +10,20 @@ import {
   Stack,
   Text,
   Title,
+  TypographyStylesProvider,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { IconAt } from "@tabler/icons";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import AfridiImage from "../../../afridi-image";
 
 const EditorRendererParagraph = ({ data }) => {
+  const { colorScheme } = useMantineColorScheme();
+  const router = useRouter();
+
   return data.type == "paragraph"
     ? data.content &&
         data.content.map((mapped, index) => {
@@ -42,7 +49,7 @@ const EditorRendererParagraph = ({ data }) => {
                     <Text
                       variant="link"
                       weight={600}
-                      color="dark"
+                      color={colorScheme == "dark" ? "gray.4" : "dark"}
                       component={NextLink}
                       href={`/author/${mapped.attrs.id}`}
                       key={nanoid()}
@@ -66,7 +73,7 @@ const EditorRendererParagraph = ({ data }) => {
                         {mapped.attrs.label}
                       </Text>
                       <Anchor
-                        href="https://twitter.com/mantinedev"
+                        href={`/author/${mapped.attrs.id}`}
                         color="dimmed"
                         size="xs"
                         sx={{ lineHeight: 1 }}
@@ -75,13 +82,26 @@ const EditorRendererParagraph = ({ data }) => {
                       </Anchor>
                     </Stack>
                   </Group>
-
-                  <Text color="dimmed" size="sm" mt="md">
-                    Interested in my work ? Check out my profile for more
-                    articles
-                  </Text>
+                  {mapped.attrs.bio ? (
+                    <Text size="xs" lineClamp={3}>
+                      <TypographyStylesProvider mt="sm">
+                        <div
+                          className="!text-xs"
+                          dangerouslySetInnerHTML={{
+                            __html: mapped.attrs.bio,
+                          }}
+                        />
+                      </TypographyStylesProvider>
+                    </Text>
+                  ) : (
+                    <Text color="dimmed" size="sm" mt="md">
+                      Interested in my work ? Check out my profile for more
+                      articles
+                    </Text>
+                  )}
 
                   <Button
+                    onClick={() => router.push(`/author/${mapped.attrs.id}`)}
                     mt="md"
                     className="mx-auto"
                     fullWidth
