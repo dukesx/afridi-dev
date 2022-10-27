@@ -246,9 +246,7 @@ const BaseComment = ({
             </Menu>
           </Group>
 
-          <AfridiDevEditorRenderer
-            data={comment.body ? JSON.parse(comment.body) : {}}
-          />
+          <AfridiDevEditorRenderer data={comment.body ? comment.body : {}} />
 
           <Group className="w-full" position="apart">
             {comment.replies && comment.replies.length > 0 && (
