@@ -71,7 +71,7 @@ const AfridiDevEditorGiphySelector = ({
         setGiphyOpened(false);
       }}
       opened={giphyOpened}
-      position="bottom-end"
+      position="bottom"
       withArrow
     >
       <Menu.Target>

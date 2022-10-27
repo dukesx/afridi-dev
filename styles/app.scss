@@ -86,5 +86,9 @@ pre code.hljs {
   font-family: "Inter", sans-serif;
 }
 
+.default-image {
+  @apply max-w-[500px] object-cover my-3 rounded-md;
+}
+
 @tailwind components;
 @tailwind utilities;

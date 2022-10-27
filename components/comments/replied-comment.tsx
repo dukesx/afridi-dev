@@ -173,7 +173,7 @@ const RepliedComment = ({
             </Menu.Dropdown>
           </Menu>
         </Group>
-        <AfridiDevEditorRenderer data={comment.body ?? {}} />
+        <AfridiDevEditorRenderer className="ml-5" data={comment.body ?? {}} />
       </Stack>
       <Divider
         label="finito"

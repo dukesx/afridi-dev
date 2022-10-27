@@ -90,7 +90,7 @@ export interface AfridiDevEditorProps {
   isScrollable?: boolean | false;
   height?: number;
   html?: boolean;
-  noToolbar?: boolean;
+  noToolbar?: boolean | false;
 }
 
 export const TextEditor = ({
@@ -100,7 +100,7 @@ export const TextEditor = ({
   isScrollable,
   height,
   placeholder,
-  noToolbar,
+  noToolbar = false,
   html,
 }: AfridiDevEditorProps) => {
   var editorRef: any = React.createRef();
@@ -198,7 +198,12 @@ export const TextEditor = ({
       Underline,
       FontFamily,
       TextStyle,
-      Image,
+      Image.configure({
+        inline: true,
+        HTMLAttributes: {
+          class: "default-image",
+        },
+      }),
       AfridiDevEditorDivider,
       AfridiDevEditorLoader,
       AfridiDevEditorImage,
@@ -442,13 +447,13 @@ export const TextEditor = ({
             theme={theme}
             colorScheme={colorScheme}
           />
+          <AfridiDevEditorImageUpload
+            theme={theme}
+            editor={editor}
+            colorScheme={colorScheme}
+          />
           {!basic && (
             <Fragment>
-              <AfridiDevEditorImageUpload
-                theme={theme}
-                editor={editor}
-                colorScheme={colorScheme}
-              />
               <AfridiDevEditorInsertEmbeds
                 theme={theme}
                 editor={editor}

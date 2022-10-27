@@ -216,6 +216,8 @@ const Article = ({ article, tags }) => {
       {article ? (
         <Fragment>
           <NextSeo
+            title={article.title ?? ""}
+            description={article.description ?? ""}
             openGraph={{
               title: article.title ?? "",
               description: article.description ?? "",

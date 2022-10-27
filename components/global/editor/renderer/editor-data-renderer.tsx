@@ -23,12 +23,16 @@ import { Gif } from "@giphy/react-components";
 
 interface AfridiDevEditorRendererProps {
   data: any;
+  className?: string;
 }
 
-const AfridiDevEditorRenderer = ({ data }: AfridiDevEditorRendererProps) => {
+const AfridiDevEditorRenderer = ({
+  data,
+  className,
+}: AfridiDevEditorRendererProps) => {
   var newData = data && JSON.parse(data);
   return (
-    <Fragment>
+    <div className={className}>
       {newData.content &&
         newData.content.map((data2) => {
           if (data2.type == "heading" && data2.content) {
@@ -202,7 +206,7 @@ const AfridiDevEditorRenderer = ({ data }: AfridiDevEditorRendererProps) => {
             );
           }
         })}
-    </Fragment>
+    </div>
   );
 };
 
