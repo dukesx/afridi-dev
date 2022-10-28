@@ -40,7 +40,10 @@ const EditArticle = ({ user, data }) => {
   var ref: any = React.createRef();
   const [loading, setLoading] = useState(false);
   const { colorScheme } = useMantineColorScheme();
-  const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>(null);
+  const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>({
+    data: JSON.parse(data.body),
+    words: 0,
+  });
   const [cover, setCover] = useState(data.cover);
   const router = useRouter();
   const [tags, setTags] = useState([]);
@@ -423,10 +426,7 @@ const EditArticle = ({ user, data }) => {
                 description="Write your content here"
                 required
               >
-                <AfridiDevEditor
-                  value={editorVal ?? { data: JSON.parse(data.body), words: 0 }}
-                  setValue={setEditorVal}
-                />
+                <AfridiDevEditor value={editorVal} setValue={setEditorVal} />
               </Input.Wrapper>
             </Grid.Col>
 
