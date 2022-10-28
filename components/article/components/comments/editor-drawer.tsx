@@ -137,6 +137,7 @@ const ArticleCommentEditorDrawer = ({
       );
     }
     setSendingReply(false);
+    setEditorVal(null);
     setEditorDrawer(false);
     getComments();
     if (commentId.type !== "reply") {
