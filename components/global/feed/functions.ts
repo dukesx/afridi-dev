@@ -124,6 +124,10 @@ export const getFeedArticles = async ({
                   ),
                 appreciations (
                 id
+                  ),
+                  tags (
+                    title,
+                    color
                   )
                 `,
         {

@@ -391,7 +391,6 @@ const UserProfilePage = ({ user, feedData, covera, dpo }) => {
 
                                 const result = await fetcher.json();
                                 if (result && result.revalidated) {
-                                  console.log("yes");
                                   showNotification({
                                     title: "Success",
                                     message: "Status submitted",

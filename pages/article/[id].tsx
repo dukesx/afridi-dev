@@ -211,6 +211,8 @@ const Article = ({ article, tags }) => {
       });
     });
 
+  console.log(JSON.parse(article.body));
+
   return (
     <AppWrapper noPadding activeHeaderKey="" size="xl">
       {article ? (
@@ -287,321 +289,323 @@ const Article = ({ article, tags }) => {
           />
         </Fragment>
       ) : null}
-      <Container className="px-0 sm:px-[12px]" size="lg">
-        <Stack spacing="xs" className={classes.mainContent}>
-          {article && (
-            <Group pr="xs" className="xs:hidden" position="apart" noWrap>
-              <Group pl="xs" pb="xl" pt="xs" className="w-full" noWrap>
-                <Tooltip mt="xl" label={article.authors.full_name}>
-                  <Avatar
-                    size={60}
-                    className="rounded-full"
-                    component={NextLink}
-                    href={article ? `/author/${article.authors.id}` : ""}
-                    radius="xl"
-                    color="blue"
-                  >
-                    {article.authors.dp ? (
-                      <AfridiImage
-                        loading="lazy"
-                        height={70}
-                        width={70}
-                        path={article.authors.dp}
-                      />
-                    ) : (
-                      <Skeleton height={50} width={50} />
-                    )}
-                  </Avatar>
-                </Tooltip>
-                <Stack className="md:mr-auto sm:mr-0" spacing={2}>
-                  <Text
-                    component={NextLink}
-                    href={`/author/${article.authors.id}`}
-                    lineClamp={1}
-                    weight={700}
-                    size="sm"
-                  >
-                    {article.authors.full_name}
-                  </Text>
-                  <Group spacing={0}>
-                    <Text size="xs" color="dimmed">
-                      {format(new Date(article.created_at), "MMM dd")}
+      <article>
+        <Container className="px-0 sm:px-[12px]" size="lg">
+          <Stack spacing="xs" className={classes.mainContent}>
+            {article && (
+              <Group pr="xs" className="xs:hidden" position="apart" noWrap>
+                <Group pl="xs" pb="xl" pt="xs" className="w-full" noWrap>
+                  <Tooltip mt="xl" label={article.authors.full_name}>
+                    <Avatar
+                      size={60}
+                      className="rounded-full"
+                      component={NextLink}
+                      href={article ? `/author/${article.authors.id}` : ""}
+                      radius="xl"
+                      color="blue"
+                    >
+                      {article.authors.dp ? (
+                        <AfridiImage
+                          loading="lazy"
+                          height={70}
+                          width={70}
+                          path={article.authors.dp}
+                        />
+                      ) : (
+                        <Skeleton height={50} width={50} />
+                      )}
+                    </Avatar>
+                  </Tooltip>
+                  <Stack className="md:mr-auto sm:mr-0" spacing={2}>
+                    <Text
+                      component={NextLink}
+                      href={`/author/${article.authors.id}`}
+                      lineClamp={1}
+                      weight={700}
+                      size="sm"
+                    >
+                      {article.authors.full_name}
                     </Text>
-                    <Divider className="w-[10px]" mx="xs" />
-                    <Text size="xs" color="dimmed">
-                      {article.read_time} read
-                    </Text>
-                  </Group>
-                </Stack>
-              </Group>
+                    <Group spacing={0}>
+                      <Text size="xs" color="dimmed">
+                        {format(new Date(article.created_at), "MMM dd")}
+                      </Text>
+                      <Divider className="w-[10px]" mx="xs" />
+                      <Text size="xs" color="dimmed">
+                        {article.read_time} read
+                      </Text>
+                    </Group>
+                  </Stack>
+                </Group>
 
-              <Group spacing="sm" noWrap>
-                <Tooltip label="Share article">
-                  <ActionIcon
-                    onClick={async () => {
-                      const shareData = {
-                        title: `${article.title} | Afridi.dev`,
-                        text: article.description,
-                        url: `https://afridi.dev/article/${article.id}`,
-                      };
-                      await navigator.share(shareData);
-                    }}
-                    radius="xl"
-                    size="lg"
-                  >
-                    <IconShare size={22} />
-                  </ActionIcon>
-                </Tooltip>
-                {session && bookmarks && bookmarks.includes(article.id) ? (
-                  <Tooltip label="bookmarked">
+                <Group spacing="sm" noWrap>
+                  <Tooltip label="Share article">
                     <ActionIcon
                       onClick={async () => {
-                        const { error } = await supabaseClient
-                          .from("bookmarks")
-                          .delete()
-                          .match({
-                            author_id: session.user.id,
-                            article_id: article.id,
-                          });
-
-                        if (!error) {
-                          var bookmarksArr = [...bookmarks];
-                          var newBookmarks = bookmarksArr.filter(
-                            (mapped) => mapped !== article.id
-                          );
-                          setBookmarks(newBookmarks);
-                        }
+                        const shareData = {
+                          title: `${article.title} | Afridi.dev`,
+                          text: article.description,
+                          url: `https://afridi.dev/article/${article.id}`,
+                        };
+                        await navigator.share(shareData);
                       }}
-                      color="gray"
-                      size="lg"
-                      variant="light"
                       radius="xl"
+                      size="lg"
                     >
-                      <IconBookmark
-                        fill={
-                          colorScheme == "dark"
-                            ? theme.colors.gray[6]
-                            : theme.colors.gray[4]
-                        }
-                        size={24}
-                      />
+                      <IconShare size={22} />
                     </ActionIcon>
                   </Tooltip>
-                ) : (
-                  <Tooltip label="bookmark this">
-                    <ActionIcon
-                      onClick={async () => {
-                        if (session && session.user) {
+                  {session && bookmarks && bookmarks.includes(article.id) ? (
+                    <Tooltip label="bookmarked">
+                      <ActionIcon
+                        onClick={async () => {
                           const { error } = await supabaseClient
                             .from("bookmarks")
-                            .insert({
-                              article_id: article.id,
+                            .delete()
+                            .match({
                               author_id: session.user.id,
+                              article_id: article.id,
                             });
 
                           if (!error) {
                             var bookmarksArr = [...bookmarks];
-                            bookmarksArr.push(article.id);
-                            setBookmarks(bookmarksArr);
+                            var newBookmarks = bookmarksArr.filter(
+                              (mapped) => mapped !== article.id
+                            );
+                            setBookmarks(newBookmarks);
                           }
-                        } else {
-                          ShowUnauthorizedModal();
-                        }
-                      }}
-                      color="gray"
-                      size="lg"
-                      radius="xl"
-                    >
-                      <IconBookmark fill={"transparent"} size={24} />
-                    </ActionIcon>
-                  </Tooltip>
-                )}
-              </Group>
-            </Group>
-          )}
-
-          <Skeleton
-            className="w-full rounded-none sm:rounded-lg mx-auto h-full sm:h-full lg:h-[550px] xl:max-h-[600px] sm:max-h-[600px]"
-            visible={!data}
-            height={300}
-            width={300}
-          >
-            {data ? (
-              <AfridiImage
-                // isResponsive
-                cover_base_64={data.cover_base_64}
-                fillImage={true}
-                path={data ? data.cover : null}
-                height={400}
-                width={300}
-                priority
-                className="h-full md:w-full"
-              />
-            ) : null}
-          </Skeleton>
-
-          <Center className="xl:h-full xs:items-baseline xs:justify-start px-[16px] sm:px-0">
-            <Stack className="my-auto w-full">
-              <Title
-                mt="xl"
-                order={1}
-                className="text-2xl xs:text-xl md:text-[34px] sm:text-[30px] !leading-normal"
-              >
-                {data ? (
-                  data.title
-                ) : (
-                  <Stack mt="xl">
-                    <Skeleton height={40} className="w-full max-w-[800px]" />
-                    <Skeleton height={40} className="w-full max-w-[400px]" />
-                  </Stack>
-                )}
-              </Title>
-
-              <Text mt="sm" lineClamp={4} color="dimmed">
-                {data ? (
-                  data.description
-                ) : (
-                  <Stack mb="xl">
-                    <Skeleton height={20} className="w-full max-w-[800px]" />
-                    <Skeleton height={20} className="w-full max-w-[400px]" />
-                    <Skeleton height={20} className="w-full max-w-[400px]" />
-                  </Stack>
-                )}
-              </Text>
-
-              <Group mr="xs" position="apart" mt="sm">
-                <Group>
-                  {article &&
-                    article.tags.map((mapped) => (
-                      <Badge
-                        variant="dot"
-                        component={NextLink}
-                        href={`/tags/${mapped.title}`}
-                        className="capitalize font-semibold cursor-pointer"
-                        color={mapped.color ?? "gray"}
-                        key={mapped.color + mapped.title}
+                        }}
+                        color="gray"
+                        size="lg"
+                        variant="light"
+                        radius="xl"
                       >
-                        {mapped.title}
-                      </Badge>
-                    ))}
+                        <IconBookmark
+                          fill={
+                            colorScheme == "dark"
+                              ? theme.colors.gray[6]
+                              : theme.colors.gray[4]
+                          }
+                          size={24}
+                        />
+                      </ActionIcon>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip label="bookmark this">
+                      <ActionIcon
+                        onClick={async () => {
+                          if (session && session.user) {
+                            const { error } = await supabaseClient
+                              .from("bookmarks")
+                              .insert({
+                                article_id: article.id,
+                                author_id: session.user.id,
+                              });
+
+                            if (!error) {
+                              var bookmarksArr = [...bookmarks];
+                              bookmarksArr.push(article.id);
+                              setBookmarks(bookmarksArr);
+                            }
+                          } else {
+                            ShowUnauthorizedModal();
+                          }
+                        }}
+                        color="gray"
+                        size="lg"
+                        radius="xl"
+                      >
+                        <IconBookmark fill={"transparent"} size={24} />
+                      </ActionIcon>
+                    </Tooltip>
+                  )}
                 </Group>
               </Group>
-            </Stack>
-          </Center>
-        </Stack>
-      </Container>
-      {article && (
-        <Stack>
-          <Aside
-            hiddenBreakpoint="xs"
-            hidden
-            height={"auto"}
-            p="md"
-            zIndex={50}
-            styles={{
-              root: {
-                zIndex: 50,
-              },
-            }}
-            width={{ xs: 220, sm: 300, md: 300, lg: 300 }}
-          >
-            <Aside.Section>
-              <ArticleRightSidebar
-                title={article.title}
-                description={article.description}
-                id={data && data.id}
-                starred={starred}
-                setStarred={setStarred}
-                bookmarks={bookmarks}
-                setBookmarks={setBookmarks}
-                data={data}
-                theme={theme}
-              />
-            </Aside.Section>
-          </Aside>
-          <Box mt={50} className={classes.mainContent + " px-[12px]"}>
-            <AfridiDevEditorRenderer data={article && article.body} />
-          </Box>
-          <Divider />
-          <Stack mt="xs" className="pb-10 pl-5">
-            <Group position="apart" spacing="xs" mb="sm">
-              <Title id="comments" order={2}>
-                Comments
-              </Title>
-              {session && session.user ? (
-                <Button
-                  onClick={() => {
-                    setCommentId({
-                      type: "comment",
-                    });
-                    setEditorDrawer(true);
-                  }}
-                  variant="light"
-                  size="xs"
-                  radius="xl"
-                  color="blue"
-                >
-                  Write a comment
-                </Button>
-              ) : null}
-            </Group>
-            <LazyLoad>
-              <ArticleComments
-                getComments={getComments}
-                coAuthors={article && article.co_authors_articles}
-                author_id={article && article.author_id}
-                openCommentEditor={setEditorDrawer}
-                comments={comments ?? []}
-                setCommentId={setCommentId}
-              />
-            </LazyLoad>
-            <div ref={targetComment} />
-          </Stack>
+            )}
 
-          <ArticleCommentEditorDrawer
-            article_id={article && article.id}
-            article_title={article && article.title}
-            commentId={commentId}
-            editorDrawer={editorDrawer}
-            setEditorDrawer={setEditorDrawer}
-            getComments={getComments}
-            session={session}
-            setCommentEditorRef={setCommentEditorRef}
-            setCommentId={setCommentId}
-            supabaseClient={supabaseClient}
-            scrollToComment={scrollToComment}
-          />
-
-          <MediaQuery smallerThan="md" styles={{ display: "none" }}>
-            <Navbar
-              hiddenBreakpoint="md"
-              hidden={true}
-              height={"auto"}
-              p="xs"
-              width={{ sm: 0, md: 250, lg: 350 }}
+            <Skeleton
+              className="w-full rounded-none sm:rounded-lg mx-auto h-full sm:h-full lg:h-[550px] xl:max-h-[600px] sm:max-h-[600px]"
+              visible={!data}
+              height={300}
+              width={300}
             >
-              <Navbar.Section
-                mt="xl"
-                grow
-                className="h-[400px]"
-                component={ScrollArea}
-              >
-                <NumberedArticlesWidget
-                  titleOrder={4}
-                  title="Similar Articles"
-                  placeholderHeight={140}
-                  icon={<IconNews />}
-                  color="blue"
-                  placeholderTitle="Hmmm!"
-                  placeholderDescription="No similar articles yet 🤔"
-                  theme={theme}
-                  articles={relatedArticles ?? []}
+              {data ? (
+                <AfridiImage
+                  // isResponsive
+                  cover_base_64={data.cover_base_64}
+                  fillImage={true}
+                  path={data ? data.cover : null}
+                  height={400}
+                  width={300}
+                  priority
+                  className="h-full md:w-full"
                 />
-              </Navbar.Section>
-            </Navbar>
-          </MediaQuery>
-        </Stack>
-      )}
+              ) : null}
+            </Skeleton>
+
+            <Center className="xl:h-full xs:items-baseline xs:justify-start px-[16px] sm:px-0">
+              <Stack className="my-auto w-full">
+                <Title
+                  mt="xl"
+                  order={1}
+                  className="text-2xl xs:text-xl md:text-[34px] sm:text-[30px] !leading-normal"
+                >
+                  {data ? (
+                    data.title
+                  ) : (
+                    <Stack mt="xl">
+                      <Skeleton height={40} className="w-full max-w-[800px]" />
+                      <Skeleton height={40} className="w-full max-w-[400px]" />
+                    </Stack>
+                  )}
+                </Title>
+
+                <Text mt="sm" lineClamp={4} color="dimmed">
+                  {data ? (
+                    data.description
+                  ) : (
+                    <Stack mb="xl">
+                      <Skeleton height={20} className="w-full max-w-[800px]" />
+                      <Skeleton height={20} className="w-full max-w-[400px]" />
+                      <Skeleton height={20} className="w-full max-w-[400px]" />
+                    </Stack>
+                  )}
+                </Text>
+
+                <Group mr="xs" position="apart" mt="sm">
+                  <Group>
+                    {article &&
+                      article.tags.map((mapped) => (
+                        <Badge
+                          variant="dot"
+                          component={NextLink}
+                          href={`/tags/${mapped.title}`}
+                          className="capitalize font-semibold cursor-pointer"
+                          color={mapped.color ?? "gray"}
+                          key={mapped.color + mapped.title}
+                        >
+                          {mapped.title}
+                        </Badge>
+                      ))}
+                  </Group>
+                </Group>
+              </Stack>
+            </Center>
+          </Stack>
+        </Container>
+        {article && (
+          <Stack>
+            <Aside
+              hiddenBreakpoint="xs"
+              hidden
+              height={"auto"}
+              p="md"
+              zIndex={50}
+              styles={{
+                root: {
+                  zIndex: 50,
+                },
+              }}
+              width={{ xs: 220, sm: 300, md: 300, lg: 300 }}
+            >
+              <Aside.Section>
+                <ArticleRightSidebar
+                  title={article.title}
+                  description={article.description}
+                  id={data && data.id}
+                  starred={starred}
+                  setStarred={setStarred}
+                  bookmarks={bookmarks}
+                  setBookmarks={setBookmarks}
+                  data={data}
+                  theme={theme}
+                />
+              </Aside.Section>
+            </Aside>
+            <Box mt={50} className={classes.mainContent + " px-[12px]"}>
+              <AfridiDevEditorRenderer data={article && article.body} />
+            </Box>
+            <Divider />
+            <Stack mt="xs" className="pb-10 pl-5">
+              <Group position="apart" spacing="xs" mb="sm">
+                <Title id="comments" order={2}>
+                  Comments
+                </Title>
+                {session && session.user ? (
+                  <Button
+                    onClick={() => {
+                      setCommentId({
+                        type: "comment",
+                      });
+                      setEditorDrawer(true);
+                    }}
+                    variant="light"
+                    size="xs"
+                    radius="xl"
+                    color="blue"
+                  >
+                    Write a comment
+                  </Button>
+                ) : null}
+              </Group>
+              <LazyLoad>
+                <ArticleComments
+                  getComments={getComments}
+                  coAuthors={article && article.co_authors_articles}
+                  author_id={article && article.author_id}
+                  openCommentEditor={setEditorDrawer}
+                  comments={comments ?? []}
+                  setCommentId={setCommentId}
+                />
+              </LazyLoad>
+              <div ref={targetComment} />
+            </Stack>
+
+            <ArticleCommentEditorDrawer
+              article_id={article && article.id}
+              article_title={article && article.title}
+              commentId={commentId}
+              editorDrawer={editorDrawer}
+              setEditorDrawer={setEditorDrawer}
+              getComments={getComments}
+              session={session}
+              setCommentEditorRef={setCommentEditorRef}
+              setCommentId={setCommentId}
+              supabaseClient={supabaseClient}
+              scrollToComment={scrollToComment}
+            />
+
+            <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+              <Navbar
+                hiddenBreakpoint="md"
+                hidden={true}
+                height={"auto"}
+                p="xs"
+                width={{ sm: 0, md: 250, lg: 350 }}
+              >
+                <Navbar.Section
+                  mt="xl"
+                  grow
+                  className="h-[400px]"
+                  component={ScrollArea}
+                >
+                  <NumberedArticlesWidget
+                    titleOrder={4}
+                    title="Similar Articles"
+                    placeholderHeight={140}
+                    icon={<IconNews />}
+                    color="blue"
+                    placeholderTitle="Hmmm!"
+                    placeholderDescription="No similar articles yet 🤔"
+                    theme={theme}
+                    articles={relatedArticles ?? []}
+                  />
+                </Navbar.Section>
+              </Navbar>
+            </MediaQuery>
+          </Stack>
+        )}
+      </article>
     </AppWrapper>
   );
 };

@@ -177,7 +177,10 @@ const EditArticle = ({ user, data }) => {
                 author_id: session.user.id,
                 body: editorVal.data,
                 description: val.description,
-                read_time: secondsToHms((editorVal.words / 265) * 60),
+                read_time:
+                  editorVal.words == 0
+                    ? data.read_time
+                    : secondsToHms((editorVal.words / 265) * 60),
               })
               .eq("id", data.id)
               .select();
@@ -275,21 +278,23 @@ const EditArticle = ({ user, data }) => {
                       mapped.content &&
                         mapped.content.map(async (mapped2) => {
                           if (mapped2.type == "mention") {
-                            if (!pinged.includes(mapped2.attrs.id)) {
-                              pinged.push(mapped2.attrs.id);
+                            if (mapped2.attrs.id !== session.user.id) {
+                              if (!pinged.includes(mapped2.attrs.id)) {
+                                pinged.push(mapped2.attrs.id);
 
-                              const { data: currentUserData } =
-                                await supabaseClient
-                                  .from("authors")
-                                  .select("full_name")
-                                  .eq("id", session.user.id);
-                              const { error } = await supabaseClient
-                                .from("user_notifications")
-                                .insert({
-                                  author_id: mapped2.attrs.id,
-                                  message: `You were mentioned in the article "${val.title}" by ${currentUserData[0].full_name}`,
-                                  link: `/article/${articleData[0].id}`,
-                                });
+                                const { data: currentUserData } =
+                                  await supabaseClient
+                                    .from("authors")
+                                    .select("full_name")
+                                    .eq("id", session.user.id);
+                                const { error } = await supabaseClient
+                                  .from("user_notifications")
+                                  .insert({
+                                    author_id: mapped2.attrs.id,
+                                    message: `You were mentioned in the article "${val.title}" by ${currentUserData[0].full_name}`,
+                                    link: `/article/${articleData[0].id}`,
+                                  });
+                              }
                             }
                           }
                         });
@@ -486,6 +491,7 @@ export const getServerSideProps = withPageAuth({
         description,
         cover,
         author_id,
+        read_time,
         body,
         tags (
           title

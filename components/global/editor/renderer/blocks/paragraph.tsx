@@ -157,7 +157,7 @@ const EditorRendererParagraph = ({ data }) => {
                   mapped.marks &&
                   mapped.marks.filter((mark) => mark.type == "link").length > 0
                     ? "a"
-                    : "span"
+                    : "p"
                 }
                 key={nanoid()}
               >

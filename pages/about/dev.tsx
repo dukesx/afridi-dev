@@ -11,7 +11,6 @@ import AppWrapper from "../../components/global/wrapper";
 import { supabase } from "../../utils/supabaseClient";
 
 const AboutDev = ({ bio }) => {
-  console.log(bio);
   return (
     <AppWrapper size="md" activeHeaderKey="">
       <NextSeo
@@ -74,9 +73,6 @@ export const getStaticProps = async () => {
     .from("authors")
     .select("bio")
     .eq("id", "49d746ab-60bf-4b1d-aaab-7524d40bd402");
-
-  console.log(data);
-  console.log(error);
 
   return {
     props: {

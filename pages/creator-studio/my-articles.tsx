@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Group, LoadingOverlay, Text } from "@mantine/core";
+import { Button, Group, LoadingOverlay, Text, TextInput } from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { useEffect, useState } from "react";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -9,8 +9,9 @@ import { format } from "date-fns";
 import StudioWrapper from "../../components/studio/studio-wrapper";
 import { openConfirmModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
-import { IconX } from "@tabler/icons";
+import { IconSearch, IconX } from "@tabler/icons";
 import { NextSeo } from "next-seo";
+import { useDebouncedValue } from "@mantine/hooks";
 
 const CreatorsStudio = ({ authored }) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
@@ -19,13 +20,17 @@ const CreatorsStudio = ({ authored }) => {
   const [tableLoading, setTableLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(null);
+  const [query, setQuery] = useState("");
+  const [debouncedQuery] = useDebouncedValue(query, 200);
+
   const PAGE_SIZE = 10;
-  const getAuthorArticles = async () => {
-    setLoading(true);
-    const { error, data, count } = await supabaseClient
-      .from("articles")
-      .select(
-        `
+  const getAuthorArticles = async (query?) => {
+    if (query) {
+      setTableLoading(true);
+      const { error, data, count } = await supabaseClient
+        .from("articles")
+        .select(
+          `
       id,
       title,
       description,
@@ -37,17 +42,44 @@ const CreatorsStudio = ({ authored }) => {
         id
       )
     `,
-        {
-          count: "exact",
-        }
+          {
+            count: "exact",
+          }
+        )
+        .ilike("title", `%${query}%`)
+        .eq("author_id", session && session.user.id);
+      //@ts-ignore
+      setArticles(data);
+      setTotalRecords(count);
+      setTableLoading(false);
+    } else {
+      const { error, data, count } = await supabaseClient
+        .from("articles")
+        .select(
+          `
+      id,
+      title,
+      description,
+      cover,
+      created_at,
+     tags (
+        title,
+        content_count,
+        id
       )
-      .eq("author_id", session && session.user.id)
-      .limit(PAGE_SIZE);
-    //@ts-ignore
-    setArticles(data);
-    setTotalRecords(count);
-    setLoading(false);
-    setTableLoading(false);
+    `,
+          {
+            count: "exact",
+          }
+        )
+        .eq("author_id", session && session.user.id)
+        .limit(PAGE_SIZE);
+      //@ts-ignore
+      setArticles(data);
+      setTotalRecords(count);
+      setLoading(false);
+      setTableLoading(false);
+    }
   };
 
   const loadMore = async (page) => {
@@ -84,6 +116,10 @@ const CreatorsStudio = ({ authored }) => {
       getAuthorArticles();
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    getAuthorArticles(debouncedQuery);
+  }, [debouncedQuery]);
   return (
     <StudioWrapper
       authored={authored}
@@ -92,6 +128,15 @@ const CreatorsStudio = ({ authored }) => {
       loading={loading}
     >
       <NextSeo nofollow noindex />
+
+      <TextInput
+        icon={<IconSearch size={16} />}
+        placeholder="Search term...."
+        radius="md"
+        my="sm"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
 
       <DataTable
         className="w-full"

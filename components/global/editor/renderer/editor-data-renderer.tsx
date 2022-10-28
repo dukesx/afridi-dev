@@ -2,6 +2,7 @@ import {
   Blockquote,
   Code,
   Divider,
+  Group,
   List,
   Mark,
   Stack,
@@ -18,6 +19,7 @@ import EditorRendererEmbeds from "./blocks/embeds";
 import dracula from "prism-react-renderer/themes/dracula";
 import github from "prism-react-renderer/themes/github";
 import { Gif } from "@giphy/react-components";
+import EditorRendererHeading from "./blocks/heading";
 
 // import duotoneLight from "prism-react-renderer/themes/duotoneLight";
 
@@ -37,9 +39,12 @@ const AfridiDevEditorRenderer = ({
         newData.content.map((data2) => {
           if (data2.type == "heading" && data2.content) {
             return (
-              <Title py="xs" key={nanoid()} order={data2.attrs.level}>
-                {data2.content[0].text}
-              </Title>
+              <Group spacing={"xs"} key={nanoid()}>
+                <EditorRendererHeading
+                  level={data2.attrs.level}
+                  data={data2.content}
+                />
+              </Group>
             );
           }
 
@@ -193,7 +198,7 @@ const AfridiDevEditorRenderer = ({
                 }
                 withLineNumbers
                 key={nanoid()}
-                language={data2.attrs.language}
+                language={data2.attrs.language.toLowerCase()}
               >
                 {data2.attrs.code}
               </Prism>

@@ -13,6 +13,7 @@ import {
   Divider,
   Badge,
   Avatar,
+  Button,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -156,6 +157,7 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
         >
           {data.description}
         </Text>
+
         {withFooter ? (
           <Group spacing="xs">
             {session && bookmarks && bookmarks.includes(data.id) ? (
