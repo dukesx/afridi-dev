@@ -522,7 +522,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                                     .from("user_notifications")
                                     .delete()
                                     .eq("id", mapped.id);
-
+                                  getUserNotifications();
                                   router.push(mapped.link);
                                 }}
                               >
