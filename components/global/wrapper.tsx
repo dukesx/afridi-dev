@@ -15,7 +15,6 @@ import GlobalHeader from "./header";
 import AppLoader from "./loaders/appLoader";
 import StudioSidebar from "../studio/sidebar/sidebar";
 import WebsiteTourWizardBase from "./wizards/website-tour/wizardBase";
-import { IconAlertTriangle, IconExclamationMark } from "@tabler/icons";
 interface AppWrapperProps {
   children: any;
   size?: MantineNumberSize | number;

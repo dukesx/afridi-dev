@@ -19,6 +19,7 @@ import { IconAt } from "@tabler/icons";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import slugify from "slugify";
 import AfridiImage from "../../../afridi-image";
 
 const EditorRendererHeading = ({ data, level }) => {
@@ -42,7 +43,8 @@ const EditorRendererHeading = ({ data, level }) => {
             <Badge
               mt="md"
               size="md"
-              variant="light"
+              className="border-0"
+              variant="dot"
               leftSection={
                 <IconAt
                   size={16}
@@ -50,14 +52,14 @@ const EditorRendererHeading = ({ data, level }) => {
                   className="mt-1.5 mr-0"
                 />
               }
-              color="gray"
+              color="blue"
               radius="xl"
               key={nanoid()}
             >
               <Text
                 mt="sm"
                 variant="link"
-                weight={700}
+                weight={600}
                 color={colorScheme == "dark" ? "gray.4" : "dark"}
                 component={NextLink}
                 href={`/author/${mapped.attrs.id}`}
@@ -122,43 +124,63 @@ const EditorRendererHeading = ({ data, level }) => {
 
     if (mapped.type == "text") {
       return (
-        <Title
-          mt="sm"
-          order={level}
-          className="leading-normal"
-          style={{
-            fontFamily:
-              mapped.marks &&
-              mapped.marks.filter((mark) => mark.type == "textStyle").length >
-                0 &&
-              mapped.marks.filter((mark) => mark.type == "textStyle")[0].attrs
-                .fontFamily,
-          }}
-          mx={1}
-          variant={
-            mapped.marks &&
-            mapped.marks.filter((mark) => mark.type == "link").length > 0
-              ? "link"
-              : "text"
-          }
-          color={
-            mapped.marks &&
-            mapped.marks.filter((mark) => mark.type == "link").length > 0
-              ? "blue"
-              : "auto"
-          }
+        <Anchor
+          id={`${slugify(mapped.text.toLowerCase())}`}
+          variant="text"
           key={nanoid()}
+          href={
+            mapped.marks &&
+            mapped.marks.filter((mark) => mark.type == "link").length > 0
+              ? mapped.marks.filter((mark) => mark.type == "link")[0].attrs.href
+              : null
+          }
+          style={{
+            cursor:
+              mapped.marks &&
+              mapped.marks.filter((mark) => mark.type == "link").length > 0
+                ? "pointer"
+                : "auto",
+          }}
         >
-          {mapped.marks &&
-          mapped.marks.filter((mark) => mark.type == "highlight").length > 0 ? (
-            <Mark>{mapped.text}</Mark>
-          ) : mapped.marks &&
-            mapped.marks.filter((mark) => mark.type == "code").length > 0 ? (
-            <Code className="text-sm">{mapped.text}</Code>
-          ) : (
-            mapped.text
-          )}
-        </Title>
+          <Title
+            mt="sm"
+            order={level}
+            className="leading-normal"
+            style={{
+              fontFamily:
+                mapped.marks &&
+                mapped.marks.filter((mark) => mark.type == "textStyle").length >
+                  0 &&
+                mapped.marks.filter((mark) => mark.type == "textStyle")[0].attrs
+                  .fontFamily,
+            }}
+            mx={1}
+            variant={
+              mapped.marks &&
+              mapped.marks.filter((mark) => mark.type == "link").length > 0
+                ? "link"
+                : "text"
+            }
+            color={
+              mapped.marks &&
+              mapped.marks.filter((mark) => mark.type == "link").length > 0
+                ? "blue"
+                : "auto"
+            }
+            key={nanoid()}
+          >
+            {mapped.marks &&
+            mapped.marks.filter((mark) => mark.type == "highlight").length >
+              0 ? (
+              <Mark>{mapped.text}</Mark>
+            ) : mapped.marks &&
+              mapped.marks.filter((mark) => mark.type == "code").length > 0 ? (
+              <Code className="text-sm">{mapped.text}</Code>
+            ) : (
+              mapped.text
+            )}
+          </Title>
+        </Anchor>
       );
     }
 

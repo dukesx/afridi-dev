@@ -285,7 +285,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                   <Stack
                     key="something-list"
                     spacing="xl"
-                    className="lg:mx-10"
+                    className="lg:mx-5"
                     mb="xl"
                     align="center"
                   >

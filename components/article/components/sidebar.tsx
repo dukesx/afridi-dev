@@ -14,6 +14,7 @@ import {
   useMantineColorScheme,
   Aside,
   ThemeIcon,
+  MediaQuery,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -22,6 +23,7 @@ import { useEffect, useState } from "react";
 import { ShowUnauthorizedModal } from "../../../utils/helpers";
 import { AfridiDevAuthor } from "../../author/widgets/square-horizontal-author";
 import AfridiImage from "../../global/afridi-image";
+import { TableOfContentsFloating } from "../../global/toc";
 
 interface ArticleSidebarProps {
   data: {
@@ -36,6 +38,7 @@ interface ArticleSidebarProps {
   id: string;
   title: string;
   description: string;
+  links: Array<any>;
 }
 
 const ArticleRightSidebar = ({
@@ -48,6 +51,7 @@ const ArticleRightSidebar = ({
   setBookmarks,
   starred,
   setStarred,
+  links,
 }: ArticleSidebarProps) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
   const { colorScheme } = useMantineColorScheme();

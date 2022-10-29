@@ -73,6 +73,7 @@ import AfridiDevEditorGiphySelector from "./menu/giphy";
 import AfridiDevEditorGiphy from "./plugins/afridi-dev-editor-giphy";
 import Placeholder from "@tiptap/extension-placeholder";
 import Image from "@tiptap/extension-image";
+import AfridiDevEditorLink from "./menu/link";
 
 /**
  *  @property {String}   value
@@ -404,6 +405,11 @@ export const TextEditor = ({
                 colorScheme={colorScheme}
               />
               <AfridiDevEditorHighlight
+                theme={theme}
+                colorScheme={colorScheme}
+                editor={editor}
+              />
+              <AfridiDevEditorLink
                 theme={theme}
                 colorScheme={colorScheme}
                 editor={editor}

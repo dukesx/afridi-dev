@@ -22,10 +22,13 @@ import {
   useMantineTheme,
   ActionIcon,
   useMantineColorScheme,
+  Card,
 } from "@mantine/core";
 import {
+  IconArrowRight,
   IconBookmark,
   IconClock,
+  IconHierarchy3,
   IconLink,
   IconNews,
   IconShare,
@@ -46,6 +49,8 @@ import { ArticleJsonLd, BreadcrumbJsonLd, NextSeo } from "next-seo";
 import { format } from "date-fns";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
 import AfridiDevEditorRenderer from "../../components/global/editor/renderer/editor-data-renderer";
+import { TableOfContentsFloating } from "../../components/global/toc";
+import slugify from "slugify";
 
 //
 //
@@ -69,6 +74,20 @@ const Article = ({ article, tags }) => {
   const [bookmarks, setBookmarks] = useState([]);
   const { colorScheme } = useMantineColorScheme();
   const [starred, setStarred] = useState(false);
+
+  var links = [];
+  console.log(JSON.parse(article.body));
+
+  article &&
+    JSON.parse(article.body).content.map((mapped) => {
+      if (mapped.type == "heading") {
+        links.push({
+          link: `#${slugify(mapped.content[0].text.toLowerCase())}`,
+          order: mapped.attrs.level,
+          label: mapped.content[0].text,
+        });
+      }
+    });
 
   var ref = useRef<any>();
   const [commentId, setCommentId] = useState(null);
@@ -470,7 +489,7 @@ const Article = ({ article, tags }) => {
                   )}
                 </Text>
 
-                <Group mr="xs" position="apart" mt="sm">
+                <Group mb="xl" mr="xs" position="apart" mt="sm">
                   <Group>
                     {article &&
                       article.tags.map((mapped) => (
@@ -508,6 +527,7 @@ const Article = ({ article, tags }) => {
             >
               <Aside.Section>
                 <ArticleRightSidebar
+                  links={links}
                   title={article.title}
                   description={article.description}
                   id={data && data.id}
@@ -520,7 +540,19 @@ const Article = ({ article, tags }) => {
                 />
               </Aside.Section>
             </Aside>
-            <Box mt={50} className={classes.mainContent + " px-[12px]"}>
+            {links && links.length > 0 ? (
+              <MediaQuery
+                largerThan={1000}
+                styles={{
+                  display: "none",
+                }}
+              >
+                <Box mb="sm">
+                  <TableOfContentsFloating links={links} />
+                </Box>
+              </MediaQuery>
+            ) : null}
+            <Box className={classes.mainContent + " px-[12px]"}>
               <AfridiDevEditorRenderer data={article && article.body} />
             </Box>
             <Divider />
@@ -581,12 +613,19 @@ const Article = ({ article, tags }) => {
                 p="xs"
                 width={{ sm: 0, md: 250, lg: 350 }}
               >
-                <Navbar.Section
-                  mt="xl"
-                  grow
-                  className="h-[400px]"
-                  component={ScrollArea}
-                >
+                <Navbar.Section grow component={ScrollArea}>
+                  {links && links.length > 0 ? (
+                    <MediaQuery
+                      smallerThan={1000}
+                      styles={{
+                        display: "none",
+                      }}
+                    >
+                      <Box>
+                        <TableOfContentsFloating links={links} />
+                      </Box>
+                    </MediaQuery>
+                  ) : null}
                   <NumberedArticlesWidget
                     titleOrder={4}
                     title="Similar Articles"
