@@ -187,11 +187,6 @@ const Article = ({ article, tags }) => {
 
   const addViewCount = async () => {
     //
-    const { data: returnedData, error } = await supabaseClient
-      .from("article_views")
-      .insert({
-        article_id: article.id,
-      });
     const update = await fetch("/api/updateViews", {
       method: "POST",
       headers: {
@@ -205,13 +200,21 @@ const Article = ({ article, tags }) => {
 
     const data = await update.json();
 
+    if (data && data.success) {
+      const { data: returnedData, error } = await supabaseClient
+        .from("article_views")
+        .insert({
+          article_id: article.id,
+        });
+    }
+
     //
   };
 
   useEffect(() => {
     setTimeout(() => {
       addViewCount();
-    }, 10000);
+    }, 4000);
   }, []);
 
   var relatedArticles = [];
