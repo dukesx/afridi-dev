@@ -76,7 +76,6 @@ const Article = ({ article, tags }) => {
   const [starred, setStarred] = useState(false);
 
   var links = [];
-  console.log(JSON.parse(article.body));
 
   article &&
     JSON.parse(article.body).content.map((mapped) => {
