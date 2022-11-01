@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createStyles, Box, Text, Group, Card, Divider } from "@mantine/core";
 import { IconAnchor, IconListDetails, IconListSearch } from "@tabler/icons";
+import slugify from "slugify";
 
 const LINK_HEIGHT = 40;
 const INDICATOR_SIZE = 10;
@@ -55,13 +56,14 @@ const useStyles = createStyles((theme) => ({
 
 interface TableOfContentsFloatingProps {
   links: { label: string; link: string; order: number }[];
+  activeIndex?: any;
 }
 
 export function TableOfContentsFloating({
   links,
 }: TableOfContentsFloatingProps) {
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState<any>(0);
 
   var indices = [];
 
@@ -74,12 +76,13 @@ export function TableOfContentsFloating({
         component="a"
         href={item.link}
         onClick={(event) => {
-          // event.preventDefault();
           setActive(index);
         }}
         lineClamp={1}
         key={item.label}
-        className={cx(classes.link, { [classes.linkActive]: active === index })}
+        className={cx(classes.link, {
+          [classes.linkActive]: active === index,
+        })}
         sx={(theme) => ({ paddingLeft: item.order * theme.spacing.md })}
       >
         <Group spacing="xs">{item.label}</Group>

@@ -128,6 +128,18 @@ const EditorRendererParagraph = ({ data }) => {
                       .attrs.fontFamily,
                 }}
                 mx={1}
+                italic={
+                  mapped.marks &&
+                  mapped.marks.filter((mark) => mark.type == "italic").length >
+                    0 &&
+                  true
+                }
+                underline={
+                  mapped.marks &&
+                  mapped.marks.filter((mark) => mark.type == "underline")
+                    .length > 0 &&
+                  true
+                }
                 href={
                   mapped.marks &&
                   mapped.marks.filter((mark) => mark.type == "link").length > 0

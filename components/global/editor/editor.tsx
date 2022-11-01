@@ -19,10 +19,12 @@ import {
   Group,
   Loader,
   LoadingOverlay,
+  Menu,
   Paper,
   ScrollArea,
   Stack,
   Text,
+  ThemeIcon,
   Transition,
   useMantineColorScheme,
   useMantineTheme,
@@ -33,7 +35,9 @@ import {
   IconBold,
   IconH1,
   IconH2,
+  IconHeading,
   IconItalic,
+  IconLetterT,
   IconMarkdown,
 } from "@tabler/icons";
 import CharacterCount from "@tiptap/extension-character-count";
@@ -255,24 +259,29 @@ export const TextEditor = ({
 
             return {
               onStart: (props) => {
-                component = new ReactRenderer(AfridiDevEditorMentionsDropdown, {
-                  props,
-                  editor: props.editor,
-                });
+                if (!props.editor.isActive("heading")) {
+                  component = new ReactRenderer(
+                    AfridiDevEditorMentionsDropdown,
+                    {
+                      props,
+                      editor: props.editor,
+                    }
+                  );
 
-                if (!props.clientRect) {
-                  return;
+                  if (!props.clientRect) {
+                    return;
+                  }
+
+                  popup = tippy("body", {
+                    getReferenceClientRect: props.clientRect,
+                    appendTo: () => document.body,
+                    content: component.element,
+                    showOnCreate: true,
+                    interactive: true,
+                    trigger: "manual",
+                    placement: "bottom-start",
+                  });
                 }
-
-                popup = tippy("body", {
-                  getReferenceClientRect: props.clientRect,
-                  appendTo: () => document.body,
-                  content: component.element,
-                  showOnCreate: true,
-                  interactive: true,
-                  trigger: "manual",
-                  placement: "bottom-start",
-                });
               },
 
               onUpdate(props) {
@@ -487,76 +496,27 @@ export const TextEditor = ({
         >
           <Card ml={70} className="shadow-xl" p={0} py={1} px={4} radius="xl">
             <Group noWrap spacing="xs" className="cursor-grab">
-              <ActionIcon
-                variant={
-                  editor.isActive("heading", { level: 1 }) ? "filled" : "subtle"
-                }
-                color={
-                  editor.isActive("heading", { level: 1 }) ? "blue" : "gray"
-                }
-                className="rounded-full px-1.5 py-0"
-                onClick={() =>
-                  editor.chain().focus().toggleHeading({ level: 1 }).run()
-                }
-                radius="xl"
-                size="lg"
-              >
-                <IconH1
-                  color={
-                    editor.isActive("heading", { level: 1 })
-                      ? theme.white
-                      : colorScheme == "dark"
-                      ? theme.colors.gray[4]
-                      : theme.colors.gray[8]
-                  }
-                  size={18}
-                />
-              </ActionIcon>
-              <ActionIcon
-                variant={
-                  editor.isActive("heading", { level: 2 }) ? "filled" : "subtle"
-                }
-                color={
-                  editor.isActive("heading", { level: 2 }) ? "blue" : "gray"
-                }
-                className="rounded-full px-1.5 py-0"
-                onClick={() =>
-                  editor.chain().focus().toggleHeading({ level: 2 }).run()
-                }
-                radius="xl"
-                size="lg"
-              >
-                <IconH2
-                  color={
-                    editor.isActive("heading", { level: 2 })
-                      ? theme.white
-                      : colorScheme == "dark"
-                      ? theme.colors.gray[4]
-                      : theme.colors.gray[8]
-                  }
-                  size={18}
-                />
-              </ActionIcon>
-
-              <ActionIcon
-                variant={editor.isActive("bold") ? "filled" : "subtle"}
-                color={editor.isActive("bold") ? "blue" : "gray"}
-                className="rounded-full px-1.5 py-0"
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                radius="xl"
-                size="lg"
-              >
-                <IconBold
-                  color={
-                    editor.isActive("bold")
-                      ? theme.white
-                      : colorScheme == "dark"
-                      ? theme.colors.gray[4]
-                      : theme.colors.gray[8]
-                  }
-                  size={18}
-                />
-              </ActionIcon>
+              {!editor.isActive("heading") && (
+                <ActionIcon
+                  variant={editor.isActive("bold") ? "filled" : "subtle"}
+                  color={editor.isActive("bold") ? "blue" : "gray"}
+                  className="rounded-full px-1.5 py-0"
+                  onClick={() => editor.chain().focus().toggleBold().run()}
+                  radius="xl"
+                  size="lg"
+                >
+                  <IconBold
+                    color={
+                      editor.isActive("bold")
+                        ? theme.white
+                        : colorScheme == "dark"
+                        ? theme.colors.gray[4]
+                        : theme.colors.gray[8]
+                    }
+                    size={18}
+                  />
+                </ActionIcon>
+              )}
               <ActionIcon
                 variant={editor.isActive("italic") ? "filled" : "subtle"}
                 color={editor.isActive("italic") ? "blue" : "gray"}

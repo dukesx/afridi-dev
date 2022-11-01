@@ -37,7 +37,9 @@ const AfridiDevEditorLink = ({
               if (editor.isActive("link")) {
                 editor.commands.unsetLink();
               } else {
-                setMenu(true);
+                if (!editor.isActive("heading")) {
+                  setMenu(true);
+                }
               }
             }}
             radius="xl"

@@ -90,6 +90,7 @@ const Article = ({ article, tags }) => {
 
   var ref = useRef<any>();
   const [commentId, setCommentId] = useState(null);
+  const [activeLink, setActiveLink] = useState<any>(null);
 
   const { scrollIntoView: scrollToComment, targetRef: targetComment } =
     useScrollIntoView<HTMLDivElement>({
@@ -231,6 +232,8 @@ const Article = ({ article, tags }) => {
         }
       });
     });
+
+  console.log(JSON.parse(article.body));
 
   return (
     <AppWrapper noPadding activeHeaderKey="" size="xl">
@@ -549,7 +552,7 @@ const Article = ({ article, tags }) => {
                   display: "none",
                 }}
               >
-                <Box mb="sm">
+                <Box mt="sm">
                   <TableOfContentsFloating links={links} />
                 </Box>
               </MediaQuery>

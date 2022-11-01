@@ -18,7 +18,6 @@ import { NextLink } from "@mantine/next";
 import { IconAt } from "@tabler/icons";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 import slugify from "slugify";
 import AfridiImage from "../../../afridi-image";
 
@@ -125,6 +124,7 @@ const EditorRendererHeading = ({ data, level }) => {
     if (mapped.type == "text") {
       return (
         <Anchor
+          className="afridi-dev-heading"
           id={`${slugify(mapped.text.toLowerCase())}`}
           variant="text"
           key={nanoid()}
@@ -143,6 +143,17 @@ const EditorRendererHeading = ({ data, level }) => {
           }}
         >
           <Title
+            italic={
+              mapped.marks &&
+              mapped.marks.filter((mark) => mark.type == "italic").length > 0 &&
+              true
+            }
+            underline={
+              mapped.marks &&
+              mapped.marks.filter((mark) => mark.type == "underline").length >
+                0 &&
+              true
+            }
             mt="sm"
             order={level}
             className="leading-normal"

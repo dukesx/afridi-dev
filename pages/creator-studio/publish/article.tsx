@@ -280,25 +280,27 @@ const ArticleComposer = () => {
               await Promise.all(
                 editorVal.data.content.map(async (mapped) => {
                   if (mapped.type == "paragraph") {
-                    mapped.content.map(async (mapped2) => {
-                      if (mapped2.type == "mention") {
-                        if (!pinged.includes(mapped2.attrs.id)) {
-                          pinged.push(mapped2.attrs.id);
+                    mapped.content &&
+                      mapped.content.map(async (mapped2) => {
+                        if (mapped2.type == "mention") {
+                          if (!pinged.includes(mapped2.attrs.id)) {
+                            pinged.push(mapped2.attrs.id);
 
-                          const { data: currentUserData } = await supabaseClient
-                            .from("authors")
-                            .select("full_name")
-                            .eq("id", session.user.id);
-                          const { error } = await supabaseClient
-                            .from("user_notifications")
-                            .insert({
-                              author_id: mapped2.attrs.id,
-                              message: `You were mentioned in the article "${val.title}" by ${currentUserData[0].full_name}`,
-                              link: `/article/${articleData[0].id}`,
-                            });
+                            const { data: currentUserData } =
+                              await supabaseClient
+                                .from("authors")
+                                .select("full_name")
+                                .eq("id", session.user.id);
+                            const { error } = await supabaseClient
+                              .from("user_notifications")
+                              .insert({
+                                author_id: mapped2.attrs.id,
+                                message: `You were mentioned in the article "${val.title}" by ${currentUserData[0].full_name}`,
+                                link: `/article/${articleData[0].id}`,
+                              });
+                          }
                         }
-                      }
-                    });
+                      });
                   }
                 })
               );
