@@ -51,6 +51,7 @@ const EditArticle = ({ user, data }) => {
   const [tagsLoading, setTagsLoading] = useState(false);
   const [scroll, scrollTo] = useWindowScroll();
   const [scrollHeight, setScrollHeight] = useState(0);
+  const [drafted, setDrafted] = useState(data.published == true ? false : true);
 
   var coAuthors =
     data &&
@@ -120,39 +121,228 @@ const EditArticle = ({ user, data }) => {
   useEffect(() => {
     setScrollHeight(document.documentElement.scrollHeight);
   }, []);
+  //
+  //
+  //
 
+  const callSubmit = async ({ draft }) => {
+    if (draft) {
+      setDrafted(true);
+    } else {
+      setDrafted(false);
+    }
+    setLoading(true);
+    const { error, data: articleData } = await supabaseClient
+      .from("articles")
+      .update({
+        title: form.values.title,
+        cover: form.values.cover,
+        author_id: session.user.id,
+        body: editorVal.data,
+        description: form.values.description,
+        published: draft ? false : true,
+        read_time:
+          editorVal.words == 0
+            ? data.read_time
+            : secondsToHms((editorVal.words / 265) * 60),
+      })
+      .eq("id", data.id)
+      .select();
+
+    if (error) {
+      setLoading(false);
+      showNotification({
+        title: "Error publishing article",
+        color: "red",
+        icon: <IconX />,
+        message: error.message,
+      });
+    } else {
+      const { error: deleteTagError } = await supabaseClient
+        .from("articles_tags")
+        .delete()
+        .eq("article_id", data.id);
+
+      await Promise.all(
+        form.values.tags.map(async (mapped) => {
+          if (mapped) {
+            const { error, data, count } = await supabaseClient
+              .from("tags")
+              .select("*", {
+                count: "exact",
+              })
+              .eq("title", mapped);
+
+            if (data && count > 0 && data[0].content_count > 0) {
+              const { error: error2 } = await supabaseClient
+                .from("tags")
+                .update({ content_count: data[0].content_count - 1 })
+                .eq("title", mapped);
+            }
+          }
+        })
+      );
+
+      const { error: deleteCoAuthorsError } = await supabaseClient
+        .from("co_authors_articles")
+        .delete()
+        .eq("article_id", data.id);
+
+      if (!deleteTagError && !deleteCoAuthorsError) {
+        await Promise.all(
+          form.values.tags.map(async (mapped) => {
+            const {
+              error,
+              data: tagData,
+              count,
+            } = await supabaseClient
+              .from("tags")
+              .select(
+                `
+                title,
+                id,
+                content_count
+                `,
+                {
+                  count: "exact",
+                }
+              )
+              .match({
+                title: mapped,
+              });
+
+            if (count > 0) {
+              const { data: finalData } = await supabaseClient
+                .from("articles_tags")
+                .insert({
+                  tag_id: tagData[0].id,
+                  article_id: articleData[0].id,
+                });
+
+              const { error: errored } = await supabaseClient
+                .from("tags")
+                .update({
+                  content_count: draft
+                    ? tagData[0].content_count
+                    : tagData[0].content_count + 1,
+                })
+                .eq("title", mapped);
+            } else {
+              const { data: insertedTagData } = await supabaseClient
+                .from("tags")
+                .insert({
+                  title: slugify(mapped),
+                  content_count: draft ? 0 : 1,
+                })
+                .select();
+              const { error: tag2Error, data: tag2Data } = await supabaseClient
+                .from("articles_tags")
+                .insert({
+                  tag_id: insertedTagData[0].id,
+                  article_id: articleData[0].id,
+                });
+            }
+          })
+        );
+        if (form.values.coAuthors.length > 0) {
+          await Promise.all(
+            form.values.coAuthors.map(async (mapped) => {
+              if (mapped !== articleData[0].author_id) {
+                const { error: AddCoAuthorsError } = await supabaseClient
+                  .from("co_authors_articles")
+                  .insert({
+                    article_id: articleData[0].id,
+                    author_id: mapped.id ? mapped.id : mapped,
+                  });
+              }
+            })
+          );
+        }
+
+        if (draft == false) {
+          //
+          //
+          // Ping Authors
+          //
+          //
+          //
+
+          var pinged = [];
+
+          await Promise.all(
+            editorVal.data.content.map(async (mapped) => {
+              if (mapped.type == "paragraph") {
+                mapped.content &&
+                  mapped.content.map(async (mapped2) => {
+                    if (mapped2.type == "mention") {
+                      if (mapped2.attrs.id !== session.user.id) {
+                        if (!pinged.includes(mapped2.attrs.id)) {
+                          pinged.push(mapped2.attrs.id);
+
+                          const { data: currentUserData } = await supabaseClient
+                            .from("authors")
+                            .select("full_name")
+                            .eq("id", session.user.id);
+                          const { error } = await supabaseClient
+                            .from("user_notifications")
+                            .insert({
+                              author_id: mapped2.attrs.id,
+                              message: `You were mentioned in the article "${form.values.title}" by ${currentUserData[0].full_name}`,
+                              link: `/article/${articleData[0].id}`,
+                            });
+                        }
+                      }
+                    }
+                  });
+              }
+            })
+          );
+
+          /**
+           *
+           *
+           *
+           *
+           */
+
+          /**
+           *
+           *
+           *  Revalidate Cache
+           *
+           */
+
+          const fetcher = await fetch("/api/revalidate", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              accept: "application/json",
+            },
+            body: JSON.stringify({
+              paths: [
+                `/article/${articleData[0].id}`,
+                `/author/${articleData[0].author_id}`,
+                "/",
+              ],
+            }),
+          });
+
+          const returned = await fetcher.json();
+
+          if (returned && returned.revalidated) {
+            setCover(null);
+            router.push("/article/" + articleData[0].id);
+          }
+        }
+        setLoading(false);
+      }
+    }
+  };
   //
 
   return (
     <AppWrapper noPadding activeHeaderKey="" size={1400}>
       <NextSeo nofollow noindex />
-      <Tooltip label="Goto End of Article">
-        <Affix zIndex={5000} position={{ bottom: 20, right: "10%" }}>
-          <Transition
-            transition="slide-up"
-            mounted={scroll.y > 0 && scroll.y < scrollHeight}
-          >
-            {(transitionStyles) => (
-              <ActionIcon
-                size={60}
-                className="rounded-full"
-                style={transitionStyles}
-                onClick={() =>
-                  scrollTo({ y: document.documentElement.scrollHeight })
-                }
-                color="blue"
-                variant="gradient"
-                gradient={{
-                  from: "blue",
-                  to: "cyan",
-                }}
-              >
-                <IconArrowDown size={16} />{" "}
-              </ActionIcon>
-            )}
-          </Transition>
-        </Affix>
-      </Tooltip>
 
       <div className="relative ml-0 sm:ml-5">
         <LoadingOverlay
@@ -160,7 +350,9 @@ const EditArticle = ({ user, data }) => {
           loader={
             <Stack className="absolute top-64 left-0 right-0" align="center">
               <Loader variant="bars" color="blue" />
-              <Text weight={600}>Updating Article</Text>
+              <Text weight={600}>
+                {drafted ? "Saving" : "Updating"} Article
+              </Text>
             </Stack>
           }
           visible={loading}
@@ -168,177 +360,7 @@ const EditArticle = ({ user, data }) => {
         />
         <form
           onSubmit={form.onSubmit(async (val) => {
-            setLoading(true);
-            const { error, data: articleData } = await supabaseClient
-              .from("articles")
-              .update({
-                title: val.title,
-                cover: val.cover,
-                author_id: session.user.id,
-                body: editorVal.data,
-                description: val.description,
-                read_time:
-                  editorVal.words == 0
-                    ? data.read_time
-                    : secondsToHms((editorVal.words / 265) * 60),
-              })
-              .eq("id", data.id)
-              .select();
-
-            if (error) {
-              setLoading(false);
-              showNotification({
-                title: "Error publishing article",
-                color: "red",
-                icon: <IconX />,
-                message: error.message,
-              });
-            } else {
-              const { error: deleteTagError } = await supabaseClient
-                .from("articles_tags")
-                .delete()
-                .eq("article_id", data.id);
-
-              const { error: deleteCoAuthorsError } = await supabaseClient
-                .from("co_authors_articles")
-                .delete()
-                .eq("article_id", data.id);
-
-              if (!deleteTagError && !deleteCoAuthorsError) {
-                val.tags.map(async (mapped) => {
-                  const {
-                    error,
-                    data: tagData,
-                    count,
-                  } = await supabaseClient
-                    .from("tags")
-                    .select(
-                      `
-                title,
-                id
-                `,
-                      {
-                        count: "exact",
-                      }
-                    )
-                    .match({
-                      title: mapped,
-                    });
-
-                  if (count > 0) {
-                    const { data: finalData } = await supabaseClient
-                      .from("articles_tags")
-                      .insert({
-                        title: mapped.title,
-                        tag_id: tagData[0].id,
-                        article_id: articleData[0].id,
-                      });
-                  } else {
-                    const { data: insertedTagData } = await supabaseClient
-                      .from("tags")
-                      .insert({
-                        title: slugify(mapped),
-                      })
-                      .select();
-                    const { error: tag2Error, data: tag2Data } =
-                      await supabaseClient.from("articles_tags").insert({
-                        tag_id: insertedTagData[0].id,
-                        article_id: articleData[0].id,
-                      });
-                  }
-                });
-                if (val.coAuthors.length > 0) {
-                  await Promise.all(
-                    val.coAuthors.map(async (mapped) => {
-                      if (mapped !== articleData[0].author_id) {
-                        const { error: AddCoAuthorsError } =
-                          await supabaseClient
-                            .from("co_authors_articles")
-                            .insert({
-                              article_id: articleData[0].id,
-                              author_id: mapped.id ? mapped.id : mapped,
-                            });
-                      }
-                    })
-                  );
-                }
-
-                //
-                //
-                // Ping Authors
-                //
-                //
-                //
-
-                var pinged = [];
-
-                await Promise.all(
-                  editorVal.data.content.map(async (mapped) => {
-                    if (mapped.type == "paragraph") {
-                      mapped.content &&
-                        mapped.content.map(async (mapped2) => {
-                          if (mapped2.type == "mention") {
-                            if (mapped2.attrs.id !== session.user.id) {
-                              if (!pinged.includes(mapped2.attrs.id)) {
-                                pinged.push(mapped2.attrs.id);
-
-                                const { data: currentUserData } =
-                                  await supabaseClient
-                                    .from("authors")
-                                    .select("full_name")
-                                    .eq("id", session.user.id);
-                                const { error } = await supabaseClient
-                                  .from("user_notifications")
-                                  .insert({
-                                    author_id: mapped2.attrs.id,
-                                    message: `You were mentioned in the article "${val.title}" by ${currentUserData[0].full_name}`,
-                                    link: `/article/${articleData[0].id}`,
-                                  });
-                              }
-                            }
-                          }
-                        });
-                    }
-                  })
-                );
-
-                /**
-                 *
-                 *
-                 *
-                 *
-                 */
-
-                /**
-                 *
-                 *
-                 *  Revalidate Cache
-                 *
-                 */
-
-                const fetcher = await fetch("/api/revalidate", {
-                  method: "POST",
-                  headers: {
-                    "content-type": "application/json",
-                    accept: "application/json",
-                  },
-                  body: JSON.stringify({
-                    paths: [
-                      `/article/${articleData[0].id}`,
-                      `/author/${articleData[0].author_id}`,
-                      "/",
-                    ],
-                  }),
-                });
-
-                const returned = await fetcher.json();
-
-                if (returned && returned.revalidated) {
-                  setCover(null);
-                  router.push("/article/" + articleData[0].id);
-                }
-              }
-            }
+            callSubmit({ draft: false });
           })}
         >
           <Grid px={0} py="xl">
@@ -435,7 +457,7 @@ const EditArticle = ({ user, data }) => {
               </Input.Wrapper>
             </Grid.Col>
 
-            <Grid.Col span={12} md={4}>
+            <Grid.Col className="h-screen sticky top-20" span={12} md={4}>
               <Card
                 sx={(theme) => ({
                   height: "100%",
@@ -456,6 +478,8 @@ const EditArticle = ({ user, data }) => {
                 </Text>
 
                 <ArticleEditSidebar
+                  callSubmit={callSubmit}
+                  draft={drafted}
                   receivedCoAuthors={coAuthors}
                   setLoading={setLoading}
                   cover={cover}
@@ -492,6 +516,7 @@ export const getServerSideProps = withPageAuth({
         cover,
         author_id,
         read_time,
+        published,
         body,
         tags (
           title

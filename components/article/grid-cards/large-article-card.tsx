@@ -14,6 +14,7 @@ import LargeGridCardSkeleton from "../../global/skeletons/grid-cards/largeGridCa
 
 export type AfridiDevArticle = {
   id: string;
+  published?: boolean;
   cover_base_64?: string;
   title: string;
   description: string;

@@ -13,6 +13,7 @@ import {
   Group,
   Input,
   Loader,
+  Menu,
   Modal,
   MultiSelect,
   Stack,
@@ -28,10 +29,14 @@ import { closeAllModals, openContextModal, openModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
+  IconArrowDown,
+  IconArrowRight,
   IconCheck,
   IconCloudUpload,
   IconCopy,
+  IconDeviceFloppy,
   IconExternalLink,
+  IconSend,
   IconX,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
@@ -59,6 +64,7 @@ interface ArticleComposerSidebarProps {
     description: string;
   }>;
   setCoverImage: Function;
+  callSubmit: Function;
 }
 
 //
@@ -68,6 +74,7 @@ const ArticleComposeSidebar = ({
   setLoading,
   form,
   setCoverImage,
+  callSubmit,
 }: ArticleComposerSidebarProps) => {
   //
   const { isLoading, session, error, supabaseClient } = useSessionContext();
@@ -178,7 +185,8 @@ const ArticleComposeSidebar = ({
         {...form.getInputProps("description")}
         required
         placeholder="This is awesome because..."
-        minRows={2}
+        minRows={4}
+        autosize
       />
 
       <Input.Wrapper pb="xl" label="Cover" required error={form.errors.cover}>
@@ -210,20 +218,53 @@ const ArticleComposeSidebar = ({
         />
       </Input.Wrapper>
 
-      <Button
-        styles={{
-          label: {
-            fontSize: 13,
-          },
-        }}
-        type="submit"
-        leftIcon={<IconCloudUpload size={20} />}
-        color="blue"
-        mt={0}
-        fullWidth
-      >
-        Publish Article
-      </Button>
+      <Menu width="100%">
+        <Menu.Target>
+          <Button
+            styles={{
+              label: {
+                fontSize: 13,
+              },
+            }}
+            fullWidth
+            leftIcon={<IconCloudUpload size={20} />}
+            color="blue"
+            mt={0}
+          >
+            Choose Publishing Method
+          </Button>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item
+            onClick={() => {
+              const { hasErrors } = form.validate();
+              if (!hasErrors) {
+                callSubmit({ draft: true });
+              }
+            }}
+            className="hover:font-bold font-medium"
+            icon={<IconDeviceFloppy />}
+            color="teal"
+            rightSection={<IconArrowRight size={18} />}
+          >
+            Save as Draft
+          </Menu.Item>
+          <Menu.Item
+            onClick={() => {
+              const { hasErrors } = form.validate();
+              if (!hasErrors) {
+                callSubmit({ draft: false });
+              }
+            }}
+            rightSection={<IconArrowRight size={18} />}
+            className="hover:font-bold font-medium"
+            icon={<IconSend />}
+            color="blue"
+          >
+            Publish Now
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
     </Fragment>
   );
 };

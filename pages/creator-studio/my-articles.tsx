@@ -1,5 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Group, LoadingOverlay, Text, TextInput } from "@mantine/core";
+import {
+  Badge,
+  Button,
+  Group,
+  LoadingOverlay,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { DataTable } from "mantine-datatable";
 import { useEffect, useState } from "react";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -34,6 +41,7 @@ const CreatorsStudio = ({ authored }) => {
       id,
       title,
       description,
+      published,
       cover,
       created_at,
      tags (
@@ -60,6 +68,7 @@ const CreatorsStudio = ({ authored }) => {
       id,
       title,
       description,
+      published,
       cover,
       created_at,
      tags (
@@ -92,6 +101,7 @@ const CreatorsStudio = ({ authored }) => {
       id,
       title,
       description,
+      published,
       cover,
       created_at,
       tags (
@@ -157,6 +167,18 @@ const CreatorsStudio = ({ authored }) => {
         onPageChange={(p) => setPage(p)}
         // define columns
         columns={[
+          {
+            accessor: "published",
+            title: "Status",
+            render: ({ published }) => {
+              return (
+                <Badge variant="light" color={published ? "teal" : "yellow"}>
+                  {published ? "Published" : "Draft"}
+                </Badge>
+              );
+            },
+            width: 130,
+          },
           {
             accessor: "title",
             title: "Title",
@@ -266,7 +288,10 @@ const CreatorsStudio = ({ authored }) => {
                               const { error } = await supabaseClient
                                 .from("tags")
                                 .update({
-                                  content_count: mapped.content_count - 1,
+                                  content_count:
+                                    mapped.content_count > 0
+                                      ? mapped.content_count - 1
+                                      : 0,
                                 })
                                 .eq("id", mapped.id);
                             })

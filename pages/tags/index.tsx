@@ -86,6 +86,9 @@ const TagsPage = ({ tagsArr }) => {
       )
       .ilike("title", `%${deferred.toLowerCase()}%`);
 
+    //
+    //
+    //
     var tagsArr = [];
     data.map((mapped) =>
       tagsArr.push({
@@ -275,8 +278,6 @@ export const getStaticProps = async () => {
         image: mapped.image,
       })
     );
-
-    
 
   return {
     props: {

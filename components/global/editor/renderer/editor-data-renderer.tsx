@@ -74,7 +74,11 @@ const AfridiDevEditorRenderer = ({
             );
           }
           if (data2.type == "paragraph") {
-            return <EditorRendererParagraph data={data2} key={nanoid()} />;
+            return (
+              <Text key={nanoid()} component="p">
+                <EditorRendererParagraph data={data2} key={nanoid()} />
+              </Text>
+            );
           }
 
           if (data2.type == "afridi-dev-editor-blockquote") {

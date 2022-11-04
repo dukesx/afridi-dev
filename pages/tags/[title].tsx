@@ -105,6 +105,7 @@ const ArticleTagPage = ({ taga, articles }) => {
         }
       )
       .eq("tags.title", router.query.title)
+      .eq("published", true)
       .limit(10)
       .range(data.length, data.length + 9);
 
@@ -398,6 +399,7 @@ export const getStaticProps = async (ctx) => {
       }
     )
     .eq("tags.title", title)
+    .eq("published", true)
     .limit(10);
 
   if (data && data.length > 0) {

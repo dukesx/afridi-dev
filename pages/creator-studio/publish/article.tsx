@@ -50,6 +50,7 @@ const ArticleComposer = () => {
   const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>(null);
   const router = useRouter();
   const [tagsLoading, setTagsLoading] = useState(false);
+  const [drafted, setDrafted] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -117,6 +118,206 @@ const ArticleComposer = () => {
     }
   }, [session]);
   //
+  //
+  //
+
+  const callSubmit = async ({ draft }) => {
+    if (draft) {
+      setDrafted(true);
+    } else {
+      setDrafted(false);
+    }
+    setLoading(true);
+    const { error, data: articleData } = await supabaseClient
+      .from("articles")
+      .insert({
+        title: form.values.title,
+        cover: form.values.cover,
+        author_id: session.user.id,
+        body: editorVal.data,
+        read_time: secondsToHms((editorVal.words / 265) * 60),
+        description: form.values.description,
+        published: draft == true ? false : true,
+      })
+      .select(
+        `
+                id,
+                author_id,
+                authors!articles_author_id_fkey
+                (
+                    id,
+                    content_count
+                 )
+                `
+      );
+    if (error) {
+      setLoading(false);
+      showNotification({
+        title: "Error publishing article",
+        color: "red",
+        icon: <IconX />,
+        message: error.message,
+      });
+    } else {
+      form.values.tags.map(async (mapped) => {
+        const {
+          error,
+          data: tagData,
+          count,
+        } = await supabaseClient
+          .from("tags")
+          .select(
+            `
+                  title,
+                  content_count,
+                  id
+                  `,
+            {
+              count: "exact",
+            }
+          )
+          .match({
+            title: mapped,
+          });
+        if (count > 0) {
+          const { data: finalData } = await supabaseClient
+            .from("articles_tags")
+            .insert({
+              tag_id: tagData[0].id,
+              article_id: articleData[0].id,
+            })
+            .select();
+          const { error: increaseCountError } = await supabaseClient
+            .from("tags")
+            .update({
+              content_count: draft
+                ? tagData[0].content_count
+                : tagData[0].content_count + 1,
+            })
+            .eq("id", tagData[0].id);
+        } else {
+          const { data: insertedTagData } = await supabaseClient
+            .from("tags")
+            .insert({
+              title: slugify(mapped),
+              content_count: draft ? 0 : 1,
+            })
+            .select();
+          const { error: tag2Error, data: tag2Data } = await supabaseClient
+            .from("articles_tags")
+            .insert({
+              tag_id: insertedTagData[0].id,
+              article_id: articleData[0].id,
+            });
+        }
+        const fetcher = await fetch("/api/revalidate", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            path: `/tags/${mapped}`,
+          }),
+        });
+        const returned = await fetcher.json();
+      });
+      const { error } = await supabaseClient
+        .from("authors")
+        .update({
+          //@ts-ignore
+          content_count: articleData[0].authors.content_count + 1,
+        })
+        .eq("id", session.user.id);
+      //
+      //
+      //
+      //
+      //
+      // Add CoAuthors
+      //
+      //
+      if (form.values.coAuthors.length > 0) {
+        await Promise.all(
+          form.values.coAuthors.map(async (mapped) => {
+            if (mapped !== articleData[0].author_id) {
+              const { error: AddCoAuthorsError } = await supabaseClient
+                .from("co_authors_articles")
+                .insert({
+                  article_id: articleData[0].id,
+                  author_id: mapped,
+                });
+            }
+          })
+        );
+      }
+      //
+      //
+
+      if (draft == false) {
+        //Ping Mentioned Users
+        var pinged = [];
+
+        await Promise.all(
+          editorVal.data.content.map(async (mapped) => {
+            if (mapped.type == "paragraph") {
+              mapped.content &&
+                mapped.content.map(async (mapped2) => {
+                  if (mapped2.type == "mention") {
+                    if (!pinged.includes(mapped2.attrs.id)) {
+                      pinged.push(mapped2.attrs.id);
+
+                      const { data: currentUserData } = await supabaseClient
+                        .from("authors")
+                        .select("full_name")
+                        .eq("id", session.user.id);
+                      const { error } = await supabaseClient
+                        .from("user_notifications")
+                        .insert({
+                          author_id: mapped2.attrs.id,
+                          message: `You were mentioned in the article "${form.values.title}" by ${currentUserData[0].full_name}`,
+                          link: `/article/${articleData[0].id}`,
+                        });
+                    }
+                  }
+                });
+            }
+          })
+        );
+        //
+        //
+        //
+
+        //
+        // Revalidate
+        //
+        const fetcher = await fetch("/api/revalidate", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            accept: "application/json",
+          },
+          body: JSON.stringify({
+            paths: [
+              `/article/${articleData[0].id}`,
+              `/author/${articleData[0].author_id}`,
+              "/",
+              "/tags",
+            ],
+          }),
+        });
+        const returned = await fetcher.json();
+        setCover(null);
+        router.push("/article/" + articleData[0].id);
+      }
+      setLoading(false);
+    }
+  };
+
+  //
+  //
+  //
+  //
 
   //
   return media == false ? (
@@ -142,7 +343,9 @@ const ArticleComposer = () => {
           loader={
             <Stack className="absolute top-64 left-0 right-0" align="center">
               <Loader variant="bars" color="blue" />
-              <Text weight={600}>Publishing Article</Text>
+              <Text weight={600}>
+                {drafted ? "Saving" : "Publishing"} Article
+              </Text>
             </Stack>
           }
           visible={loading}
@@ -151,185 +354,7 @@ const ArticleComposer = () => {
 
         <form
           onSubmit={form.onSubmit(async (val) => {
-            setLoading(true);
-            const { error, data: articleData } = await supabaseClient
-              .from("articles")
-              .insert({
-                title: val.title,
-                cover: val.cover,
-                author_id: session.user.id,
-                body: editorVal.data,
-                read_time: secondsToHms((editorVal.words / 265) * 60),
-                description: val.description,
-              })
-              .select(
-                `
-                id,
-                author_id,
-                authors!articles_author_id_fkey
-                (
-                    id,
-                    content_count
-                 )
-                `
-              );
-            if (error) {
-              setLoading(false);
-              showNotification({
-                title: "Error publishing article",
-                color: "red",
-                icon: <IconX />,
-                message: error.message,
-              });
-            } else {
-              val.tags.map(async (mapped) => {
-                const {
-                  error,
-                  data: tagData,
-                  count,
-                } = await supabaseClient
-                  .from("tags")
-                  .select(
-                    `
-                  title,
-                  content_count,
-                  id
-                  `,
-                    {
-                      count: "exact",
-                    }
-                  )
-                  .match({
-                    title: mapped,
-                  });
-                if (count > 0) {
-                  const { data: finalData } = await supabaseClient
-                    .from("articles_tags")
-                    .insert({
-                      tag_id: tagData[0].id,
-                      article_id: articleData[0].id,
-                    })
-                    .select();
-                  const { error: increaseCountError } = await supabaseClient
-                    .from("tags")
-                    .update({
-                      content_count: tagData[0].content_count + 1,
-                    })
-                    .eq("id", tagData[0].id);
-                } else {
-                  const { data: insertedTagData } = await supabaseClient
-                    .from("tags")
-                    .insert({
-                      title: slugify(mapped),
-                      content_count: 1,
-                    })
-                    .select();
-                  const { error: tag2Error, data: tag2Data } =
-                    await supabaseClient.from("articles_tags").insert({
-                      tag_id: insertedTagData[0].id,
-                      article_id: articleData[0].id,
-                    });
-                }
-                const fetcher = await fetch("/api/revalidate", {
-                  method: "POST",
-                  headers: {
-                    "content-type": "application/json",
-                    accept: "application/json",
-                  },
-                  body: JSON.stringify({
-                    path: `/tags/${mapped}`,
-                  }),
-                });
-                const returned = await fetcher.json();
-              });
-              const { error } = await supabaseClient
-                .from("authors")
-                .update({
-                  //@ts-ignore
-                  content_count: articleData[0].authors.content_count + 1,
-                })
-                .eq("id", session.user.id);
-              //
-              //
-              //
-              //
-              //
-              // Add CoAuthors
-              //
-              //
-              if (val.coAuthors.length > 0) {
-                await Promise.all(
-                  val.coAuthors.map(async (mapped) => {
-                    if (mapped !== articleData[0].author_id) {
-                      const { error: AddCoAuthorsError } = await supabaseClient
-                        .from("co_authors_articles")
-                        .insert({
-                          article_id: articleData[0].id,
-                          author_id: mapped,
-                        });
-                    }
-                  })
-                );
-              }
-              //
-              //
-
-              //Ping Mentioned Users
-              var pinged = [];
-
-              await Promise.all(
-                editorVal.data.content.map(async (mapped) => {
-                  if (mapped.type == "paragraph") {
-                    mapped.content &&
-                      mapped.content.map(async (mapped2) => {
-                        if (mapped2.type == "mention") {
-                          if (!pinged.includes(mapped2.attrs.id)) {
-                            pinged.push(mapped2.attrs.id);
-
-                            const { data: currentUserData } =
-                              await supabaseClient
-                                .from("authors")
-                                .select("full_name")
-                                .eq("id", session.user.id);
-                            const { error } = await supabaseClient
-                              .from("user_notifications")
-                              .insert({
-                                author_id: mapped2.attrs.id,
-                                message: `You were mentioned in the article "${val.title}" by ${currentUserData[0].full_name}`,
-                                link: `/article/${articleData[0].id}`,
-                              });
-                          }
-                        }
-                      });
-                  }
-                })
-              );
-              //
-              //
-              //
-
-              //
-              // Revalidate
-              //
-              const fetcher = await fetch("/api/revalidate", {
-                method: "POST",
-                headers: {
-                  "content-type": "application/json",
-                  accept: "application/json",
-                },
-                body: JSON.stringify({
-                  paths: [
-                    `/article/${articleData[0].id}`,
-                    `/author/${articleData[0].author_id}`,
-                    "/",
-                    "/tags",
-                  ],
-                }),
-              });
-              const returned = await fetcher.json();
-              setCover(null);
-              router.push("/article/" + articleData[0].id);
-            }
+            callSubmit({ draft: false });
           })}
         >
           <Grid px={0} py="xl">
@@ -437,7 +462,12 @@ const ArticleComposer = () => {
               </Input.Wrapper>
             </Grid.Col>
 
-            <Grid.Col span={12} md={4} xs={12}>
+            <Grid.Col
+              className="h-screen sticky top-20"
+              span={12}
+              md={4}
+              xs={12}
+            >
               <Card
                 sx={(theme) => ({
                   backgroundColor:
@@ -457,6 +487,7 @@ const ArticleComposer = () => {
                 </Text>
                 {session && (
                   <ArticleComposeSidebar
+                    callSubmit={callSubmit}
                     setLoading={setLoading}
                     cover={cover}
                     form={form}

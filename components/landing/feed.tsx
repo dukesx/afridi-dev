@@ -133,6 +133,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
   useEffect(() => {
     if (isLoading == false) {
       if (session) {
+        setFeedLoading(true);
         getUserBookmarks();
         getFeed();
       } else {
