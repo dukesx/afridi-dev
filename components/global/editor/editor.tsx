@@ -69,7 +69,7 @@ import AfridiDevEditorEmbeds from "./plugins/afridi-dev-editor-embeds";
 import Link from "@tiptap/extension-link";
 import AfridiDevEditorInsertEmbeds from "./menu/embeds";
 import Script from "next/script";
-import { AfridiDevEditorOutput } from "../../../pages/creator-studio/publish/article";
+import { AfridiDevEditorOutput } from "../../../pages/studio/publish/article";
 import Mention from "@tiptap/extension-mention";
 import tippy from "tippy.js";
 import AfridiDevEditorMentionsDropdown from "./plugins/afridi-dev-editor-mentions-dropdown";

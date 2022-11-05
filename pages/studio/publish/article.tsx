@@ -310,8 +310,7 @@ const ArticleComposer = () => {
         setCover(null);
         router.push("/article/" + articleData[0].id);
       }
-      router.push("/article/edit/" + articleData[0].id);
-      setLoading(false);
+      router.push("/studio/edit/" + articleData[0].id);
     }
   };
 
@@ -342,15 +341,21 @@ const ArticleComposer = () => {
         <LoadingOverlay
           zIndex={1100}
           loader={
-            <Stack className="absolute top-64 left-0 right-0" align="center">
-              <Loader variant="bars" color="blue" />
-              <Text weight={600}>
+            <Stack className="fixed top-64 left-0 right-0" align="center">
+              <Loader
+                variant="bars"
+                color={colorScheme == "dark" ? "blue.1" : "blue"}
+              />
+              <Text
+                color={colorScheme == "dark" ? "blue.1" : "blue"}
+                weight={600}
+              >
                 {drafted ? "Saving" : "Publishing"} Article
               </Text>
             </Stack>
           }
           visible={loading}
-          overlayBlur={2}
+          overlayBlur={4}
         />
 
         <form

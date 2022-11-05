@@ -2,8 +2,10 @@
 import {
   ActionIcon,
   Affix,
+  Badge,
   Card,
   Grid,
+  Group,
   Input,
   Loader,
   LoadingOverlay,
@@ -15,6 +17,7 @@ import {
   Tooltip,
   Transition,
   useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import { useMediaQuery, useWindowScroll } from "@mantine/hooks";
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
@@ -30,7 +33,7 @@ import slugify from "slugify";
 import { useRouter } from "next/router";
 import { IconArrowDown, IconX } from "@tabler/icons";
 import { forbidden_tags } from "../../../data/static/forbidden_tags";
-import { AfridiDevEditorOutput } from "../../creator-studio/publish/article";
+import { AfridiDevEditorOutput } from "../publish/article";
 import { secondsToHms } from "../../../utils/helpers";
 
 const EditArticle = ({ user, data }) => {
@@ -52,7 +55,7 @@ const EditArticle = ({ user, data }) => {
   const [scroll, scrollTo] = useWindowScroll();
   const [scrollHeight, setScrollHeight] = useState(0);
   const [drafted, setDrafted] = useState(data.published == true ? false : true);
-
+  const theme = useMantineTheme();
   var coAuthors =
     data &&
     data.co_authors_articles.map((mapped) => {
@@ -348,15 +351,21 @@ const EditArticle = ({ user, data }) => {
         <LoadingOverlay
           zIndex={1100}
           loader={
-            <Stack className="absolute top-64 left-0 right-0" align="center">
-              <Loader variant="bars" color="blue" />
-              <Text weight={600}>
+            <Stack className="fixed top-64 left-0 right-0" align="center">
+              <Loader
+                variant="bars"
+                color={colorScheme == "dark" ? "blue.1" : "blue"}
+              />
+              <Text
+                color={colorScheme == "dark" ? "blue.1" : "blue"}
+                weight={600}
+              >
                 {drafted ? "Saving" : "Updating"} Article
               </Text>
             </Stack>
           }
           visible={loading}
-          overlayBlur={2}
+          overlayBlur={4}
         />
         <form
           onSubmit={form.onSubmit(async (val) => {
@@ -467,15 +476,22 @@ const EditArticle = ({ user, data }) => {
                       : theme.colors.gray[0],
                 })}
               >
-                <Text
-                  className="uppercase"
-                  pb="xl"
-                  pt="sm"
-                  weight={700}
-                  size="sm"
-                >
-                  Article Settings
-                </Text>
+                <Group>
+                  <Text
+                    className="uppercase"
+                    pb="xl"
+                    pt="sm"
+                    weight={700}
+                    size="sm"
+                  >
+                    Article Settings
+                  </Text>
+                  {drafted && (
+                    <Badge color="yellow" mb="xl" mt="xs">
+                      Draft
+                    </Badge>
+                  )}
+                </Group>
 
                 <ArticleEditSidebar
                   callSubmit={callSubmit}

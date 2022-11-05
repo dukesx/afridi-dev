@@ -37,7 +37,7 @@ import { showNotification } from "@mantine/notifications";
 import React from "react";
 import AfridiDevEditor from "../../../../components/global/editor/editor";
 import { NextSeo } from "next-seo";
-import { AfridiDevEditorOutput } from "../../../creator-studio/publish/article";
+import { AfridiDevEditorOutput } from "../../../studio/publish/article";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();
@@ -368,18 +368,18 @@ const UserSettingsPage = () => {
                           github: val.githubProfile,
                         })
                         .eq("id", session.user.id);
-                        const fetcher = await fetch("/api/revalidate", {
-                          method: "POST",
-                          headers: {
-                            accept: "application/json",
-                            "content-type": "application/json",
-                          },
-                          body: JSON.stringify({
-                            paths: ["/about/dev", `/author/${session.user.id}`],
-                          }),
-                        });
+                      const fetcher = await fetch("/api/revalidate", {
+                        method: "POST",
+                        headers: {
+                          accept: "application/json",
+                          "content-type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          paths: ["/about/dev", `/author/${session.user.id}`],
+                        }),
+                      });
 
-                        const res = await fetcher.json();
+                      const res = await fetcher.json();
 
                       if (!error && res.revalidated) {
                         showNotification({

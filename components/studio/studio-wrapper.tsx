@@ -124,7 +124,7 @@ const StudioWrapper = ({
 
             <Button
               component={NextLink}
-              href="/creator-studio/publish/article"
+              href="/studio/publish/article"
               className="max-w-[300px] mx-auto"
               variant="outline"
               radius="xl"

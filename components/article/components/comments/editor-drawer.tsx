@@ -12,7 +12,7 @@ import {
 import { useScrollIntoView } from "@mantine/hooks";
 import { Session, SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
-import { AfridiDevEditorOutput } from "../../../../pages/creator-studio/publish/article";
+import { AfridiDevEditorOutput } from "../../../../pages/studio/publish/article";
 import AfridiDevEditor from "../../../global/editor/editor";
 
 interface ArticleCommentEditorDrawerProps {

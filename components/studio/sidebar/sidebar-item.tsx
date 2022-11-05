@@ -61,7 +61,7 @@ const SidebarItem = ({
     >
       <UnstyledButton
         component={NextLink}
-        href={`/creator-studio/${label === "home" ? "" : label}`}
+        href={`/studio/${label === "home" ? "" : label}`}
         className={cx(classes.mainLink, {
           [classes.mainLinkActive]:
             activeKey.toLowerCase() === label.toLowerCase(),

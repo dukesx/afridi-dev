@@ -435,7 +435,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
                       <Menu.Item
                         component={NextLink}
                         passHref
-                        href="/creator-studio/publish/article"
+                        href="/studio/publish/article"
                       >
                         <Stack align="center" spacing={0}>
                           <Image
@@ -668,7 +668,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 
                         <Menu.Item
                           component={NextLink}
-                          href={`/creator-studio`}
+                          href={`/studio`}
                           rightSection={
                             <IconChevronRight
                               className="align-middle"
@@ -683,7 +683,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 
                         <Menu.Item
                           component={NextLink}
-                          href={`/creator-studio/my-articles`}
+                          href={`/studio/my-articles`}
                           rightSection={
                             <IconChevronRight
                               className="align-middle"

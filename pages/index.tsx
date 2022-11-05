@@ -211,7 +211,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
               <LandingSidebarItem
                 leftIcon={<CreatorStudioIcon size="xl" textSize="sm" />}
                 color="gray"
-                path="/creator-studio"
+                path="/studio"
                 text="Creator Studio"
                 // maxWidth={255}
               />
@@ -219,7 +219,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
               <LandingSidebarItem
                 leftIcon={<IconNews size={25} />}
                 color="gray"
-                path="/creator-studio/my-articles"
+                path="/studio/my-articles"
                 text="My Articles"
                 // maxWidth={255}
               />

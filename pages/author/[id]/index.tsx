@@ -56,7 +56,7 @@ import AuthorFeedRenderer from "../../../components/author/components/author-fee
 import SquareHorizontalAuthorWidget from "../../../components/author/widgets/square-horizontal-author";
 import HorizontalGridCardSkeleton from "../../../components/global/skeletons/grid-cards/horizontalGridCardSkeleton";
 import ExclusivePlaceholder from "../../../components/author/components/exclusive-placeholder";
-import { AfridiDevEditorOutput } from "../../creator-studio/publish/article";
+import { AfridiDevEditorOutput } from "../../studio/publish/article";
 import AfridiDevEditorRenderer from "../../../components/global/editor/renderer/editor-data-renderer";
 
 const UserProfilePage = ({ user, feedData, covera, dpo }) => {

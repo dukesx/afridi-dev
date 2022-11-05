@@ -3,7 +3,9 @@ import {
   Badge,
   Button,
   Group,
+  Loader,
   LoadingOverlay,
+  Stack,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -29,6 +31,7 @@ const CreatorsStudio = ({ authored }) => {
   const [totalRecords, setTotalRecords] = useState(null);
   const [query, setQuery] = useState("");
   const [debouncedQuery] = useDebouncedValue(query, 200);
+  const [deleting, setDeleting] = useState(false);
 
   const PAGE_SIZE = 10;
   const getAuthorArticles = async (query?) => {
@@ -153,7 +156,7 @@ const CreatorsStudio = ({ authored }) => {
         minHeight={400}
         withBorder={false}
         borderRadius="md"
-        loaderVariant="bars"
+        // loaderVariant="bars"
         loaderBackgroundBlur={5}
         withColumnBorders
         horizontalSpacing="lg"
@@ -161,6 +164,12 @@ const CreatorsStudio = ({ authored }) => {
         highlightOnHover
         // provide data
         records={articles ?? []}
+        customLoader={
+          <Stack align="center">
+            <Loader color="blue" variant="bars" />
+            <Text weight={600}>{deleting ? "Deleting" : "Updating"}</Text>
+          </Stack>
+        }
         recordsPerPage={PAGE_SIZE}
         page={page}
         totalRecords={totalRecords}
@@ -220,7 +229,7 @@ const CreatorsStudio = ({ authored }) => {
                 <Group>
                   <Button
                     component="a"
-                    href={`/article/edit/${id}`}
+                    href={`/studio/edit/${id}`}
                     color="blue"
                     radius="md"
                     variant="light"
@@ -245,6 +254,7 @@ const CreatorsStudio = ({ authored }) => {
                         labels: { confirm: "Confirm", cancel: "Cancel" },
                         onCancel: () => {},
                         onConfirm: async () => {
+                          setDeleting(true);
                           setTableLoading(true);
 
                           const { data: comments } = await supabaseClient

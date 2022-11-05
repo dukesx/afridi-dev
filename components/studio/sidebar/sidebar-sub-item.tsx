@@ -57,7 +57,7 @@ const SidebarSubItem = ({
   return (
     <UnstyledButton
       component={NextLink}
-      href={`/creator-studio${path == "home" ? "" : path}/${
+      href={`/studio${path == "home" ? "" : path}/${
         label.includes(" ")
           ? (label.split(" ")[0] + "-" + label.split(" ")[1]).toLowerCase()
           : label.toLowerCase() == "analytics"
