@@ -310,6 +310,7 @@ const ArticleComposer = () => {
         setCover(null);
         router.push("/article/" + articleData[0].id);
       }
+      router.push("/article/edit/" + articleData[0].id);
       setLoading(false);
     }
   };

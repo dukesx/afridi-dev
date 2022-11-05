@@ -18,7 +18,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { Dropzone } from "@mantine/dropzone";
+import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconPhoto, IconPhotoUp, IconUpload, IconX } from "@tabler/icons";
 import { Editor } from "@tiptap/react";
 import { useState } from "react";
@@ -120,62 +120,69 @@ const AfridiDevEditorImageUpload = ({
             </Card>
           ) : (
             <Dropzone
+              accept={IMAGE_MIME_TYPE}
+              multiple={false}
+              maxSize={1000000}
               className="w-[260px] border-0"
               onDrop={async (files) => {
                 setImageUploadMenuOpened(false);
-                const reader = new FileReader();
-                var fileer = reader.readAsDataURL(files[0]);
-                reader.addEventListener(
-                  "load",
-                  () => {
-                    editor
-                      .chain()
-                      .insertContent({
-                        type: "afridi-dev-editor-loader",
-                        attrs: {
-                          title: "Uploading Image....",
-                          image: reader.result,
-                        },
-                      })
-                      .run();
-                    editor.commands.blur();
-                  },
-                  false
+                await Promise.all(
+                  files.map(async (filer) => {
+                    const reader = new FileReader();
+
+                    reader.addEventListener(
+                      "load",
+                      () => {
+                        editor
+                          .chain()
+                          .insertContent({
+                            type: "afridi-dev-editor-loader",
+                            attrs: {
+                              title: "Uploading Image....",
+                              image: reader.result,
+                            },
+                          })
+                          .run();
+                        editor.commands.blur();
+                      },
+                      false
+                    );
+
+                    var fileer = reader.readAsDataURL(filer);
+
+                    const form = new FormData();
+                    form.append("file", filer);
+                    const res = await fetch(
+                      `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/form`,
+                      {
+                        method: "POST",
+                        body: form,
+                      }
+                    );
+
+                    const result = await res.json();
+
+                    if (result) {
+                      editor
+                        .chain()
+                        .focus()
+                        .insertContent({
+                          type: "afridi-dev-editor-image",
+                          attrs: {
+                            src:
+                              "https://ik.imagekit.io/afrididotdev/tr:w-900" +
+                              result.file.url.split("tr:n-400x")[1],
+                          },
+                        })
+                        .run();
+
+                      editor.commands.enter();
+                      editor.commands.focus("end");
+                    } else {
+                      editor.commands.insertContent(" ");
+                    }
+                  })
                 );
-
-                const form = new FormData();
-                form.append("file", files[0]);
-                const res = await fetch(
-                  `${process.env.NEXT_PUBLIC_FUNCTIONS_URL}/upload/image/form`,
-                  {
-                    method: "POST",
-                    body: form,
-                  }
-                );
-
-                const result = await res.json();
-
-                if (result) {
-                  setTimeout(() => {
-                    editor
-                      .chain()
-                      .focus()
-                      .insertContent({
-                        type: "afridi-dev-editor-image",
-                        attrs: {
-                          src:
-                            "https://ik.imagekit.io/afrididotdev/tr:w-900" +
-                            result.file.url.split("tr:n-400x")[1],
-                        },
-                      })
-                      .run();
-
-                    editor.commands.enter();
-                    editor.commands.focus("end");
-                  }, 3000);
-                } else {
-                  editor.commands.insertContent(" ");
-                }
               }}
               onReject={(files) => console.log("rejected files", files)}
             >
@@ -230,7 +237,7 @@ const AfridiDevEditorImageUpload = ({
                     weight={700}
                     inline
                   >
-                    Drag images here or click to select files
+                    Drag an image here or click to select a file
                   </Text>
                   <Text
                     size="xs"
@@ -239,8 +246,8 @@ const AfridiDevEditorImageUpload = ({
                     mt={15}
                     className="leading-snug"
                   >
-                    Attach as many files as you like, each file should not
-                    exceed 5mb
+                    File must be (JPG/GIF/PNG/SVG/WEBP) and should not exceed
+                    1MB
                   </Text>
                 </div>
               </Stack>
