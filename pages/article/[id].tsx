@@ -233,8 +233,6 @@ const Article = ({ article, tags }) => {
       });
     });
 
-  console.log(JSON.parse(article.body));
-
   return (
     <AppWrapper noPadding activeHeaderKey="" size="xl">
       {article ? (
