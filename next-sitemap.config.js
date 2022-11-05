@@ -9,7 +9,7 @@ module.exports = {
     "/studio",
     "/studio/publish",
     "/studio/publish/article",
-    "/studio/my-articles",
+    "/studio/articles",
   ],
   robotsTxtOptions: {
     additionalSitemaps: [

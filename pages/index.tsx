@@ -219,7 +219,7 @@ const LandingPage = ({ feedData, feedDataCount }) => {
               <LandingSidebarItem
                 leftIcon={<IconNews size={25} />}
                 color="gray"
-                path="/studio/my-articles"
+                path="/studio/articles"
                 text="My Articles"
                 // maxWidth={255}
               />

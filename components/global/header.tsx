@@ -683,7 +683,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = ({
 
                         <Menu.Item
                           component={NextLink}
-                          href={`/studio/my-articles`}
+                          href={`/studio/articles`}
                           rightSection={
                             <IconChevronRight
                               className="align-middle"
