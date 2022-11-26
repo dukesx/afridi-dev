@@ -19,6 +19,7 @@ import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import { DefaultSeo, SocialProfileJsonLd } from "next-seo";
 import { Database } from "../utils/database.types";
+import AfridiDevEditorBlockquoteMenu from "../components/global/editor/menu/blockquote";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -51,6 +52,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       maxAge: 60 * 60 * 24 * 30,
     });
   };
+
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
