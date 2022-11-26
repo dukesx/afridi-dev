@@ -20,17 +20,9 @@ import { format, formatDistanceToNow } from "date-fns";
 import { useState } from "react";
 import { ShowUnauthorizedModal } from "../../utils/helpers";
 import AfridiImage from "../global/afridi-image";
-import MarkDownRenderer from "../global/markdown-renderer";
+import AfridiDevEditorRenderer from "../global/editor/renderer/editor-data-renderer";
 import { AfridiDevComment, CommentProps } from "./base-comment";
 import CommentReportModal from "./reportModal";
-
-var body = `PostHog is an open-source product analytics platform. We enable software teams to understand user behavior by auto-capturing events, performing product analytics, enabling video replays, conducting experiments and rolling out new features behind feature flags. Our open source approach enables companies to self-host, removing the need to send data externally.
-
-Founded in January 2020 by James Hawkins and Tim Glaser, PostHog was a member of Y Combinator’s Winter 2020 batch, and has subsequently raised $27m in funding from GV, Y Combinator, and notable angel investors including Jason Warner (CTO, GitHub), Solomon Hykes (Founder, Docker), and David Cramer (Founder, Sentry).
-
-You can read more about PostHog's story and our transparent, work-in-the-open philosophy in our company handbook.
-
-PostHog is an open-source product analytics platform. We provide product-led teams with everything they need to understand user behavior, including funnels, session recording, user paths, multivariate testing, feature flags, heat maps, and more. `;
 
 const RepliedComment = ({
   comment,
@@ -181,9 +173,7 @@ const RepliedComment = ({
             </Menu.Dropdown>
           </Menu>
         </Group>
-        <MarkDownRenderer className="ml-3" commentMode>
-          {comment.body ?? body}
-        </MarkDownRenderer>
+        <AfridiDevEditorRenderer className="ml-5" data={comment.body ?? {}} />
       </Stack>
       <Divider
         label="finito"

@@ -62,6 +62,7 @@ const DazzleMe = () => {
         )
         .limit(1)
         .range(rand, rand)
+        .eq("published", true)
         .single();
 
       setArticle(data);

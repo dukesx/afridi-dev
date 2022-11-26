@@ -63,12 +63,13 @@ export const getFeedArticles = async ({
       )
       .eq("tags.authors.id", user.id)
       .limit(10)
+      .eq("published", true)
       .order("views", {
         ascending: false,
       })
       .range(data ? data.length : 0, data ? data.length + 9 : 9);
 
-    if (feedData && feedData.length > 0) {
+    if (feedData) {
       var articles = [];
       if (data) {
         articles = [...data];
@@ -93,6 +94,7 @@ export const getFeedArticles = async ({
           articles.push(mappa);
         })
       );
+
       setArticleCount(count);
       setData(articles);
     }
@@ -124,6 +126,10 @@ export const getFeedArticles = async ({
                   ),
                 appreciations (
                 id
+                  ),
+                  tags (
+                    title,
+                    color
                   )
                 `,
         {
@@ -133,12 +139,13 @@ export const getFeedArticles = async ({
       .order("created_at", {
         ascending: false,
       })
+      .eq("published", true)
       .limit(10)
       .range(data ? data.length : 0, data ? data.length + 9 : 9);
 
     //
     //
-    if (feedData && feedData.length > 0) {
+    if (feedData) {
       var articles = [];
       if (data) {
         articles = [...data];
@@ -203,6 +210,8 @@ export const getTrendingArticles = async ({ setData }: FeedFunctionProps) => {
       }
     )
     .eq("tags.title", "trending")
+    .eq("published", true)
+
     .order("created_at", {
       ascending: false,
     });
@@ -270,6 +279,7 @@ export const getPopularArticles = async ({
       }
     )
     .eq("tags.title", "popular")
+    .eq("published", true)
     .order("created_at", {
       ascending: false,
     });

@@ -133,6 +133,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
   useEffect(() => {
     if (isLoading == false) {
       if (session) {
+        setFeedLoading(true);
         getUserBookmarks();
         getFeed();
       } else {
@@ -159,7 +160,17 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
 
   return (
     <Fragment>
-      <Tabs value={key} onTabChange={setKey} color="blue" variant="default">
+      <Tabs
+        styles={{
+          tabsList: {
+            flexWrap: "nowrap",
+          },
+        }}
+        value={key}
+        onTabChange={setKey}
+        color="blue"
+        variant="default"
+      >
         <Tabs.List grow position="center">
           <Tabs.Tab
             icon={
@@ -275,6 +286,7 @@ const LandingFeed: React.FC<LandingFeedProps> = ({
                   <Stack
                     key="something-list"
                     spacing="xl"
+                    className="lg:mx-5"
                     mb="xl"
                     align="center"
                   >

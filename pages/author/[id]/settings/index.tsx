@@ -11,6 +11,7 @@ import {
   Stack,
   Tabs,
   Text,
+  Textarea,
   TextInput,
   Title,
   useMantineTheme,
@@ -34,12 +35,14 @@ import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { showNotification } from "@mantine/notifications";
 import React from "react";
-import { AfridiDevEditor } from "../../../../components/global/editor/editorCaller";
+import AfridiDevEditor from "../../../../components/global/editor/editor";
 import { NextSeo } from "next-seo";
+import { AfridiDevEditorOutput } from "../../../studio/publish/article";
 
 const UserSettingsPage = () => {
   const theme = useMantineTheme();
   const mobile = useMediaQuery("(max-width: 500px)", false);
+  const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>(null);
   const form1 = useForm({
     initialValues: {
       full_name: "",
@@ -63,7 +66,6 @@ const UserSettingsPage = () => {
           : null,
       repeatPassword: (val) => {
         if (val !== form1.values.password) {
-          console.log("yes");
           return "Passwords donot match";
         } else {
           return null;
@@ -74,17 +76,13 @@ const UserSettingsPage = () => {
 
   const form2 = useForm({
     initialValues: {
-      about: "",
+      about: {},
       githubProfile: "",
     },
 
     validate: {
       about: (value) =>
-        ref.current.getInstance().getMarkdown().split(" ").length < 50
-          ? "Bio cannot be less than 100 words"
-          : ref.current.getInstance().getMarkdown().length <= 0
-          ? "Bio cannot be empty"
-          : null,
+        editorVal.data.words <= 0 ? "Bio cannot be empty" : null,
 
       githubProfile: (value) =>
         /^(https):\/\/(github.com)[^abc$]*$/gm.test(value)
@@ -158,8 +156,9 @@ const UserSettingsPage = () => {
       .eq("id", session.user.id);
     if (!error) {
       setAboutLoading(false);
-      form2.setFieldValue("about", data[0].bio ?? "");
+      form2.setFieldValue("about", { data: data[0].bio, words: 0 } ?? "");
       form2.setFieldValue("githubProfile", data[0].github ?? "");
+      setEditorVal({ data: data[0].bio, words: 0 });
     }
   };
 
@@ -362,16 +361,27 @@ const UserSettingsPage = () => {
                 <Fragment>
                   <form
                     onSubmit={form2.onSubmit(async (val) => {
-                      var markdown = ref.current.getInstance().getMarkdown();
-                      form2.setFieldValue("about", markdown);
-                      const { error, status } = await supabaseClient
+                      const { error } = await supabaseClient
                         .from("authors")
                         .update({
-                          bio: markdown,
+                          bio: editorVal.data,
                           github: val.githubProfile,
                         })
                         .eq("id", session.user.id);
-                      if (status == 200) {
+                      const fetcher = await fetch("/api/revalidate", {
+                        method: "POST",
+                        headers: {
+                          accept: "application/json",
+                          "content-type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          paths: ["/about/dev", `/author/${session.user.id}`],
+                        }),
+                      });
+
+                      const res = await fetcher.json();
+
+                      if (!error && res.revalidated) {
                         showNotification({
                           message: "Your changes have been saved successfully",
                           title: "Saved Successfully",
@@ -380,7 +390,7 @@ const UserSettingsPage = () => {
                         });
                       } else {
                         showNotification({
-                          message: "A server error has occurred",
+                          message: error.message,
                           title: "Your changes could not be saved",
                           color: "red",
                           icon: <IconX size={18} />,
@@ -389,18 +399,16 @@ const UserSettingsPage = () => {
                     })}
                   >
                     <Input.Wrapper
-                      label="About me (GFM is supported)"
+                      label="About me"
                       required
                       error={form2.errors.about}
                     >
                       <AfridiDevEditor
-                        toolbarItems="basic"
-                        autoFocus={false}
-                        value={form2.values.about}
-                        height="290px"
-                        saveData={save}
-                        previewStyle="tab"
-                        plugins
+                        basic
+                        html
+                        noToolbar
+                        value={editorVal}
+                        setValue={setEditorVal}
                       />
                     </Input.Wrapper>
 

@@ -18,13 +18,13 @@ export const getData = async (
     .select(
       `
       id,
-:     full_name,
+      full_name,
       location,
       github,
       dp,
       bio,
       cover,
-      articles (
+      articles!articles_author_id_fkey (
         created_at,
         author_id,
         id,

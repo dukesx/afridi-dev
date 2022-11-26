@@ -25,6 +25,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import { format } from "date-fns";
 import { NextSeo } from "next-seo";
+import { textEllipsis } from "../../utils/helpers";
 
 const CreatorsStudio = ({ authored }) => {
   const { session, isLoading, supabaseClient } = useSessionContext();
@@ -147,7 +148,7 @@ const CreatorsStudio = ({ authored }) => {
       newArticlesArr.push({
         //@ts-ignore
         views: mapped.article_views.length,
-        title: mapped.title,
+        title: textEllipsis(mapped.title, 50),
       })
     );
 

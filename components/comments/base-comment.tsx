@@ -37,7 +37,7 @@ import { ShowUnauthorizedModal } from "../../utils/helpers";
 import { supabase } from "../../utils/supabaseClient";
 import { AfridiDevAuthor } from "../author/widgets/square-horizontal-author";
 import AfridiImage from "../global/afridi-image";
-import MarkDownRenderer from "../global/markdown-renderer";
+import AfridiDevEditorRenderer from "../global/editor/renderer/editor-data-renderer";
 import RepliedComment from "./replied-comment";
 import CommentReportModal from "./reportModal";
 
@@ -245,9 +245,8 @@ const BaseComment = ({
               </Menu.Dropdown>
             </Menu>
           </Group>
-          <MarkDownRenderer className="ml-3 mt-1" commentMode>
-            {comment.body ?? body}
-          </MarkDownRenderer>
+
+          <AfridiDevEditorRenderer data={comment.body ? comment.body : {}} />
 
           <Group className="w-full" position="apart">
             {comment.replies && comment.replies.length > 0 && (

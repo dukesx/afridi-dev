@@ -1,12 +1,8 @@
-// const { withPlaiceholder } = require("@plaiceholder/next");
-
+/**
+ * @type {import('next').NextConfig}
+ */
 module.exports = {
-  reactStrictMode: false,
-  swcMinify: true,
+  experimental: {
+    largePageDataBytes: 256 * 1000,
+  },
 };
-
-// const removeImports = require("next-remove-imports")({
-//   options: {},
-// });
-
-// module.exports = removeImports();

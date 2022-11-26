@@ -9,6 +9,7 @@ import {
   Group,
   Input,
   Loader,
+  Menu,
   Modal,
   MultiSelect,
   Stack,
@@ -19,19 +20,28 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, UseFormReturnType } from "@mantine/form";
 import { closeAllModals, openContextModal, openModal } from "@mantine/modals";
 import { showNotification } from "@mantine/notifications";
 import { useSessionContext, useUser } from "@supabase/auth-helpers-react";
 import {
+  IconArrowRight,
   IconCheck,
   IconCloudUpload,
   IconCopy,
+  IconDeviceFloppy,
   IconExternalLink,
+  IconSend,
   IconX,
 } from "@tabler/icons";
 import { useRouter } from "next/router";
-import React, { createRef, forwardRef, Fragment, useEffect } from "react";
+import React, {
+  createRef,
+  forwardRef,
+  Fragment,
+  useEffect,
+  useRef,
+} from "react";
 import { useState } from "react";
 import { forbidden_tags } from "../../../../../data/static/forbidden_tags";
 import AfridiImage from "../../../../global/afridi-image";
@@ -40,92 +50,47 @@ import AfridiImageUploader, {
 } from "../../../../global/image_uploader";
 import slugify from "slugify";
 import { secondsToHms } from "../../../../../utils/helpers";
+import { AfridiDevAuthor } from "../../../../author/widgets/square-horizontal-author";
 
 //
 
 interface ArticleEditSidebarProps {
-  getMarkdown: () => string;
   setLoading: Function;
-  props: {
-    title: string;
+  cover: string;
+  receivedCoAuthors: Array<any>;
+  setCover: Function;
+  draft: boolean;
+  form: UseFormReturnType<{
+    title: any;
+    cover: any;
+    tags: any;
+    coAuthors: any;
+    content: string;
     description: string;
-    tags: Array<any>;
-    cover: string;
-    id: string;
-    coAuthors: Array<any>;
-  };
+  }>;
+  setCoverImage: Function;
+  callSubmit: Function;
 }
 
 //
 const ArticleEditSidebar = ({
-  getMarkdown,
   setLoading,
-  props,
+  form,
+  draft,
+  receivedCoAuthors,
+  cover,
+  setCover,
+  setCoverImage,
+  callSubmit,
 }: ArticleEditSidebarProps) => {
   //
   const { isLoading, session, error, supabaseClient } = useSessionContext();
   const theme = useMantineTheme();
-  const [cover, setCover] = useState(props.cover);
-  var openRef: any = createRef();
-  const [tagsLoading, setTagsLoading] = useState(false);
-  const router = useRouter();
+  const openRef = useRef();
   const [coAuthorsLoading, setCoAuthorsLoading] = useState(false);
   const [coAuthors, setCoAuthors] = useState([]);
 
-  const form = useForm({
-    initialValues: {
-      tags: props.tags,
-      content: "",
-      title: props.title,
-      description: props.description,
-      cover: props.cover,
-      coAuthors: props.coAuthors,
-    },
-
-    validate: {
-      tags: (value) =>
-        value.length <= 0
-          ? "Tags cannot be empty"
-          : value.length > 0 && value.length < 3
-          ? "Please select atleast 3 tags"
-          : null,
-      title: (val) =>
-        !val || val.length <= 0 ? "Title cannot be empty" : null,
-      description: (val) =>
-        !val || val.length <= 0 ? "Description cannot be empty" : null,
-      cover: (val) => (val.length <= 0 ? "Cover image cannot be empty" : null),
-    },
-  });
   //
-
-  const [tags, setTags] = useState([]);
-  const [tagsVal, setTagsVal] = useState(props.tags);
-
-  const setCoverImage = (image) => {
-    setCover(image);
-    form.setFieldValue("cover", image);
-  };
-  //
-
-  const getTags = async () => {
-    setTagsLoading(true);
-    const { error, data } = await supabaseClient
-      .from("tags")
-      .select("title")
-      .limit(10);
-    var tagsa = [...props.tags];
-    if (data && data.length > 0) {
-      data.map((mapped) => tagsa.push(mapped.title));
-      setTags(tagsa);
-      setTagsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (session.user) {
-      getTags();
-    }
-  }, [session]);
 
   interface CoAuthorsItemProps extends React.ComponentPropsWithoutRef<"div"> {
     dp: string;
@@ -150,187 +115,8 @@ const ArticleEditSidebar = ({
   ));
 
   return (
-    <form
-      onSubmit={form.onSubmit(async (val) => {
-        setLoading(true);
-        var markdown = getMarkdown();
-
-        if (!markdown || markdown.length <= 0) {
-          setLoading(false);
-          openModal({
-            title: (
-              <Text weight={700} color="red">
-                Could Not Submit Article{" "}
-                <span className="text-md ml-1">😓 ❌ 👇</span>
-              </Text>
-            ),
-
-            children: (
-              <Fragment>
-                <Text mb="xl" size="sm" color="dimmed" weight={400}>
-                  <b className="mr-[0.3px]">Reason:</b> You cannot submit an
-                  empty article. Please ensure that article has enough content
-                  before submitting
-                </Text>
-                <Button color="red" fullWidth onClick={closeAllModals} mt="md">
-                  OK
-                </Button>
-              </Fragment>
-            ),
-          });
-        } else {
-          const { error, data: articleData } = await supabaseClient
-            .from("articles")
-            .update({
-              title: val.title,
-              description: val.description,
-              cover: val.cover,
-              author_id: session.user.id,
-              body: markdown,
-              read_time: secondsToHms(
-                (markdown.match(/(?!\")\b[a-zA-Z0-9]+\b(?!\")/g).length / 265) *
-                  60
-              ),
-            })
-            .eq("id", props.id)
-            .select();
-
-          if (error) {
-            setLoading(false);
-            showNotification({
-              title: "Error publishing article",
-              color: "red",
-              icon: <IconX />,
-              message: error.message,
-            });
-          } else {
-            const { error: deleteTagError } = await supabaseClient
-              .from("articles_tags")
-              .delete()
-              .eq("article_id", props.id);
-
-            const { error: deleteCoAuthorsError } = await supabaseClient
-              .from("co_authors_articles")
-              .delete()
-              .eq("article_id", props.id);
-
-            if (!deleteTagError && !deleteCoAuthorsError) {
-              val.tags.map(async (mapped) => {
-                const {
-                  error,
-                  data: tagData,
-                  count,
-                } = await supabaseClient
-                  .from("tags")
-                  .select(
-                    `
-                title,
-                id
-                `,
-                    {
-                      count: "exact",
-                    }
-                  )
-                  .match({
-                    title: mapped,
-                  });
-
-                if (count > 0) {
-                  const { data: finalData } = await supabaseClient
-                    .from("articles_tags")
-                    .insert({
-                      title: mapped.title,
-                      tag_id: tagData[0].id,
-                      article_id: articleData[0].id,
-                    });
-                } else {
-                  const { data: insertedTagData } = await supabaseClient
-                    .from("tags")
-                    .insert({
-                      title: slugify(mapped),
-                    })
-                    .select();
-                  const { error: tag2Error, data: tag2Data } =
-                    await supabaseClient.from("articles_tags").insert({
-                      tag_id: insertedTagData[0].id,
-                      article_id: articleData[0].id,
-                    });
-                }
-              });
-              if (val.coAuthors.length > 0) {
-                await Promise.all(
-                  val.coAuthors.map(async (mapped) => {
-                    if (mapped !== articleData[0].author_id) {
-                      const { error: AddCoAuthorsError } = await supabaseClient
-                        .from("co_authors_articles")
-                        .insert({
-                          article_id: articleData[0].id,
-                          author_id: mapped.id ? mapped.id : mapped,
-                        });
-                    }
-                  })
-                );
-              }
-
-              const fetcher = await fetch("/api/revalidate", {
-                method: "POST",
-                headers: {
-                  "content-type": "application/json",
-                  accept: "application/json",
-                },
-                body: JSON.stringify({
-                  paths: [
-                    `/article/${articleData[0].id}`,
-                    `/author/${articleData[0].author_id}`,
-                    "/",
-                  ],
-                }),
-              });
-
-              const returned = await fetcher.json();
-
-              if (returned && returned.revalidated) {
-                setCover(null);
-                router.push("/article/" + articleData[0].id);
-              }
-            }
-          }
-        }
-      })}
-    >
-      <Input.Wrapper
-        pb="xl"
-        label="Title"
-        description="Pick something unique 🤗"
-        required
-      >
-        <TextInput
-          {...form.getInputProps("title")}
-          pt="md"
-          placeholder="Example: Why Markdown is the future of editing experience"
-          styles={{
-            input: {
-              textTransform: "capitalize",
-            },
-          }}
-        />
-      </Input.Wrapper>
-
-      <Input.Wrapper
-        pb="xl"
-        label="Description"
-        description="The overall summary"
-        required
-      >
-        <Textarea
-          {...form.getInputProps("description")}
-          pt="md"
-          minRows={4}
-          placeholder="TL;DR, Markdown is the future because it is parsable in a very distinct but consistent language standard called AST"
-        />
-      </Input.Wrapper>
-
-      <Input.Wrapper
+    <Fragment>
+      {/* <Input.Wrapper
         styles={{
           label: {
             fontSize: 12.5,
@@ -341,7 +127,7 @@ const ArticleEditSidebar = ({
       >
         <MultiSelect
           placeholder="Search and Collaborate with Others"
-          defaultValue={props.coAuthors.map((mapped) => {
+          defaultValue={receivedCoAuthors.map((mapped) => {
             return mapped.value;
           })}
           rightSection={coAuthorsLoading ? <Loader size="xs" /> : null}
@@ -354,7 +140,7 @@ const ArticleEditSidebar = ({
             !selected &&
             item.full_name.toLowerCase().includes(value.toLowerCase().trim())
           }
-          data={coAuthors.length > 0 ? coAuthors : props.coAuthors}
+          data={coAuthors.length > 0 ? coAuthors : receivedCoAuthors}
           onSearchChange={async (query) => {
             setCoAuthorsLoading(true);
             const { error, data, count } = await supabaseClient
@@ -399,71 +185,17 @@ const ArticleEditSidebar = ({
           maxDropdownHeight={160}
           onChange={(value) => form.setFieldValue("coAuthors", value)}
         />
-      </Input.Wrapper>
+      </Input.Wrapper> */}
 
-      <Input.Wrapper
-        styles={{
-          label: {
-            fontSize: 12.5,
-          },
-        }}
-        label="Tags (type to create your own)"
-        description="For Website search, Tags Subscription and SEO"
+      <Textarea
+        mb="md"
+        label="Description"
+        {...form.getInputProps("description")}
         required
-      >
-        <MultiSelect
-          value={form.values.tags}
-          rightSection={tagsLoading ? <Loader size="xs" /> : null}
-          mt="md"
-          mb="md"
-          searchable
-          data={tags.length <= 0 ? [] : tags}
-          creatable
-          getCreateLabel={(query) =>
-            !forbidden_tags.includes(query.toLowerCase())
-              ? `+ Create #${query}`
-              : `This tag is not allowed`
-          }
-          onCreate={(query) => {
-            if (
-              !tags.includes(query) &&
-              !forbidden_tags.includes(query.toLowerCase())
-            ) {
-              var taga = tags;
-              taga.push(query);
-              setTags(taga);
-              return query;
-            }
-          }}
-          onSearchChange={async (query) => {
-            if (
-              !tags.includes(query) &&
-              !forbidden_tags.includes(query.toLowerCase())
-            ) {
-              setTagsLoading(true);
-              const { error, data, count } = await supabaseClient
-                .from("tags")
-                .select("title", { count: "exact" })
-                .match({ title: query });
-
-              if (data) {
-                setTagsLoading(false);
-                if (count <= 0) {
-                } else {
-                  var taga = [...tags];
-                  taga.push(data[0].title);
-                  setTags(taga);
-                }
-              }
-            }
-          }}
-          maxDropdownHeight={160}
-          onChange={(value) => {
-            form.setFieldValue("tags", value);
-          }}
-          error={form.errors.tags}
-        />
-      </Input.Wrapper>
+        autosize
+        placeholder="This is awesome because..."
+        minRows={3}
+      />
 
       <Input.Wrapper pb="xl" label="Cover" required error={form.errors.cover}>
         <AfridiImageUploader
@@ -494,21 +226,44 @@ const ArticleEditSidebar = ({
         />
       </Input.Wrapper>
 
-      <Button
-        styles={{
-          label: {
-            fontSize: 13,
-          },
-        }}
-        type="submit"
-        leftIcon={<IconCloudUpload size={20} />}
-        color="blue"
-        mt={0}
-        fullWidth
-      >
-        Update Article
-      </Button>
-    </form>
+      <Menu width="100%">
+        <Menu.Target>
+          <Button
+            styles={{
+              label: {
+                fontSize: 13,
+              },
+            }}
+            fullWidth
+            leftIcon={<IconCloudUpload size={20} />}
+            color="blue"
+            mt={0}
+          >
+            Choose Publishing Method
+          </Button>
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item
+            onClick={() => callSubmit({ draft: true })}
+            className="hover:font-bold font-medium"
+            icon={<IconDeviceFloppy />}
+            color="teal"
+            rightSection={<IconArrowRight size={18} />}
+          >
+            Save as Draft
+          </Menu.Item>
+          <Menu.Item
+            onClick={() => callSubmit({ draft: false })}
+            rightSection={<IconArrowRight size={18} />}
+            className="hover:font-bold font-medium"
+            icon={<IconSend />}
+            color="blue"
+          >
+            Publish Now
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+    </Fragment>
   );
 };
 

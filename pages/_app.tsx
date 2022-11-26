@@ -18,6 +18,8 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
 import { DefaultSeo, SocialProfileJsonLd } from "next-seo";
+import { Database } from "../utils/database.types";
+import AfridiDevEditorBlockquoteMenu from "../components/global/editor/menu/blockquote";
 
 export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -25,7 +27,9 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   //States
   const [iteration, setIteration] = useState(0);
   const preferredColorScheme = useColorScheme();
-  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
+  const [supabaseClient] = useState(() =>
+    createBrowserSupabaseClient<Database>()
+  );
   const [newColorScheme, setNewColorScheme] = useLocalStorage<ColorScheme>({
     key: "afridi-dev-color-scheme",
     defaultValue: props.colorScheme ?? null,
@@ -49,6 +53,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
     });
   };
 
+
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
   useEffect(() => {
@@ -59,6 +64,16 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       }
     }
   }, [preferredColorScheme]);
+
+  useEffect(() => {
+    if (newColorScheme == "dark") {
+      document.body.classList.remove("light");
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+      document.body.classList.add("light");
+    }
+  }, [newColorScheme]);
 
   return (
     <>
@@ -83,8 +98,12 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
         >
           <RouterTransition />
 
-          <NotificationsProvider position="top-right">
-            <ModalsProvider>
+          <NotificationsProvider zIndex={5000} position="top-right">
+            <ModalsProvider
+              modalProps={{
+                zIndex: 2000,
+              }}
+            >
               <SessionContextProvider
                 supabaseClient={supabaseClient}
                 //@ts-ignore

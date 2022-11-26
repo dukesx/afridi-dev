@@ -102,25 +102,22 @@ const Acknowledgements = () => {
             <List.Item>
               This Website uses
               <Text weight={500} component="span" className="ml-1">
-                React Markdown Renderer
+                Tiptap Editor
               </Text>{" "}
               Created by{" "}
-              <a
-                className="mr-1"
-                href="https://github.com/remarkjs/react-markdown"
-              >
-                @remarkjs
+              <a className="mr-1" href="https://github.com/ueberdosis/tiptap">
+                @ueberdosis
               </a>
-              for Markdown Parsing Articles & Author Bio.
+              for State of the Art Editing Experience
             </List.Item>
             <List.Item>
               This Website uses
               <Text weight={500} component="span" className="ml-1">
-                Toast UI Markdown Editor
+                TipTap Editor
               </Text>{" "}
               Created by{" "}
-              <a className="mr-1" href="https://ui.toast.com/tui-editor">
-                @nhn
+              <a className="mr-1" href="https://github.com/ueberdosis/tiptap">
+                @ueberdosis
               </a>
               for Article Edits & Creation
             </List.Item>

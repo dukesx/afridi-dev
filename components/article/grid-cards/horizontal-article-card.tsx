@@ -13,6 +13,7 @@ import {
   Divider,
   Badge,
   Avatar,
+  Button,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -56,6 +57,8 @@ interface HorizontalGridCardProps {
     priority?: boolean;
     layout?: "fill" | "intrinsic" | "fixed" | "responsive";
   };
+  withNumber?: boolean;
+  number?: number;
 }
 
 const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
@@ -71,6 +74,8 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
   appreciations,
   withCover,
   coverProps,
+  number,
+  withNumber,
 }) => {
   const awards = [
     {
@@ -107,6 +112,14 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
           {...coverProps}
         />
       ) : null}
+      {withNumber && (
+        <Fragment>
+          <Text size={30} weight={700} color="gray.3">
+            {number + 1}
+          </Text>
+          <Divider mx="sm" size="sm" className="w-[20px]" />
+        </Fragment>
+      )}
       <Stack
         spacing="xs"
         className={
@@ -144,6 +157,7 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
         >
           {data.description}
         </Text>
+
         {withFooter ? (
           <Group spacing="xs">
             {session && bookmarks && bookmarks.includes(data.id) ? (
@@ -182,11 +196,6 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                     />
                   </ActionIcon>
                 </Tooltip>
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={1}
-                />
               </Fragment>
             ) : (
               <Fragment>
@@ -218,14 +227,16 @@ const HorizontalArticleGridCard: React.FC<HorizontalGridCardProps> = ({
                     <IconBookmark fill={"transparent"} size={18} />
                   </ActionIcon>
                 </Tooltip>
-
-                <Divider
-                  className="h-[14px] align-middle my-auto"
-                  orientation="vertical"
-                  size={1}
-                />
               </Fragment>
             )}
+
+            {appreciations && appreciations.length > 0 ? (
+              <Divider
+                className="h-[14px] align-middle my-auto"
+                orientation="vertical"
+                size={1}
+              />
+            ) : null}
 
             {appreciations && appreciations.length > 0 ? (
               <Tooltip

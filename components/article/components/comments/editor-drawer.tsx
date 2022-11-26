@@ -12,7 +12,8 @@ import {
 import { useScrollIntoView } from "@mantine/hooks";
 import { Session, SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useRef, useState } from "react";
-import { AfridiDevEditor } from "../../../global/editor/editorCaller";
+import { AfridiDevEditorOutput } from "../../../../pages/studio/publish/article";
+import AfridiDevEditor from "../../../global/editor/editor";
 
 interface ArticleCommentEditorDrawerProps {
   editorDrawer: boolean;
@@ -22,7 +23,6 @@ interface ArticleCommentEditorDrawerProps {
   article_id: string;
   setCommentEditorRef: Function;
   article_title: string;
-  getMarkdown: Function;
   supabaseClient: SupabaseClient;
   session: Session;
   getComments: Function;
@@ -35,9 +35,7 @@ const ArticleCommentEditorDrawer = ({
   setCommentId,
   commentId,
   article_id,
-  setCommentEditorRef,
   article_title,
-  getMarkdown,
   supabaseClient,
   session,
   scrollToComment,
@@ -48,6 +46,7 @@ const ArticleCommentEditorDrawer = ({
   const [captchaToken, setCaptchaToken] = useState(null);
   const commentCaptchaRef = useRef(null);
   const [comment, setComment] = useState(null);
+  const [editorVal, setEditorVal] = useState<AfridiDevEditorOutput>(null);
 
   useEffect(() => {
     if (captchaToken) {
@@ -57,23 +56,88 @@ const ArticleCommentEditorDrawer = ({
 
   const validResult = async () => {
     if (commentId && commentId.type == "reply") {
+      //
+      //
+      //
+
+      //
+      //
+      //
       const { error: AddReplyError, data } = await supabaseClient
         .from("replies")
         .insert({
           comment_id: commentId.id,
           author_id: session.user.id,
-          body: comment,
+          body: editorVal.data,
         });
+
+      var pinged = [];
+
+      await Promise.all(
+        editorVal.data.content.map(async (mapped) => {
+          if (mapped.type == "paragraph") {
+            mapped.content.map(async (mapped2) => {
+              if (mapped2.type == "mention") {
+                if (!pinged.includes(mapped2.attrs.id)) {
+                  pinged.push(mapped2.attrs.id);
+
+                  const { data: currentUserData } = await supabaseClient
+                    .from("authors")
+                    .select("full_name")
+                    .eq("id", session.user.id);
+                  const { error } = await supabaseClient
+                    .from("user_notifications")
+                    .insert({
+                      author_id: mapped2.attrs.id,
+                      message: `You were mentioned in a reply by ${currentUserData[0].full_name}`,
+                      link: `/article/${article_id}`,
+                    });
+                }
+              }
+            });
+          }
+        })
+      );
     } else {
       const { error: AddCommentError, data } = await supabaseClient
         .from("comments")
         .insert({
           article_id: article_id,
           author_id: session.user.id,
-          body: comment,
+          body: editorVal.data,
         });
+
+      var pinged = [];
+
+      await Promise.all(
+        editorVal.data.content.map(async (mapped) => {
+          if (mapped.type == "paragraph") {
+            mapped.content &&
+              mapped.content.map(async (mapped2) => {
+                if (mapped2.type == "mention") {
+                  if (!pinged.includes(mapped2.attrs.id)) {
+                    pinged.push(mapped2.attrs.id);
+
+                    const { data: currentUserData } = await supabaseClient
+                      .from("authors")
+                      .select("full_name")
+                      .eq("id", session.user.id);
+                    const { error } = await supabaseClient
+                      .from("user_notifications")
+                      .insert({
+                        author_id: mapped2.attrs.id,
+                        message: `You were mentioned in a comment by ${currentUserData[0].full_name}`,
+                        link: `/article/${article_id}`,
+                      });
+                  }
+                }
+              });
+          }
+        })
+      );
     }
     setSendingReply(false);
+    setEditorVal(null);
     setEditorDrawer(false);
     getComments();
     if (commentId.type !== "reply") {
@@ -107,7 +171,7 @@ const ArticleCommentEditorDrawer = ({
           marginLeft: "auto",
           marginRight: "auto",
           borderRadius: "12px 12px 0px 0px",
-          height: 380,
+          height: 500,
         },
       }}
     >
@@ -121,14 +185,11 @@ const ArticleCommentEditorDrawer = ({
         }
       />
       <AfridiDevEditor
-        className="mt-5"
-        saveData={setCommentEditorRef}
-        value=""
-        height="220px"
-        autoFocus
-        previewStyle="tab"
-        toolbarItems="basic"
-        plugins={false}
+        isScrollable
+        height={240}
+        basic
+        value={editorVal}
+        setValue={setEditorVal}
       />
 
       <HCaptcha
@@ -143,9 +204,6 @@ const ArticleCommentEditorDrawer = ({
         fullWidth
         mt="xl"
         onClick={async () => {
-          setSendingReply(true);
-          var mark = getMarkdown();
-          setComment(mark);
           commentCaptchaRef.current?.execute();
         }}
         variant="light"

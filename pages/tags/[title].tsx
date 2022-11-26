@@ -105,6 +105,7 @@ const ArticleTagPage = ({ taga, articles }) => {
         }
       )
       .eq("tags.title", router.query.title)
+      .eq("published", true)
       .limit(10)
       .range(data.length, data.length + 9);
 
@@ -357,6 +358,8 @@ const ArticleTagPage = ({ taga, articles }) => {
           <Stack pb="xl" mt={50} spacing="xl">
             {data.map((mapped, index) => (
               <HorizontalGridCard
+                withNumber
+                number={index}
                 coverClassName="rounded-lg"
                 theme={theme}
                 data={mapped}
@@ -396,6 +399,7 @@ export const getStaticProps = async (ctx) => {
       }
     )
     .eq("tags.title", title)
+    .eq("published", true)
     .limit(10);
 
   if (data && data.length > 0) {

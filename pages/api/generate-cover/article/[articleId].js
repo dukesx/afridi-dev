@@ -31,7 +31,6 @@ export default async function generateTagCover(req, res) {
 
   //Chrome
 
-  console.log(data);
   if (data && data.length > 0) {
     let element = (
       <MantineProvider

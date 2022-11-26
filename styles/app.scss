@@ -2,8 +2,93 @@
 // .ProseMirror {
 //   @apply min-h-[400px] p-5;
 // }
+
+div[data-id="frequent"] {
+  display: none !important;
+}
 html {
   scroll-behavior: smooth;
 }
+
+.epr-header-overlay {
+  display: none !important;
+}
+
+.epr-hidden-on-search {
+  display: none !important;
+}
+
+.ProseMirror {
+  @apply p-0 pl-3 outline-none pt-1 mb-3 ring-0;
+}
+
+code {
+  @apply px-1 py-1 font-mono px-2 bg-gray-100 m-0;
+}
+
+pre {
+  margin: 0 !important;
+}
+
+.dark {
+  code {
+    @apply px-1.5 py-1 font-mono bg-neutral-800;
+  }
+}
+
+.hljs {
+  border-radius: 5px;
+}
+
+// code[class^="language-"] {
+//   @apply px-1 py-1 font-mono  px-2 text-white bg-transparent;
+// }
+
+// pre {
+//   @apply bg-gray-800 px-5 py-5 font-mono rounded-xl;
+// }
+
+.mention {
+  @apply border border-solid border-gray-300 p-2 rounded-md text-sm text-gray-500 italic cursor-pointer capitalize;
+}
+
+.dark {
+  .mention {
+    @apply border-gray-600 border font-bold;
+  }
+}
+
+:host(div[data-id="frequent"]) {
+  display: none !important;
+}
+
+em-emoji-picker {
+  height: 50vh;
+  min-height: 200px;
+  max-height: 300px;
+}
+
+pre code.hljs {
+  padding: 23px !important;
+}
+
+.giphy-suggestion-bar {
+  // width: 200px;
+  margin-top: 10px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  font-family: "Inter", sans-serif;
+}
+
+.default-image {
+  @apply max-w-[500px] object-cover my-3 rounded-md;
+}
+
 @tailwind components;
 @tailwind utilities;

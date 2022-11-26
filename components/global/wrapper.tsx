@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  Alert,
   AppShell,
   Container,
   createStyles,
@@ -8,7 +9,7 @@ import {
 } from "@mantine/core";
 import { openModal } from "@mantine/modals";
 import { useSessionContext } from "@supabase/auth-helpers-react";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { type GeneralStore, useGeneralStore } from "../../data/static/store";
 import GlobalHeader from "./header";
 import AppLoader from "./loaders/appLoader";
@@ -83,32 +84,36 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
 
   const { classes } = useStyles();
   return (
-    <AppShell
-      navbar={
-        studio ? (
-          <StudioSidebar path={studioPath} subPath={studioSubPath} />
-        ) : null
-      }
-      header={<GlobalHeader theme={theme} activeHeaderKey={activeHeaderKey} />}
-      className="relative"
-      styles={{
-        body: {
-          paddingLeft: 0,
-          paddingRight: 0,
-        },
-        main: {
-          "@media (max-width: 576px)": {
+    <Fragment>
+      <AppShell
+        navbar={
+          studio ? (
+            <StudioSidebar path={studioPath} subPath={studioSubPath} />
+          ) : null
+        }
+        header={
+          <GlobalHeader theme={theme} activeHeaderKey={activeHeaderKey} />
+        }
+        className="relative"
+        styles={{
+          body: {
             paddingLeft: 0,
             paddingRight: 0,
           },
-        },
-      }}
-    >
-      <AppLoader theme={theme} loading={appLoading} />
-      <Container className={classes.container} size={size ?? "xl"}>
-        {children}
-      </Container>
-    </AppShell>
+          main: {
+            "@media (max-width: 576px)": {
+              paddingLeft: 0,
+              paddingRight: 0,
+            },
+          },
+        }}
+      >
+        <AppLoader theme={theme} loading={appLoading} />
+        <Container className={classes.container} size={size ?? "xl"}>
+          {children}
+        </Container>
+      </AppShell>
+    </Fragment>
   );
 };
 
