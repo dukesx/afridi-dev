@@ -10,6 +10,8 @@ export interface GeneralStore {
   toggleSearch: any;
   overlay: boolean;
   toggleOverlay: any;
+  toggleUnauthenticatedModal: any;
+  unauthenticatedModal: boolean;
 }
 
 // Declare General Store
@@ -24,4 +26,9 @@ export const useGeneralStore = create<GeneralStore>((set) => ({
     set({
       overlay: value,
     }),
+  toggleUnauthenticatedModal: (value: boolean) =>
+    set({
+      unauthenticatedModal: value,
+    }),
+  unauthenticatedModal: true,
 }));

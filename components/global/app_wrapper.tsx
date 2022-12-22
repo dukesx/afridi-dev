@@ -30,11 +30,15 @@ import {
   Modal,
   Loader,
   TextInput,
+  CloseButton,
 } from "@mantine/core";
 import { forwardRef, Fragment, useState } from "react";
 import type { AppWrapperProps } from "../../types/general";
 import {
   CaretDown,
+  DiscordLogo,
+  GithubLogo,
+  GoogleLogo,
   Hexagon,
   House,
   ListDashes,
@@ -57,6 +61,10 @@ import AfridiImage from "./afridi-image";
 import { Fade } from "react-awesome-reveal";
 import AfridiSearchArticleListItem from "./search/afridi-search-article-list";
 import FeedIcon from "../../public/feed.svg";
+import GoogleIcon from "../../public/google.png";
+import GithubIcon from "../../public/github.svg";
+
+import Image from "next/image";
 
 const AppWrapper: React.FC<AppWrapperProps> = ({
   children,
@@ -68,28 +76,12 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
   const [opened, setOpened] = useState(false);
   const overlay = useGeneralStore((store) => store.overlay);
   const search = useGeneralStore((store) => store.search);
-
   const setSearch = useGeneralStore((store) => store.toggleSearch);
-
-  const AutoCompleteItem = forwardRef<HTMLDivElement, SearchItemProps>(
-    ({ title, description, cover, ...others }: SearchItemProps, ref) => (
-      <div className="w-[200px] h-[200px]" ref={ref} {...others}>
-        <Loader />
-
-        <Group noWrap>
-          <Avatar>
-            <AfridiImage path="" />
-          </Avatar>
-
-          <div>
-            <Text>{title}</Text>
-            <Text size="xs" color="dimmed">
-              {description}
-            </Text>
-          </div>
-        </Group>
-      </div>
-    )
+  const unauthenticatedModal = useGeneralStore(
+    (store) => store.unauthenticatedModal
+  );
+  const toggleUnauthenticatedModal = useGeneralStore(
+    (store) => store.toggleUnauthenticatedModal
   );
 
   return (
@@ -143,8 +135,137 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
             description=" This is a punishement for a world that didnt pay for Winrar"
             cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
           />
+
           {/* <AfridiEmptyPlaceholder />
           <AfridiLoading title="Fetching articles" /> */}
+        </Paper>
+      </Modal>
+
+      <Modal
+        radius="md"
+        zIndex={2000}
+        onClose={() => toggleUnauthenticatedModal(false)}
+        opened={unauthenticatedModal}
+        size="lg"
+        padding={0}
+        title={false}
+        withCloseButton={false}
+        transition="scale"
+      >
+        <Paper
+          sx={{
+            height: 600,
+          }}
+          radius="md"
+          p="xs"
+        >
+          <Group pt={2} pr={4} position="right">
+            <CloseButton
+              onClick={() => toggleUnauthenticatedModal(false)}
+              size={"lg"}
+              iconSize={20}
+            />
+          </Group>
+          <Stack mb="auto" spacing={0} align="center" mt={80}>
+            <Title weight={500} order={2}>
+              Let&apos;s Get You Started
+            </Title>
+
+            <Text mt={8} size="sm" color="dimmed">
+              Because it&apos;s easy, free & beneficial.
+            </Text>
+
+            <Stack mb="auto" spacing="lg" mt={50}>
+              <Button
+                color="gray"
+                leftIcon={
+                  <Image
+                    priority
+                    width={20}
+                    height={20}
+                    src={GoogleIcon}
+                    alt=""
+                  />
+                }
+                variant="light"
+                styles={{
+                  label: {
+                    fontWeight: 500,
+                    fontSize: 12,
+                  },
+                }}
+              >
+                Start with a Google Account
+              </Button>
+
+              <Button
+                color={"gray"}
+                leftIcon={
+                  <GithubLogo
+                    color={
+                      colorScheme == "dark" ? theme.white : theme.colors.dark[9]
+                    }
+                    strokeWidth={2}
+                    weight="duotone"
+                    size={18}
+                  />
+                }
+                variant="light"
+                styles={{
+                  label: {
+                    fontWeight: 500,
+                    fontSize: 12,
+                  },
+                }}
+              >
+                Start with a Github Account
+              </Button>
+
+              <Button
+                color={"gray"}
+                leftIcon={
+                  <DiscordLogo
+                    color={theme.colors.indigo[6]}
+                    strokeWidth={2}
+                    weight="duotone"
+                    size={18}
+                  />
+                }
+                variant="light"
+                styles={{
+                  label: {
+                    fontWeight: 500,
+                    fontSize: 12,
+                  },
+                }}
+              >
+                Start with a Discord Account
+              </Button>
+            </Stack>
+          </Stack>
+          <Group position="center">
+            <Text
+              color={colorScheme == "dark" ? "dimmed" : "dark"}
+              variant="link"
+              component="a"
+              align="center"
+              href="#"
+              size="xs"
+              mt={90}
+            >
+              Explore the benefits of a joining{" "}
+              <Text
+                component="span"
+                style={{
+                  fontSize: 14,
+                  fontFamily: playfair.style.fontFamily,
+                  fontWeight: 600,
+                }}
+              >
+                Afridi.dev
+              </Text>
+            </Text>
+          </Group>
         </Paper>
       </Modal>
       <AppShell
@@ -174,7 +295,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                 label="Home"
               />
 
-              <AfridiNavLink href="/link" LeftIcon={Hexagon} label="My Feed" />
+              <AfridiNavLink href="#" LeftIcon={Hexagon} label="My Feed" />
               <AfridiNavLink
                 href="/link"
                 LeftIcon={PencilSimpleLine}

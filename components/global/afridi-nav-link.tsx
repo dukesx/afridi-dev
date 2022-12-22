@@ -3,6 +3,7 @@ import { NextLink } from "@mantine/next";
 import Image from "next/image";
 import Link from "next/link";
 import { CaretRight, House } from "phosphor-react";
+import { useGeneralStore } from "../../data/static/store";
 import { AfridiNavLinkProps } from "../../types/general";
 
 const AfridiNavLink: React.FC<AfridiNavLinkProps> = ({
@@ -18,8 +19,12 @@ const AfridiNavLink: React.FC<AfridiNavLinkProps> = ({
 }) => {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
+  const toggleUnauthenticatedModal = useGeneralStore(
+    (store) => store.toggleUnauthenticatedModal
+  );
   return (
     <NavLink
+      onClick={() => toggleUnauthenticatedModal(true)}
       href={href ?? "#"}
       component={children ? "div" : Link}
       className={(className ?? " ") + sub ? "" : active ? " font-medium " : " "}
