@@ -6,6 +6,7 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 // import ProgressiveImage from "react-progressive-graceful-image";
 
@@ -14,7 +15,7 @@ export interface AfridiImageProps {
   height?: number;
   path: string;
   loading?: "lazy" | "normal";
-  style?: object;
+  style?: CSSProperties;
   className?: string;
   onClick?: Function;
   fillImage?: boolean | false;
@@ -44,22 +45,6 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   }));
 
   return (
-    // <div
-    //   className={
-    //     classes.wrapper +
-    //     " " +
-    //     (className ?? "") +
-    //     (fillImage ? " max-w-full w-full" : "")
-    //   }
-    //   style={style}
-    // >
-    // <div
-    //   style={{
-    //     width: width,
-    //     height: height,
-    //   }}
-    // >
-
     <div
       className="block"
       style={{
@@ -72,51 +57,26 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         className={
           (imageClassName ? imageClassName : "") + " w-full rounded-sm"
         }
+        fill={fillImage}
         alt="article's cover image"
-        src={path && path.replaceAll("/", "")}
-        layout={fillImage ? "fill" : isResponsive ? "responsive" : "fixed"}
-        width={fillImage ? false : width}
-        height={fillImage ? false : height}
+        src={path && !path.includes("http") ? path.replaceAll("/", "") : path}
+        width={width}
+        height={height}
         quality={75}
         loader={({ src, width, quality }) =>
-          `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${src}`
+          src.includes("http")
+            ? src
+            : `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${src}`
         }
         placeholder={cover_base_64 ? "blur" : "empty"}
         blurDataURL={cover_base_64 ?? null}
         onClick={onClick ?? null}
-        objectFit="cover"
         style={{
+          objectFit: "cover",
           ...style,
         }}
       />
     </div>
-    // </div>
-    //  <ProgressiveImage
-    //   src={
-    //     `https://ik.imagekit.io/afrididotdev/tr:w-${width},h-${height}` + path
-    //   }
-    //   placeholder={
-    //     `https://ik.imagekit.io/afrididotdev/tr:q-100,bl-30,w-${width},h-${height}` +
-    //     path
-    //   }
-    //   className={fillImage ? "mx-auto flex !w-full !h-full" : ""}
-    //   onClick={onClick}
-    // >
-    //   {(src, loading) => (
-    //     <img
-    //       src={src}
-    //       alt=""
-    //       height={height}
-    //       width={width}
-    //       className={
-    //         (fillImage ? "mx-auto flex !w-full !h-full" : "") +
-    //         " object-cover " +
-    //         (imageClassName ? imageClassName : "")
-    //       }
-    //     />
-    //   )}
-    // </ProgressiveImage>
-    // </div>
   );
 };
 
