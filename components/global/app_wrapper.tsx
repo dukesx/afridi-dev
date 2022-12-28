@@ -36,9 +36,11 @@ import { forwardRef, Fragment, useState } from "react";
 import type { AppWrapperProps } from "../../types/general";
 import {
   CaretDown,
+  Cookie,
   DiscordLogo,
   GithubLogo,
   GoogleLogo,
+  Hash,
   Hexagon,
   House,
   ListDashes,
@@ -47,6 +49,7 @@ import {
   PencilSimpleLine,
   Question,
   RocketLaunch,
+  Scales,
   SquaresFour,
   Star,
   Sun,
@@ -65,6 +68,9 @@ import GoogleIcon from "../../public/google.png";
 import GithubIcon from "../../public/github.svg";
 
 import Image from "next/image";
+import { nanoid } from "nanoid";
+import AfridiEmptyPlaceholder from "./afridi-empty";
+import AfridiLoading from "./afridi-loading";
 
 const AppWrapper: React.FC<AppWrapperProps> = ({
   children,
@@ -84,6 +90,41 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
     (store) => store.toggleUnauthenticatedModal
   );
 
+  const navLinks = [
+    {
+      key: "home",
+      icon: House,
+      label: "Home",
+      href: "/",
+    },
+
+    {
+      key: "feed",
+      icon: Hexagon,
+      label: "My Feed",
+      href: "/feed",
+    },
+
+    {
+      key: "tags",
+      icon: Hash,
+      label: "Topics",
+      href: "/topics",
+    },
+    {
+      key: "terms",
+      icon: Scales,
+      label: "Terms of Service",
+      href: "/terms",
+    },
+    {
+      key: "privacy",
+      icon: Cookie,
+      label: "Privacy Policy",
+      href: "/privacy-policy",
+    },
+  ];
+
   return (
     <Fragment>
       {overlay && <Overlay opacity={0.6} color={theme.black} zIndex={2100} />}
@@ -99,13 +140,33 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
         styles={{
           modal: {
             background: "transparent",
+            boxShadow: "none",
           },
         }}
+        transition="pop"
+        transitionDuration={200}
+        overlayColor={
+          colorScheme == "dark" ? theme.colors.gray[8] : theme.colors.gray[5]
+        }
+        overlayBlur={10}
       >
         <TextInput
+          radius="xl"
           placeholder="Enter a term to start searching"
           styles={{
             input: {
+              ":focus-within": {
+                border:
+                  colorScheme == "light"
+                    ? "none"
+                    : `1px solid ${theme.colors.teal[7]}`,
+              },
+              ":focus": {
+                border:
+                  colorScheme == "light"
+                    ? "none"
+                    : `1px solid ${theme.colors.teal[7]}`,
+              },
               padding: "22px",
               "::placeholder": {
                 fontSize: theme.fontSizes.xs,
@@ -114,7 +175,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
           }}
         />
         <Paper radius="lg" mt="sm">
-          <AfridiSearchArticleListItem
+          {/* <AfridiSearchArticleListItem
             title="How to do things in 3 in 1 ways"
             description=" This is a punishement for a world that didnt pay for Winrar"
             cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
@@ -134,14 +195,18 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
             title="How to do things in 3 in 1 ways"
             description=" This is a punishement for a world that didnt pay for Winrar"
             cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-          />
+          /> */}
 
-          {/* <AfridiEmptyPlaceholder />
-          <AfridiLoading title="Fetching articles" /> */}
+          <AfridiEmptyPlaceholder
+            title="Hmmm.... Empty"
+            description="Enter a term to see results"
+          />
+          <AfridiLoading title="Fetching articles" />
         </Paper>
       </Modal>
 
       <Modal
+        transitionDuration={1500}
         radius="md"
         zIndex={2000}
         onClose={() => toggleUnauthenticatedModal(false)}
@@ -150,7 +215,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
         padding={0}
         title={false}
         withCloseButton={false}
-        transition="scale"
+        transition="pop"
       >
         <Paper
           sx={{
@@ -164,6 +229,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
               onClick={() => toggleUnauthenticatedModal(false)}
               size={"lg"}
               iconSize={20}
+              radius="md"
             />
           </Group>
           <Stack mb="auto" spacing={0} align="center" mt={80}>
@@ -277,129 +343,13 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                 ? theme.colors.dark[8]
                 : theme.colors.gray[0],
           },
+          body: {
+            height: "100%",
+            overflow: "clip",
+          },
         }}
         navbarOffsetBreakpoint="sm"
         asideOffsetBreakpoint="sm"
-        navbar={
-          <Navbar
-            px={0}
-            hiddenBreakpoint="md"
-            hidden={!opened}
-            width={{ md: 200, lg: 250 }}
-          >
-            <Navbar.Section grow>
-              <AfridiNavLink
-                href="/link"
-                active={activeKey === "home"}
-                LeftIcon={House}
-                label="Home"
-              />
-
-              <AfridiNavLink href="#" LeftIcon={Hexagon} label="My Feed" />
-              <AfridiNavLink
-                href="/link"
-                LeftIcon={PencilSimpleLine}
-                label="Compose"
-              />
-            </Navbar.Section>
-            <Navbar.Section mb="md" p="xl">
-              <Stack spacing="xs">
-                <Button
-                  fullWidth
-                  onClick={() => toggleColorScheme()}
-                  leftIcon={
-                    colorScheme == "dark" ? (
-                      <Sun weight="duotone" size={20} />
-                    ) : (
-                      <MoonStars weight="duotone" size={18} />
-                    )
-                  }
-                  color={colorScheme == "dark" ? "yellow.7" : "dark"}
-                >
-                  {colorScheme == "dark" ? "Light" : "Dark"} Mode
-                </Button>
-              </Stack>
-            </Navbar.Section>
-          </Navbar>
-        }
-        aside={
-          aside ? (
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-                <Text>Application sidebar</Text>
-              </Aside>
-            </MediaQuery>
-          ) : null
-        }
-        footer={
-          <FooterLinks
-            data={[
-              {
-                title: "About",
-                links: [
-                  {
-                    label: "Features",
-                    link: "#",
-                  },
-                  {
-                    label: "Pricing",
-                    link: "#",
-                  },
-                  {
-                    label: "Support",
-                    link: "#",
-                  },
-                  {
-                    label: "Forums",
-                    link: "#",
-                  },
-                ],
-              },
-              {
-                title: "Project",
-                links: [
-                  {
-                    label: "Contribute",
-                    link: "#",
-                  },
-                  {
-                    label: "Media assets",
-                    link: "#",
-                  },
-                  {
-                    label: "Changelog",
-                    link: "#",
-                  },
-                  {
-                    label: "Releases",
-                    link: "#",
-                  },
-                ],
-              },
-              {
-                title: "Community",
-                links: [
-                  {
-                    label: "Join Discord",
-                    link: "#",
-                  },
-                  {
-                    label: "Follow on Twitter",
-                    link: "#",
-                  },
-                  {
-                    label: "Email newsletter",
-                    link: "#",
-                  },
-                  {
-                    label: "GitHub discussions",
-                    link: "#",
-                  },
-                ],
-              },
-            ]}
-          />
-        }
         header={
           <Fragment>
             <Header zIndex={2000} height={{ base: 60, md: 70 }} px={10} py="xs">
@@ -411,8 +361,9 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                   height: "100%",
                 }}
               >
-                <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+                <MediaQuery largerThan="md" styles={{ display: "none" }}>
                   <ActionIcon
+                    radius="xl"
                     component="span"
                     mt={3}
                     size={31}
@@ -454,6 +405,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                   variant="filled"
                   color="teal"
                   mr="md"
+                  radius="xl"
                   size={32}
                   onClick={() => setSearch(true)}
                 >
@@ -556,6 +508,123 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
               </Group>
             </Header>
           </Fragment>
+        }
+        navbar={
+          <Navbar
+            px={0}
+            hiddenBreakpoint="md"
+            hidden={!opened}
+            width={{ md: 200, lg: 250 }}
+          >
+            <Navbar.Section grow>
+              {navLinks.map((mapped) => (
+                <AfridiNavLink
+                  href={mapped.href}
+                  key={nanoid()}
+                  LeftIcon={mapped.icon}
+                  label={mapped.label}
+                  active={activeKey == mapped.key}
+                />
+              ))}
+            </Navbar.Section>
+            <Navbar.Section mb="md" p="xl">
+              <Stack spacing="xs">
+                <Button
+                  radius="xl"
+                  fullWidth
+                  onClick={() => toggleColorScheme()}
+                  leftIcon={
+                    colorScheme == "dark" ? (
+                      <Sun weight="duotone" size={20} />
+                    ) : (
+                      <MoonStars weight="duotone" size={18} />
+                    )
+                  }
+                  color={colorScheme == "dark" ? "yellow.7" : "dark"}
+                >
+                  {colorScheme == "dark" ? "Light" : "Dark"} Mode
+                </Button>
+              </Stack>
+            </Navbar.Section>
+          </Navbar>
+        }
+        aside={
+          aside ? (
+            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
+              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
+                <Text>Application sidebar</Text>
+              </Aside>
+            </MediaQuery>
+          ) : null
+        }
+        footer={
+          <FooterLinks
+            data={[
+              {
+                title: "About",
+                links: [
+                  {
+                    label: "Features",
+                    link: "#",
+                  },
+                  {
+                    label: "Pricing",
+                    link: "#",
+                  },
+                  {
+                    label: "Support",
+                    link: "#",
+                  },
+                  {
+                    label: "Forums",
+                    link: "#",
+                  },
+                ],
+              },
+              {
+                title: "Project",
+                links: [
+                  {
+                    label: "Contribute",
+                    link: "#",
+                  },
+                  {
+                    label: "Media assets",
+                    link: "#",
+                  },
+                  {
+                    label: "Changelog",
+                    link: "#",
+                  },
+                  {
+                    label: "Releases",
+                    link: "#",
+                  },
+                ],
+              },
+              {
+                title: "Community",
+                links: [
+                  {
+                    label: "Join Discord",
+                    link: "#",
+                  },
+                  {
+                    label: "Follow on Twitter",
+                    link: "#",
+                  },
+                  {
+                    label: "Email newsletter",
+                    link: "#",
+                  },
+                  {
+                    label: "GitHub discussions",
+                    link: "#",
+                  },
+                ],
+              },
+            ]}
+          />
         }
       >
         {children}

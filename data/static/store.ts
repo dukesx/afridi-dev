@@ -30,5 +30,5 @@ export const useGeneralStore = create<GeneralStore>((set) => ({
     set({
       unauthenticatedModal: value,
     }),
-  unauthenticatedModal: true,
+  unauthenticatedModal: false,
 }));

@@ -28,6 +28,7 @@ const AfridiVerticalArticleCardWithBg: FC<
       }}
     >
       <AfridiImage
+        priority
         style={{
           filter: "brightness(65%)",
         }}
@@ -44,6 +45,7 @@ const AfridiVerticalArticleCardWithBg: FC<
       >
         <Stack>
           <Text
+            weight={500}
             sx={{
               textTransform: "capitalize",
             }}

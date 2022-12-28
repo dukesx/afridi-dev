@@ -24,7 +24,6 @@ const AfridiNavLink: React.FC<AfridiNavLinkProps> = ({
   );
   return (
     <NavLink
-      onClick={() => toggleUnauthenticatedModal(true)}
       href={href ?? "#"}
       component={children ? "div" : Link}
       className={(className ?? " ") + sub ? "" : active ? " font-medium " : " "}

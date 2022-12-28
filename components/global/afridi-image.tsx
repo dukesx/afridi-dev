@@ -37,16 +37,9 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   priority,
 }) => {
   const theme = useMantineTheme();
-  const AfridiImageClasses = createStyles((theme) => ({
-    wrapper: {
-      height: height,
-      width: width,
-    },
-  }));
 
   return (
     <div
-      className="block"
       style={{
         width: width,
         height: height,
@@ -61,6 +54,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         alt="article's cover image"
         src={path && !path.includes("http") ? path.replaceAll("/", "") : path}
         width={width}
+        unoptimized={fillImage === true}
         height={height}
         quality={75}
         loader={({ src, width, quality }) =>

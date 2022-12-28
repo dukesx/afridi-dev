@@ -54,7 +54,6 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       >
         <MantineProvider
           theme={{
-            defaultRadius: "xl",
             colorScheme,
             fontFamily: `${inter.style.fontFamily}`,
             primaryColor: "teal",

@@ -67,35 +67,6 @@ export function textEllipsis(
   return str;
 }
 
-export const ShowUnauthorizedModal = (title?: any, description?: any) => {
-  openModal({
-    title: "Unauthorized",
-    children: (
-      <Stack spacing={4} align="center">
-        <Image src={Unauthorized} height={200} width={200} alt="" />
-        <Text weight={600}>
-          {title ? title : "Ooops - You Can't perform this action"}
-        </Text>
-        <Text size="sm" color="dimmed">
-          {description ? description : "You need to be signed in to continue"}
-        </Text>
-        <Button
-          mt="xs"
-          color="blue"
-          fullWidth
-          component={NextLink}
-          onClick={() => {
-            closeAllModals();
-          }}
-          href="/get-started"
-        >
-          Sign in
-        </Button>
-      </Stack>
-    ),
-  });
-};
-
 export function secondsToHms(d) {
   d = Number(d);
   var h = Math.floor(d / 3600);

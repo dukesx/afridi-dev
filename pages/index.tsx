@@ -3,6 +3,7 @@ import { Carousel } from "@mantine/carousel";
 import {
   Anchor,
   BackgroundImage,
+  Blockquote,
   Box,
   Button,
   Card,
@@ -21,23 +22,82 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { ArrowRight } from "phosphor-react";
+import { Fade } from "react-awesome-reveal";
 import AppWrapper from "../components/global/app_wrapper";
 import AfridiVerticalArticleCardWithBg from "../components/global/articles/cards/vertical-with-bg";
 import AfridiHorizontalArticleListItem from "../components/global/articles/list-item/horizontal-simple";
 import { useGeneralStore } from "../data/static/store";
+import { playfair } from "./_app";
 
 export default function HomePage() {
   const { colorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
   const set = useGeneralStore((state) => state.toggleOverlay);
   const set2 = useGeneralStore((state) => state.toggleSearch);
-
+  const toggleUnauthenticatedModal = useGeneralStore(
+    (store) => store.toggleUnauthenticatedModal
+  );
   return (
     <AppWrapper activeKey="home">
+      <Fade duration={2000} triggerOnce>
+        <Paper
+          sx={(theme) => ({
+            height: 400,
+            backgroundColor:
+              colorScheme == "dark"
+                ? theme.colors.yellow[7]
+                : theme.colors.yellow[6],
+          })}
+          radius="xs"
+          pr={0}
+          className="w-full"
+        >
+          <Center className="h-full">
+            <Stack align="center" spacing={0}>
+              <Blockquote
+                // align="center"
+                color="dark"
+                sx={{
+                  maxWidth: 700,
+                }}
+                cite="- Conficius (Chineese Philosopher)"
+                styles={{
+                  cite: {
+                    color: theme.colors.dark[8],
+                  },
+                }}
+              >
+                <Title
+                  sx={(theme) => ({
+                    [theme.fn.smallerThan(400)]: {
+                      fontSize: theme.fontSizes.xl * 1.5,
+                    },
+                  })}
+                  color="dark"
+                >{`To know what you know and what you do not know, that is true
+                knowledge`}</Title>
+              </Blockquote>
+
+              <Button
+                onClick={() => toggleUnauthenticatedModal(true)}
+                style={{
+                  // fontFamily: playfair.style.fontFamily,
+                  fontWeight: 600,
+                }}
+                color="dark"
+                variant={colorScheme == "dark" ? "white" : "filled"}
+                mt={50}
+              >
+                Browse My Feed
+              </Button>
+            </Stack>
+          </Center>
+        </Paper>
+      </Fade>
       <Paper
         sx={(theme) => ({
           backgroundColor:
-            colorScheme == "dark" ? theme.colors.teal[4] : theme.colors.teal[1],
+            colorScheme == "dark" ? theme.colors.teal[6] : theme.colors.teal[1],
         })}
         radius="xs"
         pr={0}
@@ -164,6 +224,7 @@ export default function HomePage() {
                 })}
                 color="dark"
                 size="sm"
+                weight={600}
               >
                 See More
                 <ArrowRight
@@ -185,7 +246,7 @@ export default function HomePage() {
               sx={{
                 height: 400,
                 maxWidth: 380,
-                [theme.fn.smallerThan(400)]: {
+                [theme.fn.smallerThan(600)]: {
                   height: 200,
                 },
               }}
@@ -253,19 +314,40 @@ export default function HomePage() {
                     title: "Fashion",
                     id: "",
                   }}
-                  title="Top 7 React Animation Libraries in 2022"
-                  cover="https://www.syncfusion.com/blogs/wp-content/uploads/2022/08/Top-7-React-Animation-Libraries-in-2022.png"
+                  title=" solution for inconsistencies in indexing operations in pandas"
+                  cover="https://miro.medium.com/max/1280/1*c2867ICA_q6okdAz-EfhmA.webp"
                 />
               </Carousel.Slide>
 
               <Carousel.Slide>
                 <AfridiVerticalArticleCardWithBg
                   tag={{
-                    title: "Programming Fundamentals",
+                    title: "Fashion",
                     id: "",
                   }}
-                  title="Make videos programmatically."
-                  cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                  title="Using ChatGPT to Set Up an Android App"
+                  cover="https://miro.medium.com/max/1400/0*iwttmYprRiobgMAH"
+                />
+              </Carousel.Slide>
+              <Carousel.Slide>
+                <AfridiVerticalArticleCardWithBg
+                  tag={{
+                    title: "Fashion",
+                    id: "",
+                  }}
+                  title="VS Code Shortcuts To Code Like You’re Playing a Piano"
+                  cover="https://miro.medium.com/max/1400/1*ShinbGf8NZEuHJ41dVnkqA.webp"
+                />
+              </Carousel.Slide>
+
+              <Carousel.Slide>
+                <AfridiVerticalArticleCardWithBg
+                  tag={{
+                    title: "GraalVM",
+                    id: "",
+                  }}
+                  title="GraalVM, Galahad, and a New Release Schedule"
+                  cover="https://miro.medium.com/max/1400/0*Q7g4pcf4KBZroL_h"
                 />
               </Carousel.Slide>
 
@@ -275,8 +357,8 @@ export default function HomePage() {
                     title: "React",
                     id: "",
                   }}
-                  title="How to build faster animation transitions in React"
-                  cover="https://blog.logrocket.com/wp-content/uploads/2022/04/build-faster-animations-react-nocdn.png"
+                  title="Handling errors like a pro in TypeScript"
+                  cover="https://miro.medium.com/max/1400/1*6AtIsUWN6W7f-bru9LmH4w.webp"
                 />
               </Carousel.Slide>
             </Carousel>

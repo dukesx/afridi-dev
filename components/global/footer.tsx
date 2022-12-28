@@ -10,6 +10,7 @@ import {
   Stack,
   useMantineTheme,
   Paper,
+  useMantineColorScheme,
 } from "@mantine/core";
 import {
   IconBrandTwitter,
@@ -135,6 +136,7 @@ interface FooterLinksProps {
 export function FooterLinks({ data }: FooterLinksProps) {
   const { classes } = useStyles();
   const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
 
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
@@ -224,17 +226,21 @@ export function FooterLinks({ data }: FooterLinksProps) {
           </Text>
 
           <Group spacing={0} className={classes.social} position="right" noWrap>
-            <ActionIcon size="lg">
+            <ActionIcon radius="xl" size="lg">
               <TwitterLogo
                 size={18}
                 weight="fill"
                 color={theme.colors.blue[6]}
               />
             </ActionIcon>
-            <ActionIcon size="lg">
+            <ActionIcon radius="xl" size="lg">
               <YoutubeLogo
                 weight="fill"
-                color={theme.colors.red[6]}
+                color={
+                  colorScheme == "dark"
+                    ? theme.colors.red[7]
+                    : theme.colors.red[6]
+                }
                 size={18}
               />
             </ActionIcon>

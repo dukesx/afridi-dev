@@ -8,3 +8,11 @@ export interface AfridiHorizontalArticleListItemProps {
     id: string;
   };
 }
+
+export interface AfridiHorizontalFeedArticleListItemProps {
+  title: string;
+  description: string;
+  bookmarked: boolean;
+  read_time: string;
+  cover: string;
+}
