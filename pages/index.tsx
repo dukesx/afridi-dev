@@ -21,6 +21,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
+import { GetServerSidePropsContext } from "next";
 import { ArrowRight } from "phosphor-react";
 import { Fade } from "react-awesome-reveal";
 import AppWrapper from "../components/global/app_wrapper";
@@ -29,7 +30,7 @@ import AfridiHorizontalArticleListItem from "../components/global/articles/list-
 import { useGeneralStore } from "../data/static/store";
 import { playfair } from "./_app";
 
-export default function HomePage() {
+export default function HomePage({ quote }) {
   const { colorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
   const set = useGeneralStore((state) => state.toggleOverlay);
@@ -37,6 +38,8 @@ export default function HomePage() {
   const toggleUnauthenticatedModal = useGeneralStore(
     (store) => store.toggleUnauthenticatedModal
   );
+
+  console.log(quote);
   return (
     <AppWrapper activeKey="home">
       <Fade duration={2000} triggerOnce>
@@ -60,7 +63,7 @@ export default function HomePage() {
                 sx={{
                   maxWidth: 700,
                 }}
-                cite="- Conficius (Chineese Philosopher)"
+                cite={`- ${quote.author}`}
                 styles={{
                   cite: {
                     color: theme.colors.dark[8],
@@ -68,14 +71,16 @@ export default function HomePage() {
                 }}
               >
                 <Title
+                  lineClamp={2}
                   sx={(theme) => ({
                     [theme.fn.smallerThan(400)]: {
                       fontSize: theme.fontSizes.xl * 1.5,
                     },
                   })}
                   color="dark"
-                >{`To know what you know and what you do not know, that is true
-                knowledge`}</Title>
+                >
+                  {quote.content}
+                </Title>
               </Blockquote>
 
               <Button
@@ -368,3 +373,23 @@ export default function HomePage() {
     </AppWrapper>
   );
 }
+
+export const getServerSideProps = async ({}: GetServerSidePropsContext) => {
+  const fetcher = await fetch(
+    "https://api.quotable.io/random?tags=inspirational"
+  );
+
+  const data = await fetcher.json();
+
+  if (data) {
+    return {
+      props: {
+        quote: data,
+      },
+    };
+  } else {
+    return {
+      props: {},
+    };
+  }
+};

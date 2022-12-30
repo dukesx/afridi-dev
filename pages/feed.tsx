@@ -11,8 +11,6 @@ import {
 } from "@mantine/core";
 import AppWrapper from "../components/global/app_wrapper";
 import AfridiVerticalArticleCardWithBg from "../components/global/articles/cards/vertical-with-bg";
-import Autoplay from "embla-carousel-autoplay";
-import { useRef } from "react";
 import AfridiHorizontalFeedArticleListItem from "../components/global/articles/list-item/horizontal-feed";
 import AfridiArticleFeedSquareWidget from "../components/global/articles/widgets/square/feed-square-widget";
 //
@@ -22,7 +20,6 @@ import AfridiArticleFeedSquareWidget from "../components/global/articles/widgets
 const Feed = () => {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
-  const autoplay = useRef(Autoplay({ delay: 4000 }));
   return (
     <AppWrapper activeKey="feed">
       <Paper radius="xs">
@@ -35,7 +32,6 @@ const Feed = () => {
           withControls={false}
           slideGap={0}
           loop
-          plugins={[autoplay.current]}
           slideSize="30%"
           styles={{
             indicator: {

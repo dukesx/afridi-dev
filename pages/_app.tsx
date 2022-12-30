@@ -10,6 +10,8 @@ import {
 import { NotificationsProvider } from "@mantine/notifications";
 import { Inter, Playfair_Display, Source_Code_Pro } from "@next/font/google";
 import "../styles/app.scss";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 
 export const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const playfair = Playfair_Display({
@@ -27,7 +29,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
   const [colorScheme, setColorScheme] = useState<ColorScheme>(
     props.colorScheme
   );
-
+  const [supabaseClient] = useState(() => createBrowserSupabaseClient());
   const toggleColorScheme = (value?: ColorScheme) => {
     const nextColorScheme =
       value || (colorScheme === "dark" ? "light" : "dark");
@@ -67,7 +69,12 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           withNormalizeCSS
         >
           <NotificationsProvider>
-            <Component {...pageProps} />
+            <SessionContextProvider
+              supabaseClient={supabaseClient}
+              initialSession={pageProps.initialSession}
+            >
+              <Component {...pageProps} />
+            </SessionContextProvider>
           </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>

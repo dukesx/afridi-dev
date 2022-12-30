@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
     // backgroundColor:
     //   theme.colorScheme === "dark"
     //     ? theme.colors.dark[6]
-    //     : theme.colors.gray[0],
+    //     : theme.colors.dark[0],
     borderTop: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
     }`,
@@ -238,7 +238,7 @@ export function FooterLinks({ data }: FooterLinksProps) {
                 weight="fill"
                 color={
                   colorScheme == "dark"
-                    ? theme.colors.red[7]
+                    ? theme.colors.red[6]
                     : theme.colors.red[6]
                 }
                 size={18}

@@ -32,50 +32,45 @@ import {
   TextInput,
   CloseButton,
 } from "@mantine/core";
-import { forwardRef, Fragment, useState } from "react";
+import { forwardRef, Fragment, ReactNode, useState } from "react";
 import type { AppWrapperProps } from "../../types/general";
 import {
   CaretDown,
   Cookie,
-  DiscordLogo,
-  GithubLogo,
-  GoogleLogo,
   Hash,
   Hexagon,
   House,
-  ListDashes,
+  IconProps,
   MagnifyingGlass,
   MoonStars,
-  PencilSimpleLine,
   Question,
   RocketLaunch,
   Scales,
-  SquaresFour,
   Star,
   Sun,
   User,
+  UserFocus,
 } from "phosphor-react";
 import AfridiNavLink from "./afridi-nav-link";
 import { playfair } from "../../pages/_app";
 import { FooterLinks } from "./footer";
 import { useGeneralStore } from "../../data/static/store";
-import { SearchItemProps } from "../../types/general";
-import AfridiImage from "./afridi-image";
 import { Fade } from "react-awesome-reveal";
-import AfridiSearchArticleListItem from "./search/afridi-search-article-list";
-import FeedIcon from "../../public/feed.svg";
-import GoogleIcon from "../../public/google.png";
-import GithubIcon from "../../public/github.svg";
 
 import Image from "next/image";
 import { nanoid } from "nanoid";
 import AfridiEmptyPlaceholder from "./afridi-empty";
 import AfridiLoading from "./afridi-loading";
+import { SearchModal, UnAuthorizedModal } from "../../utils/helpers";
+import AfridiImage from "./afridi-image";
+import Link from "next/link";
 
 const AppWrapper: React.FC<AppWrapperProps> = ({
   children,
   aside,
   activeKey,
+  sidebar = true,
+  themedPage,
 }) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
@@ -90,7 +85,12 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
     (store) => store.toggleUnauthenticatedModal
   );
 
-  const navLinks = [
+  const navLinks: Array<{
+    label: string | ReactNode;
+    key: string;
+    icon: any;
+    href: string;
+  }> = [
     {
       key: "home",
       icon: House,
@@ -111,11 +111,24 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       label: "Topics",
       href: "/topics",
     },
+
     {
-      key: "terms",
-      icon: Scales,
-      label: "Terms of Service",
-      href: "/terms",
+      label: (
+        <Group spacing={5}>
+          <Text>About</Text>
+          <Text
+            weight={600}
+            sx={{
+              fontFamily: playfair.style.fontFamily,
+            }}
+          >
+            Afridi.dev
+          </Text>
+        </Group>
+      ),
+      key: "about",
+      icon: UserFocus,
+      href: "/about-us",
     },
     {
       key: "privacy",
@@ -123,217 +136,30 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       label: "Privacy Policy",
       href: "/privacy-policy",
     },
+    {
+      key: "terms",
+      icon: Scales,
+      label: "Terms of Service",
+      href: "/terms",
+    },
   ];
-
   return (
     <Fragment>
       {overlay && <Overlay opacity={0.6} color={theme.black} zIndex={2100} />}
 
-      <Modal
-        radius="md"
-        centered
-        zIndex={2000}
-        withCloseButton={false}
-        onClose={() => setSearch(false)}
+      <SearchModal
+        colorScheme={colorScheme}
+        toggle={setSearch}
         opened={search}
-        size="md"
-        styles={{
-          modal: {
-            background: "transparent",
-            boxShadow: "none",
-          },
-        }}
-        transition="pop"
-        transitionDuration={200}
-        overlayColor={
-          colorScheme == "dark" ? theme.colors.gray[8] : theme.colors.gray[5]
-        }
-        overlayBlur={10}
-      >
-        <TextInput
-          radius="xl"
-          placeholder="Enter a term to start searching"
-          styles={{
-            input: {
-              ":focus-within": {
-                border:
-                  colorScheme == "light"
-                    ? "none"
-                    : `1px solid ${theme.colors.teal[7]}`,
-              },
-              ":focus": {
-                border:
-                  colorScheme == "light"
-                    ? "none"
-                    : `1px solid ${theme.colors.teal[7]}`,
-              },
-              padding: "22px",
-              "::placeholder": {
-                fontSize: theme.fontSizes.xs,
-              },
-            },
-          }}
-        />
-        <Paper radius="lg" mt="sm">
-          {/* <AfridiSearchArticleListItem
-            title="How to do things in 3 in 1 ways"
-            description=" This is a punishement for a world that didnt pay for Winrar"
-            cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-          />
-          <Fade>
-            <Divider color={colorScheme == "dark" ? "gray.9" : "gray.2"} />
-          </Fade>
-          <AfridiSearchArticleListItem
-            title="How to do things in 3 in 1 ways"
-            description=" This is a punishement for a world that didnt pay for Winrar"
-            cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-          />
-          <Fade>
-            <Divider color={colorScheme == "dark" ? "gray.9" : "gray.2"} />
-          </Fade>
-          <AfridiSearchArticleListItem
-            title="How to do things in 3 in 1 ways"
-            description=" This is a punishement for a world that didnt pay for Winrar"
-            cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-          /> */}
+        theme={theme}
+      />
 
-          <AfridiEmptyPlaceholder
-            title="Hmmm.... Empty"
-            description="Enter a term to see results"
-          />
-          <AfridiLoading title="Fetching articles" />
-        </Paper>
-      </Modal>
-
-      <Modal
-        transitionDuration={1500}
-        radius="md"
-        zIndex={2000}
-        onClose={() => toggleUnauthenticatedModal(false)}
+      <UnAuthorizedModal
+        colorScheme={colorScheme}
+        toggle={toggleUnauthenticatedModal}
         opened={unauthenticatedModal}
-        size="lg"
-        padding={0}
-        title={false}
-        withCloseButton={false}
-        transition="pop"
-      >
-        <Paper
-          sx={{
-            height: 600,
-          }}
-          radius="md"
-          p="xs"
-        >
-          <Group pt={2} pr={4} position="right">
-            <CloseButton
-              onClick={() => toggleUnauthenticatedModal(false)}
-              size={"lg"}
-              iconSize={20}
-              radius="md"
-            />
-          </Group>
-          <Stack mb="auto" spacing={0} align="center" mt={80}>
-            <Title weight={500} order={2}>
-              Let&apos;s Get You Started
-            </Title>
-
-            <Text mt={8} size="sm" color="dimmed">
-              Because it&apos;s easy, free & beneficial.
-            </Text>
-
-            <Stack mb="auto" spacing="lg" mt={50}>
-              <Button
-                color="gray"
-                leftIcon={
-                  <Image
-                    priority
-                    width={20}
-                    height={20}
-                    src={GoogleIcon}
-                    alt=""
-                  />
-                }
-                variant="light"
-                styles={{
-                  label: {
-                    fontWeight: 500,
-                    fontSize: 12,
-                  },
-                }}
-              >
-                Start with a Google Account
-              </Button>
-
-              <Button
-                color={"gray"}
-                leftIcon={
-                  <GithubLogo
-                    color={
-                      colorScheme == "dark" ? theme.white : theme.colors.dark[9]
-                    }
-                    strokeWidth={2}
-                    weight="duotone"
-                    size={18}
-                  />
-                }
-                variant="light"
-                styles={{
-                  label: {
-                    fontWeight: 500,
-                    fontSize: 12,
-                  },
-                }}
-              >
-                Start with a Github Account
-              </Button>
-
-              <Button
-                color={"gray"}
-                leftIcon={
-                  <DiscordLogo
-                    color={theme.colors.indigo[6]}
-                    strokeWidth={2}
-                    weight="duotone"
-                    size={18}
-                  />
-                }
-                variant="light"
-                styles={{
-                  label: {
-                    fontWeight: 500,
-                    fontSize: 12,
-                  },
-                }}
-              >
-                Start with a Discord Account
-              </Button>
-            </Stack>
-          </Stack>
-          <Group position="center">
-            <Text
-              color={colorScheme == "dark" ? "dimmed" : "dark"}
-              variant="link"
-              component="a"
-              align="center"
-              href="#"
-              size="xs"
-              mt={90}
-            >
-              Explore the benefits of a joining{" "}
-              <Text
-                component="span"
-                style={{
-                  fontSize: 14,
-                  fontFamily: playfair.style.fontFamily,
-                  fontWeight: 600,
-                }}
-              >
-                Afridi.dev
-              </Text>
-            </Text>
-          </Group>
-        </Paper>
-      </Modal>
+        theme={theme}
+      />
       <AppShell
         padding={0}
         styles={{
@@ -352,7 +178,22 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
         asideOffsetBreakpoint="sm"
         header={
           <Fragment>
-            <Header zIndex={2000} height={{ base: 60, md: 70 }} px={10} py="xs">
+            <Header
+              withBorder={themedPage ? false : true}
+              sx={(theme) => ({
+                backgroundColor: themedPage
+                  ? colorScheme == "light"
+                    ? theme.colors.teal[0]
+                    : theme.colors.dark[7]
+                  : colorScheme == "light"
+                  ? theme.white
+                  : theme.colors.dark[7],
+              })}
+              zIndex={2000}
+              height={{ base: 60, md: 70 }}
+              px={10}
+              py="xs"
+            >
               <Group
                 spacing={0}
                 style={{
@@ -383,22 +224,44 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                     />
                   </ActionIcon>
                 </MediaQuery>
-                <Group
-                  className="mr-auto"
-                  position="center"
-                  align="center"
-                  spacing={"xs"}
+                <Anchor
+                  mr="auto"
+                  // color="dark"
+                  shallow={true}
+                  sx={{
+                    color: "inherit",
+                    marginRight: "auto",
+                    ":hover": {
+                      textDecoration: "unset",
+                      border: "none",
+                      outline: "none",
+                    },
+                  }}
+                  component={Link}
+                  href="/"
                 >
-                  <Title order={4}>Afridi.dev</Title>
-                  <MediaQuery smallerThan={420} styles={{ display: "none" }}>
-                    <Group spacing={10}>
-                      <Divider orientation="vertical" />
-                      <Text color="dimmed" mt={4} size="xs">
-                        The Coder&apos;s Handbook
-                      </Text>
-                    </Group>
-                  </MediaQuery>
-                </Group>
+                  <Group
+                    mr="auto"
+                    position="center"
+                    align="center"
+                    spacing={"xs"}
+                  >
+                    <Title
+                      color={colorScheme == "dark" ? theme.white : "dark"}
+                      order={4}
+                    >
+                      Afridi.dev
+                    </Title>
+                    <MediaQuery smallerThan={420} styles={{ display: "none" }}>
+                      <Group spacing={10}>
+                        <Divider orientation="vertical" />
+                        <Text color="dimmed" mt={4} size="xs">
+                          The Coder&apos;s Handbook
+                        </Text>
+                      </Group>
+                    </MediaQuery>
+                  </Group>
+                </Anchor>
 
                 <ActionIcon
                   mt={3}
@@ -428,7 +291,10 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                     <Menu.Target>
                       <Group className="cursor-pointer" spacing={4}>
                         <Avatar radius="xl" color="gray">
-                          <User size={18} />
+                          <AfridiImage
+                            fillImage
+                            path="https://images.unsplash.com/photo-1639755507638-e34150b56db2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
+                          />
                         </Avatar>
                         <CaretDown size={12} color={theme.colors.gray[6]} />
                       </Group>
@@ -439,6 +305,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                           Get started with Afridi.dev
                         </Title>
                         <Button
+                          radius="sm"
                           color="teal.7"
                           className="h-[32px] font-medium"
                           fullWidth
@@ -446,6 +313,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                           Sign up
                         </Button>
                         <Button
+                          radius="sm"
                           className="h-[32px] font-medium"
                           fullWidth
                           color="gray"
@@ -457,11 +325,16 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                       <Divider mt="lg" mb="sm" size={0.5} />
                       <Stack spacing={0}>
                         <Menu.Item
-                          className="hover:font-medium rounded-none"
+                          className="hover:font-semibold font-medium rounded-none"
                           color="teal"
                           rightSection={
-                            <ThemeIcon variant="light" color="teal" size="lg">
-                              <Star weight="duotone" size={18} />
+                            <ThemeIcon
+                              radius="xl"
+                              variant="light"
+                              color="teal"
+                              size="lg"
+                            >
+                              <Star weight="duotone" size={17} />
                             </ThemeIcon>
                           }
                         >
@@ -470,9 +343,14 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
 
                         <Menu.Item
                           className="hover:font-medium rounded-none"
-                          color="yellow"
+                          color={colorScheme == "dark" ? "pink.5" : "pink.6"}
                           rightSection={
-                            <ThemeIcon variant="light" color="yellow" size="lg">
+                            <ThemeIcon
+                              variant="light"
+                              radius="xl"
+                              color="pink"
+                              size="lg"
+                            >
                               <RocketLaunch weight="duotone" size={18} />
                             </ThemeIcon>
                           }
@@ -482,24 +360,44 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                             PRO!
                           </Text>
                         </Menu.Item>
+
                         <Menu.Item
-                          className="rounded-none"
+                          onClick={() => toggleColorScheme()}
+                          sx={(theme) => ({
+                            [":hover"]: {
+                              backgroundColor:
+                                colorScheme == "dark"
+                                  ? theme.colors.yellow[6]
+                                  : theme.colors.dark[8],
+                              color: theme.white,
+                            },
+                          })}
+                          className="hover:font-medium rounded-none"
+                          color={colorScheme == "dark" ? "yellow" : "dark"}
                           rightSection={
-                            <ThemeIcon color="blue" variant="filled" size="md">
-                              <Question size={18} />
+                            <ThemeIcon
+                              variant="gradient"
+                              color={colorScheme == "dark" ? "yellow" : "gray"}
+                              size="lg"
+                              gradient={{
+                                from: colorScheme == "dark" ? "yellow" : "dark",
+                                to:
+                                  colorScheme == "dark" ? "yellow.4" : "dark.1",
+                              }}
+                              radius="xl"
+                            >
+                              {colorScheme == "dark" ? (
+                                <Sun weight="duotone" size={17} />
+                              ) : (
+                                <MoonStars weight="duotone" size={18} />
+                              )}
                             </ThemeIcon>
                           }
                         >
-                          About{" "}
-                          <Text
-                            weight={700}
-                            component="span"
-                            style={{
-                              fontFamily: playfair.style.fontFamily,
-                            }}
-                          >
-                            Afridi.dev
-                          </Text>
+                          <Text component="span" weight={700}>
+                            {colorScheme == "dark" ? "Light" : "Dark"}
+                          </Text>{" "}
+                          Mode{" "}
                         </Menu.Item>
                       </Stack>
                     </Menu.Dropdown>
@@ -510,43 +408,35 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
           </Fragment>
         }
         navbar={
-          <Navbar
-            px={0}
-            hiddenBreakpoint="md"
-            hidden={!opened}
-            width={{ md: 200, lg: 250 }}
-          >
-            <Navbar.Section grow>
-              {navLinks.map((mapped) => (
-                <AfridiNavLink
-                  href={mapped.href}
-                  key={nanoid()}
-                  LeftIcon={mapped.icon}
-                  label={mapped.label}
-                  active={activeKey == mapped.key}
-                />
-              ))}
-            </Navbar.Section>
-            <Navbar.Section mb="md" p="xl">
-              <Stack spacing="xs">
-                <Button
-                  radius="xl"
-                  fullWidth
-                  onClick={() => toggleColorScheme()}
-                  leftIcon={
-                    colorScheme == "dark" ? (
-                      <Sun weight="duotone" size={20} />
-                    ) : (
-                      <MoonStars weight="duotone" size={18} />
-                    )
-                  }
-                  color={colorScheme == "dark" ? "yellow.7" : "dark"}
-                >
-                  {colorScheme == "dark" ? "Light" : "Dark"} Mode
-                </Button>
-              </Stack>
-            </Navbar.Section>
-          </Navbar>
+          !sidebar ? null : (
+            <Navbar
+              sx={{
+                backgroundColor: themedPage
+                  ? colorScheme == "light"
+                    ? theme.colors.teal[0]
+                    : theme.colors.dark[7]
+                  : colorScheme == "light"
+                  ? theme.white
+                  : theme.colors.dark[7],
+              }}
+              px={0}
+              hiddenBreakpoint={themedPage ? 8000 : "md"}
+              hidden={!opened}
+              width={{ md: themedPage ? 0 : 200, lg: themedPage ? 0 : 250 }}
+            >
+              <Navbar.Section grow>
+                {navLinks.map((mapped) => (
+                  <AfridiNavLink
+                    href={mapped.href}
+                    key={nanoid()}
+                    LeftIcon={mapped.icon}
+                    label={mapped.label}
+                    active={activeKey == mapped.key}
+                  />
+                ))}
+              </Navbar.Section>
+            </Navbar>
+          )
         }
         aside={
           aside ? (

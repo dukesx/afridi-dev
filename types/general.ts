@@ -1,6 +1,7 @@
 import type { MantineColor } from "@mantine/core";
 import type { SelectItemsProps } from "@mantine/core/lib/Select/SelectItems/SelectItems";
 import { IconProps } from "phosphor-react";
+import { ReactNode } from "react";
 
 export type AfridiNavLinkProps = {
   LeftIcon?:
@@ -13,7 +14,7 @@ export type AfridiNavLinkProps = {
   >;
   imageIcon?: boolean;
   className?: string;
-  label: string;
+  label: string | ReactNode;
   active?: boolean;
   children?: any;
   sub?: boolean;
@@ -31,6 +32,8 @@ export type AppWrapperProps = {
   children: any;
   aside?: boolean;
   activeKey: string;
+  sidebar?: boolean | true;
+  themedPage?: boolean;
 };
 
 export interface AfridiEmptyPlaceholderProps {
@@ -49,4 +52,10 @@ export interface AfridiSearchArticleListItemProps {
   title: string;
   description: string;
   cover: string;
+}
+
+export interface UnsplashLogoProps {
+  height?: number;
+  width?: number;
+  style?: object;
 }

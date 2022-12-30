@@ -24,6 +24,9 @@ const AfridiNavLink: React.FC<AfridiNavLinkProps> = ({
   );
   return (
     <NavLink
+      sx={{
+        cursor: "pointer",
+      }}
       href={href ?? "#"}
       component={children ? "div" : Link}
       className={(className ?? " ") + sub ? "" : active ? " font-medium " : " "}
