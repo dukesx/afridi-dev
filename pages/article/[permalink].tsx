@@ -20,7 +20,7 @@ import { inter } from "../_app";
 import { format } from "date-fns";
 
 import Image from "next/image";
-import UnsplashLogo from "../../components/global/unsplash-logo";
+import UnsplashLogo from "../../components/global/unsplash";
 
 const AfridiArticle = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -154,8 +154,11 @@ const AfridiArticle = () => {
               Photo by
             </Text>
 
-            <Group spacing={6}>
-              <Anchor color={colorScheme == "dark" ? "white" : "dark"}>
+            <Group spacing={4}>
+              <Anchor
+                href={`https://unsplash.com/@anniespratt?utm_source=afridi.dev&utm_medium=referral`}
+                color={colorScheme == "dark" ? "white" : "dark"}
+              >
                 <Text weight={600} size="xs">
                   @Sharon Stone
                 </Text>
@@ -218,8 +221,8 @@ const AfridiArticle = () => {
                     size={50}
                   >
                     <AfridiImage
-                      height={80}
-                      width={80}
+                      height={60}
+                      width={60}
                       path="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
                     />
                   </Avatar>
@@ -235,8 +238,8 @@ const AfridiArticle = () => {
                     size={50}
                   >
                     <AfridiImage
-                      height={80}
-                      width={80}
+                      height={60}
+                      width={60}
                       path="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
                     />
                   </Avatar>

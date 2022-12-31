@@ -8,7 +8,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 module.exports = withBundleAnalyzer({
   images: {
-    deviceSizes: [640, 750, 828, 1080, 1200],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
   },
   compiler: {
     emotion: true,
@@ -18,9 +18,3 @@ module.exports = withBundleAnalyzer({
     largePageDataBytes: 256 * 1000,
   },
 });
-
-// module.exports = withPreact({
-//   experimental: {
-//     largePageDataBytes: 256 * 1000,
-//   },
-// });

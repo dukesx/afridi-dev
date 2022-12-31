@@ -1,14 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
-import {
-  createStyles,
-  useMantineColorScheme,
-  useMantineTheme,
-} from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import Image from "next/image";
 import type { CSSProperties } from "react";
-
-// import ProgressiveImage from "react-progressive-graceful-image";
 
 export interface AfridiImageProps {
   width?: number | string;
@@ -59,12 +53,12 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         quality={75}
         unoptimized={unoptimised ?? false}
         loader={({ src, width, quality }) =>
-          src.includes("unsplash")
-            ? src.split("&")[0] +
+          path.includes("unsplash")
+            ? path.split("&")[0] +
               `&auto=format&fit=crop&w=${width}&q=${quality}`
-            : src.includes("imagekit")
-            ? `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${src}`
-            : src
+            : path.includes("imagekit")
+            ? `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${path}`
+            : path
         }
         placeholder={cover_base_64 ? "blur" : "empty"}
         blurDataURL={cover_base_64 ?? null}
