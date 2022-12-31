@@ -16,7 +16,6 @@ module.exports = withBundleAnalyzer({
   },
   experimental: {
     largePageDataBytes: 256 * 1000,
-    swcTraceProfiling: true,
   },
 });
 

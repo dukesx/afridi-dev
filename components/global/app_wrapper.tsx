@@ -274,8 +274,8 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                       <Group className="cursor-pointer" spacing={4}>
                         <Avatar radius="xl" color="gray">
                           <AfridiImage
-                            width={80}
-                            height={80}
+                            width={40}
+                            height={40}
                             priority
                             path="https://images.unsplash.com/photo-1639755507638-e34150b56db2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                           />
