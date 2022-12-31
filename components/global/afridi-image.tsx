@@ -22,7 +22,6 @@ export interface AfridiImageProps {
   imageClassName?: string;
   cover_base_64?: string;
   priority?: boolean | false;
-  isResponsive?: boolean | false;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
@@ -30,7 +29,6 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
   path,
   style,
   fillImage,
-  isResponsive,
   imageClassName,
   cover_base_64,
   onClick,
@@ -46,7 +44,8 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
       }}
     >
       <Image
-        priority={priority ? true : false}
+        loading={priority == true ? undefined : "lazy"}
+        priority={priority == true ? true : false}
         className={
           (imageClassName ? imageClassName : "") + " w-full rounded-sm"
         }
