@@ -6,12 +6,10 @@ import {
   Burger,
   Button,
   Divider,
-  Footer,
   Group,
   Header,
   MediaQuery,
   Navbar,
-  NavLink,
   Stack,
   Text,
   Title,
@@ -20,19 +18,11 @@ import {
   Anchor,
   ThemeIcon,
   Box,
-  Affix,
-  Transition,
   Avatar,
   Menu,
-  Paper,
   Overlay,
-  Autocomplete,
-  Modal,
-  Loader,
-  TextInput,
-  CloseButton,
 } from "@mantine/core";
-import { forwardRef, Fragment, ReactNode, useState } from "react";
+import { Fragment, ReactNode, useState } from "react";
 import type { AppWrapperProps } from "../../types/general";
 import {
   CaretDown,
@@ -40,27 +30,19 @@ import {
   Hash,
   Hexagon,
   House,
-  IconProps,
   MagnifyingGlass,
   MoonStars,
-  Question,
   RocketLaunch,
   Scales,
   Star,
   Sun,
-  User,
   UserFocus,
 } from "phosphor-react";
 import AfridiNavLink from "./afridi-nav-link";
 import { playfair } from "../../pages/_app";
 import { FooterLinks } from "./footer";
 import { useGeneralStore } from "../../data/static/store";
-import { Fade } from "react-awesome-reveal";
-
-import Image from "next/image";
 import { nanoid } from "nanoid";
-import AfridiEmptyPlaceholder from "./afridi-empty";
-import AfridiLoading from "./afridi-loading";
 import { SearchModal, UnAuthorizedModal } from "../../utils/helpers";
 import AfridiImage from "./afridi-image";
 import Link from "next/link";
@@ -279,7 +261,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                   //
                   //
                 }
-                <Box mr="md">
+                <Box mr="xs">
                   <Menu
                     transition="pop"
                     withArrow
@@ -292,7 +274,9 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                       <Group className="cursor-pointer" spacing={4}>
                         <Avatar radius="xl" color="gray">
                           <AfridiImage
-                            fillImage
+                            width={80}
+                            height={80}
+                            priority
                             path="https://images.unsplash.com/photo-1639755507638-e34150b56db2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                           />
                         </Avatar>

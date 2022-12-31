@@ -9,13 +9,17 @@ import {
 } from "@mantine/core";
 import { FC } from "react";
 import { AfridiHorizontalArticleListItemProps } from "../../../../types/articles/list-item/all";
-import AfridiImage from "../../afridi-image";
 
 const AfridiHorizontalArticleListItem: FC<
   AfridiHorizontalArticleListItemProps
 > = ({ cover, description, title, tag, index }) => {
   return (
-    <Paper className="bg-transparent" radius="xs">
+    <Paper
+      sx={{
+        background: "transparent",
+      }}
+      radius="xs"
+    >
       <Group noWrap>
         <Text mb={50} color="dark" size={30} weight={700}>
           {index + 1}

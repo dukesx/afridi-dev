@@ -1,22 +1,15 @@
-import { ThemeContext } from "@emotion/react";
 import { Carousel } from "@mantine/carousel";
 import {
   Anchor,
-  BackgroundImage,
   Blockquote,
-  Box,
   Button,
-  Card,
   Center,
-  Code,
   Grid,
   Group,
-  Overlay,
   Paper,
   SimpleGrid,
   Stack,
   Text,
-  ThemeIcon,
   Title,
   useMantineColorScheme,
   useMantineTheme,
@@ -28,7 +21,6 @@ import AppWrapper from "../components/global/app_wrapper";
 import AfridiVerticalArticleCardWithBg from "../components/global/articles/cards/vertical-with-bg";
 import AfridiHorizontalArticleListItem from "../components/global/articles/list-item/horizontal-simple";
 import { useGeneralStore } from "../data/static/store";
-import { playfair } from "./_app";
 
 export default function HomePage({ quote }) {
   const { colorScheme } = useMantineColorScheme();
@@ -39,7 +31,6 @@ export default function HomePage({ quote }) {
     (store) => store.toggleUnauthenticatedModal
   );
 
-  console.log(quote);
   return (
     <AppWrapper activeKey="home">
       <Fade duration={2000} triggerOnce>

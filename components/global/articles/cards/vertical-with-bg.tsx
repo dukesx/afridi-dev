@@ -20,26 +20,28 @@ const AfridiVerticalArticleCardWithBg: FC<
       component={Link}
       href="/"
       radius="lg"
-      p={"sm"}
+      p={0}
       className={colorScheme == "dark" ? "" : "shadow-neutral-400 shadow-xl"}
       style={{
         height: 400,
         width: 300,
+        position: "relative",
       }}
     >
       <AfridiImage
-        priority
         style={{
-          filter: "brightness(65%)",
+          filter: "brightness(57%)",
         }}
-        fillImage
+        width={350}
+        height={400}
         path={cover}
       />
 
       <Center
         style={{
-          zIndex: 2,
-          position: "relative",
+          position: "absolute",
+          top: "12px",
+          left: "16px",
         }}
         p="md"
       >
@@ -58,7 +60,8 @@ const AfridiVerticalArticleCardWithBg: FC<
               textTransform: "capitalize",
             }}
             order={2}
-            color="white"
+            weight={700}
+            color="gray.1"
           >
             {title}
           </Title>

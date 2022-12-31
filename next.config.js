@@ -10,8 +10,13 @@ module.exports = withBundleAnalyzer({
   images: {
     deviceSizes: [640, 750, 828, 1080, 1200],
   },
+  compiler: {
+    emotion: true,
+    removeConsole: true,
+  },
   experimental: {
     largePageDataBytes: 256 * 1000,
+    swcTraceProfiling: true,
   },
 });
 
