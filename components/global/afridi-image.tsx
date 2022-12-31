@@ -54,13 +54,16 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         alt="article's cover image"
         src={path && !path.includes("http") ? path.replaceAll("/", "") : path}
         width={width}
-        unoptimized={fillImage === true}
+        // unoptimized={fillImage === true}
         height={height}
         quality={75}
         loader={({ src, width, quality }) =>
-          src.includes("http")
-            ? src
-            : `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${src}`
+          src.includes("unsplash")
+            ? src.split("&")[0] +
+              `&auto=format&fit=crop&w=${width}&q=${quality}`
+            : src.includes("imagekit")
+            ? `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${src}`
+            : src
         }
         placeholder={cover_base_64 ? "blur" : "empty"}
         blurDataURL={cover_base_64 ?? null}

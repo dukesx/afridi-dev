@@ -73,7 +73,7 @@ const Feed = () => {
                 id: "",
               }}
               title=" solution for inconsistencies in indexing operations in pandas"
-              cover="https://miro.medium.com/max/1280/1*c2867ICA_q6okdAz-EfhmA.webp"
+              cover="https://images.unsplash.com/photo-1599507593499-a3f7d7d97667?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
             />
           </Carousel.Slide>
 
@@ -84,7 +84,7 @@ const Feed = () => {
                 id: "",
               }}
               title="Using ChatGPT to Set Up an Android App"
-              cover="https://miro.medium.com/max/1400/0*iwttmYprRiobgMAH"
+              cover="https://images.unsplash.com/photo-1607798748738-b15c40d33d57?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
             />
           </Carousel.Slide>
           <Carousel.Slide>
@@ -94,7 +94,7 @@ const Feed = () => {
                 id: "",
               }}
               title="VS Code Shortcuts To Code Like You’re Playing a Piano"
-              cover="https://miro.medium.com/max/1400/1*ShinbGf8NZEuHJ41dVnkqA.webp"
+              cover="https://images.unsplash.com/photo-1581287053822-fd7bf4f4bfec?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1501&q=80"
             />
           </Carousel.Slide>
 
@@ -105,7 +105,7 @@ const Feed = () => {
                 id: "",
               }}
               title="GraalVM, Galahad, and a New Release Schedule"
-              cover="https://miro.medium.com/max/1400/0*Q7g4pcf4KBZroL_h"
+              cover="https://images.unsplash.com/photo-1603354350317-6f7aaa5911c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
             />
           </Carousel.Slide>
 
@@ -116,7 +116,7 @@ const Feed = () => {
                 id: "",
               }}
               title="Handling errors like a pro in TypeScript"
-              cover="https://miro.medium.com/max/1400/1*6AtIsUWN6W7f-bru9LmH4w.webp"
+              cover="https://images.unsplash.com/photo-1533906966484-a9c978a3f090?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
             />
           </Carousel.Slide>
         </Carousel>
