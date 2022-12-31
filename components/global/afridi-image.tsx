@@ -22,11 +22,13 @@ export interface AfridiImageProps {
   imageClassName?: string;
   cover_base_64?: string;
   priority?: boolean | false;
+  unoptimised?: boolean | false;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
   height,
   path,
+  unoptimised,
   style,
   fillImage,
   imageClassName,
@@ -53,9 +55,9 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         alt="article's cover image"
         src={path && !path.includes("http") ? path.replaceAll("/", "") : path}
         width={width}
-        // unoptimized={fillImage === true}
         height={height}
         quality={75}
+        unoptimized={unoptimised ?? false}
         loader={({ src, width, quality }) =>
           src.includes("unsplash")
             ? src.split("&")[0] +

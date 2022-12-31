@@ -137,6 +137,7 @@ const AfridiArticle = () => {
             }}
           >
             <AfridiImage
+              priority
               style={{
                 borderRadius: "0px 20px 20px 0px",
               }}
@@ -213,10 +214,15 @@ const AfridiArticle = () => {
                         minWidth: 60,
                       },
                     })}
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
                     radius="xl"
                     size={50}
-                  />
+                  >
+                    <AfridiImage
+                      height={80}
+                      width={80}
+                      path="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+                    />
+                  </Avatar>
                   <Avatar
                     sx={(theme) => ({
                       [theme.fn.smallerThan(1000)]: {
@@ -225,10 +231,15 @@ const AfridiArticle = () => {
                         minWidth: 60,
                       },
                     })}
-                    src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
                     radius="xl"
                     size={50}
-                  />
+                  >
+                    <AfridiImage
+                      height={80}
+                      width={80}
+                      path="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+                    />
+                  </Avatar>
                 </Avatar.Group>
                 <Group position="center" mt={-6} spacing={4}>
                   <Anchor color={colorScheme == "dark" ? "dimmed" : "dark"}>
