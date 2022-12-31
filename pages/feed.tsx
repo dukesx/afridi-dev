@@ -178,65 +178,37 @@ const Feed = () => {
               <AfridiHorizontalFeedArticleListItem
                 title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
                 description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--YTZMhHCS--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/i2my79kbfycghlbnlexa.png"
+                cover="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80"
                 bookmarked={true}
                 read_time="10 Min read"
               />
-
               <AfridiHorizontalFeedArticleListItem
-                title="Backgrounds for every react,svelte,anguler and nodejs developer out there Backgrounds for every react,svelte,anguler and nodejs developer out there"
-                description="Master Notifications With ChatGPT, React and NodeJS"
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--yziQTiQd--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3e4piohjvmncf766h7k0.jpeg"
+                title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
+                description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
+                cover="https://images.unsplash.com/photo-1616004655123-818cbd4b3143?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
                 bookmarked={false}
-                read_time="4 Min Read"
+                read_time="10 Min read"
               />
-
               <AfridiHorizontalFeedArticleListItem
-                title="Master Notifications With ChatGPT, React and NodeJS"
-                description="Master Notifications With ChatGPT, React and NodeJS"
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--yziQTiQd--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3e4piohjvmncf766h7k0.jpeg"
-                bookmarked={false}
-                read_time="4 Min Read"
+                title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
+                description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
+                cover="https://images.unsplash.com/photo-1526925539332-aa3b66e35444?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
+                bookmarked={true}
+                read_time="10 Min read"
               />
-
               <AfridiHorizontalFeedArticleListItem
-                title="Master Notifications With ChatGPT, React and NodeJS"
-                description="Master Notifications With ChatGPT, React and NodeJS"
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--yziQTiQd--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3e4piohjvmncf766h7k0.jpeg"
+                title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
+                description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
+                cover="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
                 bookmarked={false}
-                read_time="4 Min Read"
+                read_time="10 Min read"
               />
-
               <AfridiHorizontalFeedArticleListItem
-                title="Master Notifications With ChatGPT, React and NodeJS"
-                description="Master Notifications With ChatGPT, React and NodeJS"
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--yziQTiQd--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3e4piohjvmncf766h7k0.jpeg"
-                bookmarked={false}
-                read_time="4 Min Read"
-              />
-
-              <AfridiHorizontalFeedArticleListItem
-                title="Master Notifications With ChatGPT, React and NodeJS"
-                description="Master Notifications With ChatGPT, React and NodeJS"
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--yziQTiQd--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3e4piohjvmncf766h7k0.jpeg"
-                bookmarked={false}
-                read_time="4 Min Read"
-              />
-
-              <AfridiHorizontalFeedArticleListItem
-                title="Master Notifications With ChatGPT, React and NodeJS"
-                description="Master Notifications With ChatGPT, React and NodeJS"
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--yziQTiQd--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3e4piohjvmncf766h7k0.jpeg"
-                bookmarked={false}
-                read_time="4 Min Read"
-              />
-
-              <AfridiHorizontalFeedArticleListItem
-                title="Master Notifications With ChatGPT, React and NodeJS"
-                description="Master Notifications With ChatGPT, React and NodeJS"
-                cover="https://res.cloudinary.com/practicaldev/image/fetch/s--yziQTiQd--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/3e4piohjvmncf766h7k0.jpeg"
-                bookmarked={false}
-                read_time="4 Min Read"
+                title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
+                description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
+                cover="https://images.unsplash.com/photo-1585229259255-9f0816d671a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=677&q=80"
+                bookmarked={true}
+                read_time="10 Min read"
               />
             </Stack>
           </Grid.Col>

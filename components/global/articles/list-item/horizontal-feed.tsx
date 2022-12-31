@@ -94,7 +94,14 @@ const AfridiHorizontalFeedArticleListItem: FC<
           minWidth: 90,
         })}
       >
-        <AfridiImage path={cover} fillImage />
+        <AfridiImage
+          style={{
+            borderRadius: "6px",
+          }}
+          path={cover}
+          width={90}
+          height={90}
+        />
       </Avatar>
     </Group>
   );
