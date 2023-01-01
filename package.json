@@ -57,7 +57,7 @@
     "@mantine/nprogress": "^5.2.3",
     "@mantine/prism": "^5.2.3",
     "@mantine/spotlight": "^5.2.3",
-    "@next/env": "^12.2.3",
+    "@next/env": "^13.1.1",
     "@plaiceholder/next": "^2.5.0",
     "@supabase/auth-helpers-nextjs": "0.4.0-next.3",
     "@supabase/auth-helpers-react": "0.3.0-next.2",
