@@ -17,12 +17,14 @@ export interface AfridiImageProps {
   cover_base_64?: string;
   priority?: boolean | false;
   unoptimised?: boolean | false;
+  blurHash?: string;
 }
 const AfridiImage: React.FC<AfridiImageProps> = ({
   width,
   height,
   path,
   unoptimised,
+  blurHash,
   style,
   fillImage,
   imageClassName,
@@ -45,7 +47,7 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         className={
           (imageClassName ? imageClassName : "") + " w-full rounded-sm"
         }
-        fill={fillImage}
+        fill={fillImage == true ? true : false}
         alt="article's cover image"
         src={path && !path.includes("http") ? path.replaceAll("/", "") : path}
         width={width}
@@ -55,13 +57,15 @@ const AfridiImage: React.FC<AfridiImageProps> = ({
         loader={({ src, width, quality }) =>
           path.includes("unsplash")
             ? path.split("&")[0] +
-              `&auto=format&fit=crop&w=${width}&q=${quality}`
+              `&auto=format&fit=crop&${
+                height ? `height=${height}` : `height=800`
+              }&q=${quality}`
             : path.includes("imagekit")
             ? `https://ik.imagekit.io/afrididotdev/tr:w-${width},q-${quality}/${path}`
             : path
         }
         placeholder={cover_base_64 ? "blur" : "empty"}
-        blurDataURL={cover_base_64 ?? null}
+        blurDataURL={cover_base_64 ?? blurHash ? blurHash : null}
         onClick={onClick ?? null}
         style={{
           objectFit: "cover",

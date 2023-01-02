@@ -137,7 +137,7 @@ export default function HomePage({ quote }) {
                 size="sm"
                 color="dark"
               >
-                The <Text component="span">Latest</Text> section. Articles
+                The <Text component="span">Latest</Text> section. Compositions
                 published recently appear in this section.
               </Text>
             </Stack>
@@ -160,6 +160,7 @@ export default function HomePage({ quote }) {
               cols={3}
             >
               <AfridiHorizontalArticleListItem
+                permalink="/"
                 index={0}
                 title="How to build faster animation transitions in React"
                 description=" This is a punishement for a world that didnt pay for Winrar"
@@ -167,6 +168,7 @@ export default function HomePage({ quote }) {
               />
 
               <AfridiHorizontalArticleListItem
+                permalink="/"
                 index={1}
                 title="Syndergaard is laser focused on recapturing the best version of himself"
                 description=" This is a punishement for a world that didnt pay for Winrar"
@@ -175,23 +177,27 @@ export default function HomePage({ quote }) {
 
               <AfridiHorizontalArticleListItem
                 index={2}
+                permalink="/"
                 title="Ramanujan’s Magnificent Formula for Pi: 9801/(1103√8)=π"
                 description=" This is a punishement for a world that didnt pay for Winrar"
                 cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
               />
               <AfridiHorizontalArticleListItem
+                permalink="/"
                 index={3}
                 title="One hour a day keeps your regrets away"
                 description=" This is a punishement for a world that didnt pay for Winrar"
                 cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
               />
               <AfridiHorizontalArticleListItem
+                permalink="/"
                 index={4}
                 title="Should You Worry About Lead In Your Dark Chocolate?"
                 description=" This is a punishement for a world that didnt pay for Winrar"
                 cover="https://plus.unsplash.com/premium_photo-1663054729129-b6bddf57c952?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
               />
               <AfridiHorizontalArticleListItem
+                permalink="/"
                 index={5}
                 title="How to build faster animation transitions in React"
                 description=" This is a punishement for a world that didnt pay for Winrar"
@@ -258,7 +264,7 @@ export default function HomePage({ quote }) {
                 className="uppercase"
                 weight={600}
               >
-                Trending Articles
+                Trending Compositions
               </Title>
               <Text
                 mx="auto"
@@ -269,14 +275,15 @@ export default function HomePage({ quote }) {
                 size="sm"
                 color="dimmed"
               >
-                The <Text component="span">Must Read</Text> section. Articles
-                catching over 100 views in less than 24 hours are classified as
-                trending.
+                The <Text component="span">Must Read</Text> section.
+                Compositions catching over 100 views in less than 24 hours are
+                classified as trending.
               </Text>
             </Stack>
           </Grid.Col>
           <Grid.Col span={12} xs={7}>
             <Carousel
+              loop
               my="xl"
               align="start"
               withKeyboardEvents
@@ -306,6 +313,7 @@ export default function HomePage({ quote }) {
             >
               <Carousel.Slide>
                 <AfridiVerticalArticleCardWithBg
+                  permalink="/"
                   tag={{
                     title: "Fashion",
                     id: "",
@@ -317,6 +325,7 @@ export default function HomePage({ quote }) {
 
               <Carousel.Slide>
                 <AfridiVerticalArticleCardWithBg
+                  permalink="/"
                   tag={{
                     title: "Fashion",
                     id: "",
@@ -327,6 +336,7 @@ export default function HomePage({ quote }) {
               </Carousel.Slide>
               <Carousel.Slide>
                 <AfridiVerticalArticleCardWithBg
+                  permalink="/"
                   tag={{
                     title: "Fashion",
                     id: "",
@@ -338,6 +348,7 @@ export default function HomePage({ quote }) {
 
               <Carousel.Slide>
                 <AfridiVerticalArticleCardWithBg
+                  permalink="/"
                   tag={{
                     title: "GraalVM",
                     id: "",
@@ -349,6 +360,7 @@ export default function HomePage({ quote }) {
 
               <Carousel.Slide>
                 <AfridiVerticalArticleCardWithBg
+                  permalink="/"
                   tag={{
                     title: "React",
                     id: "",

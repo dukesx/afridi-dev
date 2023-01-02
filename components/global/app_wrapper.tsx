@@ -49,8 +49,9 @@ import Link from "next/link";
 
 const AppWrapper: React.FC<AppWrapperProps> = ({
   children,
-  aside,
+  aside = false,
   activeKey,
+  footer = true,
   sidebar = true,
   themedPage,
 }) => {
@@ -274,8 +275,8 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                       <Group className="cursor-pointer" spacing={4}>
                         <Avatar radius="xl" color="gray">
                           <AfridiImage
-                            width={40}
-                            height={40}
+                            width={100}
+                            height={100}
                             priority
                             path="https://images.unsplash.com/photo-1639755507638-e34150b56db2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                           />
@@ -392,113 +393,126 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
           </Fragment>
         }
         navbar={
-          !sidebar ? null : (
-            <Navbar
-              sx={{
-                backgroundColor: themedPage
-                  ? colorScheme == "light"
-                    ? theme.colors.teal[0]
-                    : theme.colors.dark[7]
-                  : colorScheme == "light"
-                  ? theme.white
-                  : theme.colors.dark[7],
-              }}
-              px={0}
-              hiddenBreakpoint={themedPage ? 8000 : "md"}
-              hidden={!opened}
-              width={{ md: themedPage ? 0 : 200, lg: themedPage ? 0 : 250 }}
-            >
-              <Navbar.Section grow>
-                {navLinks.map((mapped) => (
-                  <AfridiNavLink
-                    href={mapped.href}
-                    key={nanoid()}
-                    LeftIcon={mapped.icon}
-                    label={mapped.label}
-                    active={activeKey == mapped.key}
-                  />
-                ))}
-              </Navbar.Section>
-            </Navbar>
-          )
+          <Navbar
+            sx={{
+              backgroundColor: themedPage
+                ? colorScheme == "light"
+                  ? theme.colors.teal[0]
+                  : theme.colors.dark[7]
+                : colorScheme == "light"
+                ? theme.white
+                : theme.colors.dark[7],
+
+              [theme.fn.smallerThan(400)]: {
+                width: "100%",
+              },
+            }}
+            px={0}
+            hiddenBreakpoint={!sidebar ? 8000 : themedPage ? 8000 : "md"}
+            hidden={!opened}
+            width={{
+              xs: 0,
+              sm: 0,
+              md: !sidebar ? 0 : themedPage ? 0 : 200,
+              lg: !sidebar ? 0 : themedPage ? 0 : 250,
+            }}
+          >
+            <Navbar.Section grow>
+              {navLinks.map((mapped) => (
+                <AfridiNavLink
+                  href={mapped.href}
+                  key={nanoid()}
+                  LeftIcon={mapped.icon}
+                  label={mapped.label}
+                  active={activeKey == mapped.key}
+                />
+              ))}
+            </Navbar.Section>
+          </Navbar>
         }
         aside={
           aside ? (
-            <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-              <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
-                <Text>Application sidebar</Text>
+            <MediaQuery smallerThan="md" styles={{ display: "none" }}>
+              <Aside
+                p="md"
+                hiddenBreakpoint="sm"
+                width={{ xs: 0, sm: 0, lg: 470 }}
+              >
+                {aside}
               </Aside>
             </MediaQuery>
           ) : null
         }
         footer={
-          <FooterLinks
-            data={[
-              {
-                title: "About",
-                links: [
-                  {
-                    label: "Features",
-                    link: "#",
-                  },
-                  {
-                    label: "Pricing",
-                    link: "#",
-                  },
-                  {
-                    label: "Support",
-                    link: "#",
-                  },
-                  {
-                    label: "Forums",
-                    link: "#",
-                  },
-                ],
-              },
-              {
-                title: "Project",
-                links: [
-                  {
-                    label: "Contribute",
-                    link: "#",
-                  },
-                  {
-                    label: "Media assets",
-                    link: "#",
-                  },
-                  {
-                    label: "Changelog",
-                    link: "#",
-                  },
-                  {
-                    label: "Releases",
-                    link: "#",
-                  },
-                ],
-              },
-              {
-                title: "Community",
-                links: [
-                  {
-                    label: "Join Discord",
-                    link: "#",
-                  },
-                  {
-                    label: "Follow on Twitter",
-                    link: "#",
-                  },
-                  {
-                    label: "Email newsletter",
-                    link: "#",
-                  },
-                  {
-                    label: "GitHub discussions",
-                    link: "#",
-                  },
-                ],
-              },
-            ]}
-          />
+          !footer ? null : (
+            <FooterLinks
+              data={[
+                {
+                  title: "About",
+                  links: [
+                    {
+                      label: "Features",
+                      link: "#",
+                    },
+                    {
+                      label: "Pricing",
+                      link: "#",
+                    },
+                    {
+                      label: "Support",
+                      link: "#",
+                    },
+                    {
+                      label: "Forums",
+                      link: "#",
+                    },
+                  ],
+                },
+                {
+                  title: "Project",
+                  links: [
+                    {
+                      label: "Contribute",
+                      link: "#",
+                    },
+                    {
+                      label: "Media assets",
+                      link: "#",
+                    },
+                    {
+                      label: "Changelog",
+                      link: "#",
+                    },
+                    {
+                      label: "Releases",
+                      link: "#",
+                    },
+                  ],
+                },
+                {
+                  title: "Community",
+                  links: [
+                    {
+                      label: "Join Discord",
+                      link: "#",
+                    },
+                    {
+                      label: "Follow on Twitter",
+                      link: "#",
+                    },
+                    {
+                      label: "Email newsletter",
+                      link: "#",
+                    },
+                    {
+                      label: "GitHub discussions",
+                      link: "#",
+                    },
+                  ],
+                },
+              ]}
+            />
+          )
         }
       >
         {children}

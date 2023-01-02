@@ -55,7 +55,7 @@ const Feed = () => {
 
             {
               maxWidth: 1500,
-              slideSize: "24%",
+              slideSize: "29%",
               slideGap: "xl",
             },
 
@@ -68,6 +68,7 @@ const Feed = () => {
         >
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
+              permalink="/"
               tag={{
                 title: "Fashion",
                 id: "",
@@ -79,6 +80,7 @@ const Feed = () => {
 
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
+              permalink="/"
               tag={{
                 title: "Fashion",
                 id: "",
@@ -89,6 +91,7 @@ const Feed = () => {
           </Carousel.Slide>
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
+              permalink="/"
               tag={{
                 title: "Fashion",
                 id: "",
@@ -100,6 +103,7 @@ const Feed = () => {
 
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
+              permalink="/"
               tag={{
                 title: "GraalVM",
                 id: "",
@@ -111,6 +115,7 @@ const Feed = () => {
 
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
+              permalink="/"
               tag={{
                 title: "React",
                 id: "",
@@ -176,6 +181,7 @@ const Feed = () => {
               spacing={"xs"}
             >
               <AfridiHorizontalFeedArticleListItem
+                permalink="/"
                 title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
                 description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
                 cover="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80"
@@ -183,6 +189,7 @@ const Feed = () => {
                 read_time="10 Min read"
               />
               <AfridiHorizontalFeedArticleListItem
+                permalink="/"
                 title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
                 description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
                 cover="https://images.unsplash.com/photo-1616004655123-818cbd4b3143?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
@@ -190,6 +197,7 @@ const Feed = () => {
                 read_time="10 Min read"
               />
               <AfridiHorizontalFeedArticleListItem
+                permalink="/"
                 title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
                 description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
                 cover="https://images.unsplash.com/photo-1526925539332-aa3b66e35444?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=765&q=80"
@@ -197,6 +205,7 @@ const Feed = () => {
                 read_time="10 Min read"
               />
               <AfridiHorizontalFeedArticleListItem
+                permalink="/"
                 title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
                 description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
                 cover="https://images.unsplash.com/photo-1493723843671-1d655e66ac1c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
@@ -204,6 +213,7 @@ const Feed = () => {
                 read_time="10 Min read"
               />
               <AfridiHorizontalFeedArticleListItem
+                permalink="/"
                 title="Do you need Objectives and Key Results (OKR), or is it just a current fancy?"
                 description="Leaving 2022 behind and having the next two weeks to reflect on the new beginning. It could be the ideal time to apply a new way of progress tracking and goal planning."
                 cover="https://images.unsplash.com/photo-1585229259255-9f0816d671a3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=677&q=80"

@@ -142,10 +142,10 @@ const AfridiArticle = () => {
                 borderRadius: "0px 20px 20px 0px",
               }}
               fillImage
-              path="https://images.unsplash.com/photo-1535551951406-a19828b0a76b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1466&q=80"
+              path="https://images.unsplash.com/photo-1522252234503-e356532cafd5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1325&q=80"
             />
           </div>
-          <Group mt={-5} spacing={6}>
+          <Group mt={5} spacing={6}>
             <Text
               color={colorScheme == "dark" ? "white" : "dark"}
               weight={400}

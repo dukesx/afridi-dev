@@ -30,10 +30,11 @@ export interface SearchItemProps extends SelectItemsProps {
 
 export type AppWrapperProps = {
   children: any;
-  aside?: boolean;
+  aside?: boolean | ReactNode;
   activeKey: string;
   sidebar?: boolean | true;
   themedPage?: boolean;
+  footer?: boolean | true;
 };
 
 export interface AfridiEmptyPlaceholderProps {
