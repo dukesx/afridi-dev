@@ -16,6 +16,7 @@ import {
   BookmarkSimple,
   ChatCircle,
   DotsThreeOutline,
+  Share,
   ShareNetwork,
 } from "phosphor-react";
 import { FC } from "react";
@@ -46,11 +47,13 @@ const HorizontalProfileFeedArticleListItem: FC<
             sx={(theme) => ({
               [theme.fn.smallerThan("xs")]: {
                 fontSize: theme.fontSizes.sm,
+                lineClamp: 2,
+                WebkitLineClamp: 2,
               },
             })}
             weight={700}
-            lineClamp={2}
-            size="lg"
+            lineClamp={1}
+            size="md"
           >
             {title}
           </Anchor>
@@ -58,7 +61,7 @@ const HorizontalProfileFeedArticleListItem: FC<
           <Text
             sx={(theme) => ({
               [theme.fn.smallerThan("xs")]: {
-                display: "none",
+                // display: "none",
               },
             })}
             lineClamp={2}
@@ -69,46 +72,12 @@ const HorizontalProfileFeedArticleListItem: FC<
             {description}
           </Text>
         </Stack>
-
-        <Group noWrap spacing={8}>
-          <Tooltip label="Share article" withArrow>
-            <ActionIcon size="lg" color={"teal"} radius="xl" variant="light">
-              <ShareNetwork weight="duotone" size={19} />
-            </ActionIcon>
-          </Tooltip>
-
-          <Menu withArrow position="top" width={270}>
-            <Menu.Target>
-              <Tooltip label="More" withArrow>
-                <ActionIcon size="md" radius="xl" variant="subtle">
-                  <DotsThreeOutline
-                    strokeWidth={4}
-                    weight="fill"
-                    color={
-                      colorScheme == "dark"
-                        ? theme.colors.gray[5]
-                        : theme.colors.dark[3]
-                    }
-                    size={20}
-                  />
-                </ActionIcon>
-              </Tooltip>
-            </Menu.Target>
-
-            <Menu.Dropdown className="shadow-md">
-              <Menu.Item>
-                <Text>Edit composition</Text>
-              </Menu.Item>
-              <Menu.Item color="red">Delete composition</Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
-        </Group>
       </Group>
-      <Group mt={-5} position="apart">
+      <Group mt={0} position="apart">
         <Group spacing={8}>
           <Tooltip label="Comment" withArrow>
             <ActionIcon size="md" radius="xl" variant="subtle">
-              <ChatCircle weight="regular" size={20} />
+              <ChatCircle weight="regular" size={18} />
             </ActionIcon>
           </Tooltip>
           <Divider
@@ -124,7 +93,64 @@ const HorizontalProfileFeedArticleListItem: FC<
             >
               <BookmarkSimple
                 weight={bookmarked ? "fill" : "regular"}
-                size={20}
+                size={18}
+              />
+            </ActionIcon>
+          </Tooltip>
+
+          <Divider
+            sx={{
+              width: 15,
+            }}
+          />
+
+          <Menu withArrow position="top" width={180}>
+            <Menu.Target>
+              <Tooltip label="More" withArrow>
+                <ActionIcon size="md" radius="xl" variant="subtle">
+                  <DotsThreeOutline
+                    strokeWidth={4}
+                    weight="fill"
+                    color={
+                      colorScheme == "dark"
+                        ? theme.colors.gray[5]
+                        : theme.colors.dark[3]
+                    }
+                    size={18}
+                  />
+                </ActionIcon>
+              </Tooltip>
+            </Menu.Target>
+
+            <Menu.Dropdown className="shadow-md">
+              <Menu.Item>
+                <Text>Edit composition</Text>
+              </Menu.Item>
+              <Menu.Item color="red">Delete composition</Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
+
+        <Group mt={-5} noWrap spacing={8}>
+          <Tooltip label="Share article" withArrow>
+            <ActionIcon
+              size="md"
+              color={colorScheme == "dark" ? "teal" : "dark"}
+              radius="xl"
+              variant="filled"
+            >
+              <Share
+                onClick={async () => {
+                  const shareData = {
+                    title: "Hello World Bro!",
+                    text: "Learn web development on MDN!",
+                    url: "https://developer.mozilla.org",
+                  };
+
+                  await navigator.share(shareData);
+                }}
+                weight="duotone"
+                size={16}
               />
             </ActionIcon>
           </Tooltip>
@@ -141,7 +167,7 @@ const HorizontalProfileFeedArticleListItem: FC<
                 fontSize: theme.fontSizes.xs,
               },
             })}
-            size="sm"
+            size="xs"
             color="dimmed"
           >
             {format(Date.now(), "MMMM qo, yyyy")}

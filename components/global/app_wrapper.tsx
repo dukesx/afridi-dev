@@ -21,6 +21,7 @@ import {
   Avatar,
   Menu,
   Overlay,
+  MantineColor,
 } from "@mantine/core";
 import { Fragment, ReactNode, useState } from "react";
 import type { AppWrapperProps } from "../../types/general";
@@ -36,6 +37,7 @@ import {
   Scales,
   Star,
   Sun,
+  User,
   UserFocus,
 } from "phosphor-react";
 import AfridiNavLink from "./afridi-nav-link";
@@ -73,6 +75,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
     key: string;
     icon: any;
     href: string;
+    color?: MantineColor;
   }> = [
     {
       key: "home",
@@ -100,6 +103,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
         <Group spacing={5}>
           <Text>About</Text>
           <Text
+            mt={-3}
             weight={600}
             sx={{
               fontFamily: playfair.style.fontFamily,
@@ -286,7 +290,13 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                     </Menu.Target>
                     <Menu.Dropdown pb="xs" color="teal" p={0}>
                       <Stack px="xl" pt="xl" align="center">
-                        <Title mt="sm" mb="sm" align="center" order={5}>
+                        <Title
+                          mt="sm"
+                          mb="sm"
+                          weight={700}
+                          align="center"
+                          order={5}
+                        >
                           Get started with Afridi.dev
                         </Title>
                         <Button
@@ -423,6 +433,7 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                   href={mapped.href}
                   key={nanoid()}
                   LeftIcon={mapped.icon}
+                  color={mapped.color}
                   label={mapped.label}
                   active={activeKey == mapped.key}
                 />

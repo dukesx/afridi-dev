@@ -15,7 +15,7 @@ import { NextLink } from "@mantine/next";
 import { IconBug } from "@tabler/icons";
 import Image from "next/image";
 import { DiscordLogo, GithubLogo } from "phosphor-react";
-import AfridiEmptyPlaceholder from "../components/global/afridi-empty";
+import AfridiEmptyPlaceholder from "../components/global/afridi-placeholder";
 import AfridiLoading from "../components/global/afridi-loading";
 import { playfair } from "../pages/_app";
 import GoogleIcon from "../public/google.png";
@@ -290,6 +290,7 @@ export const SearchModal = ({ colorScheme, toggle, opened, theme }) => (
           /> */}
 
       <AfridiEmptyPlaceholder
+        mode="empty"
         title="Hmmm.... Empty"
         description="Enter a term to see results"
       />

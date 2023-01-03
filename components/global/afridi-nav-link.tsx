@@ -11,6 +11,7 @@ const AfridiNavLink: React.FC<AfridiNavLinkProps> = ({
   RightIcon,
   className,
   label,
+  color,
   active,
   children,
   imageIcon,
@@ -22,6 +23,7 @@ const AfridiNavLink: React.FC<AfridiNavLinkProps> = ({
   const toggleUnauthenticatedModal = useGeneralStore(
     (store) => store.toggleUnauthenticatedModal
   );
+
   return (
     <NavLink
       sx={{
@@ -37,7 +39,11 @@ const AfridiNavLink: React.FC<AfridiNavLinkProps> = ({
         imageIcon ? (
           <Image src={LeftIcon} alt="" height={20} width={20} />
         ) : sub ? null : LeftIcon ? (
-          <LeftIcon weight={active ? "regular" : "light"} size={18} />
+          <LeftIcon
+            color={color ? theme.fn.themeColor(color) : null}
+            weight={active ? "regular" : color ? "duotone" : "light"}
+            size={18}
+          />
         ) : null
       }
       rightSection={

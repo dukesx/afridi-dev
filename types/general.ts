@@ -15,6 +15,7 @@ export type AfridiNavLinkProps = {
   imageIcon?: boolean;
   className?: string;
   label: string | ReactNode;
+  color?: MantineColor;
   active?: boolean;
   children?: any;
   sub?: boolean;
@@ -37,11 +38,12 @@ export type AppWrapperProps = {
   footer?: boolean | true;
 };
 
-export interface AfridiEmptyPlaceholderProps {
+export interface AfridiPlaceholderProps {
   width?: number;
   height?: number;
   title?: string;
   description?: string;
+  mode: "default" | "empty" | "question" | "error" | "under-construnction";
 }
 
 export interface AfridiLoadingProps {

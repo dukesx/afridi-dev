@@ -1,13 +1,9 @@
 import {
-  ActionIcon,
   Anchor,
   Avatar,
-  Badge,
   Box,
-  Button,
-  Divider,
+  Center,
   Group,
-  Menu,
   Navbar,
   Paper,
   Stack,
@@ -18,14 +14,9 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { format } from "date-fns";
-import {
-  BookmarkSimple,
-  ChatCircle,
-  DotsThreeOutline,
-  Link,
-  ShareNetwork,
-} from "phosphor-react";
+import { BookmarkSimple, PencilSimpleLine, PenNib, User } from "phosphor-react";
 import { Fragment } from "react";
+import AfridiPlaceholder from "../../components/global/afridi-placeholder";
 import AfridiImage from "../../components/global/afridi-image";
 import AppWrapper from "../../components/global/app_wrapper";
 import HorizontalProfileFeedArticleListItem from "../../components/global/articles/list-item/horizontal-profile-feed";
@@ -35,7 +26,7 @@ const Me = () => {
   return (
     <AppWrapper
       footer={false}
-      sidebar={false}
+      //   sidebar={false}
       aside={
         <Fragment>
           <Navbar.Section>
@@ -132,7 +123,6 @@ const Me = () => {
     >
       <Paper
         sx={(theme) => ({
-          maxWidth: "740px",
           //   height: "100vh",
           [theme.fn.smallerThan("md")]: {
             maxWidth: "100%",
@@ -148,59 +138,88 @@ const Me = () => {
         >
           <AfridiImage
             style={{
-              filter: "brightness(50%)",
+              filter: "brightness(54%)",
             }}
-            width={740}
-            height={400}
-            path="https://images.unsplash.com/photo-1661956602868-6ae368943878?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+            fillImage
+            path="https://images.unsplash.com/photo-1508780709619-79562169bc64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
           />
 
           <Stack
             align="center"
             sx={(theme) => ({
               position: "absolute",
+              backdropFilter: "blur(8px)",
+              height: "100%",
               transform: "translate(-50%, -50%)",
               top: "50%",
-              left: "49%",
+              left: "50%",
               width: "100%",
               [theme.fn.smallerThan(400)]: {
                 padding: 0,
               },
             })}
           >
-            <Title
-              align="center"
-              transform="capitalize"
-              color="white"
-              size={60}
-              lineClamp={2}
-              sx={(theme) => ({
-                [theme.fn.smallerThan("xs")]: {
-                  fontSize: theme.fontSizes.xl * 3,
-                },
-              })}
+            <Center
+              sx={{
+                height: "100%",
+              }}
             >
-              John Rambo
-            </Title>
-            <Stack w="100%" p="md" align="center" spacing={8}>
-              <Text
-                lineClamp={2}
-                align="center"
-                weight={600}
-                size="sm"
-                color="white"
-              >
-                Member since {format(Date.now(), "MMMM qo, yyyy")}
-              </Text>
-            </Stack>
+              <Stack>
+                <Title
+                  px="xl"
+                  align="center"
+                  transform="capitalize"
+                  color="white"
+                  size={60}
+                  lineClamp={2}
+                  weight={600}
+                  sx={(theme) => ({
+                    [theme.fn.smallerThan("xs")]: {
+                      fontSize: theme.fontSizes.xl * 3,
+                    },
+                  })}
+                >
+                  Muhammad Afzaal Afridi
+                </Title>
+                <Stack w="100%" p="md" align="center" spacing={8}>
+                  <Text
+                    lineClamp={2}
+                    align="center"
+                    weight={600}
+                    size="sm"
+                    color="white"
+                  >
+                    Member since {format(Date.now(), "MMMM qo, yyyy")}
+                  </Text>
+                </Stack>
+              </Stack>
+            </Center>
           </Stack>
         </Paper>
 
-        <Tabs py="xl" defaultValue="feed">
+        <Tabs pt={0} defaultValue="feed">
           <Tabs.List grow>
-            <Tabs.Tab value="feed">Feed</Tabs.Tab>
-            <Tabs.Tab value="bookmarks">Saved</Tabs.Tab>
-            <Tabs.Tab value="about">About</Tabs.Tab>
+            <Tooltip label="My Compositions">
+              <Tabs.Tab
+                pt="lg"
+                icon={<PenNib size={22} />}
+                value="feed"
+              ></Tabs.Tab>
+            </Tooltip>
+            <Tooltip label="Saved">
+              <Tabs.Tab
+                pt="lg"
+                icon={<BookmarkSimple size={22} />}
+                value="bookmarks"
+              ></Tabs.Tab>
+            </Tooltip>
+            <Tooltip label="About">
+              <Tabs.Tab
+                pt="lg"
+                icon={<User size={22} />}
+                value="about"
+              ></Tabs.Tab>
+            </Tooltip>
           </Tabs.List>
 
           <Tabs.Panel value="feed">
@@ -212,15 +231,22 @@ const Me = () => {
               })}
               p="xl"
             >
-              <Stack mt="md">
+              <AfridiPlaceholder
+                mode="under-construnction"
+                title="Under Construction"
+                description="This feature will be available soon"
+                width={300}
+                height={150}
+              />
+              {/* <Stack mt="md">
                 <HorizontalProfileFeedArticleListItem
                   permalink="/"
                   title="Revolutionize DNA Analysis with DNAnalyzer: Join Our Open-Source Project Today!"
-                  description="Byte Size article delivered to your inbox 😎. No Promotion just pure Developer 💖"
+                  description="2022 had a ton of big releases that push web development forward. We saw the 1.0 releases of both Astro and Sveltekit. SolidStart, and Qwik entered Beta."
                   bookmarked={false}
-                />
+                /> */}
 
-                {/* <HorizontalProfileFeedArticleListItem
+              {/* <HorizontalProfileFeedArticleListItem
                   permalink="/"
                   title="Revolutionize DNA Analysis with DNAnalyzer: Join Our Open-Source Project Today!"
                   description="Byte Size article delivered to your inbox 😎. No Promotion just pure Developer 💖"
@@ -247,11 +273,39 @@ const Me = () => {
                   description="Byte Size article delivered to your inbox 😎. No Promotion just pure Developer 💖"
                   bookmarked={false}
                 /> */}
+              {/* </Stack> */}
+            </Paper>
+          </Tabs.Panel>
+          <Tabs.Panel value="bookmarks">
+            <Paper
+              sx={(theme) => ({
+                [theme.fn.smallerThan("xs")]: {
+                  padding: 15,
+                },
+              })}
+              p="xl"
+            >
+              <Stack mt="md">
+                <HorizontalProfileFeedArticleListItem
+                  permalink="/"
+                  title="Revolutionize DNA Analysis with DNAnalyzer: Join Our Open-Source Project Today!"
+                  description="2022 had a ton of big releases that push web development forward. We saw the 1.0 releases of both Astro and Sveltekit. SolidStart, and Qwik entered Beta."
+                  bookmarked={false}
+                />
               </Stack>
             </Paper>
           </Tabs.Panel>
-          <Tabs.Panel value="bookmarks">This is bookmarks</Tabs.Panel>
-          <Tabs.Panel value="about">This is About</Tabs.Panel>
+          <Tabs.Panel value="about">
+            <Paper
+              sx={(theme) => ({
+                [theme.fn.smallerThan("xs")]: {
+                  padding: 15,
+                  height: 200,
+                },
+              })}
+              p="xl"
+            ></Paper>
+          </Tabs.Panel>
         </Tabs>
       </Paper>
     </AppWrapper>

@@ -69,6 +69,7 @@ const Feed = () => {
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
               permalink="/"
+              priorityImage
               tag={{
                 title: "Fashion",
                 id: "",
@@ -81,6 +82,7 @@ const Feed = () => {
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
               permalink="/"
+              priorityImage
               tag={{
                 title: "Fashion",
                 id: "",
@@ -92,6 +94,7 @@ const Feed = () => {
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
               permalink="/"
+              priorityImage
               tag={{
                 title: "Fashion",
                 id: "",
@@ -104,6 +107,7 @@ const Feed = () => {
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
               permalink="/"
+              priorityImage
               tag={{
                 title: "GraalVM",
                 id: "",
@@ -116,6 +120,7 @@ const Feed = () => {
           <Carousel.Slide>
             <AfridiVerticalArticleCardWithBg
               permalink="/"
+              priorityImage
               tag={{
                 title: "React",
                 id: "",

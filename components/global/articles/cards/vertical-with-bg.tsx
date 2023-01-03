@@ -13,7 +13,7 @@ import AfridiImage from "../../afridi-image";
 
 const AfridiVerticalArticleCardWithBg: FC<
   AfridiVerticalArticleCardWithBgProps
-> = ({ title, cover, tag }) => {
+> = ({ title, cover, tag, priorityImage = false }) => {
   const { colorScheme } = useMantineColorScheme();
   return (
     <Card
@@ -29,6 +29,7 @@ const AfridiVerticalArticleCardWithBg: FC<
       }}
     >
       <AfridiImage
+        priority={priorityImage}
         style={{
           filter: "brightness(57%)",
         }}
