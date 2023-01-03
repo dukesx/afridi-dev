@@ -145,7 +145,15 @@ const AfridiArticle = () => {
               path="https://images.unsplash.com/photo-1522252234503-e356532cafd5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1325&q=80"
             />
           </div>
-          <Group mt={5} spacing={6} noWrap>
+          <Group
+            position="center"
+            sx={{
+              width: "100%",
+            }}
+            mt={5}
+            spacing={6}
+            noWrap
+          >
             <Text
               color={colorScheme == "dark" ? "white" : "dark"}
               weight={400}
