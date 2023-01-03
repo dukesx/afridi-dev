@@ -2,6 +2,7 @@ import {
   ActionIcon,
   Anchor,
   Avatar,
+  Badge,
   Box,
   Button,
   Divider,
@@ -181,23 +182,9 @@ const Me = () => {
             >
               John Rambo
             </Title>
-            <Group w="100%" p="md" noWrap spacing={8} position="center">
-              <Text mt="xl" align="center" weight={600} size="sm" color="white">
-                @dukesthegarbage
-              </Text>
-
-              <Divider
-                mt="xl"
-                sx={{
-                  maxWidth: 40,
-                  width: "100%",
-                }}
-                color="gray.4"
-              />
-
+            <Stack w="100%" p="md" align="center" spacing={8}>
               <Text
                 lineClamp={2}
-                mt="xl"
                 align="center"
                 weight={600}
                 size="sm"
@@ -205,7 +192,7 @@ const Me = () => {
               >
                 Member since {format(Date.now(), "MMMM qo, yyyy")}
               </Text>
-            </Group>
+            </Stack>
           </Stack>
         </Paper>
 
