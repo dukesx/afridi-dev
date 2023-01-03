@@ -252,15 +252,12 @@ const AfridiArticle = () => {
                           fontSize: theme.fontSizes.md,
                         },
                         [`@media (min-width: 400px) and (max-width: 1000px)`]: {
-                          fontSize: theme.fontSizes.lg,
+                          fontSize: theme.fontSizes.md,
                         },
 
                         [`@media (min-width: 1000px)`]: {
                           fontSize: theme.fontSizes.sm,
                         },
-                        // [theme.fn.largerThan(1000)]: {
-                        //   fontSize: theme.fontSizes.sm,
-                        // },
                       })}
                       weight={800}
                       size="sm"
@@ -268,7 +265,22 @@ const AfridiArticle = () => {
                       Liz Herman
                     </Text>
                   </Anchor>
-                  <Text weight={600} size="sm">
+                  <Text
+                    sx={(theme) => ({
+                      [`@media (max-width: 400px)`]: {
+                        fontSize: theme.fontSizes.md,
+                      },
+                      [`@media (min-width: 400px) and (max-width: 1000px)`]: {
+                        fontSize: theme.fontSizes.md,
+                      },
+
+                      [`@media (min-width: 1000px)`]: {
+                        fontSize: theme.fontSizes.sm,
+                      },
+                    })}
+                    weight={600}
+                    size="sm"
+                  >
                     and
                   </Text>
                   <Anchor
@@ -277,7 +289,7 @@ const AfridiArticle = () => {
                         fontSize: theme.fontSizes.md,
                       },
                       [`@media (min-width: 400px) and (max-width: 1000px)`]: {
-                        fontSize: theme.fontSizes.lg,
+                        fontSize: theme.fontSizes.md,
                       },
 
                       [`@media (min-width: 1000px)`]: {
@@ -292,7 +304,7 @@ const AfridiArticle = () => {
                           fontSize: theme.fontSizes.md,
                         },
                         [`@media (min-width: 400px) and (max-width: 1000px)`]: {
-                          fontSize: theme.fontSizes.lg,
+                          fontSize: theme.fontSizes.md,
                         },
 
                         [`@media (min-width: 1000px)`]: {
@@ -311,7 +323,7 @@ const AfridiArticle = () => {
                         fontSize: theme.fontSizes.md,
                       },
                       [`@media (min-width: 400px) and (max-width: 1000px)`]: {
-                        fontSize: theme.fontSizes.lg,
+                        fontSize: theme.fontSizes.md,
                       },
 
                       [`@media (min-width: 1000px)`]: {
