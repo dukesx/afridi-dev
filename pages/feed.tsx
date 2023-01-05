@@ -1,25 +1,40 @@
+import { Arrow, Fade } from "@egjs/flicking-plugins";
+import Flicking, { ViewportSlot } from "@egjs/react-flicking";
 import { Carousel } from "@mantine/carousel";
 import {
+  ActionIcon,
+  Box,
+  Button,
+  Divider,
   Grid,
   Group,
   Paper,
   Select,
   Stack,
+  Text,
   Title,
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
+import AfridiFlickCarousel from "../components/global/afridi-flicking-carousel";
+import AfridiFlick from "../components/global/afridi-flicking-carousel/carousel";
 import AppWrapper from "../components/global/app_wrapper";
 import AfridiVerticalArticleCardWithBg from "../components/global/articles/cards/vertical-with-bg";
 import AfridiHorizontalFeedArticleListItem from "../components/global/articles/list-item/horizontal-feed";
 import AfridiArticleFeedSquareWidget from "../components/global/articles/widgets/square/feed-square-widget";
-//
+import "@egjs/react-flicking/dist/flicking.min.css";
+import "@egjs/flicking-plugins/dist/arrow.css";
+import { CaretLeft, CaretRight, Plus } from "phosphor-react";
+import { useState } from "react";
 //
 //
 //
 const Feed = () => {
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
+  const [index, setIndex] = useState(0);
+  var fade = new Fade();
+  fade.scale = 0.9;
   return (
     <AppWrapper activeKey="feed">
       <Paper radius="xs">
@@ -55,7 +70,7 @@ const Feed = () => {
 
             {
               maxWidth: 1500,
-              slideSize: "29%",
+              slideSize: "25%",
               slideGap: "xl",
             },
 
@@ -130,6 +145,7 @@ const Feed = () => {
             />
           </Carousel.Slide>
         </Carousel>
+
         <Grid>
           <Grid.Col span={12} xs={12} md={12} lg={7}>
             <Group

@@ -14,7 +14,13 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { format } from "date-fns";
-import { BookmarkSimple, PencilSimpleLine, PenNib, User } from "phosphor-react";
+import {
+  BookmarkSimple,
+  BookmarksSimple,
+  PencilSimpleLine,
+  PenNib,
+  User,
+} from "phosphor-react";
 import { Fragment } from "react";
 import AfridiPlaceholder from "../../components/global/afridi-placeholder";
 import AfridiImage from "../../components/global/afridi-image";
@@ -138,17 +144,17 @@ const Me = () => {
         >
           <AfridiImage
             style={{
-              filter: "brightness(54%)",
+              filter: "brightness(52%)",
             }}
             fillImage
-            path="https://images.unsplash.com/photo-1508780709619-79562169bc64?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+            path="https://images.unsplash.com/photo-1661956600684-97d3a4320e45?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
           />
 
           <Stack
             align="center"
             sx={(theme) => ({
               position: "absolute",
-              backdropFilter: "blur(8px)",
+              backdropFilter: "blur(0px)",
               height: "100%",
               transform: "translate(-50%, -50%)",
               top: "50%",
@@ -209,7 +215,7 @@ const Me = () => {
             <Tooltip label="Saved">
               <Tabs.Tab
                 pt="lg"
-                icon={<BookmarkSimple size={22} />}
+                icon={<BookmarksSimple size={22} />}
                 value="bookmarks"
               ></Tabs.Tab>
             </Tooltip>
@@ -236,7 +242,7 @@ const Me = () => {
                 title="Under Construction"
                 description="This feature will be available soon"
                 width={300}
-                height={150}
+                height={120}
               />
               {/* <Stack mt="md">
                 <HorizontalProfileFeedArticleListItem
@@ -304,7 +310,14 @@ const Me = () => {
                 },
               })}
               p="xl"
-            ></Paper>
+            >
+              <AfridiPlaceholder
+                height={120}
+                title="Hmmmm.... Missing Bio"
+                description="Goto settings > demographics > bio"
+                mode="empty"
+              />
+            </Paper>
           </Tabs.Panel>
         </Tabs>
       </Paper>

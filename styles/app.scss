@@ -6,6 +6,7 @@
 div[data-id="frequent"] {
   display: none !important;
 }
+
 html {
   scroll-behavior: smooth;
 }
@@ -40,6 +41,33 @@ pre {
   border-radius: 5px;
 }
 
+.flicking-arrow-prev {
+  width: 0px !important;
+  height: 0px !important;
+  background-color: transparent;
+}
+
+.flicking-arrow-prev:before {
+  content: none !important;
+}
+
+.flicking-arrow-prev:after {
+  content: none !important;
+}
+
+.flicking-arrow-next {
+  // width: 0px !important;
+  height: 0px !important;
+  background-color: transparent;
+}
+
+.flicking-arrow-next:before {
+  content: none !important;
+}
+
+.flicking-arrow-next:after {
+  content: none !important;
+}
 // code[class^="language-"] {
 //   @apply px-1 py-1 font-mono  px-2 text-white bg-transparent;
 // }

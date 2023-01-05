@@ -1,5 +1,6 @@
 import { Carousel } from "@mantine/carousel";
 import {
+  ActionIcon,
   Anchor,
   Blockquote,
   Button,
@@ -10,13 +11,15 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  ThemeIcon,
   Title,
   useMantineColorScheme,
   useMantineTheme,
 } from "@mantine/core";
 import { GetServerSidePropsContext } from "next";
-import { ArrowRight } from "phosphor-react";
+import { ArrowRight, CaretLeft, CaretRight } from "phosphor-react";
 import { Fade } from "react-awesome-reveal";
+import AfridiFlickCarousel from "../components/global/afridi-flicking-carousel";
 import AppWrapper from "../components/global/app_wrapper";
 import AfridiVerticalArticleCardWithBg from "../components/global/articles/cards/vertical-with-bg";
 import AfridiHorizontalArticleListItem from "../components/global/articles/list-item/horizontal-simple";
@@ -62,7 +65,7 @@ export default function HomePage({ quote }) {
                 }}
               >
                 <Title
-                  lineClamp={2}
+                  lineClamp={3}
                   sx={(theme) => ({
                     [theme.fn.smallerThan(400)]: {
                       fontSize: theme.fontSizes.xl * 1.5,

@@ -22,11 +22,15 @@ import {
   Menu,
   Overlay,
   MantineColor,
+  ScrollArea,
+  Tooltip,
+  NavLink,
 } from "@mantine/core";
 import { Fragment, ReactNode, useState } from "react";
 import type { AppWrapperProps } from "../../types/general";
 import {
   CaretDown,
+  CaretRight,
   Cookie,
   Hash,
   Hexagon,
@@ -37,7 +41,6 @@ import {
   Scales,
   Star,
   Sun,
-  User,
   UserFocus,
 } from "phosphor-react";
 import AfridiNavLink from "./afridi-nav-link";
@@ -75,6 +78,8 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
     key: string;
     icon: any;
     href: string;
+    notLink?: boolean;
+    links?: Array<any>;
     color?: MantineColor;
   }> = [
     {
@@ -116,18 +121,6 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
       key: "about",
       icon: UserFocus,
       href: "/about-us",
-    },
-    {
-      key: "privacy",
-      icon: Cookie,
-      label: "Privacy Policy",
-      href: "/privacy-policy",
-    },
-    {
-      key: "terms",
-      icon: Scales,
-      label: "Terms of Service",
-      href: "/terms",
     },
   ];
   return (
@@ -424,10 +417,10 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
               xs: 0,
               sm: 0,
               md: !sidebar ? 0 : themedPage ? 0 : 200,
-              lg: !sidebar ? 0 : themedPage ? 0 : 250,
+              lg: !sidebar ? 0 : themedPage ? 0 : 300,
             }}
           >
-            <Navbar.Section grow>
+            <Navbar.Section>
               {navLinks.map((mapped) => (
                 <AfridiNavLink
                   href={mapped.href}
@@ -436,8 +429,264 @@ const AppWrapper: React.FC<AppWrapperProps> = ({
                   color={mapped.color}
                   label={mapped.label}
                   active={activeKey == mapped.key}
-                />
+                >
+                  {mapped.links && mapped.links.length > 0
+                    ? mapped.links.map((mapped2) => (
+                        <AfridiNavLink
+                          href={mapped2.href}
+                          key={nanoid()}
+                          LeftIcon={mapped2.icon}
+                          color={mapped2.color}
+                          label={mapped2.label}
+                          active={activeKey == mapped2.key}
+                        />
+                      ))
+                    : null}
+                </AfridiNavLink>
               ))}
+            </Navbar.Section>
+
+            <Text pr="xl" pt="xl" pb={0} pl="sm" size="sm" weight={600}>
+              Popular Topics
+            </Text>
+
+            <Divider color={"teal"} mt={8} mb="md" ml="xs" mr="xl" />
+
+            <Navbar.Section grow component={ScrollArea}>
+              <Stack spacing={8}>
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="react"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="javascript"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="programming"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                  label="computer-science"
+                />
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="svelete-kit"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="angular-js"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="ruby-on-rails"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="python"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="html"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+
+                <NavLink
+                  px={6}
+                  rightSection={
+                    <Group px="xs" spacing="xs">
+                      <Text weight={700} size="xs">
+                        1.1k
+                      </Text>
+
+                      <Text size="xs">Subscribers</Text>
+                    </Group>
+                  }
+                  label="css"
+                  icon={
+                    <ThemeIcon
+                      size="md"
+                      radius="xl"
+                      color={colorScheme == "dark" ? "teal" : "dark"}
+                      variant={colorScheme == "dark" ? "light" : "filled"}
+                    >
+                      <Hash size={14} weight="regular" />
+                    </ThemeIcon>
+                  }
+                />
+              </Stack>
             </Navbar.Section>
           </Navbar>
         }
