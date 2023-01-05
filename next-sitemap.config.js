@@ -6,10 +6,10 @@ module.exports = {
   exclude: [
     "/server-sitemap.xml",
     "/get-started",
-    "/creator-studio",
-    "/creator-studio/publish",
-    "/creator-studio/publish/article",
-    "/creator-studio/my-articles",
+    "/studio",
+    "/studio/publish",
+    "/studio/publish/article",
+    "/studio/articles",
   ],
   robotsTxtOptions: {
     additionalSitemaps: [

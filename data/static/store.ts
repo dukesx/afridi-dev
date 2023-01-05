@@ -1,4 +1,3 @@
-import { AfridiDevArticle } from "../../components/article/grid-cards/large-article-card";
 import create from "zustand";
 /**
  *  General Store
@@ -7,57 +6,29 @@ import create from "zustand";
  */
 
 export interface GeneralStore {
-  dark: boolean;
-  toggleDark: any;
-  appLoading: boolean;
-  toggleAppLoading: any;
-  feedData: Array<AfridiDevArticle>;
-  setFeedData: any;
-  trendingData: Array<AfridiDevArticle>;
-  setTrendingData: any;
-  popularData: Array<AfridiDevArticle>;
-  setPopularData: any;
-  articleCount: number;
-  setArticleCount: any;
-  feedLoading: boolean;
-  setFeedLoading: any;
+  search: boolean;
+  toggleSearch: any;
+  overlay: boolean;
+  toggleOverlay: any;
+  toggleUnauthenticatedModal: any;
+  unauthenticatedModal: boolean;
 }
 
 // Declare General Store
 export const useGeneralStore = create<GeneralStore>((set) => ({
-  dark: false,
-  toggleDark: (value: boolean) =>
+  search: false,
+  toggleSearch: (value: boolean) =>
     set({
-      dark: value,
+      search: value,
     }),
-  appLoading: false,
-  toggleAppLoading: (value: boolean) =>
+  overlay: false,
+  toggleOverlay: (value: boolean) =>
     set({
-      appLoading: value,
+      overlay: value,
     }),
-  feedData: [],
-  setFeedData: (value: Array<any>) =>
+  toggleUnauthenticatedModal: (value: boolean) =>
     set({
-      feedData: value,
+      unauthenticatedModal: value,
     }),
-  trendingData: [],
-  setTrendingData: (value: Array<any>) =>
-    set({
-      trendingData: value,
-    }),
-  popularData: [],
-  setPopularData: (value: Array<any>) =>
-    set({
-      popularData: value,
-    }),
-  articleCount: 0,
-  setArticleCount: (value: number) =>
-    set({
-      articleCount: value,
-    }),
-  feedLoading: false,
-  setFeedLoading: (value: boolean) =>
-    set({
-      appLoading: value,
-    }),
+  unauthenticatedModal: false,
 }));

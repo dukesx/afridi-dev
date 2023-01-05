@@ -1,12 +1,20 @@
-// const { withPlaiceholder } = require("@plaiceholder/next");
+/**
+ * @type {import('next').NextConfig}
+ */
 
-module.exports = {
-  reactStrictMode: false,
-  swcMinify: true,
-};
-
-// const removeImports = require("next-remove-imports")({
-//   options: {},
-// });
-
-// module.exports = removeImports();
+// const withPreact = require("next-plugin-preact");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: false,
+});
+module.exports = withBundleAnalyzer({
+  images: {
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
+  },
+  compiler: {
+    emotion: true,
+    removeConsole: true,
+  },
+  experimental: {
+    largePageDataBytes: 256 * 1000,
+  },
+});

@@ -1,3 +1,10 @@
 {
-  "conventionalCommits.scopes": ["docs", "ci", "app", "test"]
+  "conventionalCommits.scopes": [
+    "docs",
+    "ci",
+    "app",
+    "test"
+  ],
+  "typescript.tsdk": "node_modules/.pnpm/typescript@4.8.4/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

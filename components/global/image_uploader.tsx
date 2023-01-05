@@ -62,6 +62,7 @@ const AfridiImageUploader = ({
         overlayBlur={2}
       />
       <Dropzone
+        multiple={false}
         styles={{
           root: {
             padding: `${py ? py : theme.spacing.xs} ${
