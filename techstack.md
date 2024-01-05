@@ -1,7 +1,8 @@
 <!--
---- Readme.md Snippet without images Start ---
+&lt;--- Readme.md Snippet without images Start ---&gt;
 ## Tech Stack
 dukesx/afridi-dev is built on the following main stack:
+
 - [Jest](http://facebook.github.io/jest/) – Javascript Testing Framework
 - [Node.js](http://nodejs.org/) – Frameworks (Full Stack)
 - [React](https://reactjs.org/) – Javascript UI Libraries
@@ -19,11 +20,13 @@ dukesx/afridi-dev is built on the following main stack:
 - [GitHub Actions](https://github.com/features/actions) – Continuous Integration
 
 Full tech stack [here](/techstack.md)
---- Readme.md Snippet without images End ---
 
---- Readme.md Snippet with images Start ---
+&lt;--- Readme.md Snippet without images End ---&gt;
+
+&lt;--- Readme.md Snippet with images Start ---&gt;
 ## Tech Stack
 dukesx/afridi-dev is built on the following main stack:
+
 - <img width='25' height='25' src='https://img.stackshare.io/service/830/jest.png' alt='Jest'/> [Jest](http://facebook.github.io/jest/) – Javascript Testing Framework
 - <img width='25' height='25' src='https://img.stackshare.io/service/1011/n1JRsFeB_400x400.png' alt='Node.js'/> [Node.js](http://nodejs.org/) – Frameworks (Full Stack)
 - <img width='25' height='25' src='https://img.stackshare.io/service/1020/OYIaJ1KK.png' alt='React'/> [React](https://reactjs.org/) – Javascript UI Libraries
@@ -41,14 +44,15 @@ dukesx/afridi-dev is built on the following main stack:
 - <img width='25' height='25' src='https://img.stackshare.io/service/11563/actions.png' alt='GitHub Actions'/> [GitHub Actions](https://github.com/features/actions) – Continuous Integration
 
 Full tech stack [here](/techstack.md)
---- Readme.md Snippet with images End ---
+
+&lt;--- Readme.md Snippet with images End ---&gt;
 -->
 <div align="center">
 
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [dukesx/afridi-dev](https://github.com/dukesx/afridi-dev)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|40<br/>Tools used|11/11/23 <br/>Report generated|
+|40<br/>Tools used|01/05/24 <br/>Report generated|
 |------|------|
 </div>
 
@@ -249,11 +253,11 @@ Full tech stack [here](/techstack.md)
 |[release-it](https://www.npmjs.com/release-it)|v15.1.3|09/27/22|dukesx |MIT|N/A|
 |[remark-github](https://www.npmjs.com/remark-github)|v11.2.4|09/22/22|dukesx |MIT|N/A|
 |[sass](https://www.npmjs.com/sass)|v1.54.0|07/29/22|dukesx |MIT|N/A|
-|[sharp](https://www.npmjs.com/sharp)|v0.31.0|09/15/22|dukesx |Apache-2.0|N/A|
+|[sharp](https://www.npmjs.com/sharp)|v0.31.0|09/15/22|dukesx |Apache-2.0|[](https://github.com/advisories/GHSA-54xq-cgqr-rpm3) (High)|
 |[slugify](https://www.npmjs.com/slugify)|v1.6.5|09/30/22|dukesx |MIT|N/A|
 |[tailwindcss](https://www.npmjs.com/tailwindcss)|v3.1.6|07/22/22|dukesx |MIT|N/A|
 
 <br/>
 <div align='center'>
 
-Generated via [Stack File](https://github.com/apps/stack-file)
+Generated via [Stack File](https://github.com/marketplace/stack-file)
