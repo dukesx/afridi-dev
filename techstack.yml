@@ -2,7 +2,7 @@ repo_name: dukesx/afridi-dev
 report_id: 656df990f788c09ab8211a1cd8cdc4a9
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-05T08:51:18+00:00'
+timestamp: '2024-02-29T18:38:31+00:00'
 requested_by: dukesx
 provider: github
 branch: main
@@ -66,7 +66,7 @@ tools:
   last_updated_by: dukesx
   last_updated_on: 2022-09-14 14:25:43.000000000 Z
 - name: Next.js
-  description: 'A small framework for server-rendered universal JavaScript apps '
+  description: A small framework for server-rendered universal JavaScript apps
   website_url: https://nextjs.org/
   version: 12.3.1
   open_source: true
